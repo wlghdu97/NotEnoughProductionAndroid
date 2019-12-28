@@ -4,16 +4,20 @@ import android.util.Log
 import com.google.gson.stream.JsonReader
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.ShapedRecipe
+import com.xhlab.nep.shared.data.RecipeRepo
 import com.xhlab.nep.shared.parser.element.VanillaItemParser
 import javax.inject.Inject
 
 internal class ShapedRecipeParser @Inject constructor(
-    private val vanillaItemParser: VanillaItemParser
+    private val vanillaItemParser: VanillaItemParser,
+    private val recipeRepo: RecipeRepo
 ) : RecipeParser<ShapedRecipe>() {
 
     override suspend fun parse(reader: JsonReader) {
         Log.i(TAG, "start parsing, ${reader.nextName()}")
-        parseElements(reader)
+        val recipeList = parseElements(reader)
+        // insert recipes into db
+        recipeRepo.insertRecipes(recipeList)
     }
 
     override suspend fun parseElement(reader: JsonReader): ShapedRecipe {

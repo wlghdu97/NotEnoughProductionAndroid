@@ -1,4 +1,6 @@
 package com.xhlab.nep.shared.di
+
+import com.xhlab.nep.shared.data.RecipeRepo
 import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser
 import com.xhlab.nep.shared.parser.ShapelessRecipeParser
@@ -30,21 +32,24 @@ class ParserModule {
     @Reusable
     internal fun provideGregtechRecipeParser(
         itemParser: ItemParser,
-        fluidParser: FluidParser
+        fluidParser: FluidParser,
+        recipeRepo: RecipeRepo
     ): GregtechRecipeParser =
-        GregtechRecipeParser(itemParser, fluidParser)
+        GregtechRecipeParser(itemParser, fluidParser, recipeRepo)
 
     @Provides
     @Reusable
     internal fun provideShapedRecipeParser(
-        vanillaItemParser: VanillaItemParser
+        vanillaItemParser: VanillaItemParser,
+        recipeRepo: RecipeRepo
     ): ShapedRecipeParser =
-        ShapedRecipeParser(vanillaItemParser)
+        ShapedRecipeParser(vanillaItemParser, recipeRepo)
 
     @Provides
     @Reusable
     internal fun provideShapelessRecipeParser(
-        vanillaItemParser: VanillaItemParser
+        vanillaItemParser: VanillaItemParser,
+        recipeRepo: RecipeRepo
     ): ShapelessRecipeParser =
-        ShapelessRecipeParser(vanillaItemParser)
+        ShapelessRecipeParser(vanillaItemParser, recipeRepo)
 }

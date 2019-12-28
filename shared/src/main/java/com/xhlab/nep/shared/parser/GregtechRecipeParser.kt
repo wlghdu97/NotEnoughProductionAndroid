@@ -5,13 +5,15 @@ import com.google.gson.stream.JsonReader
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.GregtechRecipe
+import com.xhlab.nep.shared.data.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
 import javax.inject.Inject
 
 internal class GregtechRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
-    private val fluidParser: FluidParser
+    private val fluidParser: FluidParser,
+    private val recipeRepo: RecipeRepo
 ) : RecipeParser<GregtechRecipe>() {
 
     override suspend fun parse(reader: JsonReader) {
@@ -41,6 +43,15 @@ internal class GregtechRecipeParser @Inject constructor(
         }
         Log.i(TAG, "machine ${recipes.size} : $name")
         reader.endObject()
+
+        // map machine name to recipes
+        val machineId = recipeRepo.insertGregtechMachine(name)
+        val mappedRecipes = recipes.map {
+            it.copy(machineId = machineId)
+        }
+
+        // insert recipes into db
+        recipeRepo.insertRecipes(mappedRecipes)
     }
 
     override suspend fun parseElement(reader: JsonReader): GregtechRecipe {
