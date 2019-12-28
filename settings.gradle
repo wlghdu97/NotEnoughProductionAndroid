@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':model', ':shared'
 rootProject.name='Not Enough Production'
