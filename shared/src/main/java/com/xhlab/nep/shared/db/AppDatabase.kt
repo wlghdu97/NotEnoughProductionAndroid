@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.xhlab.nep.shared.db.dao.*
 import com.xhlab.nep.shared.db.entity.*
+import com.xhlab.nep.shared.db.view.SearchResultView
 
 @Database(
     entities = [
@@ -11,7 +12,11 @@ import com.xhlab.nep.shared.db.entity.*
         GregtechRecipeEntity::class,
         RecipeEntity::class,
         RecipeResultEntity::class,
-        ElementEntity::class
+        ElementEntity::class,
+        ElementFts::class
+    ],
+    views = [
+        SearchResultView::class
     ],
     version = 1,
     exportSchema = false
