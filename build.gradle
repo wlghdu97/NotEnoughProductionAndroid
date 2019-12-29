@@ -13,6 +13,7 @@ buildscript {
         room_compiler_version = "2.2.1"
         dagger_version = "2.24"
         gson_version = "2.8.6"
+        timber_version = "4.7.1"
 
         junit_version = "4.12"
         core_testing_version = "1.1.1"

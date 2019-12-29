@@ -1,11 +1,11 @@
 package com.xhlab.nep.shared.parser
 
-import android.util.Log
 import com.google.gson.stream.JsonReader
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.ShapedRecipe
 import com.xhlab.nep.shared.data.RecipeRepo
 import com.xhlab.nep.shared.parser.element.VanillaItemParser
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class ShapedRecipeParser @Inject constructor(
@@ -14,7 +14,7 @@ internal class ShapedRecipeParser @Inject constructor(
 ) : RecipeParser<ShapedRecipe>() {
 
     override suspend fun parse(reader: JsonReader) {
-        Log.i(TAG, "start parsing, ${reader.nextName()}")
+        Timber.i("start parsing, ${reader.nextName()}")
         val recipeList = parseElements(reader)
         // insert recipes into db
         recipeRepo.insertRecipes(recipeList)
@@ -41,9 +41,5 @@ internal class ShapedRecipeParser @Inject constructor(
             input = inputItems,
             output = outputItem
         )
-    }
-
-    companion object {
-        private const val TAG = "shaped_recipe_parser"
     }
 }

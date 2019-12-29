@@ -8,6 +8,7 @@ import com.xhlab.nep.shared.parser.ShapelessRecipeParser
 import com.xhlab.nep.shared.domain.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class ParseRecipeUseCase @Inject internal constructor(
 
         reader.beginObject()
         val sourcesName = reader.nextName()
-        Log.i(TAG, "source start. $sourcesName")
+        Timber.i("source start. $sourcesName")
         while (reader.hasNext()) {
             reader.beginArray()
             while (reader.hasNext()) {
@@ -41,7 +42,8 @@ class ParseRecipeUseCase @Inject internal constructor(
             reader.endArray()
         }
         reader.endObject()
-        Log.i(TAG, "done! elapsed time : ${(System.currentTimeMillis() - startTime) / 1000} sec")
+        val elapsedTime = System.currentTimeMillis() - startTime
+        Timber.i("done! elapsed time : ${elapsedTime / 1000} sec")
         return@withContext
     }
 
@@ -51,9 +53,5 @@ class ParseRecipeUseCase @Inject internal constructor(
             "shaped" -> shapedRecipeParser.parse(reader)
             "shapeless" -> shapelessRecipeParser.parse(reader)
         }
-    }
-
-    companion object {
-        private const val TAG = "recipe_parser"
     }
 }

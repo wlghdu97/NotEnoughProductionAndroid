@@ -8,6 +8,7 @@ import com.xhlab.nep.model.recipes.GregtechRecipe
 import com.xhlab.nep.shared.data.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class GregtechRecipeParser @Inject constructor(
@@ -41,7 +42,7 @@ internal class GregtechRecipeParser @Inject constructor(
                 recipes = parseElements(reader)
             }
         }
-        Log.i(TAG, "machine ${recipes.size} : $name")
+        Timber.i("machine ${recipes.size} : $name")
         reader.endObject()
 
         // map machine name to recipes
@@ -88,9 +89,5 @@ internal class GregtechRecipeParser @Inject constructor(
             fluidInputs = inputFluids,
             fluidOutputs = outputFluids
         )
-    }
-
-    companion object {
-        private const val TAG = "gregtech_recipe_parser"
     }
 }
