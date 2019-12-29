@@ -13,4 +13,9 @@ abstract class GregtechMachineDao : BaseDao<GregtechMachineEntity>() {
         WHERE gregtech_machine.name = :name
     """)
     abstract suspend fun getId(name: String): Int
+
+    @Query("""
+        DELETE FROM gregtech_machine
+    """)
+    abstract suspend fun deleteAll()
 }

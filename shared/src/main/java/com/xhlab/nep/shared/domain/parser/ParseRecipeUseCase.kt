@@ -1,11 +1,12 @@
 package com.xhlab.nep.shared.domain.parser
 
-import android.util.Log
 import com.google.gson.stream.JsonReader
+import com.xhlab.nep.shared.data.ElementRepo
+import com.xhlab.nep.shared.data.GregtechRepo
+import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser
 import com.xhlab.nep.shared.parser.ShapelessRecipeParser
-import com.xhlab.nep.shared.domain.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -15,12 +16,18 @@ import javax.inject.Inject
 class ParseRecipeUseCase @Inject internal constructor(
     private val gregtechRecipeParser: GregtechRecipeParser,
     private val shapedRecipeParser: ShapedRecipeParser,
-    private val shapelessRecipeParser: ShapelessRecipeParser
+    private val shapelessRecipeParser: ShapelessRecipeParser,
+    private val elementRepo: ElementRepo,
+    private val gregtechRepo: GregtechRepo
 ) : UseCase<InputStream, Unit>() {
 
     private val io = Dispatchers.IO
 
     override suspend fun execute(params: InputStream) = withContext(io) {
+        // delete all previous elements
+        gregtechRepo.deleteGregtechMachines()
+        elementRepo.deleteAll()
+
         val reader = JsonReader(params.bufferedReader())
         val startTime = System.currentTimeMillis()
 

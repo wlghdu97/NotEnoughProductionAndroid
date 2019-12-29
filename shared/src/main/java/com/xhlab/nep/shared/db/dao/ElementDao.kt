@@ -31,4 +31,9 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         ORDER BY search_result.localized_name ASC
     """)
     abstract fun searchByName(term: String): DataSource.Factory<Int, SearchResultView>
+
+    @Query("""
+        DELETE FROM element
+    """)
+    abstract suspend fun deleteAll()
 }

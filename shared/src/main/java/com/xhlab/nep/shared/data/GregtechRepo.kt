@@ -14,4 +14,8 @@ internal class GregtechRepo @Inject constructor(private val db: AppDatabase) {
         db.getGregtechMachineDao().insert(GregtechMachineEntity(name = machineName))
         db.getGregtechMachineDao().getId(machineName)
     }
+
+    suspend fun deleteGregtechMachines() = withContext(io) {
+        db.getGregtechMachineDao().deleteAll()
+    }
 }
