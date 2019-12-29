@@ -13,6 +13,7 @@ import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser
 import com.xhlab.nep.shared.parser.ShapelessRecipeParser
 import com.xhlab.nep.shared.preference.GeneralPreference
+import com.xhlab.nep.shared.preference.GeneralSharedPreference
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -22,7 +23,7 @@ class SharedModule {
 
     @Provides
     @Singleton
-    fun provideGeneralPreference(app: Application) = GeneralPreference(app)
+    fun provideGeneralPreference(app: Application): GeneralPreference = GeneralSharedPreference(app)
 
     @Provides
     @Singleton

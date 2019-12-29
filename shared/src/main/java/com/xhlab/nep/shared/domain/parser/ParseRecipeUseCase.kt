@@ -53,7 +53,7 @@ class ParseRecipeUseCase @Inject internal constructor(
         reader.endObject()
 
         // mark db is successfully loaded
-        generalPreference.isDBLoaded = true
+        generalPreference.setDBLoaded(true)
 
         val elapsedTime = System.currentTimeMillis() - startTime
         Timber.i("done! elapsed time : ${elapsedTime / 1000} sec")
