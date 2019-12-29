@@ -15,15 +15,9 @@ import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-class RecipeRepo @Inject constructor(
-    private val db: AppDatabase
-) {
-    private val io = Dispatchers.IO
+internal class RecipeRepo @Inject constructor(private val db: AppDatabase) {
 
-    suspend fun insertGregtechMachine(machineName: String) = withContext(io) {
-        db.getGregtechMachineDao().insert(GregtechMachineEntity(name = machineName))
-        db.getGregtechMachineDao().getId(machineName)
-    }
+    private val io = Dispatchers.IO
 
     suspend fun insertRecipes(recipes: List<Recipe>) = withContext(io) {
         insertItems(recipes)

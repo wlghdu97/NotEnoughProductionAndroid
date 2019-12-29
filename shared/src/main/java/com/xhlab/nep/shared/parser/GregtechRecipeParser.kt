@@ -1,10 +1,10 @@
 package com.xhlab.nep.shared.parser
 
-import android.util.Log
 import com.google.gson.stream.JsonReader
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.GregtechRecipe
+import com.xhlab.nep.shared.data.GregtechRepo
 import com.xhlab.nep.shared.data.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
@@ -14,7 +14,8 @@ import javax.inject.Inject
 internal class GregtechRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
     private val fluidParser: FluidParser,
-    private val recipeRepo: RecipeRepo
+    private val recipeRepo: RecipeRepo,
+    private val gregtechRepo: GregtechRepo
 ) : RecipeParser<GregtechRecipe>() {
 
     override suspend fun parse(reader: JsonReader) {
@@ -46,7 +47,7 @@ internal class GregtechRecipeParser @Inject constructor(
         reader.endObject()
 
         // map machine name to recipes
-        val machineId = recipeRepo.insertGregtechMachine(name)
+        val machineId = gregtechRepo.insertGregtechMachine(name)
         val mappedRecipes = recipes.map {
             it.copy(machineId = machineId)
         }
