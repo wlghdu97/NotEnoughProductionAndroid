@@ -3,7 +3,7 @@ package com.xhlab.nep.shared.parser
 import com.google.gson.stream.JsonReader
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.ShapedRecipe
-import com.xhlab.nep.shared.data.RecipeRepo
+import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.VanillaItemParser
 import timber.log.Timber
 import javax.inject.Inject

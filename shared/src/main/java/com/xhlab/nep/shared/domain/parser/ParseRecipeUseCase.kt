@@ -1,8 +1,8 @@
 package com.xhlab.nep.shared.domain.parser
 
 import com.google.gson.stream.JsonReader
-import com.xhlab.nep.shared.data.ElementRepo
-import com.xhlab.nep.shared.data.GregtechRepo
+import com.xhlab.nep.shared.data.element.ElementRepo
+import com.xhlab.nep.shared.data.gregtech.GregtechRepo
 import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser

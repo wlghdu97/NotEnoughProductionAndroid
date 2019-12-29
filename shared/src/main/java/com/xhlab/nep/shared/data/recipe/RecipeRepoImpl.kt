@@ -1,4 +1,4 @@
-package com.xhlab.nep.shared.data
+package com.xhlab.nep.shared.data.recipe
 
 import androidx.room.withTransaction
 import com.xhlab.nep.model.Element
@@ -6,20 +6,25 @@ import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.recipes.GregtechRecipe
 import com.xhlab.nep.shared.db.AppDatabase
-import com.xhlab.nep.shared.db.entity.*
+import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
+import com.xhlab.nep.shared.db.entity.GregtechRecipeEntity
+import com.xhlab.nep.shared.db.entity.RecipeEntity
+import com.xhlab.nep.shared.db.entity.RecipeResultEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-internal class RecipeRepo @Inject constructor(private val db: AppDatabase) {
+internal class RecipeRepoImpl @Inject constructor(
+    private val db: AppDatabase
+) : RecipeRepo {
 
     private val io = Dispatchers.IO
 
-    suspend fun insertRecipes(recipes: List<Recipe>) = withContext(io) {
+    override suspend fun insertRecipes(recipes: List<Recipe>) = withContext(io) {
         insertItems(recipes)
         insertRecipesInternal(recipes)
     }

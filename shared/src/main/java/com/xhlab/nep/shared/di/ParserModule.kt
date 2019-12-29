@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.di
 
-import com.xhlab.nep.shared.data.GregtechRepo
-import com.xhlab.nep.shared.data.RecipeRepo
+import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser
 import com.xhlab.nep.shared.parser.ShapelessRecipeParser

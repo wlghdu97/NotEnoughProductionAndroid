@@ -1,8 +1,13 @@
 package com.xhlab.nep.shared.di
 
 import android.app.Application
-import com.xhlab.nep.shared.data.ElementRepo
-import com.xhlab.nep.shared.data.GregtechRepo
+import com.xhlab.nep.shared.data.element.ElementRepo
+import com.xhlab.nep.shared.data.element.ElementRepoImpl
+import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.data.gregtech.GregtechRepoImpl
+import com.xhlab.nep.shared.data.recipe.RecipeRepo
+import com.xhlab.nep.shared.data.recipe.RecipeRepoImpl
+import com.xhlab.nep.shared.db.AppDatabase
 import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
 import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser
@@ -18,6 +23,18 @@ class SharedModule {
     @Provides
     @Singleton
     fun provideGeneralPreference(app: Application) = GeneralPreference(app)
+
+    @Provides
+    @Singleton
+    internal fun provideElementRepo(db: AppDatabase): ElementRepo = ElementRepoImpl(db)
+
+    @Provides
+    @Singleton
+    internal fun provideRecipeRepo(db: AppDatabase): RecipeRepo = RecipeRepoImpl(db)
+
+    @Provides
+    @Singleton
+    internal fun provideGregtechRepo(db: AppDatabase): GregtechRepo = GregtechRepoImpl(db)
 
     @Provides
     internal fun provideParseRecipeUseCase(

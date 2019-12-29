@@ -4,8 +4,8 @@ import com.google.gson.stream.JsonReader
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.GregtechRecipe
-import com.xhlab.nep.shared.data.GregtechRepo
-import com.xhlab.nep.shared.data.RecipeRepo
+import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
 import timber.log.Timber
