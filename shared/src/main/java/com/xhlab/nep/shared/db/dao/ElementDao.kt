@@ -28,6 +28,7 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         SELECT * FROM search_result
         INNER JOIN element_fts ON search_result.id = element_fts.docid
         WHERE element_fts MATCH :term
+        ORDER BY search_result.localized_name ASC
     """)
     abstract fun searchByName(term: String): DataSource.Factory<Int, SearchResultView>
 }
