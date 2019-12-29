@@ -7,6 +7,7 @@ import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser
 import com.xhlab.nep.shared.parser.ShapelessRecipeParser
+import com.xhlab.nep.shared.preference.GeneralPreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -18,7 +19,8 @@ class ParseRecipeUseCase @Inject internal constructor(
     private val shapedRecipeParser: ShapedRecipeParser,
     private val shapelessRecipeParser: ShapelessRecipeParser,
     private val elementRepo: ElementRepo,
-    private val gregtechRepo: GregtechRepo
+    private val gregtechRepo: GregtechRepo,
+    private val generalPreference: GeneralPreference
 ) : UseCase<InputStream, Unit>() {
 
     private val io = Dispatchers.IO
@@ -49,6 +51,10 @@ class ParseRecipeUseCase @Inject internal constructor(
             reader.endArray()
         }
         reader.endObject()
+
+        // mark db is successfully loaded
+        generalPreference.isDBLoaded = true
+
         val elapsedTime = System.currentTimeMillis() - startTime
         Timber.i("done! elapsed time : ${elapsedTime / 1000} sec")
         return@withContext
