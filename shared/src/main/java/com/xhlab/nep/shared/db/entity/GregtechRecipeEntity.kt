@@ -20,7 +20,7 @@ data class GregtechRecipeEntity(
     @ColumnInfo(name = "recipe_id")
     val recipeId: Long,
     @ColumnInfo(name = "target_item_id", index = true)
-    val targetItemId: Int,
+    val targetItemId: Long,
     val amount: Int,
     @ColumnInfo(name = "machine_id", index = true)
     val machineId: Int,

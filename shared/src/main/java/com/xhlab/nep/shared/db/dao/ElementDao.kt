@@ -21,7 +21,7 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         SELECT element.id FROM element
         WHERE element.unlocalized_name = :unlocalizedName
     """)
-    abstract suspend fun getId(unlocalizedName: String): Int
+    abstract suspend fun getId(unlocalizedName: String): Long
 
     @Transaction
     @Query("""

@@ -52,7 +52,7 @@ internal class RecipeRepoImpl @Inject constructor(
 
     private suspend fun insertRecipes(recipe: Recipe) {
 
-        suspend fun Pair<Element, Int>.toId(): Int {
+        suspend fun Pair<Element, Int>.toId(): Long {
             return db.getElementDao().getId(first.unlocalizedName)
         }
 

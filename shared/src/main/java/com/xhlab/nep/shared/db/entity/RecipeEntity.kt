@@ -20,6 +20,6 @@ data class RecipeEntity(
     @ColumnInfo(name = "recipe_id")
     val recipeId: Long,
     @ColumnInfo(name = "target_item_id", index = true)
-    val targetItemId: Int,
+    val targetItemId: Long,
     val amount: Int
 )
