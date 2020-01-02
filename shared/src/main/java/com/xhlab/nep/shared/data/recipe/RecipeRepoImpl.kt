@@ -71,7 +71,7 @@ internal class RecipeRepoImpl @Inject constructor(
                     recipeList.add(GregtechRecipeEntity(
                         recipeId = recipeId,
                         targetItemId = inputIdList[index],
-                        amount = pair.second,
+                        amount = pair.first.amount * pair.second,
                         machineId = recipe.machineId,
                         isEnabled = recipe.isEnabled,
                         duration = recipe.duration,
@@ -98,7 +98,7 @@ internal class RecipeRepoImpl @Inject constructor(
             resultList.add(RecipeResultEntity(
                 recipeId = recipeId,
                 resultItemId = outputIdList[index],
-                amount = pair.second
+                amount = pair.first.amount * pair.second
             ))
         }
         db.getRecipeResultDao().insert(resultList)
