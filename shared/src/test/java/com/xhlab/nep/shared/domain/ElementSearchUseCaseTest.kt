@@ -7,8 +7,8 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
-import com.xhlab.nep.shared.db.view.SearchResultView
 import com.xhlab.nep.shared.domain.item.ElementSearchUseCase
+import com.xhlab.nep.shared.domain.item.model.ElementView
 import com.xhlab.nep.shared.tests.util.LiveDataTestUtil
 import com.xhlab.nep.shared.tests.util.MainCoroutineRule
 import com.xhlab.nep.shared.tests.util.asPagedList
@@ -36,16 +36,20 @@ class ElementSearchUseCaseTest {
 
     private val term = "testTerm"
 
-    private val testList = listOf(
-        SearchResultView(
+    private val testList = listOf<ElementView>(
+        ElementViewImpl(
             id = 0,
             localizedName = "result1",
-            type = ITEM
+            unlocalizedName = "unlocalized_result1",
+            type = ITEM,
+            metaData = ""
         ),
-        SearchResultView(
+        ElementViewImpl(
             id = 1,
             localizedName = "result2",
-            type = ITEM
+            unlocalizedName = "unlocalized_result2",
+            type = ITEM,
+            metaData = ""
         )
     )
 
@@ -71,4 +75,12 @@ class ElementSearchUseCaseTest {
 
         Unit
     }
+
+    private data class ElementViewImpl(
+        override val id: Long,
+        override val localizedName: String,
+        override val unlocalizedName: String,
+        override val type: Int,
+        override val metaData: String
+    ) : ElementView()
 }
