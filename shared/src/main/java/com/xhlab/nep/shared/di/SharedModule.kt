@@ -3,6 +3,7 @@ package com.xhlab.nep.shared.di
 import android.app.Application
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.element.ElementRepoImpl
+import com.xhlab.nep.shared.data.element.RoomElementMapper
 import com.xhlab.nep.shared.data.gregtech.GregtechRepo
 import com.xhlab.nep.shared.data.gregtech.GregtechRepoImpl
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
@@ -31,7 +32,10 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideRecipeRepo(db: AppDatabase): RecipeRepo = RecipeRepoImpl(db)
+    internal fun provideRecipeRepo(
+        db: AppDatabase,
+        mapper: RoomElementMapper
+    ): RecipeRepo = RecipeRepoImpl(db, mapper)
 
     @Provides
     @Singleton

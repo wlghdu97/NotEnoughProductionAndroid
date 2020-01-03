@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "element",
-    indices = [Index(value = ["unlocalized_name"], unique = true)]
+    indices = [Index(value = ["unlocalized_name", "meta_data"], unique = true)]
 )
 data class ElementEntity(
     @PrimaryKey(autoGenerate = true)
@@ -16,7 +16,9 @@ data class ElementEntity(
     val unlocalizedName: String,
     @ColumnInfo(name = "localized_name")
     val localizedName: String,
-    val type: Int = ITEM
+    val type: Int = ITEM,
+    @ColumnInfo(name = "meta_data")
+    val metaData: String = ""
 ) {
     companion object {
         const val ITEM = 0

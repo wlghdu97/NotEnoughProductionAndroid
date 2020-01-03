@@ -23,6 +23,12 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
     """)
     abstract suspend fun getId(unlocalizedName: String): Long
 
+    @Query("""
+        SELECT element.id FROM element
+        WHERE element.unlocalized_name = :unlocalizedName AND element.meta_data = :metaData
+    """)
+    abstract suspend fun getId(unlocalizedName: String, metaData: String): Long
+
     @Transaction
     @Query("""
         SELECT * FROM search_result

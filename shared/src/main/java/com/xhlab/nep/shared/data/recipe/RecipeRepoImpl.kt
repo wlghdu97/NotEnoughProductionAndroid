@@ -2,13 +2,11 @@ package com.xhlab.nep.shared.data.recipe
 
 import androidx.room.withTransaction
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.Fluid
+import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.recipes.GregtechRecipe
+import com.xhlab.nep.shared.data.element.RoomElementMapper
 import com.xhlab.nep.shared.db.AppDatabase
-import com.xhlab.nep.shared.db.entity.ElementEntity
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.shared.db.entity.GregtechRecipeEntity
 import com.xhlab.nep.shared.db.entity.RecipeEntity
 import com.xhlab.nep.shared.db.entity.RecipeResultEntity
@@ -19,7 +17,8 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 internal class RecipeRepoImpl @Inject constructor(
-    private val db: AppDatabase
+    private val db: AppDatabase,
+    private val mapper: RoomElementMapper
 ) : RecipeRepo {
 
     private val io = Dispatchers.IO
@@ -35,25 +34,30 @@ internal class RecipeRepoImpl @Inject constructor(
         }
     }
 
+    private suspend fun insertItems(recipe: Recipe) {
+        val bothItemList = recipe.getInputs() + recipe.getOutput()
+        val bothPair = bothItemList.toItemAmountPair()
+
+        // insert items
+        val fullEntities = bothPair.map { mapper.map(it.first) }
+        db.getElementDao().insert(fullEntities)
+    }
+
     private suspend fun insertRecipesInternal(recipes: List<Recipe>) = db.withTransaction {
         for (recipe in recipes) {
             insertRecipes(recipe)
         }
     }
 
-    private suspend fun insertItems(recipe: Recipe) {
-        val bothItemList = recipe.getInputs() + recipe.getOutput()
-        val bothPair = bothItemList.toItemAmountPair()
-
-        // insert items
-        val fullEntities = bothPair.map { it.first.toEntity() }
-        db.getElementDao().insert(fullEntities)
-    }
-
     private suspend fun insertRecipes(recipe: Recipe) {
 
         suspend fun Pair<Element, Int>.toId(): Long {
-            return db.getElementDao().getId(first.unlocalizedName)
+            val unlocalizedName = first.unlocalizedName
+            val metaData = (first as? Item)?.metaData?.toString()
+            return when (metaData.isNullOrEmpty()) {
+                true -> db.getElementDao().getId(unlocalizedName)
+                false -> db.getElementDao().getId(unlocalizedName, metaData)
+            }
         }
 
         val inputPair = recipe.getInputs().toItemAmountPair()
@@ -111,10 +115,4 @@ internal class RecipeRepoImpl @Inject constructor(
             .map { it.value[0]!! to it.value.size }
             .toList()
     }
-
-    private fun Element.toEntity() = ElementEntity(
-        unlocalizedName = unlocalizedName,
-        localizedName = localizedName,
-        type = if (this is Fluid) FLUID else ITEM
-    )
 }
