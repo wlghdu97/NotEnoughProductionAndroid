@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.xhlab.nep.shared.db.dao.*
 import com.xhlab.nep.shared.db.entity.*
-import com.xhlab.nep.shared.db.view.SearchResultView
+import com.xhlab.nep.shared.db.view.RoomElementView
 
 @Database(
     entities = [
@@ -16,7 +16,7 @@ import com.xhlab.nep.shared.db.view.SearchResultView
         ElementFts::class
     ],
     views = [
-        SearchResultView::class
+        RoomElementView::class
     ],
     version = 1,
     exportSchema = false

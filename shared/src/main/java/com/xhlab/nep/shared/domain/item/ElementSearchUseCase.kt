@@ -4,14 +4,14 @@ import androidx.lifecycle.liveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.xhlab.nep.shared.data.element.ElementRepo
-import com.xhlab.nep.shared.db.view.SearchResultView
 import com.xhlab.nep.shared.domain.MediatorUseCase
+import com.xhlab.nep.shared.domain.item.model.ElementView
 import kotlinx.coroutines.SupervisorJob
 import javax.inject.Inject
 
 class ElementSearchUseCase @Inject internal constructor(
     private val elementRepo: ElementRepo
-) : MediatorUseCase<String, PagedList<SearchResultView>>() {
+) : MediatorUseCase<String, PagedList<ElementView>>() {
 
     override fun executeInternal(params: String) = liveData(SupervisorJob()) {
         val config = PagedList.Config.Builder()
