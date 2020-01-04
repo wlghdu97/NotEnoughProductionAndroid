@@ -1,7 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-buildscript { 
-    ext.kotlin_version = '1.3.50'
 
     ext {
         kotlin_version = "1.3.50"
@@ -26,6 +24,8 @@ buildscript {
         awaitibility_version = "3.1.6"
         test_rules_version = "1.2.0"
         test_orchestrator_version = "1.2.0"
+
+        jacoco_version = "0.8.1"
     }
 
     repositories {
@@ -37,6 +37,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jacoco:org.jacoco.core:$jacoco_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -46,8 +47,34 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
     }
+}
+
+apply plugin: 'jacoco'
+
+task jacocoRootReport(type: JacocoReport, dependsOn: [
+        'app:jacocoTestReport',
+        'shared:jacocoTestReport'
+]) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    getSourceDirectories().setFrom(
+            files([tasks.getByPath("app:jacocoTestReport").sourceDirectories,
+                   tasks.getByPath("shared:jacocoTestReport").sourceDirectories])
+    )
+
+    getClassDirectories().setFrom(
+            files([tasks.getByPath("app:jacocoTestReport").classDirectories,
+                   tasks.getByPath("shared:jacocoTestReport").classDirectories])
+    )
+
+    getExecutionData().setFrom(
+            files([tasks.getByPath("app:jacocoTestReport").executionData,
+                   tasks.getByPath("shared:jacocoTestReport").executionData])
+    )
 }
 
 task clean(type: Delete) {

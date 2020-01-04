@@ -4,6 +4,47 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'jacoco'
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: [
+        'connectedDebugAndroidTest', 'testDebugUnitTest', 'createDebugCoverageReport'
+]) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            '**/*_Impl*.class',
+            '**/*_MembersInjector.class',
+            '**/*_MembersInjector*.*',
+            '**/*_*Factory*.*',
+            '**/*Component*.*',
+            '**/*Module*.*'
+    ]
+    def stagingTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    getSourceDirectories().setFrom(files([mainSrc]))
+    getClassDirectories().setFrom(files([stagingTree]))
+    getExecutionData().setFrom(
+            fileTree(dir: project.buildDir, includes: [
+                    'jacoco/testDebugUnitTest.exec',
+                    'outputs/code_coverage/debugAndroidTest/connected/**/*.ec'
+            ])
+    )
+}
+
 android {
     compileSdkVersion 29
 
@@ -16,7 +57,19 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
