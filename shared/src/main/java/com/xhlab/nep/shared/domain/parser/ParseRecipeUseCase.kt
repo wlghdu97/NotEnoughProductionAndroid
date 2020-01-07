@@ -5,18 +5,19 @@ import androidx.lifecycle.liveData
 import com.google.gson.stream.JsonReader
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.domain.Cancelable
 import com.xhlab.nep.shared.domain.MediatorUseCase
 import com.xhlab.nep.shared.parser.GregtechRecipeParser
 import com.xhlab.nep.shared.parser.ShapedRecipeParser
 import com.xhlab.nep.shared.parser.ShapelessRecipeParser
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
 import timber.log.Timber
 import java.io.InputStream
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 class ParseRecipeUseCase @Inject internal constructor(
     private val gregtechRecipeParser: GregtechRecipeParser,
@@ -25,12 +26,20 @@ class ParseRecipeUseCase @Inject internal constructor(
     private val elementRepo: ElementRepo,
     private val gregtechRepo: GregtechRepo,
     private val generalPreference: GeneralPreference
-) : MediatorUseCase<InputStream, String>() {
+) : MediatorUseCase<InputStream, String>(), Cancelable {
 
     private val io = Dispatchers.IO
 
+    private var job: Job? = null
+
     @ExperimentalCoroutinesApi
     override fun executeInternal(params: InputStream) = liveData<Resource<String>>(io) {
+        // save job to support cancellation
+        job = coroutineContext[Job]
+
+        // mark db is dirty
+        generalPreference.setDBLoaded(false)
+
         // delete all previous elements
         emitLog("deleting previous elements")
         gregtechRepo.deleteGregtechMachines()
@@ -63,6 +72,14 @@ class ParseRecipeUseCase @Inject internal constructor(
 
         val elapsedTime = System.currentTimeMillis() - startTime
         emitLog("done! elapsed time : ${elapsedTime / 1000} sec", Resource.Status.SUCCESS)
+    }
+
+    override fun cancel() {
+        job?.cancel()
+
+        val message = "job canceled."
+        Timber.i(message)
+        result.value = Resource.success(message)
     }
 
     @ExperimentalCoroutinesApi

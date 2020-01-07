@@ -68,7 +68,7 @@ class ParseRecipeUseCaseTest {
         val shapelessRecipeParser = ShapelessRecipeParser(VanillaItemParser(), recipeRepo)
 
         generalPreference = mock {
-            doNothing().`when`(it).setDBLoaded(true)
+            doNothing().`when`(it).setDBLoaded(any())
         }
 
         useCase = ParseRecipeUseCase(
@@ -95,7 +95,20 @@ class ParseRecipeUseCaseTest {
         )
 
         verify(elementRepo, times(1)).deleteAll()
-        verify(generalPreference, times(1)).setDBLoaded(true)
+        verify(generalPreference, times(2)).setDBLoaded(any())
+    }
+
+    @Test
+    fun cancelUseCase() {
+        val result = useCase.observe()
+
+        useCase.execute(getInputStream())
+        useCase.cancel()
+
+        assertEquals(
+            Resource.success("job canceled."),
+            LiveDataTestUtil.getValue(result)
+        )
     }
 
     private class FakeRecipeRepo : RecipeRepo {

@@ -8,7 +8,7 @@ import timber.log.Timber
 
 abstract class MediatorUseCase<in Params, Result> {
 
-    private val result = MediatorLiveData<Resource<Result>>()
+    protected val result = MediatorLiveData<Resource<Result>>()
 
     protected abstract fun executeInternal(params: Params): LiveData<Resource<Result>>
 
