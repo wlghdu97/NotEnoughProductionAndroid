@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.xhlab.nep.shared.util.Resource
 import kotlinx.coroutines.SupervisorJob
+import timber.log.Timber
 
 abstract class UseCase<in Params, Result> {
 
@@ -26,7 +27,7 @@ abstract class UseCase<in Params, Result> {
             val result = execute(params)
             emit(Resource.success(result))
         } catch (e: Exception) {
-            //Timber.e(e)
+            Timber.e(e)
             emit(Resource.error(e))
         }
     }

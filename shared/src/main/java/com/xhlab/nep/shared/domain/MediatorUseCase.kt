@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import com.xhlab.nep.shared.util.Resource
+import timber.log.Timber
 
 abstract class MediatorUseCase<in Params, Result> {
 
@@ -20,7 +21,7 @@ abstract class MediatorUseCase<in Params, Result> {
                 result.postValue(Resource.success(it))
             }
         } catch (e: Exception) {
-            //Timber.e(e)
+            Timber.e(e)
             result.postValue(Resource.error(e))
         }
     }
