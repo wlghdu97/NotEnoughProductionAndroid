@@ -24,6 +24,7 @@ import com.xhlab.nep.shared.tests.util.MainCoroutineRule
 import com.xhlab.nep.shared.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.awaitility.Awaitility.await
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -85,6 +86,8 @@ class ParseRecipeUseCaseTest {
         val result = useCase.observe()
 
         useCase.execute(getInputStream())
+        // wait till parsing is done
+        await().until { LiveDataTestUtil.getValue(result)?.status == Resource.Status.SUCCESS }
 
         assertEquals(
             Resource.Status.SUCCESS,

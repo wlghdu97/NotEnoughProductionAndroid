@@ -5,16 +5,21 @@ import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.ShapedRecipe
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.VanillaItemParser
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.produce
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 internal class ShapedRecipeParser @Inject constructor(
     private val vanillaItemParser: VanillaItemParser,
     private val recipeRepo: RecipeRepo
 ) : RecipeParser<ShapedRecipe>() {
 
-    override suspend fun parse(reader: JsonReader) {
-        Timber.i("start parsing, ${reader.nextName()}")
+    @ExperimentalCoroutinesApi
+    override suspend fun parse(reader: JsonReader) = CoroutineScope(coroutineContext).produce {
+        send("parsing shaped recipes")
+        reader.nextName()
         val recipeList = parseElements(reader)
         // insert recipes into db
         recipeRepo.insertRecipes(recipeList)
