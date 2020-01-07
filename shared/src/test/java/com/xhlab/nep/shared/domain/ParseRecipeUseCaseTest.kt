@@ -82,7 +82,9 @@ class ParseRecipeUseCaseTest {
 
     @Test
     fun executeSuccessfully() = runBlocking {
-        val result = useCase.invoke(getInputStream())
+        val result = useCase.observe()
+
+        useCase.execute(getInputStream())
 
         assertEquals(
             Resource.Status.SUCCESS,
