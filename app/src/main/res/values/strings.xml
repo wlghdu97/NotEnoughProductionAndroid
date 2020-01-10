@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Not Enough Production</string>
+    <string name="title_parsing_notification">Parsing&#8230;</string>
 </resources>

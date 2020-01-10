@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.xhlab.nep">
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <dist:module dist:instant="true" />
 
@@ -20,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".service.ParseRecipeService"
+            android:exported="false"
+            android:stopWithTask="false"/>
+
     </application>
 
 </manifest>
