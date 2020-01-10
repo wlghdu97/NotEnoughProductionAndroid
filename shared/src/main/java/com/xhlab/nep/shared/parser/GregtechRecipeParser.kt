@@ -15,7 +15,7 @@ import kotlinx.coroutines.channels.produce
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
-internal class GregtechRecipeParser @Inject constructor(
+class GregtechRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
     private val fluidParser: FluidParser,
     private val recipeRepo: RecipeRepo,

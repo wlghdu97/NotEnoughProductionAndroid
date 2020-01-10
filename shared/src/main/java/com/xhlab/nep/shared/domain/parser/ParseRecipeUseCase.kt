@@ -19,7 +19,7 @@ import java.io.InputStream
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
-class ParseRecipeUseCase @Inject internal constructor(
+class ParseRecipeUseCase @Inject constructor(
     private val gregtechRecipeParser: GregtechRecipeParser,
     private val shapedRecipeParser: ShapedRecipeParser,
     private val shapelessRecipeParser: ShapelessRecipeParser,

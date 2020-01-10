@@ -11,7 +11,7 @@ import kotlinx.coroutines.channels.produce
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
-internal class ShapelessRecipeParser @Inject constructor(
+class ShapelessRecipeParser @Inject constructor(
     private val vanillaItemParser: VanillaItemParser,
     private val recipeRepo: RecipeRepo
 ) : RecipeParser<ShapelessRecipe>() {

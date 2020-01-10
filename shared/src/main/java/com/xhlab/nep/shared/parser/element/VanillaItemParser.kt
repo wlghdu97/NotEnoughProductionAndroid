@@ -6,7 +6,7 @@ import com.xhlab.nep.model.Item
 import com.xhlab.nep.shared.parser.Parser
 import javax.inject.Inject
 
-internal class VanillaItemParser @Inject constructor() : Parser<Item?> {
+class VanillaItemParser @Inject constructor() : Parser<Item?> {
 
     override suspend fun parseElement(reader: JsonReader): Item? {
         if (reader.peek() == JsonToken.NULL) {

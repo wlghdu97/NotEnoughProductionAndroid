@@ -6,7 +6,7 @@ import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.shared.parser.Parser
 import javax.inject.Inject
 
-internal class FluidParser @Inject constructor() : Parser<Fluid> {
+class FluidParser @Inject constructor() : Parser<Fluid> {
 
     override suspend fun parseElement(reader: JsonReader): Fluid {
         var amount = 0
