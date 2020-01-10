@@ -83,6 +83,7 @@ dependencies {
     implementation project(path: ':shared')
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation "org.jetbrains.anko:anko:$anko_version"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
@@ -95,7 +96,10 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
+    implementation "com.google.android.material:material:$material_version"
+    implementation "me.zhanghai.android.materialprogressbar:library:$material_progress_bar_version"
     implementation "com.jakewharton.timber:timber:$timber_version"
+
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
