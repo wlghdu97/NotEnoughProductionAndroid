@@ -8,29 +8,38 @@ import com.xhlab.nep.shared.data.gregtech.GregtechRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
-import timber.log.Timber
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.channels.produce
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
-internal class GregtechRecipeParser @Inject constructor(
+class GregtechRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
     private val fluidParser: FluidParser,
     private val recipeRepo: RecipeRepo,
     private val gregtechRepo: GregtechRepo
 ) : RecipeParser<GregtechRecipe>() {
 
-    override suspend fun parse(reader: JsonReader) {
-        parseMachineList(reader)
+    @ExperimentalCoroutinesApi
+    override suspend fun parse(
+        reader: JsonReader
+    ) = CoroutineScope(coroutineContext).produce<String> {
+        parseMachineList(this, reader)
     }
 
-    private suspend fun parseMachineList(reader: JsonReader) {
+    @ExperimentalCoroutinesApi
+    private suspend fun parseMachineList(producer: ProducerScope<String>, reader: JsonReader) {
         reader.beginArray()
         while (reader.hasNext()) {
-            parseMachine(reader)
+            parseMachine(producer, reader)
         }
         reader.endArray()
     }
 
-    private suspend fun parseMachine(reader: JsonReader) {
+    @ExperimentalCoroutinesApi
+    private suspend fun parseMachine(producer: ProducerScope<String>, reader: JsonReader) {
         reader.beginObject()
 
         var name = ""
@@ -43,7 +52,8 @@ internal class GregtechRecipeParser @Inject constructor(
                 recipes = parseElements(reader)
             }
         }
-        Timber.i("machine ${recipes.size} : $name")
+
+        producer.send("$name (${recipes.size} recipes)")
         reader.endObject()
 
         // map machine name to recipes

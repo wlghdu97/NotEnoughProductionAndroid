@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import com.xhlab.nep.shared.util.Resource
+import timber.log.Timber
 
 abstract class MediatorUseCase<in Params, Result> {
 
-    private val result = MediatorLiveData<Resource<Result>>()
+    protected val result = MediatorLiveData<Resource<Result>>()
 
-    protected abstract fun executeInternal(params: Params): LiveData<Result>
+    protected abstract fun executeInternal(params: Params): LiveData<Resource<Result>>
 
     fun execute(params: Params) {
         try {
@@ -17,10 +18,10 @@ abstract class MediatorUseCase<in Params, Result> {
 
             result.removeSource(liveData)
             result.addSource(liveData) {
-                result.postValue(Resource.success(it))
+                result.postValue(it)
             }
         } catch (e: Exception) {
-            //Timber.e(e)
+            Timber.e(e)
             result.postValue(Resource.error(e))
         }
     }

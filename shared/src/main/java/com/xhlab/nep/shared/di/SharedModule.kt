@@ -9,17 +9,13 @@ import com.xhlab.nep.shared.data.gregtech.GregtechRepoImpl
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepoImpl
 import com.xhlab.nep.shared.db.AppDatabase
-import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
-import com.xhlab.nep.shared.parser.GregtechRecipeParser
-import com.xhlab.nep.shared.parser.ShapedRecipeParser
-import com.xhlab.nep.shared.parser.ShapelessRecipeParser
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.preference.GeneralSharedPreference
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module(includes = [ParserModule::class, RoomModule::class])
+@Module(includes = [RoomModule::class])
 class SharedModule {
 
     @Provides
@@ -40,21 +36,4 @@ class SharedModule {
     @Provides
     @Singleton
     internal fun provideGregtechRepo(db: AppDatabase): GregtechRepo = GregtechRepoImpl(db)
-
-    @Provides
-    internal fun provideParseRecipeUseCase(
-        gregtechRecipeParser: GregtechRecipeParser,
-        shapedRecipeParser: ShapedRecipeParser,
-        shapelessRecipeParser: ShapelessRecipeParser,
-        elementRepo: ElementRepo,
-        gregtechRepo: GregtechRepo,
-        generalPreference: GeneralPreference
-    ) = ParseRecipeUseCase(
-        gregtechRecipeParser = gregtechRecipeParser,
-        shapedRecipeParser = shapedRecipeParser,
-        shapelessRecipeParser = shapelessRecipeParser,
-        elementRepo = elementRepo,
-        gregtechRepo = gregtechRepo,
-        generalPreference = generalPreference
-    )
 }

@@ -64,13 +64,13 @@ class MediatorUseCaseTest {
     }
 
     class TestMediatorUseCase : MediatorUseCase<String, String>() {
-        override fun executeInternal(params: String): LiveData<String> {
-            return MutableLiveData(params)
+        override fun executeInternal(params: String): LiveData<Resource<String>> {
+            return MutableLiveData(Resource.success(params))
         }
     }
 
     class TestFailingMediatorUseCase : MediatorUseCase<String, String>() {
-        override fun executeInternal(params: String): LiveData<String> {
+        override fun executeInternal(params: String): LiveData<Resource<String>> {
             throw RuntimeException()
         }
     }

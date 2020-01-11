@@ -83,6 +83,7 @@ dependencies {
     implementation project(path: ':shared')
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation "org.jetbrains.anko:anko:$anko_version"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
@@ -95,14 +96,33 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
+    implementation "com.google.android.material:material:$material_version"
+    implementation "me.zhanghai.android.materialprogressbar:library:$material_progress_bar_version"
     implementation "com.jakewharton.timber:timber:$timber_version"
+
     implementation "com.google.dagger:dagger:$dagger_version"
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
-    testImplementation 'junit:junit:4.12'
+    implementation "com.google.code.gson:gson:$gson_version"
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation "junit:junit:$junit_version"
+    testImplementation "android.arch.core:core-testing:$core_testing_version"
+    testImplementation "org.mockito:mockito-core:$mockito_version"
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_test_version"
+
+    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
+    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+    androidTestImplementation "androidx.test:runner:$test_runner_version"
+    androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation "android.arch.core:core-testing:$core_testing_version"
+    androidTestImplementation "org.awaitility:awaitility:$awaitibility_version"
+    androidTestImplementation "androidx.test:rules:$test_rules_version"
+
+    androidTestUtil "androidx.test:orchestrator:$test_orchestrator_version"
+
+    testImplementation project(path: ':model')
 }
