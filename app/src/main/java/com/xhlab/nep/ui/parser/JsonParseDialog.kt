@@ -9,6 +9,7 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
@@ -122,6 +123,9 @@ class JsonParseDialog : AppCompatDialogFragment() {
                         false -> stopService()
                     }
                 }
+            }
+            setOnKeyListener { _, keyCode, _ ->
+                (keyCode == KeyEvent.KEYCODE_BACK && !isTaskDone)
             }
         }
     }
