@@ -27,11 +27,12 @@ import org.jetbrains.anko.textResource
 class JsonParseDialog : AppCompatDialogFragment() {
 
     private lateinit var parseRecipeService: ParseRecipeService
+    private var isServiceInvoked = false
     private var isBounded = false
     private var isTaskDone = false
 
     private lateinit var dialogView: View
-    private lateinit var negativeButton: Button
+    private var negativeButton: Button? = null
 
     private val connection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder?) {
@@ -71,7 +72,12 @@ class JsonParseDialog : AppCompatDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startService()
+        // start service only once
+        isServiceInvoked = savedInstanceState?.getBoolean(SERVICE_INVOKED) ?: false
+        if (!isServiceInvoked) {
+            startService()
+            isServiceInvoked = true
+        }
     }
 
     override fun onStart() {
@@ -82,6 +88,11 @@ class JsonParseDialog : AppCompatDialogFragment() {
     override fun onStop() {
         super.onStop()
         unbindService()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(SERVICE_INVOKED, isServiceInvoked)
+        super.onSaveInstanceState(outState)
     }
 
     private fun initService() {
@@ -96,7 +107,7 @@ class JsonParseDialog : AppCompatDialogFragment() {
             }
             with (dialogView.progress_bar) {
                 isIndeterminate = !isTaskDone
-                negativeButton.textResource = when (isTaskDone) {
+                negativeButton?.textResource = when (isTaskDone) {
                     true -> {
                         progress = 100
                         R.string.btn_close
@@ -117,7 +128,7 @@ class JsonParseDialog : AppCompatDialogFragment() {
             setOnShowListener {
                 val alertDialog = dialog as AlertDialog
                 negativeButton = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                negativeButton.setOnClickListener {
+                negativeButton?.setOnClickListener {
                     when (isTaskDone) {
                         true -> dismiss()
                         false -> stopService()
@@ -162,6 +173,7 @@ class JsonParseDialog : AppCompatDialogFragment() {
     }
 
     companion object {
+        private const val SERVICE_INVOKED = "service_invoked"
         const val SHOW_JSON_PARSER_DIALOG = "show_json_parser_dialog"
     }
 }
