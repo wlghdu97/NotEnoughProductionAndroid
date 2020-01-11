@@ -2,6 +2,7 @@ package com.xhlab.nep.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.net.Uri
@@ -23,15 +24,32 @@ class ParseRecipeService @Inject constructor() : Service() {
     @Inject
     lateinit var parseRecipeUseCase: ParseRecipeUseCase
 
+    private var isTaskDone = false
+
     val parseLog by lazy { parseRecipeUseCase.observe() }
 
+    private val pendingIntent by lazy {
+        PendingIntent.getActivity(applicationContext, 0, Intent(), PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
     private val logObserver = Observer<Resource<String>> {
+        isTaskDone = it.status != Resource.Status.LOADING
+
+        if (isTaskDone) {
+            stopSelf()
+        }
+
         NotificationManagerCompat.from(this).apply {
-            val builder = getNotificationBuilder()
-            val isDone = it.status == Resource.Status.LOADING
-            builder.setProgress(100, 100, isDone)
-            builder.setOngoing(isDone)
-            builder.setContentText(it.data)
+            val builder = getNotificationBuilder().apply {
+                setProgress(100, 100, !isTaskDone)
+                setContentTitle(getString(when (isTaskDone) {
+                    true -> R.string.title_parsing_result
+                    false -> R.string.title_parsing_notification
+                }))
+                setContentText(it.data)
+                setContentIntent(pendingIntent)
+                setOngoing(!isTaskDone)
+            }
             notify(NOTIFICATION_ID, builder.build())
         }
     }
@@ -50,12 +68,13 @@ class ParseRecipeService @Inject constructor() : Service() {
     }
 
     override fun onDestroy() {
-        parseRecipeUseCase.cancel()
-        parseLog.removeObserver(logObserver)
         super.onDestroy()
+        if (!isTaskDone) {
+            parseRecipeUseCase.cancel()
+        }
+        parseLog.removeObserver(logObserver)
     }
 
-    @Suppress("missingSuperCall")
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         parseLog.observeForever(logObserver)
         val fileUri = intent.getParcelableExtra<Uri>(JSON_URI)
@@ -65,7 +84,7 @@ class ParseRecipeService @Inject constructor() : Service() {
                 parseRecipeUseCase.execute(inputStream)
             }
         }
-        return START_STICKY
+        return super.onStartCommand(intent, flags, startId)
     }
 
     @Suppress("missingSuperCall")
@@ -78,9 +97,9 @@ class ParseRecipeService @Inject constructor() : Service() {
 
     private fun getNotificationBuilder(): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, CHANNEL_ID).apply {
-            setContentTitle(getString(R.string.title_parsing_notification))
             setSmallIcon(R.mipmap.ic_launcher)
-            priority = NotificationCompat.PRIORITY_LOW
+            setAutoCancel(true)
+            priority = NotificationCompat.PRIORITY_DEFAULT
         }
     }
 
