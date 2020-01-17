@@ -16,7 +16,7 @@ data class GregtechRecipe(
     private val fluidOutputs: List<Fluid>
 ) : Recipe {
 
-    override fun getInputs(): List<Element?> {
+    override fun getInputs(): List<Element> {
         val inputs = arrayListOf<Element>()
         inputs.addAll(itemInputs)
         inputs.addAll(fluidInputs)

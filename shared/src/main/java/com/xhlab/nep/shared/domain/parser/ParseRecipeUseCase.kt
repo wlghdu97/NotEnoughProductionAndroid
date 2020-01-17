@@ -7,12 +7,12 @@ import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.gregtech.GregtechRepo
 import com.xhlab.nep.shared.domain.Cancelable
 import com.xhlab.nep.shared.domain.MediatorUseCase
-import com.xhlab.nep.shared.parser.GregtechRecipeParser
-import com.xhlab.nep.shared.parser.ShapedRecipeParser
-import com.xhlab.nep.shared.parser.ShapelessRecipeParser
+import com.xhlab.nep.shared.parser.*
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.consumeEach
 import timber.log.Timber
 import java.io.InputStream
@@ -23,6 +23,9 @@ class ParseRecipeUseCase @Inject constructor(
     private val gregtechRecipeParser: GregtechRecipeParser,
     private val shapedRecipeParser: ShapedRecipeParser,
     private val shapelessRecipeParser: ShapelessRecipeParser,
+    private val shapedOreRecipeParser: ShapedOreRecipeParser,
+    private val shapelessOreRecipeParser: ShapelessOreRecipeParser,
+    private val replacementListParser: ReplacementListParser,
     private val elementRepo: ElementRepo,
     private val gregtechRepo: GregtechRepo,
     private val generalPreference: GeneralPreference
@@ -53,15 +56,14 @@ class ParseRecipeUseCase @Inject constructor(
 
         while (reader.hasNext()) {
             reader.beginArray()
+            var index = 0
             while (reader.hasNext()) {
                 reader.beginObject()
                 while (reader.hasNext()) {
-                    when (val name = reader.nextName()) {
-                        "type" -> parse(reader.nextString(), reader)
-                        else -> parse(name, reader)
-                    }
+                    parse(index, reader)
                 }
                 reader.endObject()
+                index += 1
             }
             reader.endArray()
         }
@@ -83,12 +85,16 @@ class ParseRecipeUseCase @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun LiveDataScope<Resource<String>>.parse(name: String, reader: JsonReader) {
-        when (name) {
-            "machines" -> gregtechRecipeParser.parse(reader)
-            "shaped" -> shapedRecipeParser.parse(reader)
-            "shapeless" -> shapelessRecipeParser.parse(reader)
-            else -> return
+    private suspend fun LiveDataScope<Resource<String>>.parse(index: Int, reader: JsonReader) {
+        when (index) {
+            0 -> gregtechRecipeParser.parse(reader)
+            1 -> shapedRecipeParser.parse(reader)
+            2 -> shapelessRecipeParser.parse(reader)
+            3 -> shapedOreRecipeParser.parse(reader)
+            4 -> shapelessOreRecipeParser.parse(reader)
+            5 -> replacementListParser.parse(reader)
+            else ->
+                throw RuntimeException("parser not found.")
         }.apply {
             consumeEach { emitLog(it) }
         }

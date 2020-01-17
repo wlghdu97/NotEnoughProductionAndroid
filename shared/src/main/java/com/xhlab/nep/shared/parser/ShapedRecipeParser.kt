@@ -1,6 +1,7 @@
 package com.xhlab.nep.shared.parser
 
 import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.ShapedRecipe
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
@@ -19,20 +20,25 @@ class ShapedRecipeParser @Inject constructor(
     @ExperimentalCoroutinesApi
     override suspend fun parse(reader: JsonReader) = CoroutineScope(coroutineContext).produce {
         send("parsing shaped recipes")
-        reader.nextName()
-        val recipeList = parseElements(reader)
-        // insert recipes into db
-        recipeRepo.insertRecipes(recipeList)
+        while (reader.hasNext()) {
+            if (reader.peek() == JsonToken.BEGIN_ARRAY) {
+                val recipeList = parseElements(reader)
+                // insert recipes into db
+                recipeRepo.insertRecipes(recipeList)
+            } else {
+                reader.skipValue()
+            }
+        }
     }
 
     override suspend fun parseElement(reader: JsonReader): ShapedRecipe {
-        var inputItems = emptyList<Item?>()
+        var inputItems = emptyList<Item>()
         var outputItem: Item? = null
 
         reader.beginObject()
         while(reader.hasNext()) {
             when (reader.nextName()) {
-                "iI" -> inputItems = vanillaItemParser.parseElements(reader)
+                "iI" -> inputItems = vanillaItemParser.parseElements(reader).filterNotNull()
                 "o" -> outputItem = vanillaItemParser.parseElement(reader)
             }
         }

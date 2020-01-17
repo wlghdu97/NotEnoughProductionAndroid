@@ -4,7 +4,7 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 
 data class ShapelessRecipe(
-    private val input: List<Element?>,
+    private val input: List<Element>,
     private val output: Element
 ) : Recipe {
     override fun getInputs() = input

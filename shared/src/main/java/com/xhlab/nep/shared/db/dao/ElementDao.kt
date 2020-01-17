@@ -29,11 +29,19 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
     """)
     abstract suspend fun getId(unlocalizedName: String, metaData: String): Long
 
+    @Query("""
+        SELECT chain_element_id FROM ore_dict_chain
+        INNER JOIN element ON element.unlocalized_name IN (:unlocalizedNameList)
+        WHERE element_id = element.id
+        GROUP BY chain_element_id HAVING COUNT(element.id)
+    """)
+    abstract suspend fun getOreDictChainId(unlocalizedNameList: List<String>): Long
+
     @Transaction
     @Query("""
         SELECT * FROM element_view
         INNER JOIN element_fts ON element_view.id = element_fts.docid
-        WHERE element_fts MATCH :term
+        WHERE element_fts MATCH :term AND element_view.type NOT IN (2, 3)
         ORDER BY element_view.localized_name ASC
     """)
     abstract fun searchByName(term: String): DataSource.Factory<Int, RoomElementView>
