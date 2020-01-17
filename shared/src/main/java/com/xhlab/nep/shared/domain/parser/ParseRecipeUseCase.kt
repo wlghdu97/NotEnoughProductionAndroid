@@ -23,6 +23,8 @@ class ParseRecipeUseCase @Inject constructor(
     private val gregtechRecipeParser: GregtechRecipeParser,
     private val shapedRecipeParser: ShapedRecipeParser,
     private val shapelessRecipeParser: ShapelessRecipeParser,
+    private val shapedOreRecipeParser: ShapedOreRecipeParser,
+    private val shapelessOreRecipeParser: ShapelessOreRecipeParser,
     private val elementRepo: ElementRepo,
     private val gregtechRepo: GregtechRepo,
     private val generalPreference: GeneralPreference
@@ -87,6 +89,8 @@ class ParseRecipeUseCase @Inject constructor(
             0 -> gregtechRecipeParser.parse(reader)
             1 -> shapedRecipeParser.parse(reader)
             2 -> shapelessRecipeParser.parse(reader)
+            3 -> shapedOreRecipeParser.parse(reader)
+            4 -> shapelessOreRecipeParser.parse(reader)
             else ->
                 throw RuntimeException("parser not found.")
         }.apply {
