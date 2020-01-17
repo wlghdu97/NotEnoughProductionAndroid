@@ -1,6 +1,7 @@
 package com.xhlab.nep.shared.parser
 
 import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonToken
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.recipes.GregtechRecipe
@@ -26,7 +27,13 @@ class GregtechRecipeParser @Inject constructor(
     override suspend fun parse(
         reader: JsonReader
     ) = CoroutineScope(coroutineContext).produce<String> {
-        parseMachineList(this, reader)
+        while (reader.hasNext()) {
+            if (reader.peek() == JsonToken.BEGIN_ARRAY) {
+                parseMachineList(this, reader)
+            } else {
+                reader.skipValue()
+            }
+        }
     }
 
     @ExperimentalCoroutinesApi
