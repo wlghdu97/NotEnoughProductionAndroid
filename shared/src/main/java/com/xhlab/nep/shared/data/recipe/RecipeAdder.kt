@@ -2,20 +2,19 @@ package com.xhlab.nep.shared.data.recipe
 
 import androidx.room.withTransaction
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.model.recipes.GregtechRecipe
 import com.xhlab.nep.shared.data.element.RoomElementMapper
+import com.xhlab.nep.shared.data.generateLongUUID
+import com.xhlab.nep.shared.data.getId
 import com.xhlab.nep.shared.db.AppDatabase
 import com.xhlab.nep.shared.db.entity.*
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.collections.ArrayList
 
 @Singleton
 class RecipeAdder @Inject constructor(
@@ -101,8 +100,8 @@ class RecipeAdder @Inject constructor(
 
         // insert recipes
         val recipeId = generateLongUUID()
-        val inputIdList = inputPair.map { it.first.getId() }
-        val outputIdList = outputPair.map { it.first.getId() }
+        val inputIdList = inputPair.map { it.first.getId(db) }
+        val outputIdList = outputPair.map { it.first.getId(db) }
 
         when (recipe) {
             is GregtechRecipe -> {
@@ -153,22 +152,4 @@ class RecipeAdder @Inject constructor(
     private fun Recipe.getDistinctItemList(): List<Element> {
         return (getInputs() + getOutput()).distinct()
     }
-
-    private suspend fun Element.getId(): Long {
-        return when (this) {
-            is OreDictElement -> {
-                db.getElementDao().getOreDictChainId(oreDictNameList)
-            }
-            else -> {
-                val unlocalizedName = unlocalizedName
-                val metaData = (this as? Item)?.metaData?.toString()
-                when (metaData.isNullOrEmpty()) {
-                    true -> db.getElementDao().getId(unlocalizedName)
-                    false -> db.getElementDao().getId(unlocalizedName, metaData)
-                }
-            }
-        }
-    }
-
-    private fun generateLongUUID() = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
 }

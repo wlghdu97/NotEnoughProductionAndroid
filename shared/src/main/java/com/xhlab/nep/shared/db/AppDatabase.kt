@@ -14,7 +14,8 @@ import com.xhlab.nep.shared.db.view.RoomElementView
         RecipeResultEntity::class,
         ElementEntity::class,
         ElementFts::class,
-        OreDictChainEntity::class
+        OreDictChainEntity::class,
+        ReplacementEntity::class
     ],
     views = [
         RoomElementView::class
@@ -29,4 +30,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun getRecipeResultDao(): RecipeResultDao
     abstract fun getElementDao(): ElementDao
     abstract fun getOreDictChainDao(): OreDictChainDao
+    abstract fun getReplacementDao(): ReplacementDao
 }

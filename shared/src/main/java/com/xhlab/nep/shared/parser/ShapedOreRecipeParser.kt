@@ -24,7 +24,7 @@ class ShapedOreRecipeParser @Inject constructor(
             if (reader.peek() == JsonToken.BEGIN_ARRAY) {
                 val recipeList = parseElements(reader)
                 // insert recipes into db
-                //recipeRepo.insertRecipes(recipeList)
+                recipeRepo.insertRecipes(recipeList)
             } else {
                 reader.skipValue()
             }
