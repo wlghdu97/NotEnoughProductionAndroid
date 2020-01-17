@@ -26,13 +26,13 @@ class ShapedRecipeParser @Inject constructor(
     }
 
     override suspend fun parseElement(reader: JsonReader): ShapedRecipe {
-        var inputItems = emptyList<Item?>()
+        var inputItems = emptyList<Item>()
         var outputItem: Item? = null
 
         reader.beginObject()
         while(reader.hasNext()) {
             when (reader.nextName()) {
-                "iI" -> inputItems = vanillaItemParser.parseElements(reader)
+                "iI" -> inputItems = vanillaItemParser.parseElements(reader).filterNotNull()
                 "o" -> outputItem = vanillaItemParser.parseElement(reader)
             }
         }

@@ -109,7 +109,6 @@ class RecipeAdder @Inject constructor(
 
     private fun List<Element?>.toItemAmountPair(): List<Pair<Element, Int>> {
         return this.asSequence()
-            .filter { it != null }
             .groupBy { it!!.unlocalizedName }
             .map { it.value[0]!! to it.value.size }
             .toList()
