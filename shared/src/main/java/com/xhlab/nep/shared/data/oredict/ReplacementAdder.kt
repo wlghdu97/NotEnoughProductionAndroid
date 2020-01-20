@@ -3,7 +3,6 @@ package com.xhlab.nep.shared.data.oredict
 import androidx.room.withTransaction
 import com.xhlab.nep.model.oredict.Replacement
 import com.xhlab.nep.shared.data.element.RoomElementMapper
-import com.xhlab.nep.shared.data.generateLongUUID
 import com.xhlab.nep.shared.data.getId
 import com.xhlab.nep.shared.db.AppDatabase
 import com.xhlab.nep.shared.db.entity.ReplacementEntity
@@ -44,10 +43,9 @@ class ReplacementAdder @Inject constructor(
     }
 
     private suspend fun insertReplacement(replacement: Replacement) {
-        val replacementId = generateLongUUID()
         val entityList = replacement.elementList.map {
             ReplacementEntity(
-                replacementId = replacementId,
+                oreDictName = replacement.oreDictName,
                 elementId = it.getId(db)
             )
         }

@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 
 @Entity(
     tableName = "replacement",
-    primaryKeys = ["rep_id", "element_id"],
+    primaryKeys = ["name", "element_id"],
     foreignKeys = [
         ForeignKey(
             entity = ElementEntity::class,
@@ -17,8 +17,8 @@ import androidx.room.ForeignKey
     ]
 )
 data class ReplacementEntity(
-    @ColumnInfo(name = "rep_id")
-    val replacementId: Long = 0,
+    @ColumnInfo(name = "name")
+    val oreDictName: String,
     @ColumnInfo(name = "element_id", index = true)
     val elementId: Long
 )
