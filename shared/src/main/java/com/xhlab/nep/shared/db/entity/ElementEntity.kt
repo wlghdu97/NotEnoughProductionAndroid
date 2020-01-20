@@ -10,8 +10,8 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["unlocalized_name", "meta_data"], unique = true)]
 )
 data class ElementEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey
+    val id: Long,
     @ColumnInfo(name = "unlocalized_name")
     val unlocalizedName: String,
     @ColumnInfo(name = "localized_name")

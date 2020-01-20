@@ -5,6 +5,7 @@ import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.shared.data.Mapper
+import com.xhlab.nep.shared.data.generateLongUUID
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
@@ -19,6 +20,7 @@ class RoomElementMapper @Inject constructor() : Mapper<Element, List<ElementEnti
         return when (element) {
             is OreDictElement -> element.oreDictNameList.map {
                 ElementEntity(
+                    id = generateLongUUID(),
                     unlocalizedName = it,
                     localizedName = "",
                     type = ORE_DICT
@@ -26,6 +28,7 @@ class RoomElementMapper @Inject constructor() : Mapper<Element, List<ElementEnti
             }
             else -> listOf(
                 ElementEntity(
+                    id = generateLongUUID(),
                     unlocalizedName = element.unlocalizedName,
                     localizedName = element.localizedName,
                     type = if (element is Fluid) FLUID else ITEM,
