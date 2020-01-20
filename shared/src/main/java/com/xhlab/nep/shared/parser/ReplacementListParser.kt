@@ -21,6 +21,7 @@ class ReplacementListParser @Inject constructor(
             if (reader.peek() == JsonToken.BEGIN_ARRAY) {
                 val replacementList = replacementParser.parseElements(reader)
                 // insert replacement list into db
+                send("inserting ${replacementList.size} replacements")
                 oreDictRepo.insertReplacements(replacementList)
             } else {
                 reader.skipValue()

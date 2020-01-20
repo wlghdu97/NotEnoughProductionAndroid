@@ -24,6 +24,7 @@ class ShapelessOreRecipeParser @Inject constructor(
             if (reader.peek() == JsonToken.BEGIN_ARRAY) {
                 val recipeList = parseElements(reader)
                 // insert recipes into db
+                send("inserting ${recipeList.size} shapeless ore recipes")
                 recipeRepo.insertRecipes(recipeList)
             } else {
                 reader.skipValue()
