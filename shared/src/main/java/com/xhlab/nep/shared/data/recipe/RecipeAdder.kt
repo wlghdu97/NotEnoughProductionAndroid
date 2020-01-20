@@ -31,17 +31,16 @@ class RecipeAdder @Inject constructor(
 
     private suspend fun insertItemsFromRecipes(recipes: List<Recipe>) = db.withTransaction {
 
-        suspend fun insertItemsFromRecipe(recipe: Recipe) {
+        fun getItemsFromRecipe(recipe: Recipe): List<ElementEntity> {
             val bothItemList = recipe.getDistinctItemList()
-
-            // insert items
-            val fullEntities = bothItemList.flatMap { mapper.map(it) }.distinct()
-            db.getElementDao().insert(fullEntities)
+            return bothItemList.flatMap { mapper.map(it) }
         }
 
-        for (recipe in recipes) {
-            insertItemsFromRecipe(recipe)
-        }
+        val entitySet = Sequence { recipes.iterator() }
+            .flatMap { getItemsFromRecipe(it).asSequence() }
+            .distinctBy { it.unlocalizedName + it.metaData }
+
+        db.getElementDao().insert(entitySet.toList())
     }
 
     private suspend fun insertOreDictChains(recipes: List<Recipe>) = db.withTransaction {
