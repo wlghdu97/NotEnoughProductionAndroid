@@ -33,7 +33,6 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         SELECT chain_element_id FROM ore_dict_chain
         INNER JOIN element ON element.unlocalized_name IN (:unlocalizedNameList)
         WHERE element_id = element.id
-        GROUP BY chain_element_id HAVING COUNT(element.id)
     """)
     abstract suspend fun getOreDictChainId(unlocalizedNameList: List<String>): Long
 
