@@ -61,6 +61,7 @@ class ParseRecipeService @Inject constructor() : Service() {
         if (Build.VERSION.SDK_INT >= 26) {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, "channel", importance)
+            channel.setSound(null, null)
             NotificationManagerCompat.from(this).createNotificationChannel(channel)
         }
         val builder = getNotificationBuilder()
