@@ -13,6 +13,7 @@ buildscript {
         room_version = "2.2.3"
         room_compiler_version = "2.2.1"
         dagger_version = "2.24"
+        live_event_version = "1.2.0"
         material_version = "1.2.0-alpha03"
         material_progress_bar_version = "1.6.1"
         gson_version = "2.8.6"

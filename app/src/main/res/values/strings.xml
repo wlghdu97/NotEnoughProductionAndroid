@@ -17,10 +17,21 @@
     <string name="btn_abort">Abort</string>
     <string name="btn_close">Close</string>
 
+    <string name="hint_search_element">Search item</string>
+
+
+    <string name="txt_item">Item</string>
+    <string name="txt_fluid">Fluid</string>
+    <string name="txt_unknown">Unknown</string>
+
 
     <string name="txt_db_loaded">Loaded</string>
     <string name="txt_db_empty">Empty</string>
 
+    <string name="txt_db_not_loaded">
+        DB is not loaded.
+        \nPlease import your recEx json file.
+    </string>
     <string name="txt_parse_json">
         Previous DB data will be erased.
         \nThis job may take longer than 4 minutes.
@@ -30,5 +41,6 @@
 
     <string name="error_open_json_failed">Failed to open json file.</string>
 
+    <string name="form_item_total">matched %d items</string>
     <string name="key_db_status_ui">db_load_status_ui</string>
 </resources>
