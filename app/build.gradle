@@ -92,10 +92,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
     implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.preference:preference:$preference_version"
 
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
 
+    implementation "com.github.hadilq.liveevent:liveevent:$live_event_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "me.zhanghai.android.materialprogressbar:library:$material_progress_bar_version"
     implementation "com.jakewharton.timber:timber:$timber_version"

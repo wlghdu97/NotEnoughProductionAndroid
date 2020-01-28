@@ -5,14 +5,35 @@
     <string name="title_parsing">Parsing in progress</string>
     <string name="title_parsing_notification">Parsing&#8230;</string>
     <string name="title_parsing_result">Parsing result</string>
+    <string name="title_theme">Theme</string>
+    <string name="title_dark_theme">Enable dark theme</string>
+    <string name="title_db">DB</string>
+    <string name="title_db_status">Database Status</string>
 
     <string name="menu_open_json">Open json file</string>
+    <string name="menu_item_browser">Item browser</string>
+    <string name="menu_settings">Settings</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_abort">Abort</string>
     <string name="btn_close">Close</string>
 
+    <string name="hint_search_element">Search item</string>
+
+
+    <string name="txt_item">Item</string>
+    <string name="txt_fluid">Fluid</string>
+    <string name="txt_unknown">Unknown</string>
+
+
+    <string name="txt_db_loaded">Loaded</string>
+    <string name="txt_db_empty">Empty</string>
+
+    <string name="txt_db_not_loaded">
+        DB is not loaded.
+        \nPlease import your recEx json file.
+    </string>
     <string name="txt_parse_json">
         Previous DB data will be erased.
         \nThis job may take longer than 4 minutes.
@@ -21,4 +42,7 @@
     <string name="txt_invalid_uri">Invalid file uri.</string>
 
     <string name="error_open_json_failed">Failed to open json file.</string>
+
+    <string name="form_item_total">matched %d items</string>
+    <string name="key_db_status_ui">db_load_status_ui</string>
 </resources>
