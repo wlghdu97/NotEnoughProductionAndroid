@@ -11,6 +11,8 @@
     <string name="title_db_status">Database Status</string>
 
     <string name="menu_open_json">Open json file</string>
+    <string name="menu_item_browser">Item browser</string>
+    <string name="menu_settings">Settings</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
