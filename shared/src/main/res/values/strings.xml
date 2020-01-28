@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="key_theme_category">theme_category</string>
+    <string name="key_theme">theme</string>
+
+    <string name="key_db_category">db_category</string>
+    <string name="key_db_status">db_load_status</string>
+</resources>
