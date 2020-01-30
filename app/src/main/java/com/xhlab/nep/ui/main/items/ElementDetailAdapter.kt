@@ -5,7 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.paging.PagedList
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
@@ -15,9 +16,7 @@ import org.jetbrains.anko.textResource
 
 class ElementDetailAdapter (
     private val listener: ElementListener? = null
-) : RecyclerView.Adapter<ElementDetailAdapter.RecipeElementViewHolder>() {
-
-    private var elementList = ArrayList<ElementView>()
+) : PagedListAdapter<ElementView, ElementDetailAdapter.RecipeElementViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeElementViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -26,14 +25,11 @@ class ElementDetailAdapter (
     }
 
     override fun onBindViewHolder(holder: RecipeElementViewHolder, position: Int) {
-        holder.bind(elementList[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount() = elementList.size
-
-    fun submitList(list: PagedList<ElementView>?) {
-        elementList.clear()
-        elementList.addAll(list ?: emptyList())
+    override fun submitList(pagedList: PagedList<ElementView>?) {
+        super.submitList(pagedList)
         notifyDataSetChanged()
     }
 
@@ -58,6 +54,20 @@ class ElementDetailAdapter (
                 FLUID -> R.string.txt_fluid
                 else -> R.string.txt_unknown
             }
+        }
+    }
+
+    private object DiffCallback : DiffUtil.ItemCallback<ElementView>() {
+        override fun areItemsTheSame(oldItem: ElementView, newItem: ElementView): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: ElementView, newItem: ElementView): Boolean {
+            return (oldItem.id == newItem.id &&
+                    oldItem.unlocalizedName == newItem.unlocalizedName &&
+                    oldItem.localizedName == newItem.localizedName &&
+                    oldItem.type == newItem.type &&
+                    oldItem.metaData == newItem.metaData)
         }
     }
 }
