@@ -58,7 +58,7 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
             if (!it) {
                 search_view.setQuery("", false)
                 search_view.clearFocus()
-                search("")
+                viewModel.searchElements("**")
             }
         }
 
@@ -79,11 +79,7 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?) = false
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    if (!newText.isNullOrEmpty()) {
-                        search(newText)
-                    } else {
-                        clearResults()
-                    }
+                    viewModel.searchElements("*${newText ?: ""}*")
                     return true
                 }
             })
@@ -92,20 +88,8 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
         element_list.adapter = elementAdapter
     }
 
-    private fun search(term: String) {
-        if (term.length > 1) {
-            viewModel.searchElements("*$term*")
-        } else {
-            clearResults()
-        }
-    }
-
     private fun submitSearchResultList(list: PagedList<ElementView>?) {
         total_text.text = String.format(getString(R.string.form_item_total), list?.size ?: 0)
         elementAdapter.submitList(list)
-    }
-
-    private fun clearResults() {
-        submitSearchResultList(null)
     }
 }

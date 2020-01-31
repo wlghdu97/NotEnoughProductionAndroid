@@ -22,7 +22,8 @@ class MediatorUseCaseTest {
 
     private lateinit var useCase: MediatorUseCase<String, String>
 
-    private val parameter = ""
+    private val parameter = "param1"
+    private val parameter2 = "param2"
 
     @Test
     fun executeSuccessfully() {
@@ -60,6 +61,20 @@ class MediatorUseCaseTest {
         assertEquals(
             Resource.Status.ERROR,
             LiveDataTestUtil.getValue(result)?.status
+        )
+    }
+
+    @Test
+    fun executeMultiple() {
+        useCase = TestMediatorUseCase()
+
+        val result = useCase.observe()
+        useCase.execute(parameter)
+        useCase.execute(parameter2)
+
+        assertEquals(
+            Resource.success(parameter2),
+            LiveDataTestUtil.getValue(result)
         )
     }
 

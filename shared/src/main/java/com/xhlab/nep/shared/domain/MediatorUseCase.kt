@@ -9,12 +9,16 @@ import timber.log.Timber
 abstract class MediatorUseCase<in Params, Result> {
 
     protected val result = MediatorLiveData<Resource<Result>>()
+    private var lastSource: LiveData<Resource<Result>>? = null
 
     protected abstract fun executeInternal(params: Params): LiveData<Resource<Result>>
 
     fun execute(params: Params) {
         try {
+            lastSource?.let { result.removeSource(it) }
+
             val liveData = executeInternal(params)
+            lastSource = liveData
 
             result.removeSource(liveData)
             result.addSource(liveData) {
