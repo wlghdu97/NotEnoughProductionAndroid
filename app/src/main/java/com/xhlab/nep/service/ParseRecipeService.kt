@@ -62,6 +62,7 @@ class ParseRecipeService @Inject constructor() : Service() {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, "channel", importance)
             channel.setSound(null, null)
+            channel.importance = NotificationManager.IMPORTANCE_LOW
             NotificationManagerCompat.from(this).createNotificationChannel(channel)
         }
         val builder = getNotificationBuilder()
