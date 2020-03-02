@@ -1,5 +1,8 @@
 package com.xhlab.nep.shared.util
 
+fun <T> Resource<T>.isSuccessful(): Boolean =
+    (data != null || data is Unit) && (status == Resource.Status.SUCCESS)
+
 data class Resource<out T>(val status: Status, val data: T?, val exception: Exception?) {
 
     companion object {
@@ -14,9 +17,6 @@ data class Resource<out T>(val status: Status, val data: T?, val exception: Exce
         fun <T> loading(data: T?): Resource<T> {
             return Resource(Status.LOADING, data, null)
         }
-
-        fun <T> Resource<T>.isSuccessful(): Boolean =
-            (data != null || data is Unit) && (status == Status.SUCCESS)
     }
 
     enum class Status {

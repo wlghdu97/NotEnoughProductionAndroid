@@ -21,6 +21,9 @@
 
     <string name="hint_search_element">Search item</string>
 
+    <string name="tab_recipes">Recipes</string>
+    <string name="tab_usages">Usages</string>
+    <string name="tab_replacements">Replacements</string>
 
     <string name="txt_item">Item</string>
     <string name="txt_fluid">Fluid</string>
