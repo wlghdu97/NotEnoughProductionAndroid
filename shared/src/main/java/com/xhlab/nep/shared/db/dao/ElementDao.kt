@@ -7,15 +7,72 @@ import androidx.room.Transaction
 import com.xhlab.nep.shared.db.BaseDao
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.shared.db.view.RoomElementView
+import com.xhlab.nep.shared.domain.recipe.model.StationView
 
 @Dao
 abstract class ElementDao : BaseDao<ElementEntity>() {
 
+    // TODO clean this
+    @Transaction
     @Query("""
-        SELECT * FROM element
-        WHERE element.id = :id
+        SELECT
+        stations.id AS stationId, 
+        stations.name AS stationName, 
+        stations.recipeCount AS recipeCount
+        FROM (
+            SELECT gregtech_machine.id, gregtech_machine.name,
+            COUNT(DISTINCT gregtech_recipe.recipe_id) AS recipeCount FROM gregtech_recipe
+            INNER JOIN gregtech_machine ON gregtech_machine.id = gregtech_recipe.machine_id
+            INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+            WHERE gregtech_recipe.recipe_id = recipe_result.recipe_id
+            GROUP BY gregtech_machine.name
+            UNION ALL
+            SELECT -1 AS id, "Crafting Table" AS name, 
+            COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
+            INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+            WHERE recipe.recipe_id = recipe_result.recipe_id
+            GROUP BY name
+        ) AS stations
     """)
-    abstract suspend fun getItem(id: Int): ElementEntity?
+    abstract fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
+
+    @Transaction
+    @Query("""
+        SELECT element_view.* FROM element_view
+        INNER JOIN recipe_result ON recipe_result.recipe_id IN (
+            SELECT gregtech_recipe.recipe_id FROM gregtech_recipe
+            WHERE gregtech_recipe.target_item_id = :elementId
+            UNION ALL
+            SELECT recipe.recipe_id FROM recipe
+            WHERE recipe.target_item_id = :elementId
+        )
+        WHERE id = recipe_result.result_item_id
+        GROUP BY id
+        ORDER BY localized_name ASC
+    """)
+    abstract fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, RoomElementView>
+
+    @Transaction
+    @Query("""
+        SELECT element.unlocalized_name AS ore_dict_name FROM element
+        INNER JOIN ore_dict_chain ON ore_dict_chain.chain_element_id = :elementId
+        WHERE element.id = ore_dict_chain.element_id
+    """)
+    abstract fun getOreDictsByElement(elementId: Long): DataSource.Factory<Int, String>
+
+    @Transaction
+    @Query("""
+        SELECT element_view.* FROM element_view
+        INNER JOIN replacement ON replacement.name = :oreDictName
+        WHERE element_view.id = replacement.element_id
+    """)
+    abstract fun getReplacementList(oreDictName: String): DataSource.Factory<Int, RoomElementView>
+
+    @Query("""
+        SELECT * FROM element_view
+        WHERE element_view.id = :id
+    """)
+    abstract suspend fun getElementDetail(id: Long): RoomElementView?
 
     @Query("""
         SELECT element.id FROM element

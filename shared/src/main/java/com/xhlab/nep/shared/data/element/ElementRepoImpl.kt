@@ -12,6 +12,9 @@ internal class ElementRepoImpl @Inject constructor(
 
     private val io = Dispatchers.IO
 
+    override suspend fun getElementDetail(id: Long) = withContext(io) {
+        db.getElementDao().getElementDetail(id)
+    }
 
     override suspend fun deleteAll() = withContext(io) {
         db.getElementDao().deleteAll()
@@ -19,4 +22,16 @@ internal class ElementRepoImpl @Inject constructor(
 
     override fun searchByName(term: String)
             = db.getElementDao().searchByName(term).map { it as ElementView }
+
+    override fun getStationsByElement(elementId: Long)
+            = db.getElementDao().getStationsByElement(elementId)
+
+    override fun getUsagesByElement(elementId: Long)
+            = db.getElementDao().getUsagesByElement(elementId).map { it as ElementView }
+
+    override fun getOreDictsByElement(elementId: Long)
+            = db.getElementDao().getOreDictsByElement(elementId)
+
+    override fun getReplacementsByElement(oreDictName: String)
+            = db.getElementDao().getReplacementList(oreDictName).map { it as ElementView }
 }
