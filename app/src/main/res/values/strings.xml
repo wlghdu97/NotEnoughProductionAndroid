@@ -46,6 +46,7 @@
 
     <string name="error_open_json_failed">Failed to open json file.</string>
 
+    <string name="form_tab_recipes">Recipes (%d)</string>
     <string name="form_item_total">matched %d items</string>
     <string name="key_db_status_ui">db_load_status_ui</string>
 </resources>
