@@ -25,4 +25,7 @@ internal class ElementRepoImpl @Inject constructor(
 
     override fun getStationsByElement(elementId: Long)
             = db.getElementDao().getStationsByElement(elementId)
+
+    override fun getUsagesByElement(elementId: Long)
+            = db.getElementDao().getUsagesByElement(elementId).map { it as ElementView }
 }

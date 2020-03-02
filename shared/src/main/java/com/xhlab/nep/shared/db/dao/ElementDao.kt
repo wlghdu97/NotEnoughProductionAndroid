@@ -35,6 +35,23 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         ) AS stations
     """)
     abstract fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
+
+    @Transaction
+    @Query("""
+        SELECT element_view.* FROM element_view
+        INNER JOIN recipe_result ON recipe_result.recipe_id IN (
+            SELECT gregtech_recipe.recipe_id FROM gregtech_recipe
+            WHERE gregtech_recipe.target_item_id = :elementId
+            UNION ALL
+            SELECT recipe.recipe_id FROM recipe
+            WHERE recipe.target_item_id = :elementId
+        )
+        WHERE id = recipe_result.result_item_id
+        GROUP BY id
+        ORDER BY localized_name ASC
+    """)
+    abstract fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, RoomElementView>
+
     @Query("""
         SELECT * FROM element_view
         WHERE element_view.id = :id
