@@ -52,6 +52,13 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
     """)
     abstract fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, RoomElementView>
 
+    @Transaction
+    @Query("""
+        SELECT element.unlocalized_name AS ore_dict_name FROM element
+        INNER JOIN ore_dict_chain ON ore_dict_chain.chain_element_id = :elementId
+        WHERE element.id = ore_dict_chain.element_id
+    """)
+    abstract fun getOreDictsByElement(elementId: Long): DataSource.Factory<Int, String>
     @Query("""
         SELECT * FROM element_view
         WHERE element_view.id = :id

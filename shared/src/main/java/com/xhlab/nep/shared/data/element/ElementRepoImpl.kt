@@ -28,4 +28,7 @@ internal class ElementRepoImpl @Inject constructor(
 
     override fun getUsagesByElement(elementId: Long)
             = db.getElementDao().getUsagesByElement(elementId).map { it as ElementView }
+
+    override fun getOreDictsByElement(elementId: Long)
+            = db.getElementDao().getOreDictsByElement(elementId)
 }
