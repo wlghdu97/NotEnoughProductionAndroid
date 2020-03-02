@@ -18,9 +18,9 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
+@Suppress("unused")
 @Module(includes = [RoomModule::class])
 class SharedModule {
-
     @Provides
     @Singleton
     fun provideGeneralPreference(app: Application): GeneralPreference = GeneralSharedPreference(app)
@@ -35,7 +35,7 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideRecipeRepo(adder: RecipeAdder): RecipeRepo = RecipeRepoImpl(adder)
+    internal fun provideRecipeRepo(db: AppDatabase, adder: RecipeAdder): RecipeRepo = RecipeRepoImpl(db, adder)
 
     @Provides
     @Singleton
