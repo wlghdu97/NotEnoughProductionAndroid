@@ -7,7 +7,63 @@ import com.xhlab.nep.shared.domain.item.model.ElementView
 @DatabaseView(
     viewName = "element_view",
     value = """
-        SELECT id, localized_name, unlocalized_name, type, meta_data FROM element
+        SELECT 
+        element.id, 
+        CASE
+            WHEN element.type = 3 /*ore dict chain*/ THEN (
+                SELECT
+                CASE
+                    WHEN COUNT(ore_element.unlocalized_name) = 1 THEN (
+                        SELECT 
+                        CASE 
+                            WHEN COUNT(replacement.name) = 1 THEN (
+                                SELECT element.localized_name FROM element
+                                WHERE element.id = replacement.element_id
+                            )
+                            ELSE "Ore Chain"
+                        END
+                        FROM element
+                        INNER JOIN replacement ON replacement.name = element.unlocalized_name
+                        WHERE element.unlocalized_name = ore_element.unlocalized_name
+                    )
+                    ELSE "Ore Chain"
+                END 
+                FROM element AS ore_element
+                INNER JOIN ore_dict_chain 
+                ON ore_dict_chain.chain_element_id = element.unlocalized_name
+                WHERE ore_element.id = ore_dict_chain.element_id
+            )
+            ELSE element.localized_name 
+        END localized_name,
+        CASE
+            WHEN element.type = 3 /*ore dict chain*/ THEN (
+                SELECT
+                CASE
+                    WHEN COUNT(ore_element.unlocalized_name) = 1 THEN (
+                        SELECT 
+                        CASE 
+                            WHEN COUNT(replacement.name) = 1 THEN (
+                                SELECT element.unlocalized_name FROM element
+                                WHERE element.id = replacement.element_id
+                            )
+                            ELSE element.unlocalized_name 
+                        END
+                        FROM element
+                        INNER JOIN replacement ON replacement.name = element.unlocalized_name
+                        WHERE element.unlocalized_name = ore_element.unlocalized_name
+                    )
+                    ELSE GROUP_CONCAT(ore_element.unlocalized_name, ", ")
+                END 
+                FROM element AS ore_element
+                INNER JOIN ore_dict_chain
+                ON ore_dict_chain.chain_element_id = element.unlocalized_name
+                WHERE ore_element.id = ore_dict_chain.element_id
+            )
+            ELSE element.unlocalized_name
+        END unlocalized_name, 
+        element.type, 
+        element.meta_data 
+        FROM element
     """
 )
 data class RoomElementView(
