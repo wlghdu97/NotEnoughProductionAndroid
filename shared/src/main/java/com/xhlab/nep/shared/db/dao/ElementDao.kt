@@ -12,10 +12,10 @@ import com.xhlab.nep.shared.db.view.RoomElementView
 abstract class ElementDao : BaseDao<ElementEntity>() {
 
     @Query("""
-        SELECT * FROM element
-        WHERE element.id = :id
+        SELECT * FROM element_view
+        WHERE element_view.id = :id
     """)
-    abstract suspend fun getItem(id: Int): ElementEntity?
+    abstract suspend fun getElementDetail(id: Long): RoomElementView?
 
     @Query("""
         SELECT element.id FROM element

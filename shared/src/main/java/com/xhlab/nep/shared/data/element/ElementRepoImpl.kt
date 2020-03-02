@@ -12,6 +12,9 @@ internal class ElementRepoImpl @Inject constructor(
 
     private val io = Dispatchers.IO
 
+    override suspend fun getElementDetail(id: Long) = withContext(io) {
+        db.getElementDao().getElementDetail(id)
+    }
 
     override suspend fun deleteAll() = withContext(io) {
         db.getElementDao().deleteAll()
