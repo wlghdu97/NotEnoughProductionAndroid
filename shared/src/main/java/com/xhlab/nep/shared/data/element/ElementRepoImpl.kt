@@ -22,4 +22,7 @@ internal class ElementRepoImpl @Inject constructor(
 
     override fun searchByName(term: String)
             = db.getElementDao().searchByName(term).map { it as ElementView }
+
+    override fun getStationsByElement(elementId: Long)
+            = db.getElementDao().getStationsByElement(elementId)
 }

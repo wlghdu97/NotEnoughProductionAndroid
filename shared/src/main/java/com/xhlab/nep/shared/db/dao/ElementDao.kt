@@ -7,10 +7,34 @@ import androidx.room.Transaction
 import com.xhlab.nep.shared.db.BaseDao
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.shared.db.view.RoomElementView
+import com.xhlab.nep.shared.domain.recipe.model.StationView
 
 @Dao
 abstract class ElementDao : BaseDao<ElementEntity>() {
 
+    // TODO clean this
+    @Transaction
+    @Query("""
+        SELECT
+        stations.id AS stationId, 
+        stations.name AS stationName, 
+        stations.recipeCount AS recipeCount
+        FROM (
+            SELECT gregtech_machine.id, gregtech_machine.name,
+            COUNT(DISTINCT gregtech_recipe.recipe_id) AS recipeCount FROM gregtech_recipe
+            INNER JOIN gregtech_machine ON gregtech_machine.id = gregtech_recipe.machine_id
+            INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+            WHERE gregtech_recipe.recipe_id = recipe_result.recipe_id
+            GROUP BY gregtech_machine.name
+            UNION ALL
+            SELECT -1 AS id, "Crafting Table" AS name, 
+            COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
+            INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+            WHERE recipe.recipe_id = recipe_result.recipe_id
+            GROUP BY name
+        ) AS stations
+    """)
+    abstract fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
     @Query("""
         SELECT * FROM element_view
         WHERE element_view.id = :id
