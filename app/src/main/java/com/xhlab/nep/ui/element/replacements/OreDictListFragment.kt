@@ -51,11 +51,28 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
         }
 
         viewModel.navigateToReplacementList.observe(this) {
-            // TODO
+            switchToReplacementList(it)
         }
     }
 
     override fun initView() {
         ore_dict_list.adapter = oreDictAdapter
+    }
+
+    private fun switchToReplacementList(oreDictName: String) {
+        val fm = requireFragmentManager()
+        val fragment = fm.findFragmentByTag(REPLACEMENT_LIST_TAG) ?: ReplacementListFragment()
+        fragment.arguments = Bundle().apply {
+            putString(ReplacementListFragment.ORE_DICT_NAME, oreDictName)
+        }
+        fm.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
+            .replace(R.id.container, fragment, REPLACEMENT_LIST_TAG)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    companion object {
+        private const val REPLACEMENT_LIST_TAG = "replacement_list_tag"
     }
 }
