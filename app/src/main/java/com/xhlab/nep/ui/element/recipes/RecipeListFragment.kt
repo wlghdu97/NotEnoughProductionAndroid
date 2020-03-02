@@ -1,6 +1,7 @@
 package com.xhlab.nep.ui.element.recipes
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.recipe.StationRecipeListActivity
+import com.xhlab.nep.ui.recipe.StationRecipeListActivity.Companion.STATION_ID
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -62,11 +65,19 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         }
 
         viewModel.navigateToStationDetail.observe(this) {
-            // TODO
+            navigateToStationDetail(it.first, it.second)
         }
     }
 
     override fun initView() {
         recipe_list.adapter = recipeAdapter
+    }
+
+    private fun navigateToStationDetail(elementId: Long, stationId: Int?) {
+        val intent = Intent(context, StationRecipeListActivity::class.java).apply {
+            putExtra(ELEMENT_ID, elementId)
+            putExtra(STATION_ID, stationId)
+        }
+        startActivity(intent)
     }
 }

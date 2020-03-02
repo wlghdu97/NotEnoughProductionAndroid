@@ -9,6 +9,7 @@
     <string name="title_dark_theme">Enable dark theme</string>
     <string name="title_db">DB</string>
     <string name="title_db_status">Database Status</string>
+    <string name="title_recipe_list">Recipe list</string>
 
     <string name="menu_open_json">Open json file</string>
     <string name="menu_item_browser">Item browser</string>
@@ -27,11 +28,18 @@
 
     <string name="txt_item">Item</string>
     <string name="txt_fluid">Fluid</string>
+    <string name="txt_ore_dict">Ore dict</string>
+    <string name="txt_ore_dict_chain">Ore chain</string>
     <string name="txt_unknown">Unknown</string>
 
+    <string name="txt_ingredients">Ingredients</string>
+    <string name="txt_byproducts">Byproducts</string>
 
     <string name="txt_db_loaded">Loaded</string>
     <string name="txt_db_empty">Empty</string>
+
+    <string name="txt_crafting_table">Crafting Table</string>
+    <string name="txt_unknown_recipe">Unknown recipe</string>
 
     <string name="txt_db_not_loaded">
         DB is not loaded.
@@ -48,5 +56,8 @@
 
     <string name="form_tab_recipes">Recipes (%d)</string>
     <string name="form_item_total">matched %d items</string>
+    <string name="form_item_with_amount">%sx %s</string>
+    <string name="form_greg_property">%s EU/t, %s seconds, total %s EU</string>
+
     <string name="key_db_status_ui">db_load_status_ui</string>
 </resources>

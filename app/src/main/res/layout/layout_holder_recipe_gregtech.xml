@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textview.MaterialTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/greg_properties"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    app:layout_constraintTop_toBottomOf="@id/machine_name"
+    app:layout_constraintBottom_toTopOf="@id/input_caption"
+    style="@style/TextAppearance.MaterialComponents.Body2"/>

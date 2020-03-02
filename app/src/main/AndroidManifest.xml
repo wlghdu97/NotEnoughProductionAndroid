@@ -29,6 +29,11 @@
 
         <activity
             android:name=".ui.element.ElementDetailActivity"/>
+
+        <activity
+            android:name=".ui.recipe.StationRecipeListActivity"
+            android:launchMode="singleTop"/>
+
         <service
             android:name=".service.ParseRecipeService"
             android:exported="false"
