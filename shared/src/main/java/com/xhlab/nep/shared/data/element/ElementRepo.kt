@@ -11,4 +11,5 @@ interface ElementRepo {
     fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
     fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, ElementView>
     fun getOreDictsByElement(elementId: Long): DataSource.Factory<Int, String>
+    fun getReplacementsByElement(oreDictName: String): DataSource.Factory<Int, ElementView>
 }

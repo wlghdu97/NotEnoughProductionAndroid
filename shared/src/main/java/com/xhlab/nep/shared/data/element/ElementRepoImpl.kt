@@ -31,4 +31,7 @@ internal class ElementRepoImpl @Inject constructor(
 
     override fun getOreDictsByElement(elementId: Long)
             = db.getElementDao().getOreDictsByElement(elementId)
+
+    override fun getReplacementsByElement(oreDictName: String)
+            = db.getElementDao().getReplacementList(oreDictName).map { it as ElementView }
 }

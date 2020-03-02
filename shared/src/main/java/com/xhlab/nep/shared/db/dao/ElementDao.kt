@@ -59,6 +59,15 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         WHERE element.id = ore_dict_chain.element_id
     """)
     abstract fun getOreDictsByElement(elementId: Long): DataSource.Factory<Int, String>
+
+    @Transaction
+    @Query("""
+        SELECT element_view.* FROM element_view
+        INNER JOIN replacement ON replacement.name = :oreDictName
+        WHERE element_view.id = replacement.element_id
+    """)
+    abstract fun getReplacementList(oreDictName: String): DataSource.Factory<Int, RoomElementView>
+
     @Query("""
         SELECT * FROM element_view
         WHERE element_view.id = :id
