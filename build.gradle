@@ -32,6 +32,7 @@ buildscript {
         test_orchestrator_version = "1.2.0"
 
         jacoco_version = "0.8.1"
+        jacocoEnabled = System.getProperty("jacocoEnabled") ?: "false"
     }
 
     repositories {
@@ -62,6 +63,10 @@ task jacocoRootReport(type: JacocoReport, dependsOn: [
         'app:jacocoTestReport',
         'shared:jacocoTestReport'
 ]) {
+    if (!tasks.findByPath("app:jacocoTestReport") || !tasks.findByPath("shared:jacocoTestReport")) {
+        return
+    }
+
     reports {
         xml.enabled = true
         html.enabled = true
