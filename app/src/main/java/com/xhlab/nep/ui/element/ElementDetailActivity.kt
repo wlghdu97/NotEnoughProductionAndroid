@@ -1,7 +1,5 @@
 package com.xhlab.nep.ui.element
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -133,13 +131,5 @@ class ElementDetailActivity : DaggerAppCompatActivity(), ViewInit {
     companion object {
         const val ELEMENT_ID = "element_id"
         const val ELEMENT_TYPE = "element_type"
-
-        fun navigateToElementDetail(context: Context, elementId: Long, elementType: Int) {
-            val intent = Intent(context, ElementDetailActivity::class.java).apply {
-                putExtra(ELEMENT_ID, elementId)
-                putExtra(ELEMENT_TYPE, elementType)
-            }
-            context.startActivity(intent)
-        }
     }
 }

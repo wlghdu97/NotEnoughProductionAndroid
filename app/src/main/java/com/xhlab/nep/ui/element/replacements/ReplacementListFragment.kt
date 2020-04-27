@@ -9,7 +9,6 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetail
 import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
@@ -58,10 +57,6 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
                 oreDictName,
                 it?.size ?: 0
             )
-        }
-
-        viewModel.navigateToElementDetail.observe(this) { (elementId, elementType) ->
-            navigateToElementDetail(requireContext(), elementId, elementType)
         }
     }
 

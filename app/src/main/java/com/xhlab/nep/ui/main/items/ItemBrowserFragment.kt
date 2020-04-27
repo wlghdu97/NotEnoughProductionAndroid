@@ -14,7 +14,6 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.domain.item.model.ElementView
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetail
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -65,10 +64,6 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
 
         viewModel.elementSearchResult.observeNotNull(this) {
             submitSearchResultList(it)
-        }
-
-        viewModel.navigateToElementDetail.observe(this) { (elementId, elementType) ->
-            navigateToElementDetail(requireContext(), elementId, elementType)
         }
     }
 

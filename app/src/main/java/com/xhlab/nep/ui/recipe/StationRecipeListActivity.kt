@@ -5,8 +5,6 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetail
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
@@ -46,10 +44,6 @@ class StationRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
         }
-
-        viewModel.navigateToElementDetail.observe(this) { (elementId, elementType) ->
-            navigateToElementDetail(this, elementId, elementType)
-        }
     }
 
     override fun initView() {
@@ -66,6 +60,7 @@ class StationRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
     }
 
     companion object {
+        const val ELEMENT_ID = "element_id"
         const val STATION_ID = "station_id"
     }
 }

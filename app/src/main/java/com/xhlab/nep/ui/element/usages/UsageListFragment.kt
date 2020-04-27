@@ -11,7 +11,6 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetail
 import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
@@ -61,10 +60,6 @@ class UsageListFragment : DaggerFragment(), ViewInit {
 
         viewModel.usageList.observe(this) {
             usageAdapter.submitList(it)
-        }
-
-        viewModel.navigateToElementDetail.observe(this) { (elementId, elementType) ->
-            navigateToElementDetail(requireContext(), elementId, elementType)
         }
     }
 

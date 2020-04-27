@@ -30,9 +30,9 @@ interface BaseViewModel {
     }
 
     fun <Params, Result> invokeUseCase(
-        resultData: MutableLiveData<Resource<Result>>? = null,
         useCase: UseCase<Params, Result>,
-        params: Params
+        params: Params,
+        resultData: MutableLiveData<Resource<Result>>? = null
     ): LiveData<Resource<Result>> {
         refreshStatus.value = Resource.Status.LOADING
         resultData?.value = Resource.loading(null)
