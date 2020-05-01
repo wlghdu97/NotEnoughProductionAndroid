@@ -31,12 +31,10 @@ class ParseRecipeUseCase @Inject constructor(
     private val generalPreference: GeneralPreference
 ) : MediatorUseCase<InputStream, String>(), Cancelable {
 
-    private val io = Dispatchers.IO
-
     private var job: Job? = null
 
     @ExperimentalCoroutinesApi
-    override fun executeInternal(params: InputStream) = liveData<Resource<String>>(io) {
+    override fun executeInternal(params: InputStream) = liveData<Resource<String>>(Dispatchers.IO) {
         // save job to support cancellation
         job = coroutineContext[Job]
 
