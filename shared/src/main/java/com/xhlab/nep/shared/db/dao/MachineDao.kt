@@ -24,6 +24,7 @@ abstract class MachineDao : BaseDao<MachineEntity>() {
     @Transaction
     @Query("""
         SELECT * FROM machine
+        ORDER BY machine.name ASC
     """)
     abstract fun getMachines(): DataSource.Factory<Int, MachineEntity>
 }
