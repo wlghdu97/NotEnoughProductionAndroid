@@ -17,6 +17,7 @@ import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.service.ParseRecipeService.Companion.JSON_URI
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
+import com.xhlab.nep.ui.main.machines.MachineBrowserFragment
 import com.xhlab.nep.ui.main.settings.SettingsFragment
 import com.xhlab.nep.ui.parser.JsonParseDialog
 import com.xhlab.nep.ui.parser.JsonParseDialog.Companion.SHOW_JSON_PARSER_DIALOG
@@ -67,8 +68,12 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
                     view_pager.currentItem = 0
                     true
                 }
-                R.id.menu_settings -> {
+                R.id.menu_machine_browser -> {
                     view_pager.currentItem = 1
+                    true
+                }
+                R.id.menu_settings -> {
+                    view_pager.currentItem = 2
                     true
                 }
                 else -> false
@@ -143,17 +148,19 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
     ) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         private val itemBrowserFragment by lazy { ItemBrowserFragment() }
+        private val machineBrowserFragment by lazy { MachineBrowserFragment() }
         private val settingsFragment by lazy { SettingsFragment() }
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> itemBrowserFragment
-                1 -> settingsFragment
+                1 -> machineBrowserFragment
+                2 -> settingsFragment
                 else -> throw IllegalArgumentException("invalid position.")
             }
         }
 
-        override fun getCount() = 2
+        override fun getCount() = 3
     }
 
     companion object {

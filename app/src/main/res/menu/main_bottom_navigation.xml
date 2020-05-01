@@ -5,6 +5,10 @@
         android:title="@string/menu_item_browser"
         android:icon="@drawable/ic_storage_24dp"/>
     <item
+        android:id="@+id/menu_machine_browser"
+        android:title="@string/menu_machine_browser"
+        android:icon="@drawable/ic_widgets_24dp"/>
+    <item
         android:id="@+id/menu_settings"
         android:title="@string/menu_settings"
         android:icon="@drawable/ic_settings_24dp"/>
