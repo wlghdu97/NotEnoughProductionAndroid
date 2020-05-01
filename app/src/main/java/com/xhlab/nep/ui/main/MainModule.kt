@@ -5,6 +5,8 @@ import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.FragmentScope
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.main.items.ItemBrowserModule
+import com.xhlab.nep.ui.main.machines.MachineBrowserFragment
+import com.xhlab.nep.ui.main.machines.MachineBrowserModule
 import com.xhlab.nep.ui.main.settings.SettingsFragment
 import com.xhlab.nep.ui.main.settings.SettingsModule
 import com.xhlab.nep.ui.parser.JsonParseDialog
@@ -13,7 +15,7 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
-@Module(includes = [ItemBrowserModule::class, SettingsModule::class])
+@Module
 @Suppress("unused")
 abstract class MainModule {
     @Binds
@@ -22,11 +24,15 @@ abstract class MainModule {
     abstract fun provideMainViewModel(viewModel: MainViewModel): ViewModel
 
     @FragmentScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [ItemBrowserModule::class])
     abstract fun provideItemBrowserFragment(): ItemBrowserFragment
 
     @FragmentScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [MachineBrowserModule::class])
+    abstract fun provideMachineBrowserFragment(): MachineBrowserFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [SettingsModule::class])
     abstract fun provideSettingsFragment(): SettingsFragment
 
     @FragmentScope

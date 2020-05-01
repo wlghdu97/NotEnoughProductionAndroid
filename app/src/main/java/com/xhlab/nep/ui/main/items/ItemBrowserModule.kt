@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
+@Suppress("unused")
 abstract class ItemBrowserModule {
     @Binds
     @IntoMap
