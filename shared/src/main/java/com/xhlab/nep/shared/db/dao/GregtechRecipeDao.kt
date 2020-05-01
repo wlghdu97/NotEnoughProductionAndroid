@@ -4,6 +4,7 @@ import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.db.BaseDao
 import com.xhlab.nep.shared.db.entity.GregtechRecipeEntity
 import com.xhlab.nep.shared.db.view.RoomGregtechRecipeView
@@ -28,19 +29,20 @@ abstract class GregtechRecipeDao : BaseDao<GregtechRecipeEntity>() {
         gregtech_recipe.enabled,
         gregtech_recipe.duration,
         gregtech_recipe.eut,
-        gregtech_machine.id AS machine_id,
-        gregtech_machine.name AS machine_name
+        machine.id AS machine_id,
+        machine.name AS machine_name
         FROM gregtech_recipe
         INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
-        INNER JOIN gregtech_machine ON gregtech_machine.id = :machineId
+        INNER JOIN machine ON (machine.id = :machineId AND machine.mod_name = :modName)
         WHERE 
         gregtech_recipe.recipe_id = recipe_result.recipe_id AND
-        gregtech_recipe.machine_id = gregtech_machine.id
+        gregtech_recipe.machine_id = machine.id
         GROUP BY gregtech_recipe.recipe_id
         ORDER BY recipe_result.amount DESC
     """)
     abstract fun searchRecipeIdByElement(
         elementId: Long,
-        machineId: Int
+        machineId: Int,
+        modName: String = Machine.MOD_GREGTECH
     ): DataSource.Factory<Int, RoomGregtechRecipeView>
 }

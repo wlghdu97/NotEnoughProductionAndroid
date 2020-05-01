@@ -9,7 +9,6 @@ import com.xhlab.nep.shared.db.view.RoomElementView
 @Database(
     entities = [
         MachineEntity::class,
-        GregtechMachineEntity::class,
         GregtechRecipeEntity::class,
         RecipeEntity::class,
         RecipeResultEntity::class,
@@ -26,7 +25,6 @@ import com.xhlab.nep.shared.db.view.RoomElementView
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getMachineDao(): MachineDao
-    abstract fun getGregtechMachineDao(): GregtechMachineDao
     abstract fun getGregtechRecipeDao(): GregtechRecipeDao
     abstract fun getRecipeDao(): RecipeDao
     abstract fun getRecipeResultDao(): RecipeResultDao

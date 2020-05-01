@@ -4,8 +4,9 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
+import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.recipes.GregtechRecipe
-import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
@@ -19,8 +20,8 @@ import kotlin.coroutines.coroutineContext
 class GregtechRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
     private val fluidParser: FluidParser,
-    private val recipeRepo: RecipeRepo,
-    private val gregtechRepo: GregtechRepo
+    private val machineRepo: MachineRepo,
+    private val recipeRepo: RecipeRepo
 ) : RecipeParser<GregtechRecipe>() {
 
     @ExperimentalCoroutinesApi
@@ -64,7 +65,8 @@ class GregtechRecipeParser @Inject constructor(
         reader.endObject()
 
         // map machine name to recipes
-        val machineId = gregtechRepo.insertGregtechMachine(name)
+        val machineId = machineRepo.insertMachine(Machine.Companion.MOD_GREGTECH, name)
+            ?: throw NullPointerException("machine id is null.")
         val mappedRecipes = recipes.map {
             it.copy(machineId = machineId)
         }

@@ -5,6 +5,8 @@ import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.element.ElementRepoImpl
 import com.xhlab.nep.shared.data.gregtech.GregtechRepo
 import com.xhlab.nep.shared.data.gregtech.GregtechRepoImpl
+import com.xhlab.nep.shared.data.machine.MachineRepo
+import com.xhlab.nep.shared.data.machine.MachineRepoImpl
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
 import com.xhlab.nep.shared.data.oredict.OreDictRepoImpl
 import com.xhlab.nep.shared.data.oredict.ReplacementAdder
@@ -32,6 +34,10 @@ class SharedModule {
     @Provides
     @Singleton
     internal fun provideOreDictRepo(adder: ReplacementAdder): OreDictRepo = OreDictRepoImpl(adder)
+
+    @Provides
+    @Singleton
+    internal fun provideMachineRepo(db: AppDatabase): MachineRepo = MachineRepoImpl(db)
 
     @Provides
     @Singleton

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveDataScope
 import androidx.lifecycle.liveData
 import com.google.gson.stream.JsonReader
 import com.xhlab.nep.shared.data.element.ElementRepo
-import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.domain.Cancelable
 import com.xhlab.nep.shared.domain.MediatorUseCase
 import com.xhlab.nep.shared.parser.*
@@ -27,7 +27,7 @@ class ParseRecipeUseCase @Inject constructor(
     private val shapelessOreRecipeParser: ShapelessOreRecipeParser,
     private val replacementListParser: ReplacementListParser,
     private val elementRepo: ElementRepo,
-    private val gregtechRepo: GregtechRepo,
+    private val machineRepo: MachineRepo,
     private val generalPreference: GeneralPreference
 ) : MediatorUseCase<InputStream, String>(), Cancelable {
 
@@ -43,7 +43,7 @@ class ParseRecipeUseCase @Inject constructor(
 
         // delete all previous elements
         emitLog("deleting previous elements")
-        gregtechRepo.deleteGregtechMachines()
+        machineRepo.deleteAll()
         elementRepo.deleteAll()
 
         val reader = JsonReader(params.bufferedReader())
