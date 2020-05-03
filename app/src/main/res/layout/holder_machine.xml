@@ -6,7 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingEnd="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:focusable="true"
+    android:clickable="true">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/machine_name"

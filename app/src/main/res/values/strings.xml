@@ -10,6 +10,7 @@
     <string name="title_db">DB</string>
     <string name="title_db_status">Database Status</string>
     <string name="title_recipe_list">Recipe list</string>
+    <string name="title_machine_result_list">Machine result list</string>
 
     <string name="menu_open_json">Open json file</string>
     <string name="menu_item_browser">Item browser</string>
@@ -62,7 +63,8 @@
     <string name="form_tab_usages">Usages (%d)</string>
     <string name="form_ore_dict_name">%s (%d)</string>
 
-    <string name="form_item_total">matched %d items</string>
+    <string name="form_matched_total">matched %d items</string>
+    <string name="form_total">total %d items</string>
     <string name="form_item_with_amount">%sx %s</string>
     <string name="form_greg_property">%s EU/t, %s seconds, total %s EU</string>
 

@@ -10,7 +10,9 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.ui.util.BindableViewHolder
 
-class MachineAdapter : PagedListAdapter<Machine, MachineAdapter.MachineViewHolder>(differ) {
+class MachineAdapter(
+    private val listener: MachineListener? = null
+) : PagedListAdapter<Machine, MachineAdapter.MachineViewHolder>(differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MachineViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -24,6 +26,10 @@ class MachineAdapter : PagedListAdapter<Machine, MachineAdapter.MachineViewHolde
 
     inner class MachineViewHolder(itemView: View) : BindableViewHolder<Machine>(itemView) {
         private val machineName: TextView = itemView.findViewById(R.id.machine_name)
+
+        init {
+            itemView.setOnClickListener { model?.let { listener?.onClick(it.id) } }
+        }
 
         override fun bindNotNull(model: Machine) {
             machineName.text = model.name

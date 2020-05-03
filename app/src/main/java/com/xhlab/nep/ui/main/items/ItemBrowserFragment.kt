@@ -85,7 +85,7 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
     }
 
     private fun submitSearchResultList(list: PagedList<ElementView>?) {
-        total_text.text = String.format(getString(R.string.form_item_total), list?.size ?: 0)
+        total_text.text = String.format(getString(R.string.form_matched_total), list?.size ?: 0)
         elementAdapter.submitList(list)
     }
 }

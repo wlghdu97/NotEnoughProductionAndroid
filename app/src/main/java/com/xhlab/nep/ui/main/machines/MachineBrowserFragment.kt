@@ -20,7 +20,7 @@ class MachineBrowserFragment : DaggerFragment(), ViewInit {
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var viewModel: MachineBrowserViewModel
-    private val machineAdapter = MachineAdapter()
+    private val machineAdapter by lazy { MachineAdapter(viewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

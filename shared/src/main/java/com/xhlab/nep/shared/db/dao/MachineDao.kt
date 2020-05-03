@@ -11,6 +11,12 @@ import com.xhlab.nep.shared.db.entity.MachineEntity
 abstract class MachineDao : BaseDao<MachineEntity>() {
 
     @Query("""
+        SELECT * FROM machine
+        WHERE machine.id = :machineId
+    """)
+    abstract suspend fun getMachine(machineId: Int): MachineEntity?
+
+    @Query("""
         SELECT machine.id FROM machine
         WHERE machine.name = :machineName
     """)

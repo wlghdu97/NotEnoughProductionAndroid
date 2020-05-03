@@ -12,6 +12,10 @@ class MachineRepoImpl @Inject constructor(
 
     private val io = Dispatchers.IO
 
+    override suspend fun getMachine(machineId: Int) = withContext(io) {
+        db.getMachineDao().getMachine(machineId)?.toMachine()
+    }
+
     override suspend fun insertMachine(modName: String, machineName: String) = withContext(io) {
         db.getMachineDao().insert(MachineEntity(modName = modName, name = machineName))
         db.getMachineDao().getId(machineName)

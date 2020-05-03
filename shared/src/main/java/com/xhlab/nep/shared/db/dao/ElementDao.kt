@@ -38,6 +38,28 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
 
     @Transaction
     @Query("""
+        SELECT * FROM element_view
+        INNER JOIN recipe
+        INNER JOIN recipe_result ON element_view.id = recipe_result.result_item_id
+        GROUP BY element_view.id
+        ORDER BY element_view.localized_name ASC
+    """)
+    abstract fun getCraftingResults(): DataSource.Factory<Int, RoomElementView>
+
+    @Transaction
+    @Query("""
+        SELECT * FROM element_view
+        INNER JOIN gregtech_recipe ON gregtech_recipe.machine_id = :machineId
+        INNER JOIN recipe_result ON
+        recipe_result.recipe_id = gregtech_recipe.recipe_id AND
+        element_view.id = recipe_result.result_item_id 
+        GROUP BY element_view.id
+        ORDER BY element_view.localized_name ASC
+    """)
+    abstract fun getGregtechResults(machineId: Int): DataSource.Factory<Int, RoomElementView>
+
+    @Transaction
+    @Query("""
         SELECT element_view.* FROM element_view
         INNER JOIN recipe_result ON recipe_result.recipe_id IN (
             SELECT gregtech_recipe.recipe_id FROM gregtech_recipe

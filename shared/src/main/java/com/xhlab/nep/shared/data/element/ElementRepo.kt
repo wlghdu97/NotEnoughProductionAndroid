@@ -9,6 +9,7 @@ interface ElementRepo {
     suspend fun deleteAll()
     fun searchByName(term: String): DataSource.Factory<Int, ElementView>
     fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
+    fun getResultsByStation(machineId: Int): DataSource.Factory<Int, ElementView>
     fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, ElementView>
     fun getOreDictsByElement(elementId: Long): DataSource.Factory<Int, String>
     fun getReplacementsByElement(oreDictName: String): DataSource.Factory<Int, ElementView>
