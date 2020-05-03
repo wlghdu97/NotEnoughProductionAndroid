@@ -8,8 +8,10 @@ interface ElementRepo {
     suspend fun getElementDetail(id: Long): ElementView?
     suspend fun deleteAll()
     fun searchByName(term: String): DataSource.Factory<Int, ElementView>
-    fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
+    fun searchGregtechResults(machineId: Int, term: String): DataSource.Factory<Int, ElementView>
+    fun searchGregtechResultsFts(machineId: Int, term: String): DataSource.Factory<Int, ElementView>
     fun getResultsByStation(machineId: Int): DataSource.Factory<Int, ElementView>
+    fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
     fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, ElementView>
     fun getOreDictsByElement(elementId: Long): DataSource.Factory<Int, String>
     fun getReplacementsByElement(oreDictName: String): DataSource.Factory<Int, ElementView>

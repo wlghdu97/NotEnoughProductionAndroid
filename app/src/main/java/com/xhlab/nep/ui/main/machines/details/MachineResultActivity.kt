@@ -1,6 +1,7 @@
 package com.xhlab.nep.ui.main.machines.details
 
 import android.os.Bundle
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
@@ -46,6 +47,19 @@ class MachineResultActivity : DaggerAppCompatActivity(), ViewInit {
 
         setSupportActionBar(toolbar)
         supportActionBar?.title = getString(R.string.title_machine_result_list)
+
+        with (search_view) {
+            setIconifiedByDefault(false)
+            queryHint = getString(R.string.hint_search_element)
+
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?) = false
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.searchResults(newText ?: "")
+                    return true
+                }
+            })
+        }
 
         result_list.adapter = adapter
     }

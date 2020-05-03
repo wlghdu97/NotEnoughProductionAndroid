@@ -10,21 +10,25 @@ import com.xhlab.nep.shared.domain.item.model.ElementView
 import com.xhlab.nep.shared.util.Resource
 import javax.inject.Inject
 
-class LoadMachineResultListUseCase @Inject constructor(
+class MachineResultSearchUseCase @Inject constructor(
     private val elementRepo: ElementRepo
-) : MediatorUseCase<LoadMachineResultListUseCase.Parameter, PagedList<ElementView>>() {
+) : MediatorUseCase<MachineResultSearchUseCase.Parameters, PagedList<ElementView>>() {
 
-    override fun executeInternal(params: Parameter) = liveData<Resource<PagedList<ElementView>>> {
+    override fun executeInternal(params: Parameters) = liveData<Resource<PagedList<ElementView>>> {
         val config = PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)
             .build()
 
-        val dataSource = elementRepo.getResultsByStation(params.machineId)
+        val dataSource = when {
+            params.term.isEmpty() -> elementRepo.getResultsByStation(params.machineId)
+            params.term.length < 3 -> elementRepo.searchGregtechResults(params.machineId, "%${params.term}%")
+            else -> elementRepo.searchGregtechResultsFts(params.machineId, "*${params.term}*")
+        }
         val liveData = LivePagedListBuilder(dataSource, config).build()
         emitSource(Transformations.map(liveData) { Resource.success(it) })
     }
 
-    data class Parameter(val machineId: Int)
+    data class Parameters(val machineId: Int, val term: String = "")
 
     companion object {
         private const val PAGE_SIZE = 10

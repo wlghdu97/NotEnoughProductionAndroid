@@ -3,20 +3,24 @@ package com.xhlab.nep.ui.main.machines.details
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.Machine
-import com.xhlab.nep.shared.domain.machine.LoadMachineResultListUseCase
+import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
 import com.xhlab.nep.shared.domain.machine.LoadMachineUseCase
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.main.items.ElementListener
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MachineResultViewModel @Inject constructor(
     private val loadMachineUseCase: LoadMachineUseCase,
-    private val loadMachineResultListUseCase: LoadMachineResultListUseCase,
+    private val machineResultSearchUseCase: MachineResultSearchUseCase,
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ElementListener {
 
@@ -25,11 +29,17 @@ class MachineResultViewModel @Inject constructor(
         if (it.isSuccessful()) it.data else null
     }
 
-    val resultList = loadMachineResultListUseCase.observeOnly(Resource.Status.SUCCESS)
+    val resultList = machineResultSearchUseCase.observeOnly(Resource.Status.SUCCESS)
+
+    // to prevent DiffUtil's index out of bound
+    private var searchDebounceJob: Job? = null
+
+    private fun requireMachineId()
+            = machine.value?.id ?: throw MachineIdNullPointerException()
 
     fun init(machineId: Int?) {
         if (machineId == null || machineId == -1) {
-            throw NullPointerException("machine id is null.")
+            throw MachineIdNullPointerException()
         }
         invokeUseCase(
             useCase = loadMachineUseCase,
@@ -37,9 +47,23 @@ class MachineResultViewModel @Inject constructor(
             resultData = _machine
         )
         invokeMediatorUseCase(
-            useCase = loadMachineResultListUseCase,
-            params = LoadMachineResultListUseCase.Parameter(machineId)
+            useCase = machineResultSearchUseCase,
+            params = MachineResultSearchUseCase.Parameters(machineId)
         )
+    }
+
+    fun searchResults(term: String) {
+        searchDebounceJob?.cancel()
+        searchDebounceJob = viewModelScope.launch {
+            delay(50)
+            invokeMediatorUseCase(
+                useCase = machineResultSearchUseCase,
+                params = MachineResultSearchUseCase.Parameters(
+                    machineId = requireMachineId(),
+                    term = term
+                )
+            )
+        }
     }
 
     override fun onClick(elementId: Long, elementType: Int) {
@@ -48,4 +72,6 @@ class MachineResultViewModel @Inject constructor(
             params = ElementDetailNavigationUseCase.Parameters(elementId, elementType)
         )
     }
+
+    class MachineIdNullPointerException : Exception("machine id is null.")
 }

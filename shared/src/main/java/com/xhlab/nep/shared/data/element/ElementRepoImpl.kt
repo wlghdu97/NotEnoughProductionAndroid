@@ -23,11 +23,17 @@ internal class ElementRepoImpl @Inject constructor(
     override fun searchByName(term: String)
             = db.getElementDao().searchByName(term).map { it as ElementView }
 
-    override fun getStationsByElement(elementId: Long)
-            = db.getElementDao().getStationsByElement(elementId)
+    override fun searchGregtechResults(machineId: Int, term: String)
+            = db.getElementDao().searchGregtechResults(machineId, term).map { it as ElementView }
+
+    override fun searchGregtechResultsFts(machineId: Int, term: String)
+            = db.getElementDao().searchGregtechResultsFts(machineId, term).map { it as ElementView }
 
     override fun getResultsByStation(machineId: Int)
             = db.getElementDao().getGregtechResults(machineId).map { it as ElementView }
+
+    override fun getStationsByElement(elementId: Long)
+            = db.getElementDao().getStationsByElement(elementId)
 
     override fun getUsagesByElement(elementId: Long)
             = db.getElementDao().getUsagesByElement(elementId).map { it as ElementView }

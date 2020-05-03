@@ -48,15 +48,39 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
 
     @Transaction
     @Query("""
-        SELECT * FROM element_view
+        SELECT DISTINCT element_view.* FROM element_view
         INNER JOIN gregtech_recipe ON gregtech_recipe.machine_id = :machineId
         INNER JOIN recipe_result ON
-        recipe_result.recipe_id = gregtech_recipe.recipe_id AND
-        element_view.id = recipe_result.result_item_id 
-        GROUP BY element_view.id
+        element_view.id = recipe_result.result_item_id AND 
+        recipe_result.recipe_id = gregtech_recipe.recipe_id
         ORDER BY element_view.localized_name ASC
     """)
     abstract fun getGregtechResults(machineId: Int): DataSource.Factory<Int, RoomElementView>
+
+    @Transaction
+    @Query("""
+        SELECT DISTINCT element_view.* FROM element_view
+        INNER JOIN gregtech_recipe ON gregtech_recipe.machine_id = :machineId
+        INNER JOIN recipe_result ON
+        element_view.id = recipe_result.result_item_id AND 
+        recipe_result.recipe_id = gregtech_recipe.recipe_id
+        WHERE element_view.localized_name LIKE :term
+        ORDER BY element_view.localized_name ASC
+    """)
+    abstract fun searchGregtechResults(machineId: Int, term: String): DataSource.Factory<Int, RoomElementView>
+
+    @Transaction
+    @Query("""
+        SELECT DISTINCT element_view.* FROM element_view
+        INNER JOIN gregtech_recipe ON gregtech_recipe.machine_id = :machineId
+        INNER JOIN recipe_result ON
+        element_view.id = recipe_result.result_item_id AND 
+        recipe_result.recipe_id = gregtech_recipe.recipe_id
+        INNER JOIN element_fts ON element_view.id = element_fts.docid
+        WHERE element_fts MATCH :term
+        ORDER BY element_view.localized_name ASC
+    """)
+    abstract fun searchGregtechResultsFts(machineId: Int, term: String): DataSource.Factory<Int, RoomElementView>
 
     @Transaction
     @Query("""
