@@ -28,6 +28,8 @@
     <string name="tab_usages">Usages</string>
     <string name="tab_replacements">Replacements</string>
 
+    <string name="txt_unnamed">Unnamed</string>
+
     <string name="txt_item">Item</string>
     <string name="txt_fluid">Fluid</string>
     <string name="txt_ore_dict">Ore dict</string>

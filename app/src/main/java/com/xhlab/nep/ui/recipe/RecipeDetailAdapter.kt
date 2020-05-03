@@ -86,7 +86,10 @@ class RecipeDetailAdapter(
                 elementName.text = context.formatString(
                     R.string.form_item_with_amount,
                     integerFormat.format(targetElement.amount),
-                    targetElement.localizedName
+                    when (targetElement.localizedName.isEmpty()) {
+                        true -> context.getString(R.string.txt_unnamed)
+                        false -> targetElement.localizedName.trim()
+                    }
                 )
             }
 

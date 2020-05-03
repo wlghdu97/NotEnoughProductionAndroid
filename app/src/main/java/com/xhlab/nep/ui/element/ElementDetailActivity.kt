@@ -51,8 +51,11 @@ class ElementDetailActivity : DaggerAppCompatActivity(), ViewInit {
 
         viewModel.element.observeNotNull(this) { element ->
             supportActionBar?.let {
-                it.title = element.localizedName
-                it.subtitle = element.unlocalizedName
+                it.title = when (element.localizedName.isEmpty()) {
+                    true -> getString(R.string.txt_unnamed)
+                    false -> element.localizedName.trim()
+                }
+                it.subtitle = element.unlocalizedName.trim()
             }
         }
     }

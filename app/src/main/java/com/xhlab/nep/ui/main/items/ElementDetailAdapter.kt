@@ -47,8 +47,14 @@ class ElementDetailAdapter (
         }
 
         override fun bindNotNull(model: ElementView) {
-            name.text = model.localizedName
-            unlocalizedName.text = model.unlocalizedName
+            name.text = when (model.localizedName.isEmpty()) {
+                true -> itemView.context.getString(R.string.txt_unnamed)
+                false -> model.localizedName.trim()
+            }
+            unlocalizedName.text = when (model.unlocalizedName.isEmpty()) {
+                true -> itemView.context.getString(R.string.txt_unnamed)
+                false -> model.unlocalizedName.trim()
+            }
             type.textResource = when (model.type) {
                 ITEM -> R.string.txt_item
                 FLUID -> R.string.txt_fluid

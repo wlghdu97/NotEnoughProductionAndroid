@@ -90,7 +90,11 @@ class RecipeElementAdapter(
                 true -> " : ${model.metaData}"
                 false -> ""
             }
-            val nameText = "${model.localizedName}$metaData"
+            val localizedName = when (model.localizedName.isEmpty()) {
+                true -> context.getString(R.string.txt_unnamed)
+                false -> model.localizedName.trim()
+            }
+            val nameText = "$localizedName$metaData"
             name.text = when (model.amount == 0) {
                 true -> nameText
                 false -> context.formatString(
@@ -99,7 +103,10 @@ class RecipeElementAdapter(
                     nameText
                 )
             }
-            unlocalizedName.text = model.unlocalizedName
+            unlocalizedName.text = when (model.unlocalizedName.isEmpty()) {
+                true -> context.getString(R.string.txt_unnamed)
+                false -> model.unlocalizedName
+            }
 
             type?.textResource = when (model.type) {
                 ITEM -> R.string.txt_item
