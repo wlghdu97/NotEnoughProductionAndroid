@@ -29,6 +29,9 @@ internal class ElementRepoImpl @Inject constructor(
     override fun searchGregtechResultsFts(machineId: Int, term: String)
             = db.getElementDao().searchGregtechResultsFts(machineId, term).map { it as ElementView }
 
+    override fun getElements()
+            = db.getElementDao().getElements().map { it as ElementView }
+
     override fun getResultsByStation(machineId: Int)
             = db.getElementDao().getGregtechResults(machineId).map { it as ElementView }
 

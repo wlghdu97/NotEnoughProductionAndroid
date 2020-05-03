@@ -39,6 +39,23 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
     @Transaction
     @Query("""
         SELECT * FROM element_view
+        WHERE element_view.type NOT IN (2, 3)
+        ORDER BY element_view.localized_name ASC
+    """)
+    abstract fun getElements(): DataSource.Factory<Int, RoomElementView>
+
+    @Transaction
+    @Query("""
+        SELECT * FROM element_view
+        INNER JOIN element_fts ON element_view.id = element_fts.docid
+        WHERE element_fts MATCH :term AND element_view.type NOT IN (2, 3)
+        ORDER BY element_view.localized_name ASC
+    """)
+    abstract fun searchByName(term: String): DataSource.Factory<Int, RoomElementView>
+
+    @Transaction
+    @Query("""
+        SELECT * FROM element_view
         INNER JOIN recipe
         INNER JOIN recipe_result ON element_view.id = recipe_result.result_item_id
         GROUP BY element_view.id
@@ -138,15 +155,6 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         WHERE element_id = element.id
     """)
     abstract suspend fun getOreDictChainId(unlocalizedNameList: List<String>): Long
-
-    @Transaction
-    @Query("""
-        SELECT * FROM element_view
-        INNER JOIN element_fts ON element_view.id = element_fts.docid
-        WHERE element_fts MATCH :term AND element_view.type NOT IN (2, 3)
-        ORDER BY element_view.localized_name ASC
-    """)
-    abstract fun searchByName(term: String): DataSource.Factory<Int, RoomElementView>
 
     @Query("""
         DELETE FROM element

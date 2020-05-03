@@ -38,7 +38,7 @@ class ItemBrowserViewModel @Inject constructor(
             delay(50)
             invokeMediatorUseCase(
                 useCase = elementSearchUseCase,
-                params = term
+                params = ElementSearchUseCase.Parameter(term)
             )
         }
     }

@@ -12,16 +12,22 @@ import javax.inject.Inject
 
 class ElementSearchUseCase @Inject internal constructor(
     private val elementRepo: ElementRepo
-) : MediatorUseCase<String, PagedList<ElementView>>() {
+) : MediatorUseCase<ElementSearchUseCase.Parameter, PagedList<ElementView>>() {
 
-    override fun executeInternal(params: String) = liveData<Resource<PagedList<ElementView>>> {
+    override fun executeInternal(params: Parameter) = liveData<Resource<PagedList<ElementView>>> {
         val config = PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)
             .build()
-        val dataSource = elementRepo.searchByName(params)
+
+        val dataSource = when {
+            params.term.isEmpty() -> elementRepo.getElements()
+            else -> elementRepo.searchByName("*${params.term}*")
+        }
         val liveData = LivePagedListBuilder(dataSource, config).build()
         emitSource(Transformations.map(liveData) { Resource.success(it) })
     }
+
+    data class Parameter(val term: String)
 
     companion object {
         private const val PAGE_SIZE = 10

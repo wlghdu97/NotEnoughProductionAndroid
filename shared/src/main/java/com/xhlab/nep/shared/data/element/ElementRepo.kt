@@ -10,6 +10,7 @@ interface ElementRepo {
     fun searchByName(term: String): DataSource.Factory<Int, ElementView>
     fun searchGregtechResults(machineId: Int, term: String): DataSource.Factory<Int, ElementView>
     fun searchGregtechResultsFts(machineId: Int, term: String): DataSource.Factory<Int, ElementView>
+    fun getElements(): DataSource.Factory<Int, ElementView>
     fun getResultsByStation(machineId: Int): DataSource.Factory<Int, ElementView>
     fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
     fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, ElementView>

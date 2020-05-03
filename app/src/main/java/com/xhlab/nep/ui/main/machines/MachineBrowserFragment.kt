@@ -40,6 +40,7 @@ class MachineBrowserFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
 
         viewModel.isDBLoaded.observe(this) {
+            machine_list.isGone = !it
             db_not_loaded_text.isGone = it
         }
 

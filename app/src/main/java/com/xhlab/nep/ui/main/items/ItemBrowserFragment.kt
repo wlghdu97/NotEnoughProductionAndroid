@@ -51,15 +51,19 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
 
         viewModel.isDBLoaded.observe(this) {
+            element_list.isGone = !it
+            total_text.isGone = !it
             db_not_loaded_text.isGone = it
+
             search_view.isEnabled = it
             search_view.findViewById<EditText>(R.id.search_src_text).isEnabled = it
 
             if (!it) {
                 search_view.setQuery("", false)
                 search_view.clearFocus()
-                viewModel.searchElements("**")
             }
+            // init
+            viewModel.searchElements("")
         }
 
         viewModel.elementSearchResult.observeNotNull(this) {
@@ -75,7 +79,7 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?) = false
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.searchElements("*${newText ?: ""}*")
+                    viewModel.searchElements(newText ?: "")
                     return true
                 }
             })
