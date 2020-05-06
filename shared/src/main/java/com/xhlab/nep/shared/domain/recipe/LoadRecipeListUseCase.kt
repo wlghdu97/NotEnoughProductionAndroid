@@ -4,7 +4,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.liveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.domain.MediatorUseCase
 import com.xhlab.nep.shared.domain.recipe.model.RecipeView
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class LoadRecipeListUseCase @Inject constructor(
     private val recipeRepo: RecipeRepo,
-    private val gregtechRepo: GregtechRepo
+    private val machineRecipeRepo: MachineRecipeRepo
 ) : MediatorUseCase<LoadRecipeListUseCase.Parameters, PagedList<RecipeView>>() {
 
     override fun executeInternal(params: Parameters) = liveData<Resource<PagedList<RecipeView>>> {
@@ -23,7 +23,7 @@ class LoadRecipeListUseCase @Inject constructor(
             .build()
         val dataSource = when (machineId == CRAFTING_BENCH) {
             true -> recipeRepo.searchRecipeByElement(elementId)
-            false -> gregtechRepo.searchRecipeByElement(elementId, machineId)
+            false -> machineRecipeRepo.searchRecipeByElement(elementId, machineId)
         }
         val liveData = LivePagedListBuilder(dataSource, config).build()
         emitSource(Transformations.map(liveData) { Resource.success(it) })

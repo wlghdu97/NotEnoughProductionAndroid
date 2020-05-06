@@ -5,5 +5,5 @@ import com.xhlab.nep.model.Recipe
 import kotlinx.coroutines.channels.ReceiveChannel
 
 abstract class RecipeParser<T : Recipe> : Parser<T> {
-    abstract suspend fun parse(reader: JsonReader): ReceiveChannel<String>
+    abstract suspend fun parse(type: String, reader: JsonReader): ReceiveChannel<String>
 }

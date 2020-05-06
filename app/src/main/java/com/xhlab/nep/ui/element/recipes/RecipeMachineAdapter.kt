@@ -26,7 +26,7 @@ class RecipeMachineAdapter (
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeMachineViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.holder_recipe_machine, parent, false)
+            .inflate(R.layout.holder_machine_with_recipe_count, parent, false)
         return RecipeMachineViewHolder(view)
     }
 

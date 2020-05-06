@@ -20,7 +20,7 @@ import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
 class ParseRecipeUseCase @Inject constructor(
-    private val gregtechRecipeParser: GregtechRecipeParser,
+    private val machineRecipeParser: MachineRecipeParser,
     private val shapedRecipeParser: ShapedRecipeParser,
     private val shapelessRecipeParser: ShapelessRecipeParser,
     private val shapedOreRecipeParser: ShapedOreRecipeParser,
@@ -58,7 +58,9 @@ class ParseRecipeUseCase @Inject constructor(
             while (reader.hasNext()) {
                 reader.beginObject()
                 while (reader.hasNext()) {
-                    parse(index, reader)
+                    reader.nextName()
+                    val type = reader.nextString()
+                    parse(type, reader)
                 }
                 reader.endObject()
                 index += 1
@@ -83,16 +85,14 @@ class ParseRecipeUseCase @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun LiveDataScope<Resource<String>>.parse(index: Int, reader: JsonReader) {
-        when (index) {
-            0 -> gregtechRecipeParser.parse(reader)
-            1 -> shapedRecipeParser.parse(reader)
-            2 -> shapelessRecipeParser.parse(reader)
-            3 -> shapedOreRecipeParser.parse(reader)
-            4 -> shapelessOreRecipeParser.parse(reader)
-            5 -> replacementListParser.parse(reader)
-            else ->
-                throw RuntimeException("parser not found.")
+    private suspend fun LiveDataScope<Resource<String>>.parse(type: String, reader: JsonReader) {
+        when (type) {
+            "shaped" -> shapedRecipeParser.parse(type, reader)
+            "shapeless" -> shapelessRecipeParser.parse(type, reader)
+            "shapedOre" -> shapedOreRecipeParser.parse(type, reader)
+            "shapelessOre" -> shapelessOreRecipeParser.parse(type, reader)
+            "replacements" -> replacementListParser.parse(reader)
+            else -> machineRecipeParser.parse(type, reader)
         }.apply {
             consumeEach { emitLog(it) }
         }

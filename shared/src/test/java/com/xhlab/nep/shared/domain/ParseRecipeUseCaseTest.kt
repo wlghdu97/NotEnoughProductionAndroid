@@ -3,11 +3,13 @@ package com.xhlab.nep.shared.domain
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.paging.DataSource
 import com.nhaarman.mockitokotlin2.*
+import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.oredict.Replacement
 import com.xhlab.nep.model.recipes.*
 import com.xhlab.nep.shared.data.element.ElementRepo
-import com.xhlab.nep.shared.data.gregtech.GregtechRepo
+import com.xhlab.nep.shared.data.machine.MachineRepo
+import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepo
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
@@ -44,7 +46,8 @@ class ParseRecipeUseCaseTest {
 
     private lateinit var elementRepo: ElementRepo
     private lateinit var recipeRepo: RecipeRepo
-    private lateinit var gregtechRepo: GregtechRepo
+    private lateinit var machineRepo: MachineRepo
+    private lateinit var machineRecipeRepo: MachineRecipeRepo
     private lateinit var oreDictRepo: OreDictRepo
 
     private lateinit var generalPreference: GeneralPreference
@@ -57,14 +60,15 @@ class ParseRecipeUseCaseTest {
             onBlocking { deleteAll() }.doReturn(Unit)
         }
         recipeRepo = FakeRecipeRepo()
-        gregtechRepo = FakeGregtechRepo()
+        machineRepo = FakeMachineRepo()
+        machineRecipeRepo = FakeMachineRecipeRepo()
         oreDictRepo = FakeOreDictRepo()
 
-        val gregtechRecipeParser = GregtechRecipeParser(
+        val machineRecipeParser = MachineRecipeParser(
             itemParser = ItemParser(),
             fluidParser = FluidParser(),
-            recipeRepo = recipeRepo,
-            gregtechRepo = gregtechRepo
+            machineRepo = machineRepo,
+            recipeRepo = recipeRepo
         )
 
         val shapedRecipeParser = ShapedRecipeParser(VanillaItemParser(), recipeRepo)
@@ -82,14 +86,14 @@ class ParseRecipeUseCaseTest {
         }
 
         useCase = ParseRecipeUseCase(
-            gregtechRecipeParser = gregtechRecipeParser,
+            machineRecipeParser = machineRecipeParser,
             shapedRecipeParser = shapedRecipeParser,
             shapelessRecipeParser = shapelessRecipeParser,
             shapedOreRecipeParser = shapedOreRecipeParser,
             shapelessOreRecipeParser = shapelessOreRecipeParser,
             replacementListParser = replacementListParser,
             elementRepo = elementRepo,
-            gregtechRepo = gregtechRepo,
+            machineRepo = machineRepo,
             generalPreference = generalPreference
         )
     }
@@ -128,7 +132,7 @@ class ParseRecipeUseCaseTest {
         override suspend fun insertRecipes(recipes: List<Recipe>) {
             for (recipe in recipes) {
                 assertTrue(when (recipe) {
-                    is GregtechRecipe -> RecipeData.gregRecipeList.contains(recipe)
+                    is MachineRecipe -> RecipeData.machineRecipeList.contains(recipe)
                     is ShapedRecipe -> RecipeData.shapedRecipeList.contains(recipe)
                     is ShapelessRecipe -> RecipeData.shapelessRecipeList.contains(recipe)
                     is ShapedOreDictRecipe -> RecipeData.shapedOreRecipeList.contains(recipe)
@@ -147,15 +151,27 @@ class ParseRecipeUseCaseTest {
         }
     }
 
-    private class FakeGregtechRepo : GregtechRepo {
-        override suspend fun insertGregtechMachine(machineName: String): Int {
-            return RecipeData.gregMachineMap[machineName] ?: -1
+    private class FakeMachineRepo : MachineRepo {
+        override suspend fun getMachine(machineId: Int): Machine? {
+            return RecipeData.machineList.find { it.id == machineId }
         }
 
-        override suspend fun deleteGregtechMachines() {
+        override suspend fun insertMachine(modName: String, machineName: String): Int {
+            return RecipeData.machineList.find {
+                it.modName == modName && it.name == machineName
+            }?.id ?: -1
+        }
+
+        override suspend fun deleteAll() {
             // does nothing
         }
 
+        override fun getMachines(): DataSource.Factory<Int, Machine> {
+            TODO("not implemented")
+        }
+    }
+
+    private class FakeMachineRecipeRepo : MachineRecipeRepo {
         override suspend fun getElementListByRecipe(recipeId: Long): List<RecipeElementView> {
             TODO("not implemented")
         }

@@ -3,7 +3,8 @@ package com.xhlab.nep.shared.parser
 import com.google.gson.stream.JsonReader
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.recipes.GregtechRecipe
+import com.xhlab.nep.model.recipes.MachineRecipe
+import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
@@ -15,22 +16,21 @@ import kotlinx.coroutines.channels.produce
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
 
-class GregtechRecipeParser @Inject constructor(
+class MachineRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
     private val fluidParser: FluidParser,
     private val machineRepo: MachineRepo,
     private val recipeRepo: RecipeRepo
-) : RecipeParser<GregtechRecipe>() {
+) : RecipeParser<MachineRecipe>() {
 
     @ExperimentalCoroutinesApi
     override suspend fun parse(
+        type: String,
         reader: JsonReader
     ) = CoroutineScope(coroutineContext).produce<String> {
         while (reader.hasNext()) {
             reader.nextName()
-            val modName = reader.nextString()
-            reader.nextName()
-            parseMachineList(this, reader, modName)
+            parseMachineList(this, reader, type)
         }
     }
 
@@ -56,7 +56,7 @@ class GregtechRecipeParser @Inject constructor(
         reader.beginObject()
 
         var name = ""
-        var recipes = emptyList<GregtechRecipe>()
+        var recipes = emptyList<MachineRecipe>()
 
         while (reader.hasNext()) {
             if (reader.nextName() == "n") {
@@ -80,10 +80,11 @@ class GregtechRecipeParser @Inject constructor(
         recipeRepo.insertRecipes(mappedRecipes)
     }
 
-    override suspend fun parseElement(reader: JsonReader): GregtechRecipe {
+    override suspend fun parseElement(reader: JsonReader): MachineRecipe {
         var isEnabled = false
         var duration = 0
-        var eut = 0
+        var powerType = PowerType.NONE
+        var ept = 0
         var inputItems = emptyList<Item>()
         var outputItems = emptyList<Item>()
         var inputFluids = emptyList<Fluid>()
@@ -95,19 +96,27 @@ class GregtechRecipeParser @Inject constructor(
             when (reader.nextName()) {
                 "en" -> isEnabled = reader.nextBoolean()
                 "dur" -> duration = reader.nextInt()
-                "eut" -> eut = reader.nextInt()
                 "iI" -> inputItems = itemParser.parseElements(reader)
                 "iO" -> outputItems = itemParser.parseElements(reader)
                 "fI" -> inputFluids = fluidParser.parseElements(reader)
                 "fO" -> outputFluids = fluidParser.parseElements(reader)
+                "eut" -> {
+                    powerType = PowerType.EU
+                    ept = reader.nextInt()
+                }
+                "rft" -> {
+                    powerType = PowerType.RF
+                    ept = reader.nextInt()
+                }
             }
         }
         reader.endObject()
 
-        return GregtechRecipe(
+        return MachineRecipe(
             isEnabled = isEnabled,
             duration = duration,
-            eut = eut,
+            powerType = powerType.type,
+            ept = ept,
             machineId = -1,
             itemInputs = inputItems,
             itemOutputs = outputItems,

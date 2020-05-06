@@ -5,7 +5,7 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.oredict.OreDictElement
-import com.xhlab.nep.model.recipes.GregtechRecipe
+import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.shared.data.element.RoomElementMapper
 import com.xhlab.nep.shared.data.generateLongUUID
 import com.xhlab.nep.shared.data.getId
@@ -104,26 +104,27 @@ class RecipeAdder @Inject constructor(
         val outputIdList = outputPair.map { it.first.getId(db) }
 
         when (recipe) {
-            is GregtechRecipe -> {
-                val recipeList = ArrayList<GregtechRecipeEntity>()
+            is MachineRecipe -> {
+                val recipeList = ArrayList<MachineRecipeEntity>()
                 for ((index, pair) in inputPair.withIndex()) {
                     val metaData = if (pair.first is Item) {
                         (pair.first as Item).metaData
                     } else null
                     recipeList.add(
-                        GregtechRecipeEntity(
+                        MachineRecipeEntity(
                             recipeId = recipeId,
                             targetItemId = inputIdList[index],
                             amount = pair.first.amount * pair.second,
                             machineId = recipe.machineId,
                             isEnabled = recipe.isEnabled,
                             duration = recipe.duration,
-                            eut = recipe.eut,
+                            powerType = recipe.powerType,
+                            ept = recipe.ept,
                             metaData = metaData
                         )
                     )
                 }
-                db.getGregtechRecipeDao().insert(recipeList)
+                db.getMachineRecipeDao().insert(recipeList)
             }
             else -> {
                 val recipeList = ArrayList<RecipeEntity>()

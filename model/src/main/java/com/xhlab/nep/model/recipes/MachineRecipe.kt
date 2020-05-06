@@ -5,10 +5,11 @@ import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Recipe
 
-data class GregtechRecipe(
+data class MachineRecipe(
     val isEnabled: Boolean,
     val duration: Int,
-    val eut: Int,
+    val powerType: Int,
+    val ept: Int, // electricity per tick
     val machineId: Int,
     private val itemInputs: List<Item>,
     private val itemOutputs: List<Item>,
@@ -28,5 +29,11 @@ data class GregtechRecipe(
         outputs.addAll(itemOutputs)
         outputs.addAll(fluidOutputs)
         return outputs
+    }
+
+    companion object {
+        enum class PowerType(val type: Int) {
+            NONE(-1), EU(0), RF(1)
+        }
     }
 }
