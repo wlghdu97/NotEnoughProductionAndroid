@@ -18,9 +18,9 @@ abstract class MachineDao : BaseDao<MachineEntity>() {
 
     @Query("""
         SELECT machine.id FROM machine
-        WHERE machine.name = :machineName
+        WHERE machine.mod_name = :modName AND machine.name = :machineName
     """)
-    abstract suspend fun getId(machineName: String): Int?
+    abstract suspend fun getId(modName: String, machineName: String): Int?
 
     @Query("""
         DELETE FROM machine

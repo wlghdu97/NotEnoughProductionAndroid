@@ -65,7 +65,7 @@ class ElementSearchUseCaseTest {
 
     @Test
     fun loadPagedListSuccessfully() = runBlocking {
-        useCase.execute(term)
+        useCase.execute(ElementSearchUseCase.Parameter(term))
 
         assertEquals(
             Resource.success(testList.asPagedList()),

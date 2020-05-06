@@ -6,8 +6,8 @@ import com.xhlab.nep.ui.main.MainActivity
 import com.xhlab.nep.ui.main.MainModule
 import com.xhlab.nep.ui.main.machines.details.MachineResultActivity
 import com.xhlab.nep.ui.main.machines.details.MachineResultModule
-import com.xhlab.nep.ui.recipe.StationRecipeListActivity
-import com.xhlab.nep.ui.recipe.StationRecipeListModule
+import com.xhlab.nep.ui.recipe.MachineRecipeListActivity
+import com.xhlab.nep.ui.recipe.MachineRecipeListModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -23,6 +23,6 @@ abstract class ActivityBuilder {
     @ContributesAndroidInjector(modules = [MachineResultModule::class])
     abstract fun bindMachineResultActivity(): MachineResultActivity
 
-    @ContributesAndroidInjector(modules = [StationRecipeListModule::class])
-    abstract fun provideStationRecipeListActivity(): StationRecipeListActivity
+    @ContributesAndroidInjector(modules = [MachineRecipeListModule::class])
+    abstract fun provideMachineRecipeListActivity(): MachineRecipeListActivity
 }

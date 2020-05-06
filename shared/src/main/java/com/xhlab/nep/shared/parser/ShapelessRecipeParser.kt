@@ -18,7 +18,7 @@ class ShapelessRecipeParser @Inject constructor(
 ) : RecipeParser<ShapelessRecipe>() {
 
     @ExperimentalCoroutinesApi
-    override suspend fun parse(reader: JsonReader) = CoroutineScope(coroutineContext).produce {
+    override suspend fun parse(type: String, reader: JsonReader) = CoroutineScope(coroutineContext).produce {
         send("parsing shapeless recipes")
         while (reader.hasNext()) {
             if (reader.peek() == JsonToken.BEGIN_ARRAY) {

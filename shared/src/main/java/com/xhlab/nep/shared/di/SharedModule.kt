@@ -3,8 +3,8 @@ package com.xhlab.nep.shared.di
 import android.app.Application
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.element.ElementRepoImpl
-import com.xhlab.nep.shared.data.gregtech.GregtechRepo
-import com.xhlab.nep.shared.data.gregtech.GregtechRepoImpl
+import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepo
+import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepoImpl
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.machine.MachineRepoImpl
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
@@ -45,5 +45,5 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideGregtechRepo(db: AppDatabase): GregtechRepo = GregtechRepoImpl(db)
+    internal fun provideMachineRecipeRepo(db: AppDatabase): MachineRecipeRepo = MachineRecipeRepoImpl(db)
 }

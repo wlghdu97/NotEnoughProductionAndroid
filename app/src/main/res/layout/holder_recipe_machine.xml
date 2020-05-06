@@ -18,7 +18,7 @@
             app:layout_constraintBottom_toTopOf="@id/greg_properties"/>
 
         <include
-            layout="@layout/layout_holder_recipe_gregtech"
+            layout="@layout/layout_holder_recipe_machine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/layout_recipe_header"

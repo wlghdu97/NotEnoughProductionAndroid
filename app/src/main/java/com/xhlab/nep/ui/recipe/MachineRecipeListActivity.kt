@@ -8,21 +8,21 @@ import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_station_recipe_list.*
+import kotlinx.android.synthetic.main.activity_machine_recipe_list.*
 import org.jetbrains.anko.dip
 import javax.inject.Inject
 
-class StationRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
+class MachineRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
-    private lateinit var viewModel: StationRecipeListViewModel
+    private lateinit var viewModel: MachineRecipeListViewModel
 
     private lateinit var recipeAdapter: RecipeDetailAdapter
 
     private var elementId: Long = 0L
-    private var stationId: Int = -1
+    private var machineId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,13 +33,13 @@ class StationRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
 
     private fun checkIntent() {
         elementId = intent.getLongExtra(ELEMENT_ID, 0L)
-        stationId = intent.getIntExtra(STATION_ID, -1)
+        machineId = intent.getIntExtra(MACHINE_ID, -1)
         require(elementId != 0L)
     }
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-        viewModel.init(elementId, stationId)
+        viewModel.init(elementId, machineId)
 
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
@@ -47,7 +47,7 @@ class StationRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
     }
 
     override fun initView() {
-        setContentView(R.layout.activity_station_recipe_list)
+        setContentView(R.layout.activity_machine_recipe_list)
         setSupportActionBar(toolbar)
         supportActionBar?.setTitle(R.string.title_recipe_list)
 
@@ -61,6 +61,6 @@ class StationRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
 
     companion object {
         const val ELEMENT_ID = "element_id"
-        const val STATION_ID = "station_id"
+        const val MACHINE_ID = "machine_id"
     }
 }

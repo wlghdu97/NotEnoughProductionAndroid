@@ -20,9 +20,9 @@ class MachineResultSearchUseCase @Inject constructor(
             .build()
 
         val dataSource = when {
-            params.term.isEmpty() -> elementRepo.getResultsByStation(params.machineId)
-            params.term.length < 3 -> elementRepo.searchGregtechResults(params.machineId, "%${params.term}%")
-            else -> elementRepo.searchGregtechResultsFts(params.machineId, "*${params.term}*")
+            params.term.isEmpty() -> elementRepo.getResultsByMachine(params.machineId)
+            params.term.length < 3 -> elementRepo.searchMachineResults(params.machineId, "%${params.term}%")
+            else -> elementRepo.searchMachineResultsFts(params.machineId, "*${params.term}*")
         }
         val liveData = LivePagedListBuilder(dataSource, config).build()
         emitSource(Transformations.map(liveData) { Resource.success(it) })

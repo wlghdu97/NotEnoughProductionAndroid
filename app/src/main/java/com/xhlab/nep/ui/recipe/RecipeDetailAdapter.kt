@@ -11,8 +11,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
+import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType
 import com.xhlab.nep.shared.domain.recipe.model.CraftingRecipeView
-import com.xhlab.nep.shared.domain.recipe.model.GregtechRecipeView
+import com.xhlab.nep.shared.domain.recipe.model.MachineRecipeView
 import com.xhlab.nep.shared.domain.recipe.model.RecipeView
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.BindableViewHolder
@@ -41,7 +42,7 @@ class RecipeDetailAdapter(
         val view = LayoutInflater.from(parent.context)
             .inflate(when (viewType) {
                 0 -> R.layout.holder_recipe
-                1 -> R.layout.holder_recipe_gregtech
+                1 -> R.layout.holder_recipe_machine
                 else -> throw IllegalArgumentException("invalid view type.")
             }, parent, false)
         return RecipeDetailViewHolder(view)
@@ -54,7 +55,7 @@ class RecipeDetailAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is CraftingRecipeView -> 0
-            is GregtechRecipeView -> 1
+            is MachineRecipeView -> 1
             else -> throw IllegalArgumentException("invalid recipe view type.")
         }
     }
@@ -94,22 +95,29 @@ class RecipeDetailAdapter(
             }
 
             machineName.text = when (model) {
-                is GregtechRecipeView -> model.machineName
+                is MachineRecipeView -> model.machineName
                 is CraftingRecipeView -> context.getString(R.string.txt_crafting_table)
                 else -> context.getString(R.string.txt_unknown_recipe)
             }
 
             when (model) {
-                is GregtechRecipeView -> {
+                is MachineRecipeView -> {
+                    val unit = when (model.powerType) {
+                        PowerType.EU.type -> context.getString(R.string.txt_eu)
+                        PowerType.RF.type -> context.getString(R.string.txt_rf)
+                        else -> context.getString(R.string.txt_unknown)
+                    }
+                    val unitTick = "$unit${context.getString(R.string.txt_per_tick)}"
                     val durationSec = model.duration / 20f
-                    val total = model.eut.toLong() * model.duration
+                    val total = model.ept.toLong() * model.duration
                     gregProperty?.text = context.formatString(
-                        R.string.form_greg_property,
-                        integerFormat.format(model.eut),
+                        R.string.form_machine_property,
+                        integerFormat.format(model.ept),
+                        unitTick,
                         integerFormat.format(durationSec),
-                        integerFormat.format(total)
+                        integerFormat.format(total),
+                        unit
                     )
-
                     val byproductList = model.resultItemList.filter { it.id != targetElementId }
                     byproductAdapter.submitList(byproductList)
                     byproductGroup?.isGone = byproductList.isEmpty()

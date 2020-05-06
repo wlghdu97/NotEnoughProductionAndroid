@@ -34,7 +34,7 @@
             android:name=".ui.element.ElementDetailActivity"/>
 
         <activity
-            android:name=".ui.recipe.StationRecipeListActivity"
+            android:name=".ui.recipe.MachineRecipeListActivity"
             android:launchMode="singleTop"/>
 
         <service

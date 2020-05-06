@@ -2,6 +2,7 @@ package com.xhlab.test_shared
 
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
+import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.model.oredict.Replacement
 import com.xhlab.nep.model.recipes.*
@@ -53,27 +54,27 @@ object RecipeData {
         Replacement("wireGt02Steel", listOf(itemList[26]))
     )
 
-    val gregMachineMap = mapOf(
-        "Ore Washing Plant" to 0,
-        "Thermal Centrifuge" to 1
+    val machineList = listOf(
+        Machine(0, "gregtech", "Ore Washing Plant"),
+        Machine(1, "gregtech", "Thermal Centrifuge")
     )
 
-    val gregRecipeList = listOf(
-        GregtechRecipe(
-            true, 500, 16, 0,
+    val machineRecipeList = listOf(
+        MachineRecipe(
+            true, 500, 0, 16, 0,
             listOf(itemList[0]),
             listOf(itemList[1], itemList[2], itemList[3]),
             listOf(fluidList[0]),
             listOf()),
-        GregtechRecipe(
-            true, 500, 16, 0,
+        MachineRecipe(
+            true, 500, 0, 16, 0,
             listOf(itemList[4]),
             listOf(itemList[5], itemList[6], itemList[3]),
             listOf(fluidList[0]),
             listOf()
         ),
-        GregtechRecipe(
-            true, 500, 48, 1,
+        MachineRecipe(
+            true, 500, 0, 48, 1,
             listOf(itemList[7]),
             listOf(itemList[8], itemList[9], itemList[3]),
             listOf(),
@@ -130,7 +131,8 @@ object RecipeData {
     // sources -> type -> recipes
     fun getInputStream() = """
         {"sources": [
-            {"machines": [
+            {"type": "gregtech",
+             "machines": [
                 {"n": "Ore Washing Plant", 
                  "recs": [
                     {"en":true, "dur":500, "eut":16, 
@@ -192,7 +194,7 @@ object RecipeData {
                     }
                 ]},
                 {"n":"Thermal Centrifuge",
-                "recs":[
+                 "recs":[
                     {"en":true, "dur":500, "eut":48,
                     "iI":[
                         {"a":1,
@@ -220,7 +222,7 @@ object RecipeData {
                 ]}
             ]},
             {"type": "shaped",
-            "recs": [
+             "recs": [
                 {"iI": [
                 {"a":1,
                 "uN":"block.cobblestone",
@@ -287,7 +289,8 @@ object RecipeData {
                 "lN":"Torch"
                 }}
             ]},
-            {"recipes": [
+            {"type": "shapedOre",
+             "recipes": [
                 {"iI":[
                 {"a":1,
                 "uN":"item.projectred.core.part.conductive_plate",
@@ -324,8 +327,9 @@ object RecipeData {
                 "uN":"item.projectred.integration.gate|26",
                 "lN":"Comparator"
                 }}
-            ], "type": "shapedOre"},
-            {"recipes": [
+            ]},
+            {"type": "shapelessOre",
+             "recipes": [
                 {"iI":[
                     ["wireGt02Steel"]
                 ],
@@ -334,8 +338,9 @@ object RecipeData {
                 "uN":"gt.blockmachines.wire.steel.01",
                 "lN":"1x Steel Wire"
                 }}
-            ], "type": "shapelessOre"},
-            {"reps": [
+            ]},
+            {"type": "replacements",
+             "reps": [
                 {"name":"gemQuartz",
                 "reps":[
                     {"a":1,
@@ -406,7 +411,7 @@ object RecipeData {
                     "uN":"gt.blockmachines.wire.steel.02",
                     "lN":"2x Steel Wire"
                 }]}
-            ], "type": "replacements"}
+            ]}
         ]}
     """.trimIndent().byteInputStream()
 }
