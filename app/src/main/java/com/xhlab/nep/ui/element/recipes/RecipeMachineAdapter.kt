@@ -38,6 +38,7 @@ class RecipeMachineAdapter (
         : BindableViewHolder<RecipeMachineView>(itemView) {
 
         private val machineName: TextView = itemView.findViewById(R.id.machine_name)
+        private val modName: TextView = itemView.findViewById(R.id.mod_name)
         private val recipeCount: TextView = itemView.findViewById(R.id.recipe_count)
 
         init {
@@ -48,6 +49,7 @@ class RecipeMachineAdapter (
 
         override fun bindNotNull(model: RecipeMachineView) {
             machineName.text = model.machineName
+            modName.text = model.modName
             recipeCount.text = model.recipeCount.toString()
         }
     }

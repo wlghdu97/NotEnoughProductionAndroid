@@ -18,16 +18,17 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         SELECT
         machines.id AS machineId, 
         machines.name AS machineName, 
+        machines.mod_name AS modName,
         machines.recipeCount AS recipeCount
         FROM (
-            SELECT machine.id, machine.name,
+            SELECT machine.id, machine.name, machine.mod_name,
             COUNT(DISTINCT machine_recipe.recipe_id) AS recipeCount FROM machine_recipe
             INNER JOIN machine ON machine.id = machine_recipe.machine_id
             INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
             WHERE machine_recipe.recipe_id = recipe_result.recipe_id
             GROUP BY machine.name
             UNION ALL
-            SELECT -1 AS id, "Crafting Table" AS name, 
+            SELECT -1 AS id, "Crafting Table" AS name, "minecraft" AS mod_name,
             COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
             INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
             WHERE recipe.recipe_id = recipe_result.recipe_id
