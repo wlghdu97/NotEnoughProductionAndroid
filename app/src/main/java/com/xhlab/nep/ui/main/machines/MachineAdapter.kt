@@ -26,6 +26,7 @@ class MachineAdapter(
 
     inner class MachineViewHolder(itemView: View) : BindableViewHolder<Machine>(itemView) {
         private val machineName: TextView = itemView.findViewById(R.id.machine_name)
+        private val modName: TextView = itemView.findViewById(R.id.mod_name)
 
         init {
             itemView.setOnClickListener { model?.let { listener?.onClick(it.id) } }
@@ -33,6 +34,7 @@ class MachineAdapter(
 
         override fun bindNotNull(model: Machine) {
             machineName.text = model.name
+            modName.text = model.modName
         }
     }
 

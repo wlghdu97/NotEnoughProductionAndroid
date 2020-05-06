@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="56dp"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     android:background="?attr/selectableItemBackground"
@@ -13,13 +13,37 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/machine_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         tools:text="Machine name"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="8sp"
+        app:autoSizeMaxTextSize="16sp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mod_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_show_details"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintVertical_chainStyle="packed"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/mod_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        tools:text="mod name"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="6sp"
+        app:autoSizeMaxTextSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/machine_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        style="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+        app:layout_constraintEnd_toStartOf="@id/btn_show_details"
+        app:layout_constraintHorizontal_bias="0"
+        style="@style/TextAppearance.MaterialComponents.Caption"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/btn_show_details"
