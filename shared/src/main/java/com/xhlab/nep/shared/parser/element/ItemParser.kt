@@ -12,7 +12,7 @@ class ItemParser @Inject constructor() : Parser<Item> {
         var amount = 0
         var unlocalizedName = ""
         var localizedName = ""
-        var cfg: Int? = null
+        var metaData: String? = null
 
         reader.beginObject()
         while (reader.hasNext()) {
@@ -32,7 +32,12 @@ class ItemParser @Inject constructor() : Parser<Item> {
                         localizedName = reader.nextString()
                     }
                 }
-                "cfg" -> cfg = reader.nextInt()
+                "cfg" ->
+                    metaData = reader.nextInt().toString() // circuit configuration
+                "meta" ->
+                    metaData = reader.nextString() // meta data
+                "percentage" ->
+                    metaData = String.format("%.2f%%", reader.nextDouble() * 100) // drop chance
             }
         }
         reader.endObject()
@@ -41,7 +46,7 @@ class ItemParser @Inject constructor() : Parser<Item> {
             amount = amount,
             unlocalizedName = unlocalizedName,
             localizedName = localizedName,
-            metaData = cfg
+            metaData = metaData
         )
     }
 }
