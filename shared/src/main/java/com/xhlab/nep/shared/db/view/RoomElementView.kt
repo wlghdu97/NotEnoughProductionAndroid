@@ -61,8 +61,7 @@ import com.xhlab.nep.shared.domain.item.model.ElementView
             )
             ELSE element.unlocalized_name
         END unlocalized_name, 
-        element.type, 
-        element.meta_data 
+        element.type
         FROM element
     """
 )
@@ -74,5 +73,5 @@ data class RoomElementView(
     override val unlocalizedName: String,
     override val type: Int,
     @ColumnInfo(name = "meta_data")
-    override val metaData: String
+    override val metaData: String?
 ) : ElementView()

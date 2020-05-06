@@ -5,5 +5,5 @@ abstract class ElementView {
     abstract val unlocalizedName: String
     abstract val localizedName: String
     abstract val type: Int
-    abstract val metaData: String
+    abstract val metaData: String?
 }

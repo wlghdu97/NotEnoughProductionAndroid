@@ -2,6 +2,7 @@ package com.xhlab.nep.shared.data.recipe
 
 import androidx.room.withTransaction
 import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.model.recipes.GregtechRecipe
@@ -38,7 +39,7 @@ class RecipeAdder @Inject constructor(
 
         val entitySet = Sequence { recipes.iterator() }
             .flatMap { getItemsFromRecipe(it).asSequence() }
-            .distinctBy { it.unlocalizedName + it.metaData }
+            .distinctBy { it.unlocalizedName }
 
         db.getElementDao().insert(entitySet.toList())
     }
@@ -106,6 +107,9 @@ class RecipeAdder @Inject constructor(
             is GregtechRecipe -> {
                 val recipeList = ArrayList<GregtechRecipeEntity>()
                 for ((index, pair) in inputPair.withIndex()) {
+                    val metaData = if (pair.first is Item) {
+                        (pair.first as Item).metaData
+                    } else null
                     recipeList.add(
                         GregtechRecipeEntity(
                             recipeId = recipeId,
@@ -114,7 +118,8 @@ class RecipeAdder @Inject constructor(
                             machineId = recipe.machineId,
                             isEnabled = recipe.isEnabled,
                             duration = recipe.duration,
-                            eut = recipe.eut
+                            eut = recipe.eut,
+                            metaData = metaData
                         )
                     )
                 }
@@ -137,11 +142,15 @@ class RecipeAdder @Inject constructor(
 
         val resultList = ArrayList<RecipeResultEntity>()
         for ((index, pair) in outputPair.withIndex()) {
+            val metaData = if (pair.first is Item) {
+                (pair.first as Item).metaData
+            } else null
             resultList.add(
                 RecipeResultEntity(
                     recipeId = recipeId,
                     resultItemId = outputIdList[index],
-                    amount = pair.first.amount * pair.second
+                    amount = pair.first.amount * pair.second,
+                    metaData = metaData
                 )
             )
         }

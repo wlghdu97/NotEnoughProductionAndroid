@@ -12,7 +12,7 @@ abstract class RecipeResultDao : BaseDao<RecipeResultEntity>() {
 
     @Transaction
     @Query("""
-        SELECT element_view.*, recipe_result.amount FROM element_view
+        SELECT element_view.*, recipe_result.amount, recipe_result.meta_data FROM element_view
         INNER JOIN recipe_result ON recipe_result.recipe_id = :recipeId
         WHERE element_view.id = recipe_result.result_item_id
     """)

@@ -86,7 +86,7 @@ class RecipeElementAdapter(
         }
 
         override fun bindNotNull(model: RecipeElementView) {
-            val metaData = when (model.metaData.isNotEmpty()) {
+            val metaData = when (!model.metaData.isNullOrEmpty()) {
                 true -> " : ${model.metaData}"
                 false -> ""
             }

@@ -15,7 +15,7 @@ abstract class GregtechRecipeDao : BaseDao<GregtechRecipeEntity>() {
 
     @Transaction
     @Query("""
-        SELECT element_view.*, gregtech_recipe.amount FROM element_view
+        SELECT element_view.*, gregtech_recipe.amount, gregtech_recipe.meta_data FROM element_view
         INNER JOIN gregtech_recipe ON gregtech_recipe.recipe_id = :recipeId
         WHERE element_view.id = gregtech_recipe.target_item_id
     """)
@@ -29,6 +29,7 @@ abstract class GregtechRecipeDao : BaseDao<GregtechRecipeEntity>() {
         gregtech_recipe.enabled,
         gregtech_recipe.duration,
         gregtech_recipe.eut,
+        gregtech_recipe.meta_data,
         machine.id AS machine_id,
         machine.name AS machine_name
         FROM gregtech_recipe

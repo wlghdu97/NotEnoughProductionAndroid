@@ -12,5 +12,5 @@ data class RoomRecipeElementView(
     override val type: Int,
     override val amount: Int,
     @ColumnInfo(name = "meta_data")
-    override val metaData: String
+    override val metaData: String?
 ) : RecipeElementView()

@@ -21,5 +21,7 @@ data class RecipeResultEntity(
     val recipeId: Long,
     @ColumnInfo(name = "result_item_id", index = true)
     val resultItemId: Long,
-    val amount: Int
+    val amount: Int,
+    @ColumnInfo(name = "meta_data")
+    val metaData: String? = null
 )

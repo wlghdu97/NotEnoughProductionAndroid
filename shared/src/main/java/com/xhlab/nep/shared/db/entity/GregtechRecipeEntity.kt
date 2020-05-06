@@ -27,5 +27,7 @@ data class GregtechRecipeEntity(
     @ColumnInfo(name = "enabled")
     val isEnabled: Boolean,
     val duration: Int,
-    val eut: Int
+    val eut: Int,
+    @ColumnInfo(name = "meta_data")
+    val metaData: String? = null
 )

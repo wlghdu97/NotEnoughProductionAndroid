@@ -55,7 +55,7 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
 
     @Transaction
     @Query("""
-        SELECT * FROM element_view
+        SELECT DISTINCT element_view.* FROM element_view
         INNER JOIN recipe
         INNER JOIN recipe_result ON element_view.id = recipe_result.result_item_id
         GROUP BY element_view.id
@@ -142,12 +142,6 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         WHERE element.unlocalized_name = :unlocalizedName
     """)
     abstract suspend fun getId(unlocalizedName: String): Long
-
-    @Query("""
-        SELECT element.id FROM element
-        WHERE element.unlocalized_name = :unlocalizedName AND element.meta_data = :metaData
-    """)
-    abstract suspend fun getId(unlocalizedName: String, metaData: String): Long
 
     @Query("""
         SELECT chain_element_id FROM ore_dict_chain
