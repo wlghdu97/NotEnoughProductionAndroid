@@ -8,10 +8,11 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.recipe.model.StationView
+import com.xhlab.nep.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 
 class RecipeStationAdapter (
-    private val listener: StationListener? = null
+    private val listener: MachineListener? = null
 ) : PagedListAdapter<StationView, RecipeStationAdapter.RecipeStationViewHolder>(
     object : DiffUtil.ItemCallback<StationView>() {
         override fun areItemsTheSame(oldItem: StationView, newItem: StationView): Boolean {

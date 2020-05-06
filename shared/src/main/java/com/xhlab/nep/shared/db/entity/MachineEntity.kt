@@ -8,7 +8,7 @@ import com.xhlab.nep.model.Machine
 
 @Entity(
     tableName = "machine",
-    indices = [Index(value = ["id", "name"], unique = true)]
+    indices = [Index(value = ["mod_name", "name"], unique = true)]
 )
 data class MachineEntity(
     @PrimaryKey(autoGenerate = true)

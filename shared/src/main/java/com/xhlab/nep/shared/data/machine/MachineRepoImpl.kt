@@ -18,7 +18,7 @@ class MachineRepoImpl @Inject constructor(
 
     override suspend fun insertMachine(modName: String, machineName: String) = withContext(io) {
         db.getMachineDao().insert(MachineEntity(modName = modName, name = machineName))
-        db.getMachineDao().getId(machineName)
+        db.getMachineDao().getId(modName, machineName)
     }
 
     override suspend fun deleteAll() = withContext(io) {

@@ -1,10 +1,8 @@
 package com.xhlab.nep.shared.parser
 
 import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.recipes.GregtechRecipe
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
@@ -29,25 +27,32 @@ class GregtechRecipeParser @Inject constructor(
         reader: JsonReader
     ) = CoroutineScope(coroutineContext).produce<String> {
         while (reader.hasNext()) {
-            if (reader.peek() == JsonToken.BEGIN_ARRAY) {
-                parseMachineList(this, reader)
-            } else {
-                reader.skipValue()
-            }
+            reader.nextName()
+            val modName = reader.nextString()
+            reader.nextName()
+            parseMachineList(this, reader, modName)
         }
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun parseMachineList(producer: ProducerScope<String>, reader: JsonReader) {
+    private suspend fun parseMachineList(
+        producer: ProducerScope<String>,
+        reader: JsonReader,
+        modName: String
+    ) {
         reader.beginArray()
         while (reader.hasNext()) {
-            parseMachine(producer, reader)
+            parseMachine(producer, reader, modName)
         }
         reader.endArray()
     }
 
     @ExperimentalCoroutinesApi
-    private suspend fun parseMachine(producer: ProducerScope<String>, reader: JsonReader) {
+    private suspend fun parseMachine(
+        producer: ProducerScope<String>,
+        reader: JsonReader,
+        modName: String
+    ) {
         reader.beginObject()
 
         var name = ""
@@ -65,7 +70,7 @@ class GregtechRecipeParser @Inject constructor(
         reader.endObject()
 
         // map machine name to recipes
-        val machineId = machineRepo.insertMachine(Machine.Companion.MOD_GREGTECH, name)
+        val machineId = machineRepo.insertMachine(modName, name)
             ?: throw NullPointerException("machine id is null.")
         val mappedRecipes = recipes.map {
             it.copy(machineId = machineId)
@@ -99,7 +104,7 @@ class GregtechRecipeParser @Inject constructor(
         }
         reader.endObject()
 
-        return  GregtechRecipe(
+        return GregtechRecipe(
             isEnabled = isEnabled,
             duration = duration,
             eut = eut,

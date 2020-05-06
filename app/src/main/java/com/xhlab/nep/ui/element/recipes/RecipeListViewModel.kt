@@ -7,6 +7,7 @@ import com.xhlab.nep.shared.domain.recipe.LoadRecipeStationListUseCase
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.ui.main.machines.MachineListener
 import javax.inject.Inject
 
 class RecipeListViewModel @Inject constructor(
@@ -14,7 +15,7 @@ class RecipeListViewModel @Inject constructor(
     private val stationRecipeListNavigationUseCase: StationRecipeListNavigationUseCase
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    StationListener
+    MachineListener
 {
     private val elementId = MutableLiveData<Long>()
 
@@ -38,10 +39,10 @@ class RecipeListViewModel @Inject constructor(
     private fun requireElementId()
             = elementId.value ?: throw NullPointerException("element id is null")
 
-    override fun onClick(stationId: Int?) {
+    override fun onClick(machineId: Int) {
         invokeUseCase(
             stationRecipeListNavigationUseCase,
-            StationRecipeListNavigationUseCase.Parameters(requireElementId(), stationId)
+            StationRecipeListNavigationUseCase.Parameters(requireElementId(), machineId)
         )
     }
 }
