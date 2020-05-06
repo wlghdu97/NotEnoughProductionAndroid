@@ -8,9 +8,9 @@ import dagger.multibindings.IntoMap
 
 @Module
 @Suppress("unused")
-abstract class StationRecipeListModule {
+abstract class MachineRecipeListModule {
     @Binds
     @IntoMap
-    @ViewModelKey(StationRecipeListViewModel::class)
-    abstract fun bindStationRecipeListViewModel(viewModel: StationRecipeListViewModel): ViewModel
+    @ViewModelKey(MachineRecipeListViewModel::class)
+    abstract fun bindMachineRecipeListViewModel(viewModel: MachineRecipeListViewModel): ViewModel
 }

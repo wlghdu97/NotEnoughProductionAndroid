@@ -2,8 +2,8 @@ package com.xhlab.nep.ui.element.recipes
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.xhlab.nep.domain.StationRecipeListNavigationUseCase
-import com.xhlab.nep.shared.domain.recipe.LoadRecipeStationListUseCase
+import com.xhlab.nep.domain.MachineRecipeListNavigationUseCase
+import com.xhlab.nep.shared.domain.recipe.LoadRecipeMachineListUseCase
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
@@ -11,15 +11,15 @@ import com.xhlab.nep.ui.main.machines.MachineListener
 import javax.inject.Inject
 
 class RecipeListViewModel @Inject constructor(
-    private val loadRecipeStationListUseCase: LoadRecipeStationListUseCase,
-    private val stationRecipeListNavigationUseCase: StationRecipeListNavigationUseCase
+    private val loadRecipeMachineListUseCase: LoadRecipeMachineListUseCase,
+    private val machineRecipeListNavigationUseCase: MachineRecipeListNavigationUseCase
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     MachineListener
 {
     private val elementId = MutableLiveData<Long>()
 
-    val recipeList = loadRecipeStationListUseCase.observeOnly(Resource.Status.SUCCESS)
+    val recipeList = loadRecipeMachineListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     fun init(elementId: Long?) {
         requireNotNull(elementId) {
@@ -31,8 +31,8 @@ class RecipeListViewModel @Inject constructor(
         }
         this.elementId.value = elementId
         invokeMediatorUseCase(
-            useCase = loadRecipeStationListUseCase,
-            params = elementId
+            useCase = loadRecipeMachineListUseCase,
+            params = LoadRecipeMachineListUseCase.Parameter(elementId)
         )
     }
 
@@ -41,8 +41,8 @@ class RecipeListViewModel @Inject constructor(
 
     override fun onClick(machineId: Int) {
         invokeUseCase(
-            stationRecipeListNavigationUseCase,
-            StationRecipeListNavigationUseCase.Parameters(requireElementId(), machineId)
+            machineRecipeListNavigationUseCase,
+            MachineRecipeListNavigationUseCase.Parameters(requireElementId(), machineId)
         )
     }
 }

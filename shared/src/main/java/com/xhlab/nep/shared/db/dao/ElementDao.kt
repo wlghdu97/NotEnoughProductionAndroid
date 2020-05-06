@@ -7,7 +7,7 @@ import androidx.room.Transaction
 import com.xhlab.nep.shared.db.BaseDao
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.shared.db.view.RoomElementView
-import com.xhlab.nep.shared.domain.recipe.model.StationView
+import com.xhlab.nep.shared.domain.recipe.model.RecipeMachineView
 
 @Dao
 abstract class ElementDao : BaseDao<ElementEntity>() {
@@ -16,9 +16,9 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
     @Transaction
     @Query("""
         SELECT
-        stations.id AS stationId, 
-        stations.name AS stationName, 
-        stations.recipeCount AS recipeCount
+        machines.id AS machineId, 
+        machines.name AS machineName, 
+        machines.recipeCount AS recipeCount
         FROM (
             SELECT machine.id, machine.name,
             COUNT(DISTINCT gregtech_recipe.recipe_id) AS recipeCount FROM gregtech_recipe
@@ -32,9 +32,9 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
             INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
             WHERE recipe.recipe_id = recipe_result.recipe_id
             GROUP BY name
-        ) AS stations
+        ) AS machines
     """)
-    abstract fun getStationsByElement(elementId: Long): DataSource.Factory<Int, StationView>
+    abstract fun getMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
 
     @Transaction
     @Query("""

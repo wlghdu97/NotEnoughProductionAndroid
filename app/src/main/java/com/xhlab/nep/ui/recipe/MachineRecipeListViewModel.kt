@@ -9,7 +9,7 @@ import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.main.items.ElementListener
 import javax.inject.Inject
 
-class StationRecipeListViewModel @Inject constructor(
+class MachineRecipeListViewModel @Inject constructor(
     private val loadRecipeListUseCase: LoadRecipeListUseCase,
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
 ) : ViewModel(),
@@ -18,14 +18,14 @@ class StationRecipeListViewModel @Inject constructor(
 {
     val recipeList = loadRecipeListUseCase.observeOnly(Resource.Status.SUCCESS)
 
-    fun init(elementId: Long, stationId: Int) {
+    fun init(elementId: Long, machineId: Int) {
         // ignore it recipe list is already loaded
         if (recipeList.value != null) {
             return
         }
         invokeMediatorUseCase(
             useCase = loadRecipeListUseCase,
-            params = LoadRecipeListUseCase.Parameters(elementId, stationId)
+            params = LoadRecipeListUseCase.Parameters(elementId, machineId)
         )
     }
 

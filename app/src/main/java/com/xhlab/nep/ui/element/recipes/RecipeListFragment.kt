@@ -24,7 +24,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
     private lateinit var viewModel: RecipeListViewModel
 
-    private val recipeAdapter by lazy { RecipeStationAdapter(viewModel) }
+    private val recipeAdapter by lazy { RecipeMachineAdapter(viewModel) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
