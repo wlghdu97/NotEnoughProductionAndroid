@@ -77,7 +77,7 @@ class RecipeElementAdapter(
     inner class RecipeElementViewHolder(itemView: View)
         : BindableViewHolder<RecipeElementView>(itemView) {
 
-        private val icon: ImageView? = itemView.findViewById(R.id.icon)
+        private val icon: ImageView = itemView.findViewById(R.id.icon)
         private val name: TextView = itemView.findViewById(R.id.name)
         private val unlocalizedName: TextView = itemView.findViewById(R.id.unlocalized_name)
         private val type: TextView? = itemView.findViewById(R.id.type)
@@ -95,8 +95,8 @@ class RecipeElementAdapter(
         }
 
         override fun bindNotNull(model: RecipeElementView) {
-            icon?.isGone = !isIconVisible
-            if (icon != null && isIconVisible) {
+            icon.isGone = !isIconVisible
+            if (isIconVisible) {
                 icon.setIcon(model.unlocalizedName)
             }
             val metaData = when (!model.metaData.isNullOrEmpty()) {
