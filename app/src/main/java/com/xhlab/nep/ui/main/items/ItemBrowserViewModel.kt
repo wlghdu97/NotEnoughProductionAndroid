@@ -28,6 +28,7 @@ class ItemBrowserViewModel @Inject constructor(
     }
 
     val isDBLoaded = generalPreference.isDBLoaded
+    val isIconLoaded = generalPreference.isIconLoaded
 
     // to prevent DiffUtil's index out of bound
     private var searchDebounceJob: Job? = null

@@ -61,6 +61,10 @@ class UsageListFragment : DaggerFragment(), ViewInit {
         viewModel.usageList.observe(this) {
             usageAdapter.submitList(it)
         }
+
+        viewModel.isIconLoaded.observe(this) { isLoaded ->
+            usageAdapter.setIconVisibility(isLoaded)
+        }
     }
 
     override fun initView() {

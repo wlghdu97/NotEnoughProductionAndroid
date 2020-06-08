@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.view.isGone
@@ -18,6 +19,7 @@ import com.xhlab.nep.shared.domain.recipe.model.RecipeView
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
+import com.xhlab.nep.util.setIcon
 import java.text.NumberFormat
 import java.util.*
 
@@ -37,6 +39,7 @@ class RecipeDetailAdapter(
     }
 ) {
     private val integerFormat = NumberFormat.getIntegerInstance(Locale.getDefault())
+    private var isIconVisible = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeDetailViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -60,7 +63,13 @@ class RecipeDetailAdapter(
         }
     }
 
+    fun setIconVisibility(isVisible: Boolean) {
+        isIconVisible = isVisible
+        notifyDataSetChanged()
+    }
+
     inner class RecipeDetailViewHolder(itemView: View) : BindableViewHolder<RecipeView>(itemView) {
+        private val icon: ImageView = itemView.findViewById(R.id.icon)
         private val elementName: TextView? = itemView.findViewById(R.id.element_name)
         private val machineName: TextView = itemView.findViewById(R.id.machine_name)
 
@@ -82,8 +91,13 @@ class RecipeDetailAdapter(
         }
 
         override fun bindNotNull(model: RecipeView) {
+            icon.isGone = !isIconVisible
+
             val targetElement = model.resultItemList.find { it.id == targetElementId }
             if (elementName != null && targetElement != null) {
+                if (isIconVisible) {
+                    icon.setIcon(targetElement.unlocalizedName)
+                }
                 elementName.text = context.formatString(
                     R.string.form_item_with_amount,
                     integerFormat.format(targetElement.amount),
@@ -129,6 +143,7 @@ class RecipeDetailAdapter(
             }
 
             itemAdapter.submitList(model.itemList)
+            itemAdapter.setIconVisibility(isIconVisible)
         }
     }
 }

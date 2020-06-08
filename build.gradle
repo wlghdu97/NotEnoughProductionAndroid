@@ -16,6 +16,7 @@ buildscript {
         live_event_version = "1.2.0"
         material_version = "1.2.0-alpha03"
         material_progress_bar_version = "1.6.1"
+        glide_version = "4.10.0"
         gson_version = "2.8.6"
         timber_version = "4.7.1"
 

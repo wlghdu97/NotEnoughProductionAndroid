@@ -1,11 +1,17 @@
 package com.xhlab.nep.util
 
 import android.content.Context
+import android.util.Base64
+import android.widget.ImageView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
+import java.io.File
 
 inline fun <reified T : ViewModel> Fragment.viewModelProvider(
     viewModelFactory: ViewModelProvider.Factory
@@ -34,6 +40,19 @@ fun updateGlobalTheme(theme: Theme) {
 
 fun Context.formatString(@StringRes formatStringId: Int, vararg args: Any?): String {
     return String.format(getString(formatStringId), *args)
+}
+
+fun Context.getIconsFile(fileName: String): File {
+    return File(getExternalFilesDir("icons"), fileName)
+}
+
+fun ImageView.setIcon(unlocalizedName: String) {
+    val requestOptions = RequestOptions.bitmapTransform(RoundedCorners(16))
+    val encodedName = Base64.encodeToString(unlocalizedName.toByteArray(), Base64.NO_WRAP)
+    Glide.with(context)
+        .load(context.getIconsFile("${encodedName}.png"))
+        .apply(requestOptions)
+        .into(this)
 }
 
 inline fun <reified T> LiveData<T?>.observeNotNull(

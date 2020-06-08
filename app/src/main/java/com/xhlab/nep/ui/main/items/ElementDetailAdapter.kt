@@ -3,7 +3,9 @@ package com.xhlab.nep.ui.main.items
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -12,11 +14,14 @@ import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.shared.domain.item.model.ElementView
 import com.xhlab.nep.ui.util.BindableViewHolder
+import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.textResource
 
 class ElementDetailAdapter (
     private val listener: ElementListener? = null
 ) : PagedListAdapter<ElementView, ElementDetailAdapter.RecipeElementViewHolder>(DiffCallback) {
+
+    private var isIconVisible = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeElementViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -33,9 +38,15 @@ class ElementDetailAdapter (
         notifyDataSetChanged()
     }
 
+    fun setIconVisibility(isVisible: Boolean) {
+        isIconVisible = isVisible
+        notifyDataSetChanged()
+    }
+
     inner class RecipeElementViewHolder(itemView: View)
         : BindableViewHolder<ElementView>(itemView) {
 
+        private val icon: ImageView = itemView.findViewById(R.id.icon)
         private val name: TextView = itemView.findViewById(R.id.name)
         private val unlocalizedName: TextView = itemView.findViewById(R.id.unlocalized_name)
         private val type: TextView = itemView.findViewById(R.id.type)
@@ -47,6 +58,10 @@ class ElementDetailAdapter (
         }
 
         override fun bindNotNull(model: ElementView) {
+            icon.isGone = !isIconVisible
+            if (isIconVisible) {
+                icon.setIcon(model.unlocalizedName)
+            }
             name.text = when (model.localizedName.isEmpty()) {
                 true -> itemView.context.getString(R.string.txt_unnamed)
                 false -> model.localizedName.trim()

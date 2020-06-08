@@ -58,6 +58,10 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
                 it?.size ?: 0
             )
         }
+
+        viewModel.isIconLoaded.observe(this) { isLoaded ->
+            elementAdapter.setIconVisibility(isLoaded)
+        }
     }
 
     override fun initView() {

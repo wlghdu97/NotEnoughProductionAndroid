@@ -63,6 +63,7 @@ dependencies {
     implementation "com.github.hadilq.liveevent:liveevent:$live_event_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "me.zhanghai.android.materialprogressbar:library:$material_progress_bar_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
     implementation "com.jakewharton.timber:timber:$timber_version"
 
     implementation "com.google.dagger:dagger:$dagger_version"

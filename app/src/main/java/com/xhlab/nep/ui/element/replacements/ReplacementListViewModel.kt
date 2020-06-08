@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.element.replacements
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.shared.domain.item.LoadReplacementListUseCase
+import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
@@ -11,12 +12,15 @@ import javax.inject.Inject
 
 class ReplacementListViewModel @Inject constructor(
     private val loadReplacementListUseCase: LoadReplacementListUseCase,
-    private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
+    private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase,
+    generalPreference: GeneralPreference
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     ElementListener
 {
     val replacementList = loadReplacementListUseCase.observeOnly(Resource.Status.SUCCESS)
+
+    val isIconLoaded = generalPreference.isIconLoaded
 
     fun init(oreDictName: String?) {
         requireNotNull(oreDictName) {

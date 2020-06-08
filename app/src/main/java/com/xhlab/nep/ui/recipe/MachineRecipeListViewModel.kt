@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.recipe
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
+import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
@@ -11,12 +12,15 @@ import javax.inject.Inject
 
 class MachineRecipeListViewModel @Inject constructor(
     private val loadRecipeListUseCase: LoadRecipeListUseCase,
-    private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
+    private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase,
+    generalPreference: GeneralPreference
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     ElementListener
 {
     val recipeList = loadRecipeListUseCase.observeOnly(Resource.Status.SUCCESS)
+
+    val isIconLoaded = generalPreference.isIconLoaded
 
     fun init(elementId: Long, machineId: Int) {
         // ignore it recipe list is already loaded
