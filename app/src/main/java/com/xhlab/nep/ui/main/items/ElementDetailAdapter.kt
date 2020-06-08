@@ -1,6 +1,5 @@
 package com.xhlab.nep.ui.main.items
 
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,15 +9,12 @@ import androidx.core.view.isGone
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.shared.domain.item.model.ElementView
 import com.xhlab.nep.ui.util.BindableViewHolder
-import com.xhlab.nep.util.getIconsFile
+import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.textResource
 
 class ElementDetailAdapter (
@@ -64,12 +60,7 @@ class ElementDetailAdapter (
         override fun bindNotNull(model: ElementView) {
             icon.isGone = !isIconVisible
             if (isIconVisible) {
-                val requestOptions = RequestOptions.bitmapTransform(RoundedCorners(16))
-                val encodedName = Base64.encodeToString(model.unlocalizedName.toByteArray(), Base64.NO_WRAP)
-                Glide.with(itemView.context)
-                    .load(itemView.context.getIconsFile("${encodedName}.png"))
-                    .apply(requestOptions)
-                    .into(icon)
+                icon.setIcon(model.unlocalizedName)
             }
             name.text = when (model.localizedName.isEmpty()) {
                 true -> itemView.context.getString(R.string.txt_unnamed)
