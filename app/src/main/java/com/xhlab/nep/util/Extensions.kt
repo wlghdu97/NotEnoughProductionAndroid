@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
+import java.io.File
 
 inline fun <reified T : ViewModel> Fragment.viewModelProvider(
     viewModelFactory: ViewModelProvider.Factory
@@ -34,6 +35,10 @@ fun updateGlobalTheme(theme: Theme) {
 
 fun Context.formatString(@StringRes formatStringId: Int, vararg args: Any?): String {
     return String.format(getString(formatStringId), *args)
+}
+
+fun Context.getIconsFile(fileName: String): File {
+    return File(getExternalFilesDir("icons"), fileName)
 }
 
 inline fun <reified T> LiveData<T?>.observeNotNull(

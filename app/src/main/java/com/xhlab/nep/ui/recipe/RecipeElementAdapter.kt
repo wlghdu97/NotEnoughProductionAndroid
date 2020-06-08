@@ -3,12 +3,18 @@ package com.xhlab.nep.ui.recipe
 import android.content.Context
 import android.os.Build
 import android.text.Layout
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
@@ -18,6 +24,7 @@ import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.ui.util.DiffCallback
 import com.xhlab.nep.util.formatString
+import com.xhlab.nep.util.getIconsFile
 import org.jetbrains.anko.textResource
 import java.text.NumberFormat
 import java.util.*
@@ -28,8 +35,8 @@ class RecipeElementAdapter(
 ) : RecyclerView.Adapter<RecipeElementAdapter.RecipeElementViewHolder>() {
 
     private val elementList = ArrayList<RecipeElementView>()
-
     private val integerFormat = NumberFormat.getIntegerInstance(Locale.getDefault())
+    private var isIconVisible = false
 
     fun submitList(list: List<RecipeElementView>) {
         val callback = RecipeElementDiffCallback(
@@ -66,9 +73,15 @@ class RecipeElementAdapter(
 
     override fun getItemCount() = elementList.size
 
+    fun setIconVisibility(isVisible: Boolean) {
+        isIconVisible = isVisible
+        notifyDataSetChanged()
+    }
+
     inner class RecipeElementViewHolder(itemView: View)
         : BindableViewHolder<RecipeElementView>(itemView) {
 
+        private val icon: ImageView? = itemView.findViewById(R.id.icon)
         private val name: TextView = itemView.findViewById(R.id.name)
         private val unlocalizedName: TextView = itemView.findViewById(R.id.unlocalized_name)
         private val type: TextView? = itemView.findViewById(R.id.type)
@@ -86,6 +99,15 @@ class RecipeElementAdapter(
         }
 
         override fun bindNotNull(model: RecipeElementView) {
+            icon?.isGone = !isIconVisible
+            if (icon != null && isIconVisible) {
+                val requestOptions = RequestOptions.bitmapTransform(RoundedCorners(16))
+                val encodedName = Base64.encodeToString(model.unlocalizedName.toByteArray(), Base64.NO_WRAP)
+                Glide.with(context)
+                    .load(context.getIconsFile("${encodedName}.png"))
+                    .apply(requestOptions)
+                    .into(icon)
+            }
             val metaData = when (!model.metaData.isNullOrEmpty()) {
                 true -> " : ${model.metaData}"
                 false -> ""

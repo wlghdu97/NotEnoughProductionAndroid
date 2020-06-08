@@ -66,6 +66,10 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
             viewModel.searchElements("")
         }
 
+        viewModel.isIconLoaded.observe(this) { isLoaded ->
+            elementAdapter.setIconVisibility(isLoaded)
+        }
+
         viewModel.elementSearchResult.observeNotNull(this) {
             submitSearchResultList(it)
         }

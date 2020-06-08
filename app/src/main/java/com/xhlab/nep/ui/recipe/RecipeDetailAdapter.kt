@@ -37,6 +37,7 @@ class RecipeDetailAdapter(
     }
 ) {
     private val integerFormat = NumberFormat.getIntegerInstance(Locale.getDefault())
+    private var isIconVisible = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeDetailViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -58,6 +59,11 @@ class RecipeDetailAdapter(
             is MachineRecipeView -> 1
             else -> throw IllegalArgumentException("invalid recipe view type.")
         }
+    }
+
+    fun setIconVisibility(isVisible: Boolean) {
+        isIconVisible = isVisible
+        notifyDataSetChanged()
     }
 
     inner class RecipeDetailViewHolder(itemView: View) : BindableViewHolder<RecipeView>(itemView) {
@@ -129,6 +135,7 @@ class RecipeDetailAdapter(
             }
 
             itemAdapter.submitList(model.itemList)
+            itemAdapter.setIconVisibility(isIconVisible)
         }
     }
 }

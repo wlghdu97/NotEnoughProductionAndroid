@@ -44,6 +44,10 @@ class MachineRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
         }
+
+        viewModel.isIconLoaded.observe(this) { isLoaded ->
+            recipeAdapter.setIconVisibility(isLoaded)
+        }
     }
 
     override fun initView() {
