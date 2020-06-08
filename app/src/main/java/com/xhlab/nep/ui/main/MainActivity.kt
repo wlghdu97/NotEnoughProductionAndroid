@@ -107,7 +107,7 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
                 }
                 Activity.RESULT_CANCELED -> Unit // do nothing
                 else -> {
-                    longToast(R.string.error_open_json_failed)
+                    longToast(R.string.error_open_file_failed)
                 }
             }
         }

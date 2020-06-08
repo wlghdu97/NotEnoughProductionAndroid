@@ -5,10 +5,17 @@
     <string name="title_parsing">Parsing in progress</string>
     <string name="title_parsing_notification">Parsing&#8230;</string>
     <string name="title_parsing_result">Parsing result</string>
+    <string name="title_unzip_icon">Unzip icon zip file</string>
+    <string name="title_unzipping">Unzipping in progress</string>
+    <string name="title_unzip_notification">Unzipping&#8230;</string>
+    <string name="title_unzip_result">Unzip result</string>
+    <string name="title_load_new_icons">Load new icons?</string>
     <string name="title_theme">Theme</string>
     <string name="title_dark_theme">Enable dark theme</string>
     <string name="title_db">DB</string>
-    <string name="title_db_status">Database Status</string>
+    <string name="title_db_status">Database status</string>
+    <string name="title_icon">Icon</string>
+    <string name="title_icon_status">Icon support</string>
     <string name="title_recipe_list">Recipe list</string>
     <string name="title_machine_result_list">Machine result list</string>
 
@@ -21,6 +28,8 @@
     <string name="btn_cancel">Cancel</string>
     <string name="btn_abort">Abort</string>
     <string name="btn_close">Close</string>
+    <string name="btn_load">Load</string>
+    <string name="btn_use_existing">Use existing</string>
 
     <string name="hint_search_element">Search item</string>
 
@@ -43,8 +52,9 @@
     <string name="txt_ingredients">Ingredients</string>
     <string name="txt_byproducts">Byproducts</string>
 
-    <string name="txt_db_loaded">Loaded</string>
-    <string name="txt_db_empty">Empty</string>
+    <string name="txt_loaded">Loaded</string>
+    <string name="txt_unloaded">Unloaded</string>
+    <string name="txt_empty">Empty</string>
 
     <string name="txt_crafting_table">Crafting Table</string>
     <string name="txt_unknown_recipe">Unknown recipe</string>
@@ -57,13 +67,20 @@
         Previous DB data will be erased.
         \nThis job may take longer than 4 minutes.
     </string>
+    <string name="txt_unzip_icon">
+        Previous icons will be erased.
+        \nThis job may take longer than 4 minutes.
+    </string>
+    <string name="txt_load_new_icons">
+        Loading new icons will replace existing icon files.
+    </string>
     <string name="txt_replacement_list_info">
         Press back to go back to ore dictionary list.
     </string>
 
     <string name="txt_invalid_uri">Invalid file uri.</string>
 
-    <string name="error_open_json_failed">Failed to open json file.</string>
+    <string name="error_open_file_failed">Failed to open file.</string>
 
     <string name="form_tab_recipes">Recipes (%d)</string>
     <string name="form_tab_usages">Usages (%d)</string>

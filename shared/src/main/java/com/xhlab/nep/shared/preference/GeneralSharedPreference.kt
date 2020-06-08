@@ -21,12 +21,20 @@ class GeneralSharedPreference @Inject constructor(
     override val isDBLoaded: LiveData<Boolean>
         get() = _isDBLoaded
 
+    private val _isIconLoaded = MutableLiveData<Boolean>(getIconLoaded())
+    override val isIconLoaded: LiveData<Boolean>
+        get() = _isIconLoaded
+
     private val _isDarkTheme = MutableLiveData<Boolean?>(getDarkTheme())
     override val isDarkTheme: LiveData<Boolean?>
         get() = _isDarkTheme
 
     override fun getDBLoaded(): Boolean {
         return preference.getBoolean(app.getString(R.string.key_db_status), false)
+    }
+
+    override fun getIconLoaded(): Boolean {
+        return preference.getBoolean(app.getString(R.string.key_icon_status), false)
     }
 
     override fun getDarkTheme(): Boolean {
@@ -38,6 +46,11 @@ class GeneralSharedPreference @Inject constructor(
         _isDBLoaded.postValue(value)
     }
 
+    override fun setIconLoaded(value: Boolean) {
+        preference.edit().putBoolean(app.getString(R.string.key_icon_status), value).apply()
+        _isIconLoaded.postValue(value)
+    }
+
     override fun setDarkTheme(value: Boolean) {
         preference.edit().putBoolean(app.getString(R.string.key_theme), value).apply()
         _isDarkTheme.postValue(value)
@@ -47,6 +60,8 @@ class GeneralSharedPreference @Inject constructor(
         when (key) {
             app.getString(R.string.key_db_status) ->
                 _isDBLoaded.value = getDBLoaded()
+            app.getString(R.string.key_icon_status) ->
+                _isIconLoaded.value = getIconLoaded()
             app.getString(R.string.key_theme) ->
                 _isDarkTheme.value = getDarkTheme()
         }

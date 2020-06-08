@@ -4,6 +4,8 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.xhlab.nep">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <dist:module dist:instant="true" />
@@ -39,6 +41,11 @@
 
         <service
             android:name=".service.ParseRecipeService"
+            android:exported="false"
+            android:stopWithTask="false"/>
+
+        <service
+            android:name=".service.IconUnzipService"
             android:exported="false"
             android:stopWithTask="false"/>
 

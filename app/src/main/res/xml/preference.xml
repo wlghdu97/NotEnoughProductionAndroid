@@ -26,4 +26,14 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:key="@string/key_icon_category"
+        app:title="@string/title_icon">
+
+        <SwitchPreferenceCompat
+            app:key="@string/key_icon_status"
+            app:title="@string/title_icon_status"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

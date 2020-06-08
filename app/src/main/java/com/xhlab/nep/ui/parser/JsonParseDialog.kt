@@ -20,7 +20,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.service.ParseRecipeService
 import com.xhlab.nep.shared.util.Resource
 import dagger.android.support.AndroidSupportInjection
-import kotlinx.android.synthetic.main.dialog_json_parser.view.*
+import kotlinx.android.synthetic.main.dialog_with_progress.view.*
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.textResource
 
@@ -55,7 +55,7 @@ class JsonParseDialog : AppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireContext().layoutInflater
         @Suppress("inflateParams")
-        dialogView = inflater.inflate(R.layout.dialog_json_parser, null)
+        dialogView = inflater.inflate(R.layout.dialog_with_progress, null)
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_parsing)

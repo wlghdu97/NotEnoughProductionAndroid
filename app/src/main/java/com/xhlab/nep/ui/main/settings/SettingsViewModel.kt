@@ -8,11 +8,16 @@ import com.xhlab.nep.ui.delegate.ThemeDelegate
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-    generalPreference: GeneralPreference,
+    private val generalPreference: GeneralPreference,
     themeDelegate: ThemeDelegate
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     ThemeDelegate by themeDelegate
 {
     val isDBLoaded = generalPreference.isDBLoaded
+    val isIconLoaded = generalPreference.isIconLoaded
+
+    fun setIconLoaded(newValue: Boolean) {
+        generalPreference.setIconLoaded(newValue)
+    }
 }

@@ -7,6 +7,10 @@ interface GeneralPreference {
     fun getDBLoaded(): Boolean
     fun setDBLoaded(value: Boolean)
 
+    val isIconLoaded: LiveData<Boolean>
+    fun getIconLoaded(): Boolean
+    fun setIconLoaded(value: Boolean)
+
     val isDarkTheme: LiveData<Boolean?>
     fun getDarkTheme(): Boolean
     fun setDarkTheme(value: Boolean)
