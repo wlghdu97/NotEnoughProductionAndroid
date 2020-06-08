@@ -1,56 +1,28 @@
-package com.xhlab.nep.ui.parser
+package com.xhlab.nep.ui.dialogs
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
+import com.xhlab.nep.service.IServiceBinder
 import com.xhlab.nep.service.ParseRecipeService
 import com.xhlab.nep.shared.util.Resource
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.dialog_with_progress.view.*
 import org.jetbrains.anko.layoutInflater
 import org.jetbrains.anko.textResource
 
-class JsonParseDialog : AppCompatDialogFragment() {
-
-    private lateinit var parseRecipeService: ParseRecipeService
-    private var isServiceInvoked = false
-    private var isBounded = false
-    private var isTaskDone = false
+class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
 
     private lateinit var dialogView: View
     private var negativeButton: Button? = null
-
-    private val connection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder?) {
-            val binder = service as ParseRecipeService.LocalBinder
-            parseRecipeService = binder.getService()
-            initService()
-            isBounded = true
-        }
-
-        override fun onServiceDisconnected(className: ComponentName?) {
-            isBounded = false
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        AndroidSupportInjection.inject(this)
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val inflater = requireContext().layoutInflater
@@ -70,37 +42,12 @@ class JsonParseDialog : AppCompatDialogFragment() {
         initView()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // start service only once
-        isServiceInvoked = savedInstanceState?.getBoolean(SERVICE_INVOKED) ?: false
-        if (!isServiceInvoked) {
-            startService()
-            isServiceInvoked = true
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        bindService()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        unbindService()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(SERVICE_INVOKED, isServiceInvoked)
-        super.onSaveInstanceState(outState)
-    }
-
-    private fun initService() {
-        parseRecipeService.parseLog.observe(this) {
+    override fun initService(service: ParseRecipeService) {
+        service.parseLog.observe(this) {
             dialogView.log.text = it.data
         }
 
-        parseRecipeService.parseLog.observe(this) {
+        service.parseLog.observe(this) {
             isTaskDone = when (it.status) {
                 Resource.Status.LOADING -> false
                 else -> true
@@ -141,39 +88,15 @@ class JsonParseDialog : AppCompatDialogFragment() {
         }
     }
 
-    private fun startService() {
-        val activity = requireActivity()
-        val intent = getIntent(activity).apply {
-            arguments?.let { putExtras(it) }
-        }
-        if (Build.VERSION.SDK_INT >= 26) {
-            activity.startForegroundService(intent)
-        } else {
-            activity.startService(intent)
-        }
+    override fun getServiceBinder(binder: IBinder?): IServiceBinder<ParseRecipeService> {
+        return binder as ParseRecipeService.LocalBinder
     }
 
-    private fun stopService() {
-        val activity = requireActivity()
-        activity.stopService(getIntent(activity))
-    }
-
-    private fun bindService() {
-        val activity = requireActivity()
-        activity.bindService(getIntent(activity), connection, 0)
-    }
-
-    private fun unbindService() {
-        val activity = requireActivity()
-        activity.unbindService(connection)
-    }
-
-    private fun getIntent(activity: Activity): Intent {
+    override fun getServiceIntent(activity: Activity): Intent {
         return Intent(activity, ParseRecipeService::class.java)
     }
 
     companion object {
-        private const val SERVICE_INVOKED = "service_invoked"
         const val SHOW_JSON_PARSER_DIALOG = "show_json_parser_dialog"
     }
 }

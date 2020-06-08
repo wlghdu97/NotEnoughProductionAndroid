@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
 import com.xhlab.nep.shared.util.Resource
+import com.xhlab.nep.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -29,7 +30,12 @@ class ParseRecipeService @Inject constructor() : Service() {
     val parseLog by lazy { parseRecipeUseCase.observe() }
 
     private val pendingIntent by lazy {
-        PendingIntent.getActivity(applicationContext, 0, Intent(), PendingIntent.FLAG_UPDATE_CURRENT)
+        PendingIntent.getActivity(
+            applicationContext,
+            0,
+            Intent(this, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     private val logObserver = Observer<Resource<String>> {
@@ -105,8 +111,8 @@ class ParseRecipeService @Inject constructor() : Service() {
         }
     }
 
-    inner class LocalBinder : Binder() {
-        fun getService() = this@ParseRecipeService
+    inner class LocalBinder : Binder(), IServiceBinder<ParseRecipeService> {
+        override fun getService() = this@ParseRecipeService
     }
 
     companion object {

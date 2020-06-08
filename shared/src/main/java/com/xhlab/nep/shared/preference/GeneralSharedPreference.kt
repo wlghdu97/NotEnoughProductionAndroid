@@ -17,6 +17,10 @@ class GeneralSharedPreference @Inject constructor(
             registerOnSharedPreferenceChangeListener(this@GeneralSharedPreference)
         }
 
+    private val _isFirstDBLoad = MutableLiveData<Boolean>(getFirstDBLoad())
+    override val isFirstDBLoad: LiveData<Boolean>
+        get() = _isFirstDBLoad
+
     private val _isDBLoaded = MutableLiveData<Boolean>(getDBLoaded())
     override val isDBLoaded: LiveData<Boolean>
         get() = _isDBLoaded
@@ -28,6 +32,10 @@ class GeneralSharedPreference @Inject constructor(
     private val _isDarkTheme = MutableLiveData<Boolean?>(getDarkTheme())
     override val isDarkTheme: LiveData<Boolean?>
         get() = _isDarkTheme
+
+    override fun getFirstDBLoad(): Boolean {
+        return preference.getBoolean(app.getString(R.string.key_db_first_load), true)
+    }
 
     override fun getDBLoaded(): Boolean {
         return preference.getBoolean(app.getString(R.string.key_db_status), false)
@@ -42,7 +50,10 @@ class GeneralSharedPreference @Inject constructor(
     }
 
     override fun setDBLoaded(value: Boolean) {
-        preference.edit().putBoolean(app.getString(R.string.key_db_status), value).apply()
+        preference.edit()
+            .putBoolean(app.getString(R.string.key_db_status), value)
+            .putBoolean(app.getString(R.string.key_db_first_load), false)
+            .apply()
         _isDBLoaded.postValue(value)
     }
 
@@ -58,6 +69,8 @@ class GeneralSharedPreference @Inject constructor(
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
+            app.getString(R.string.key_db_first_load) ->
+                _isFirstDBLoad.value = getFirstDBLoad()
             app.getString(R.string.key_db_status) ->
                 _isDBLoaded.value = getDBLoaded()
             app.getString(R.string.key_icon_status) ->

@@ -17,12 +17,7 @@
 
         <SwitchPreferenceCompat
             app:key="@string/key_db_status"
-            app:isPreferenceVisible="false"/>
-
-        <Preference
-            app:key="@string/key_db_status_ui"
-            app:title="@string/title_db_status"
-            app:useSimpleSummaryProvider="true"/>
+            app:title="@string/title_db_status"/>
 
     </PreferenceCategory>
 

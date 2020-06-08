@@ -9,7 +9,7 @@ import com.xhlab.nep.ui.main.machines.MachineBrowserFragment
 import com.xhlab.nep.ui.main.machines.MachineBrowserModule
 import com.xhlab.nep.ui.main.settings.SettingsFragment
 import com.xhlab.nep.ui.main.settings.SettingsModule
-import com.xhlab.nep.ui.parser.JsonParseDialog
+import com.xhlab.nep.ui.dialogs.JsonParseDialog
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

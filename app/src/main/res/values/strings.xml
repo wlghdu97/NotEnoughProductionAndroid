@@ -5,6 +5,7 @@
     <string name="title_parsing">Parsing in progress</string>
     <string name="title_parsing_notification">Parsing&#8230;</string>
     <string name="title_parsing_result">Parsing result</string>
+    <string name="title_load_new_db">Parse new json?</string>
     <string name="title_unzip_icon">Unzip icon zip file</string>
     <string name="title_unzipping">Unzipping in progress</string>
     <string name="title_unzip_notification">Unzipping&#8230;</string>
@@ -19,7 +20,6 @@
     <string name="title_recipe_list">Recipe list</string>
     <string name="title_machine_result_list">Machine result list</string>
 
-    <string name="menu_open_json">Open json file</string>
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
     <string name="menu_settings">Settings</string>
@@ -71,6 +71,9 @@
         Previous icons will be erased.
         \nThis job may take longer than 4 minutes.
     </string>
+    <string name="txt_load_new_db">
+        Parsing new json will replace existing DB.
+    </string>
     <string name="txt_load_new_icons">
         Loading new icons will replace existing icon files.
     </string>
@@ -90,6 +93,4 @@
     <string name="form_total">total %d items</string>
     <string name="form_item_with_amount">%sx %s</string>
     <string name="form_machine_property">%s %s, %s seconds, total %s %s</string>
-
-    <string name="key_db_status_ui">db_load_status_ui</string>
 </resources>
