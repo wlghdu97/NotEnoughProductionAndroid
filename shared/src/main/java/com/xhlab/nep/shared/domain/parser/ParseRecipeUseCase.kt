@@ -69,6 +69,9 @@ class ParseRecipeUseCase @Inject constructor(
         }
         reader.endObject()
 
+        // close stream
+        params.close()
+
         // mark db is successfully loaded
         generalPreference.setDBLoaded(true)
 
