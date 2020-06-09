@@ -43,7 +43,10 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
         setSupportActionBar(toolbar)
 
         pagerAdapter = MainViewPagerAdapter(supportFragmentManager)
-        view_pager.adapter = pagerAdapter
+        with (view_pager) {
+            offscreenPageLimit = 2
+            adapter = pagerAdapter
+        }
 
         view_pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
