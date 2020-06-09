@@ -8,14 +8,16 @@ import java.util.concurrent.TimeUnit
 object LiveDataTestUtil {
 
     @Throws(InterruptedException::class)
-    fun <T> getValue(liveData: LiveData<T>): T? {
+    fun <T> getValue(liveData: LiveData<T>, countDown: Int = 1): T? {
         var data: T? = null
-        val latch = CountDownLatch(1)
+        val latch = CountDownLatch(countDown)
         val observer = object : Observer<T> {
             override fun onChanged(t: T) {
                 data = t
                 latch.countDown()
-                liveData.removeObserver(this)
+                if (latch.count == 0L) {
+                    liveData.removeObserver(this)
+                }
             }
         }
         liveData.observeForever(observer)

@@ -1,10 +1,7 @@
 package com.xhlab.nep.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
 import com.xhlab.nep.shared.domain.MediatorUseCase
 import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.shared.util.Resource
@@ -43,7 +40,7 @@ class BaseViewModelTest {
 
         assertEquals(
             Resource.Status.SUCCESS,
-            LiveDataTestUtil.getValue(viewModel.actionResults)?.status
+            LiveDataTestUtil.getValue(viewModel.useCaseResult)?.status
         )
     }
 
@@ -53,17 +50,7 @@ class BaseViewModelTest {
 
         assertEquals(
             Resource.Status.ERROR,
-            LiveDataTestUtil.getValue(viewModel.actionResults)?.status
-        )
-    }
-
-    @Test
-    fun executeUseCaseWithResult() {
-        viewModel.executeUseCaseWithResult()
-
-        assertEquals(
-            Resource.success(RESULT),
-            LiveDataTestUtil.getValue(viewModel.useCaseResult)
+            LiveDataTestUtil.getValue(viewModel.useCaseResult, 2)?.status
         )
     }
 
@@ -75,19 +62,7 @@ class BaseViewModelTest {
 
         assertEquals(
             Resource.success(RESULT),
-            LiveDataTestUtil.getValue(result)
-        )
-    }
-
-    @Test
-    fun executeMediatorUseCaseWithResult() {
-        val result = viewModel.mediatorUseCaseResult
-
-        viewModel.executeMediatorUseCaseWithResult()
-
-        assertEquals(
-            Resource.success(RESULT),
-            LiveDataTestUtil.getValue(result)
+            LiveDataTestUtil.getValue(result, 2)
         )
     }
 
@@ -99,29 +74,11 @@ class BaseViewModelTest {
 
         val mediatorResult = mediatorUseCase.observe()
 
-        private val _useCaseResult = MutableLiveData<Resource<String>>()
+        private val _useCaseResult = MediatorLiveData<Resource<String>>()
         val useCaseResult: LiveData<Resource<String>>
             get() = _useCaseResult
 
-        private val _mediatorUseCaseResult = MutableLiveData<Resource<String>>()
-        val mediatorUseCaseResult: LiveData<Resource<String>>
-            get() = _mediatorUseCaseResult
-
         fun executeUseCase() {
-            invokeUseCase(
-                useCase = useCase,
-                params = Unit
-            )
-        }
-
-        fun executeFailingUseCase() {
-            invokeUseCase(
-                useCase = failingUseCase,
-                params = Unit
-            )
-        }
-
-        fun executeUseCaseWithResult() {
             invokeUseCase(
                 resultData = _useCaseResult,
                 useCase = useCase,
@@ -129,16 +86,16 @@ class BaseViewModelTest {
             )
         }
 
-        fun executeMediatorUseCase() {
-            invokeMediatorUseCase(
-                useCase = mediatorUseCase,
+        fun executeFailingUseCase() {
+            invokeUseCase(
+                resultData = _useCaseResult,
+                useCase = failingUseCase,
                 params = Unit
             )
         }
 
-        fun executeMediatorUseCaseWithResult() {
+        fun executeMediatorUseCase() {
             invokeMediatorUseCase(
-                resultData = _mediatorUseCaseResult,
                 useCase = mediatorUseCase,
                 params = Unit
             )

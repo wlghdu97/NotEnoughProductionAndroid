@@ -1,6 +1,6 @@
 package com.xhlab.nep.ui.element
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
@@ -15,7 +15,7 @@ class ElementDetailViewModel @Inject constructor(
     private val loadElementDetailUseCase: LoadElementDetailUseCase
 ) : ViewModel(), BaseViewModel by BasicViewModel() {
 
-    private val _element = MutableLiveData<Resource<ElementView>>()
+    private val _element = MediatorLiveData<Resource<ElementView>>()
     val element = Transformations.map(_element) {
         if (it.isSuccessful()) it.data else null
     }

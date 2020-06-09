@@ -1,9 +1,6 @@
 package com.xhlab.nep.ui.main.machines.details
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
@@ -26,7 +23,7 @@ class MachineResultViewModel @Inject constructor(
     generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ElementListener {
 
-    private val _machine = MutableLiveData<Resource<Machine?>>()
+    private val _machine = MediatorLiveData<Resource<Machine?>>()
     val machine = Transformations.map(_machine) {
         if (it.isSuccessful()) it.data else null
     }
