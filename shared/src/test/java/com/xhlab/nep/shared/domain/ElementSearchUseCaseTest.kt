@@ -57,7 +57,7 @@ class ElementSearchUseCaseTest {
     fun prepare() {
         elementRepo = mock {
             val pagedSearchResultList = createMockDataSourceFactory(testList)
-            onBlocking { searchByName(term) }.doReturn(pagedSearchResultList)
+            onBlocking { searchByName("*$term*") }.doReturn(pagedSearchResultList)
         }
 
         useCase = ElementSearchUseCase(elementRepo)
@@ -71,7 +71,7 @@ class ElementSearchUseCaseTest {
             Resource.success(testList.asPagedList()),
             LiveDataTestUtil.getValue(useCase.observe())
         )
-        verify(elementRepo, times(1)).searchByName(term)
+        verify(elementRepo, times(1)).searchByName("*$term*")
 
         Unit
     }
