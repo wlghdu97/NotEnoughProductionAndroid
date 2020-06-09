@@ -40,6 +40,10 @@ class MachineResultActivity : DaggerAppCompatActivity(), ViewInit {
             total_text.text = String.format(getString(R.string.form_total), it?.size ?: 0)
             adapter.submitList(it)
         }
+
+        viewModel.isIconLoaded.observe(this) { isLoaded ->
+            adapter.setIconVisibility(isLoaded)
+        }
     }
 
     override fun initView() {

@@ -8,6 +8,7 @@ import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
 import com.xhlab.nep.shared.domain.machine.LoadMachineUseCase
+import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.BaseViewModel
@@ -21,7 +22,8 @@ import javax.inject.Inject
 class MachineResultViewModel @Inject constructor(
     private val loadMachineUseCase: LoadMachineUseCase,
     private val machineResultSearchUseCase: MachineResultSearchUseCase,
-    private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
+    private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase,
+    generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ElementListener {
 
     private val _machine = MutableLiveData<Resource<Machine?>>()
@@ -30,6 +32,8 @@ class MachineResultViewModel @Inject constructor(
     }
 
     val resultList = machineResultSearchUseCase.observeOnly(Resource.Status.SUCCESS)
+
+    val isIconLoaded = generalPreference.isIconLoaded
 
     // to prevent DiffUtil's index out of bound
     private var searchDebounceJob: Job? = null
