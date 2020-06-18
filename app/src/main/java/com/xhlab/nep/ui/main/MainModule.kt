@@ -10,6 +10,8 @@ import com.xhlab.nep.ui.main.machines.MachineBrowserModule
 import com.xhlab.nep.ui.main.settings.SettingsFragment
 import com.xhlab.nep.ui.main.settings.SettingsModule
 import com.xhlab.nep.ui.dialogs.JsonParseDialog
+import com.xhlab.nep.ui.main.process.ProcessListFragment
+import com.xhlab.nep.ui.main.process.ProcessListModule
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -30,6 +32,10 @@ abstract class MainModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = [MachineBrowserModule::class])
     abstract fun provideMachineBrowserFragment(): MachineBrowserFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [ProcessListModule::class])
+    abstract fun provideProcessListFragment(): ProcessListFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = [SettingsModule::class])

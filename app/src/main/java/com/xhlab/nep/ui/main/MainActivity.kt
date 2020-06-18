@@ -10,6 +10,7 @@ import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.main.machines.MachineBrowserFragment
+import com.xhlab.nep.ui.main.process.ProcessListFragment
 import com.xhlab.nep.ui.main.settings.SettingsFragment
 import com.xhlab.nep.util.updateGlobalTheme
 import com.xhlab.nep.util.viewModelProvider
@@ -44,7 +45,7 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
 
         pagerAdapter = MainViewPagerAdapter(supportFragmentManager)
         with (view_pager) {
-            offscreenPageLimit = 2
+            offscreenPageLimit = 3
             adapter = pagerAdapter
         }
 
@@ -64,8 +65,12 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
                     view_pager.currentItem = 1
                     true
                 }
-                R.id.menu_settings -> {
+                R.id.menu_process -> {
                     view_pager.currentItem = 2
+                    true
+                }
+                R.id.menu_settings -> {
+                    view_pager.currentItem = 3
                     true
                 }
                 else -> false
@@ -79,17 +84,19 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
 
         private val itemBrowserFragment by lazy { ItemBrowserFragment() }
         private val machineBrowserFragment by lazy { MachineBrowserFragment() }
+        private val processFragment by lazy { ProcessListFragment() }
         private val settingsFragment by lazy { SettingsFragment() }
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> itemBrowserFragment
                 1 -> machineBrowserFragment
-                2 -> settingsFragment
+                2 -> processFragment
+                3 -> settingsFragment
                 else -> throw IllegalArgumentException("invalid position.")
             }
         }
 
-        override fun getCount() = 3
+        override fun getCount() = 4
     }
 }
