@@ -34,6 +34,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        staging {
+            initWith debug
+            matchingFallbacks = ['debug']
+        }
+    }
+
+    sourceSets {
+        debug.java.srcDir 'src/debugRelease/java'
+        release.java.srcDir 'src/debugRelease/java'
     }
 }
 
@@ -85,4 +94,5 @@ dependencies {
 
     testImplementation project(path: ':model')
     testImplementation project(path: ':test_shared')
+    stagingImplementation project(path: ':test_shared')
 }

@@ -37,6 +37,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        staging {
+            initWith debug
+            versionNameSuffix = '-staging'
+            matchingFallbacks = ['debug']
+        }
+    }
+
+    sourceSets {
+        debug.java.srcDir 'src/debugRelease/java'
+        release.java.srcDir 'src/debugRelease/java'
     }
 }
 
