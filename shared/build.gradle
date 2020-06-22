@@ -94,4 +94,5 @@ dependencies {
 
     testImplementation project(path: ':model')
     testImplementation project(path: ':test_shared')
+    stagingImplementation project(path: ':test_shared')
 }
