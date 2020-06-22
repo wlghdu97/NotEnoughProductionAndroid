@@ -41,7 +41,9 @@ class ProcessAdapter(
         private val more: ImageButton = itemView.findViewById(R.id.btn_more)
 
         init {
-            model?.let { listener?.onClick(it.id) }
+            itemView.setOnClickListener {
+                model?.let { listener?.onClick(it.id) }
+            }
         }
 
         override fun bindNotNull(model: Process) {
