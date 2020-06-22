@@ -43,6 +43,11 @@ android {
             matchingFallbacks = ['debug']
         }
     }
+
+    sourceSets {
+        debug.java.srcDir 'src/debugRelease/java'
+        release.java.srcDir 'src/debugRelease/java'
+    }
 }
 
 dependencies {
