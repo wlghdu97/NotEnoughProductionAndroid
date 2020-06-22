@@ -94,4 +94,5 @@
     <string name="form_total">total %d items</string>
     <string name="form_item_with_amount">%sx %s</string>
     <string name="form_machine_property">%s %s, %s seconds, total %s %s</string>
+    <string name="form_process_description">%dx %s\n%d nodes</string>
 </resources>
