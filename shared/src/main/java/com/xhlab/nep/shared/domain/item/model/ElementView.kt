@@ -1,9 +1,11 @@
 package com.xhlab.nep.shared.domain.item.model
 
-abstract class ElementView {
+import com.xhlab.nep.model.Element
+
+abstract class ElementView : Element() {
     abstract val id: Long
-    abstract val unlocalizedName: String
-    abstract val localizedName: String
+    abstract override val unlocalizedName: String
+    abstract override val localizedName: String
     abstract val type: Int
     abstract val metaData: String?
 }
