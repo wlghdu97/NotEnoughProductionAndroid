@@ -2,13 +2,12 @@ package com.xhlab.nep.shared.db.view
 
 import androidx.room.ColumnInfo
 import androidx.room.Ignore
-import com.xhlab.nep.shared.domain.recipe.model.MachineRecipeView
-import com.xhlab.nep.shared.domain.recipe.model.RecipeElementView
+import com.xhlab.nep.model.recipes.view.MachineRecipeView
+import com.xhlab.nep.model.recipes.view.RecipeElementView
 
 data class RoomMachineRecipeView(
     @ColumnInfo(name = "recipe_id")
     override val recipeId: Long,
-    override val amount: Int,
     @ColumnInfo(name = "enabled")
     override val isEnabled: Boolean,
     override val duration: Int,

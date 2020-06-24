@@ -8,7 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.shared.domain.item.ElementSearchUseCase
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.tests.util.LiveDataTestUtil
 import com.xhlab.nep.shared.tests.util.MainCoroutineRule
 import com.xhlab.nep.shared.tests.util.asPagedList

@@ -15,7 +15,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
-import com.xhlab.nep.shared.domain.recipe.model.RecipeElementView
+import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.ui.util.DiffCallback

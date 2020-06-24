@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.textResource

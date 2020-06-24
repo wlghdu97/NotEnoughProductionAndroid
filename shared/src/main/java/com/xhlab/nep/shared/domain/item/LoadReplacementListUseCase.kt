@@ -6,7 +6,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.domain.MediatorUseCase
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.util.Resource
 import javax.inject.Inject
 

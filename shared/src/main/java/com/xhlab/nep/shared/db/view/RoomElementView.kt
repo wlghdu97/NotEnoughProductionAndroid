@@ -2,7 +2,8 @@ package com.xhlab.nep.shared.db.view
 
 import androidx.room.ColumnInfo
 import androidx.room.DatabaseView
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import androidx.room.Ignore
+import com.xhlab.nep.model.ElementView
 
 @DatabaseView(
     viewName = "element_view",
@@ -74,4 +75,7 @@ data class RoomElementView(
     override val type: Int,
     @ColumnInfo(name = "meta_data")
     override val metaData: String?
-) : ElementView()
+) : ElementView() {
+    @Ignore
+    override val amount: Int = 0
+}

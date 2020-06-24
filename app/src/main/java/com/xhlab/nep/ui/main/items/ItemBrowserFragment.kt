@@ -12,7 +12,7 @@ import androidx.lifecycle.observe
 import androidx.paging.PagedList
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider

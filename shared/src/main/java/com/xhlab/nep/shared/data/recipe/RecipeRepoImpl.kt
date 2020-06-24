@@ -2,7 +2,7 @@ package com.xhlab.nep.shared.data.recipe
 
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.db.AppDatabase
-import com.xhlab.nep.shared.domain.recipe.model.RecipeView
+import com.xhlab.nep.model.recipes.view.RecipeView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
