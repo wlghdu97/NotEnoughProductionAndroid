@@ -4,22 +4,22 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import java.util.*
 
-data class Process(
+open class Process<R : Recipe>(
     val id: String,
     val name: String,
-    val rootRecipe: Recipe,
+    val rootRecipe: R,
     val targetOutput: Element
 ) {
-    private val vertices = LinkedList<Recipe>()
+    private val vertices = LinkedList<R>()
     private val edges = LinkedList<ArrayList<Edge>>()
 
     init {
         connectRecipe(rootRecipe, null, targetOutput)
     }
 
-    fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false) {
+    fun connectRecipe(from: R, to: R?, element: Element, reversed: Boolean = false) {
 
-        fun addRecipeNode(recipe: Recipe) {
+        fun addRecipeNode(recipe: R) {
             if (vertices.indexOf(recipe) == -1) {
                 vertices.add(recipe)
                 edges.add(arrayListOf())
@@ -35,7 +35,7 @@ data class Process(
         }
     }
 
-    fun disconnectRecipe(from: Recipe, to: Recipe, element: Element, reversed: Boolean = false) {
+    fun disconnectRecipe(from: R, to: R, element: Element, reversed: Boolean = false) {
         val edgeIndex = vertices.indexOf(from)
         val targetIndex = vertices.indexOf(to)
         if (edgeIndex != -1 && targetIndex != -1) {
@@ -48,12 +48,12 @@ data class Process(
         }
     }
 
-    private fun checkConnection(input: Recipe, output: Recipe, key: String): Boolean {
+    private fun checkConnection(input: R, output: R, key: String): Boolean {
         return (input.getInputs().find { it.unlocalizedName == key } != null &&
                 output.getOutput().find { it.unlocalizedName == key } != null)
     }
 
-    fun removeRecipeNode(recipe: Recipe): Boolean {
+    fun removeRecipeNode(recipe: R): Boolean {
         val vertexIndex = vertices.indexOf(recipe)
         if (vertexIndex == 0) {
             // can't remove root
@@ -76,14 +76,14 @@ data class Process(
         return true
     }
 
-    fun getRecipeDFSTree(): RecipeNode {
+    fun getRecipeDFSTree(): RecipeNode<R> {
         val visited = BooleanArray(vertices.size) { false }
         return dfs(0, visited)
     }
 
-    private fun dfs(vertex: Int, visited: BooleanArray): RecipeNode {
+    private fun dfs(vertex: Int, visited: BooleanArray): RecipeNode<R> {
         visited[vertex] = true
-        val childNodes = arrayListOf<RecipeNode>()
+        val childNodes = arrayListOf<RecipeNode<R>>()
         for (adj in edges[vertex]) {
             if (!visited[adj.index] || edges[adj.index].isEmpty()) {
                 childNodes.add(dfs(adj.index, visited))

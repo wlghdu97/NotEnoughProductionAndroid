@@ -1,6 +1,9 @@
 package com.xhlab.test_shared
 
-import com.xhlab.nep.model.*
+import com.xhlab.nep.model.Fluid
+import com.xhlab.nep.model.Item
+import com.xhlab.nep.model.Machine
+import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.recipes.MachineRecipe
@@ -49,17 +52,19 @@ object ProcessData {
         /*16*/Fluid(1000, "fluid.hydrogen", "Hydrogen Gas")
     )
 
-    val machineList = listOf(
-        /*0*/Machine(1, "gregtech", "Forge Hammer"),
-        /*1*/Machine(2, "gregtech", "Macerator"),
-        /*2*/Machine(3, "gregtech", "Alloy Smelter"),
-        /*3*/Machine(4, "vanilla", "Crafting Table"),
+    val elementList = itemList + fluidList
 
-        /*4*/Machine(5, "gregtech", "Chemical Reactor"),
-        /*5*/Machine(6, "gregtech", "Fluid Canner"),
-        /*6*/Machine(7, "gregtech", "Distillery"),
-        /*7*/Machine(8, "gregtech", "Brewing Machine"),
-        /*8*/Machine(9, "gregtech", "Electrolyzer")
+    val machineList = listOf(
+        /*0*/Machine(0, "gregtech", "Forge Hammer"),
+        /*1*/Machine(1, "gregtech", "Macerator"),
+        /*2*/Machine(2, "gregtech", "Alloy Smelter"),
+        /*3*/Machine(3, "vanilla", "Crafting Table"),
+
+        /*4*/Machine(4, "gregtech", "Chemical Reactor"),
+        /*5*/Machine(5, "gregtech", "Fluid Canner"),
+        /*6*/Machine(6, "gregtech", "Distillery"),
+        /*7*/Machine(7, "gregtech", "Brewing Machine"),
+        /*8*/Machine(8, "gregtech", "Electrolyzer")
     )
 
     val recipeList = listOf<Recipe>(
@@ -84,7 +89,7 @@ object ProcessData {
         /*17*/MachineRecipe(true, 2000, EU.type, 30, 8, listOf(itemList[16]), listOf(itemList[15]), listOf(fluidList[13]), listOf(fluidList[2]))
     )
 
-    val processGlass: Process
+    val processGlass: Process<Recipe>
         get() = Process("process01", "Primitive glass forge", recipeList[6], itemList[9]).apply {
             connectRecipe(recipeList[5], recipeList[6], itemList[8])
             connectRecipe(recipeList[4], recipeList[5], itemList[6])
@@ -95,7 +100,7 @@ object ProcessData {
             connectRecipe(recipeList[0], recipeList[1], itemList[2])
         }
 
-    val processPE: Process
+    val processPE: Process<Recipe>
         get() = Process("process02", "Polyethylene process", recipeList[7], fluidList[0]).apply {
             connectRecipe(recipeList[7], recipeList[9], itemList[16], true)
             connectRecipe(recipeList[8], recipeList[7], itemList[10])
