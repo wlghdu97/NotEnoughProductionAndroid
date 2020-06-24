@@ -7,8 +7,7 @@ import com.xhlab.nep.shared.domain.recipe.model.RecipeElementView
 
 data class RoomCraftingRecipeView(
     @ColumnInfo(name = "recipe_id")
-    override val recipeId: Long,
-    override val amount: Int
+    override val recipeId: Long
 ) : CraftingRecipeView() {
     @Ignore
     override var itemList: List<RecipeElementView> = emptyList()

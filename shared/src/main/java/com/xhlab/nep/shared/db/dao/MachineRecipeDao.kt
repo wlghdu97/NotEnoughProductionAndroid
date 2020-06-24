@@ -24,7 +24,6 @@ abstract class MachineRecipeDao : BaseDao<MachineRecipeEntity>() {
     @Query("""
         SELECT 
         machine_recipe.recipe_id,
-        recipe_result.amount,
         machine_recipe.enabled,
         machine_recipe.duration,
         machine_recipe.power_type,

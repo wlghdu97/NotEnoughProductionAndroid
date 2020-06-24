@@ -8,7 +8,6 @@ import com.xhlab.nep.shared.domain.recipe.model.RecipeElementView
 data class RoomMachineRecipeView(
     @ColumnInfo(name = "recipe_id")
     override val recipeId: Long,
-    override val amount: Int,
     @ColumnInfo(name = "enabled")
     override val isEnabled: Boolean,
     override val duration: Int,

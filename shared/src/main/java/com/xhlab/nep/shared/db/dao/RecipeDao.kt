@@ -22,7 +22,7 @@ abstract class RecipeDao : BaseDao<RecipeEntity>() {
 
     @Transaction
     @Query("""
-        SELECT recipe.recipe_id, recipe.amount FROM recipe
+        SELECT recipe.recipe_id FROM recipe
         INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
         WHERE recipe.recipe_id = recipe_result.recipe_id
         GROUP BY recipe.recipe_id
