@@ -7,7 +7,7 @@ import androidx.room.Transaction
 import com.xhlab.nep.shared.db.BaseDao
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.shared.db.view.RoomElementView
-import com.xhlab.nep.shared.domain.recipe.model.RecipeMachineView
+import com.xhlab.nep.model.recipes.view.RecipeMachineView
 
 @Dao
 abstract class ElementDao : BaseDao<ElementEntity>() {

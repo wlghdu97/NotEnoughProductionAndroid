@@ -4,7 +4,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.BaseViewModel

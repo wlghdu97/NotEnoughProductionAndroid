@@ -1,4 +1,4 @@
-package com.xhlab.nep.shared.domain.recipe.model
+package com.xhlab.nep.model.recipes.view
 
 data class RecipeMachineView(
     val machineId: Int,

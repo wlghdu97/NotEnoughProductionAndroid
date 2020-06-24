@@ -7,7 +7,7 @@ import androidx.paging.PagedList
 import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.domain.MediatorUseCase
-import com.xhlab.nep.shared.domain.recipe.model.RecipeView
+import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.util.Resource
 import javax.inject.Inject
 

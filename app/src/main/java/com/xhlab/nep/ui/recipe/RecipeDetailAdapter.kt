@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType
-import com.xhlab.nep.shared.domain.recipe.model.CraftingRecipeView
-import com.xhlab.nep.shared.domain.recipe.model.MachineRecipeView
-import com.xhlab.nep.shared.domain.recipe.model.RecipeView
+import com.xhlab.nep.model.recipes.view.CraftingRecipeView
+import com.xhlab.nep.model.recipes.view.MachineRecipeView
+import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString

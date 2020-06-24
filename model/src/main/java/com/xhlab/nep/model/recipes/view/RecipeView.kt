@@ -1,4 +1,4 @@
-package com.xhlab.nep.shared.domain.recipe.model
+package com.xhlab.nep.model.recipes.view
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe

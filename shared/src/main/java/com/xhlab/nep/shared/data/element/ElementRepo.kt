@@ -1,8 +1,8 @@
 package com.xhlab.nep.shared.data.element
 
 import androidx.paging.DataSource
-import com.xhlab.nep.shared.domain.item.model.ElementView
-import com.xhlab.nep.shared.domain.recipe.model.RecipeMachineView
+import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.recipes.view.RecipeMachineView
 
 interface ElementRepo {
     suspend fun getElementDetail(id: Long): ElementView?

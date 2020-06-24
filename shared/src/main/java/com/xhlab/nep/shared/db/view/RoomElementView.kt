@@ -3,7 +3,7 @@ package com.xhlab.nep.shared.db.view
 import androidx.room.ColumnInfo
 import androidx.room.DatabaseView
 import androidx.room.Ignore
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import com.xhlab.nep.model.ElementView
 
 @DatabaseView(
     viewName = "element_view",

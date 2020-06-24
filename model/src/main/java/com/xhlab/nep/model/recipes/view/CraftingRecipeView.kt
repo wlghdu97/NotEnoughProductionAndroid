@@ -1,4 +1,4 @@
-package com.xhlab.nep.shared.domain.recipe.model
+package com.xhlab.nep.model.recipes.view
 
 abstract class CraftingRecipeView : RecipeView() {
     abstract override val recipeId: Long

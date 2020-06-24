@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.db.view
 
 import androidx.room.ColumnInfo
-import com.xhlab.nep.shared.domain.recipe.model.RecipeElementView
+import com.xhlab.nep.model.recipes.view.RecipeElementView
 
 data class RoomRecipeElementView(
     override val id: Long,

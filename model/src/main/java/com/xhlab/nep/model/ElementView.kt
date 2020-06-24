@@ -1,4 +1,4 @@
-package com.xhlab.nep.shared.domain.item.model
+package com.xhlab.nep.model
 
 import com.xhlab.nep.model.Element
 

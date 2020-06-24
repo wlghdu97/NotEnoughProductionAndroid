@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.data.element
 
 import com.xhlab.nep.shared.db.AppDatabase
-import com.xhlab.nep.shared.domain.item.model.ElementView
+import com.xhlab.nep.model.ElementView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
