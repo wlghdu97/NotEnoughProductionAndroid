@@ -1,37 +1,24 @@
 package com.xhlab.nep.ui.recipe
 
-import android.content.Context
-import android.os.Build
-import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.model.recipes.view.RecipeElementView
+import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.util.BindableViewHolder
+import com.xhlab.nep.ui.main.viewholders.RecipeElementViewHolder
 import com.xhlab.nep.ui.util.DiffCallback
-import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
-import org.jetbrains.anko.textResource
-import java.text.NumberFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 class RecipeElementAdapter(
     private val listener: ElementListener? = null
-) : RecyclerView.Adapter<RecipeElementAdapter.RecipeElementViewHolder>() {
+) : RecyclerView.Adapter<RecipeElementViewHolder>() {
 
     private val elementList = ArrayList<RecipeElementView>()
-    private val integerFormat = NumberFormat.getIntegerInstance(Locale.getDefault())
     private var isIconVisible = false
 
     fun submitList(list: List<RecipeElementView>) {
@@ -53,7 +40,7 @@ class RecipeElementAdapter(
                 1 -> R.layout.holder_element_ore_chain
                 else -> throw IllegalArgumentException("invalid view type.")
             }, parent, false)
-        return RecipeElementViewHolder(view)
+        return DefaultRecipeElementViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: RecipeElementViewHolder, position: Int) {
@@ -74,57 +61,19 @@ class RecipeElementAdapter(
         notifyDataSetChanged()
     }
 
-    inner class RecipeElementViewHolder(itemView: View)
-        : BindableViewHolder<RecipeElementView>(itemView) {
-
-        private val icon: ImageView = itemView.findViewById(R.id.icon)
-        private val name: TextView = itemView.findViewById(R.id.name)
-        private val unlocalizedName: TextView = itemView.findViewById(R.id.unlocalized_name)
-        private val type: TextView? = itemView.findViewById(R.id.type)
-
-        private val context: Context
-            get() = itemView.context
+    inner class DefaultRecipeElementViewHolder(itemView: View) : RecipeElementViewHolder(itemView) {
 
         init {
-            if (Build.VERSION.SDK_INT >= 23) {
-                unlocalizedName.breakStrategy = Layout.BREAK_STRATEGY_BALANCED
-            }
             itemView.setOnClickListener {
                 model?.let { listener?.onClick(it.id, it.type) }
             }
         }
 
         override fun bindNotNull(model: RecipeElementView) {
+            super.bindNotNull(model)
             icon.isGone = !isIconVisible
             if (isIconVisible) {
                 icon.setIcon(model.unlocalizedName)
-            }
-            val metaData = when (!model.metaData.isNullOrEmpty()) {
-                true -> " : ${model.metaData}"
-                false -> ""
-            }
-            val localizedName = when (model.localizedName.isEmpty()) {
-                true -> context.getString(R.string.txt_unnamed)
-                false -> model.localizedName.trim()
-            }
-            val nameText = "$localizedName$metaData"
-            name.text = when (model.amount == 0) {
-                true -> nameText
-                false -> context.formatString(
-                    R.string.form_item_with_amount,
-                    integerFormat.format(model.amount),
-                    nameText
-                )
-            }
-            unlocalizedName.text = when (model.unlocalizedName.isEmpty()) {
-                true -> context.getString(R.string.txt_unnamed)
-                false -> model.unlocalizedName
-            }
-
-            type?.textResource = when (model.type) {
-                ITEM -> R.string.txt_item
-                FLUID -> R.string.txt_fluid
-                else -> R.string.txt_unknown
             }
         }
     }

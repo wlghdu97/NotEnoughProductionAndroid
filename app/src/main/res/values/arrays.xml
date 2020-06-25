@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="degreeColorList">
+        <item>@color/colorDegree01</item>
+        <item>@color/colorDegree02</item>
+        <item>@color/colorDegree03</item>
+        <item>@color/colorDegree04</item>
+        <item>@color/colorDegree05</item>
+        <item>@color/colorDegree06</item>
+        <item>@color/colorDegree07</item>
+        <item>@color/colorDegree08</item>
+        <item>@color/colorDegree09</item>
+        <item>@color/colorDegree10</item>
+    </integer-array>
+</resources>
