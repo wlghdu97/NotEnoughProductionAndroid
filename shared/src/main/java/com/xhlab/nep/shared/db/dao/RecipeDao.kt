@@ -17,6 +17,7 @@ abstract class RecipeDao : BaseDao<RecipeEntity>() {
         SELECT element_view.*, recipe.amount FROM element_view
         INNER JOIN recipe ON recipe.recipe_id = :recipeId
         WHERE element_view.id = recipe.target_item_id
+        ORDER BY element_view.type, element_view.localized_name ASC
     """)
     abstract suspend fun getElementListOfRecipe(recipeId: Long): List<RoomRecipeElementView>
 

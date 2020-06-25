@@ -17,6 +17,7 @@ abstract class MachineRecipeDao : BaseDao<MachineRecipeEntity>() {
         SELECT element_view.*, machine_recipe.amount, machine_recipe.meta_data FROM element_view
         INNER JOIN machine_recipe ON machine_recipe.recipe_id = :recipeId
         WHERE element_view.id = machine_recipe.target_item_id
+        ORDER BY element_view.type, element_view.localized_name ASC
     """)
     abstract suspend fun getElementListOfRecipe(recipeId: Long): List<RoomRecipeElementView>
 
