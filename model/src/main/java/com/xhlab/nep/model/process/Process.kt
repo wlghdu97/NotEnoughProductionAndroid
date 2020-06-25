@@ -92,6 +92,38 @@ open class Process<R : Recipe>(
         return RecipeNode(vertices[vertex], childNodes)
     }
 
+    fun getConnectionStatus(recipe: R, key: Element): ConnectionStatus {
+        if (recipe == rootRecipe && targetOutput == key) {
+            return ConnectionStatus.FINAL_OUTPUT
+        }
+        val index = vertices.indexOf(recipe)
+        val edge = edges[index].find { it.key == key.unlocalizedName }
+        return when {
+            edge == null -> {
+                var parentEdge: Edge? = null
+                for ((edgeIndex, otherEdge) in edges.withIndex()) {
+                    if (edgeIndex == index) {
+                        continue
+                    }
+                    parentEdge = otherEdge.find { it.index == index && it.key == key.unlocalizedName }
+                    if (parentEdge != null) {
+                        break
+                    }
+                }
+                when {
+                    parentEdge != null && parentEdge.reversed ->
+                        ConnectionStatus.CONNECTED_TO_CHILD
+                    parentEdge != null ->
+                        ConnectionStatus.CONNECTED_TO_PARENT
+                    else ->
+                        ConnectionStatus.UNCONNECTED
+                }
+            }
+            edge.reversed -> ConnectionStatus.CONNECTED_TO_PARENT
+            else -> ConnectionStatus.CONNECTED_TO_CHILD
+        }
+    }
+
     fun getRecipeNodeCount(): Int {
         return vertices.size
     }
@@ -101,4 +133,8 @@ open class Process<R : Recipe>(
     }
 
     data class Edge(val index: Int, val key: String, val reversed: Boolean = false)
+
+    enum class ConnectionStatus {
+        CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT
+    }
 }
