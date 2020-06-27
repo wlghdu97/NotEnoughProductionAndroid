@@ -6,8 +6,8 @@ import com.xhlab.nep.ui.main.MainActivity
 import com.xhlab.nep.ui.main.MainModule
 import com.xhlab.nep.ui.main.machines.details.MachineResultActivity
 import com.xhlab.nep.ui.main.machines.details.MachineResultModule
-import com.xhlab.nep.ui.main.process.editor.ProcessEditActivity
-import com.xhlab.nep.ui.main.process.editor.ProcessEditModule
+import com.xhlab.nep.ui.process.editor.ProcessEditActivity
+import com.xhlab.nep.ui.process.editor.ProcessEditModule
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationActivity
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationModule
 import com.xhlab.nep.ui.recipe.MachineRecipeListActivity

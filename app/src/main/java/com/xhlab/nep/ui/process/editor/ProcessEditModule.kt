@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.main.process.editor
+package com.xhlab.nep.ui.process.editor
 
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey

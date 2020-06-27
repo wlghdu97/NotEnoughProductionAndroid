@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.main.process.editor
+package com.xhlab.nep.ui.process.editor
 
 import android.os.Bundle
 import android.view.Menu

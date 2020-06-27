@@ -41,13 +41,13 @@
             android:launchMode="singleTop"/>
 
         <activity
-            android:name=".ui.main.process.editor.ProcessEditActivity"
+            android:name=".ui.process.editor.ProcessEditActivity"
             android:parentActivityName=".ui.main.MainActivity"
             android:launchMode="singleTop"/>
 
         <activity
             android:name=".ui.process.calculator.ProcessCalculationActivity"
-            android:parentActivityName=".ui.main.process.editor.ProcessEditActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
             android:launchMode="singleTop"/>
 
         <service
