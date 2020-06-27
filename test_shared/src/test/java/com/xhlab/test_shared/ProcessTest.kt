@@ -79,4 +79,58 @@ class ProcessTest {
             processPE.getConnectionStatus(ProcessData.recipeList[9], ProcessData.itemList[16])
         )
     }
+
+    @Test
+    fun processElementMap() {
+        val processGlassMap = ProcessData.elementList.subList(0, 10)
+            .distinctBy { it.unlocalizedName }
+            .map { it.unlocalizedName to it }
+            .toMap()
+        assertEquals(processGlassMap.keys, ProcessData.processGlass.getElementMap().keys)
+        val processPEMap = ProcessData.elementList.subList(10, 34)
+            .distinctBy { it.unlocalizedName }
+            .map { it.unlocalizedName to it }
+            .toMap()
+        assertEquals(processPEMap.keys, ProcessData.processPE.getElementMap().keys)
+    }
+
+    @Test
+    fun processRecipeArray() {
+        val processGlassSublist = ProcessData.recipeList.subList(0, 7)
+        val processGlassRecipeArray = ProcessData.processGlass.getRecipeArray()
+        assertEquals(processGlassSublist.size, processGlassRecipeArray.size)
+        assertEquals(processGlassRecipeArray.intersect(processGlassSublist).size, processGlassSublist.size)
+        val processPESublist = ProcessData.recipeList.subList(7, 18)
+        val processPERecipeArray = ProcessData.processPE.getRecipeArray()
+        assertEquals(processPESublist.size, processPERecipeArray.size)
+        assertEquals(processPERecipeArray.intersect(processPESublist).size, processPESublist.size)
+    }
+
+    @Test
+    fun processElementKeyList() {
+        val processGlassList = ProcessData.elementList.subList(0, 10).map { it.unlocalizedName }.distinct()
+        val processGlassKeyList = ProcessData.processGlass.getElementKeyList()
+        assertEquals(processGlassList.size, processGlassKeyList.size)
+        assertEquals(processGlassKeyList.intersect(processGlassList).size, processGlassList.size)
+        val processPEList = ProcessData.elementList.subList(10, 34).map { it.unlocalizedName }.distinct()
+        val processPEKeyList = ProcessData.processPE.getElementKeyList()
+        assertEquals(processPEList.size, processPEKeyList.size)
+        assertEquals(processPEKeyList.intersect(processPEList).size, processPEList.size)
+    }
+
+    @Test
+    fun processElementLeafKeyList() {
+        val processGlassList = setOf(ProcessData.elementList[0]).map { it.unlocalizedName }.distinct()
+        val processGlassLeafKeyList = ProcessData.processGlass.getElementLeafKeyList()
+        assertEquals(processGlassList.size, processGlassLeafKeyList.size)
+        assertEquals(processGlassLeafKeyList.intersect(processGlassList).size, processGlassList.size)
+        val processPEList = setOf(
+            ProcessData.elementList[12],
+            ProcessData.elementList[14],
+            ProcessData.elementList[29]
+        ).map { it.unlocalizedName }.distinct()
+        val processPELeafKeyList = ProcessData.processPE.getElementLeafKeyList()
+        assertEquals(processPEList.size, processPELeafKeyList.size)
+        assertEquals(processPELeafKeyList.intersect(processPEList).size, processPEList.size)
+    }
 }

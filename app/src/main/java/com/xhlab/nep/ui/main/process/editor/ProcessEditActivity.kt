@@ -68,6 +68,9 @@ class ProcessEditActivity :
             R.id.menu_swap_icons -> {
                 viewModel.toggleIconMode()
             }
+            R.id.menu_calculate -> {
+                viewModel.navigateToCalculation()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
