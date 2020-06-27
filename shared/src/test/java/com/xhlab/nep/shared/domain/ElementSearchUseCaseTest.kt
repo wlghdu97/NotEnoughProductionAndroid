@@ -41,6 +41,7 @@ class ElementSearchUseCaseTest {
             id = 0,
             localizedName = "result1",
             unlocalizedName = "unlocalized_result1",
+            amount = 0,
             type = ITEM,
             metaData = ""
         ),
@@ -48,6 +49,7 @@ class ElementSearchUseCaseTest {
             id = 1,
             localizedName = "result2",
             unlocalizedName = "unlocalized_result2",
+            amount = 0,
             type = ITEM,
             metaData = ""
         )
@@ -80,6 +82,7 @@ class ElementSearchUseCaseTest {
         override val id: Long,
         override val localizedName: String,
         override val unlocalizedName: String,
+        override val amount: Int,
         override val type: Int,
         override val metaData: String
     ) : ElementView()
