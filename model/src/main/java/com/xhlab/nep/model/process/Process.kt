@@ -124,6 +124,51 @@ open class Process<R : Recipe>(
         }
     }
 
+    fun getRecipeArray(): Array<Recipe> {
+        return vertices.toTypedArray()
+    }
+
+    fun getElementMap(): Map<String, Element> {
+        val keyMap = mutableMapOf<String, Element>()
+        for (vertex in vertices) {
+            for (input in vertex.getInputs()) {
+                if (!keyMap.containsKey(input.unlocalizedName)) {
+                    keyMap[input.unlocalizedName] = input
+                }
+            }
+            for (output in vertex.getOutput()) {
+                if (!keyMap.containsKey(output.unlocalizedName)) {
+                    keyMap[output.unlocalizedName] = output
+                }
+            }
+        }
+        return keyMap
+    }
+
+    fun getElementKeyList(): List<String> {
+        val keySet = mutableSetOf<String>()
+        for (vertex in vertices) {
+            for (input in vertex.getInputs()) {
+                keySet.add(input.unlocalizedName)
+            }
+            for (output in vertex.getOutput()) {
+                keySet.add(output.unlocalizedName)
+            }
+        }
+        return keySet.toList()
+    }
+
+    fun getElementLeafKeyList(): List<String> {
+        val keySet = getElementKeyList().toMutableSet()
+        keySet.remove(targetOutput.unlocalizedName)
+        for (edge in edges) {
+            for ((_, key, _) in edge) {
+                keySet.remove(key)
+            }
+        }
+        return keySet.toList()
+    }
+
     fun getRecipeNodeCount(): Int {
         return vertices.size
     }
