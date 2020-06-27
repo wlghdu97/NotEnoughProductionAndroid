@@ -45,6 +45,11 @@
             android:parentActivityName=".ui.main.MainActivity"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".ui.process.calculator.ProcessCalculationActivity"
+            android:parentActivityName=".ui.main.process.editor.ProcessEditActivity"
+            android:launchMode="singleTop"/>
+
         <service
             android:name=".service.ParseRecipeService"
             android:exported="false"

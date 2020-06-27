@@ -20,12 +20,14 @@
     <string name="title_recipe_list">Recipe list</string>
     <string name="title_machine_result_list">Machine result list</string>
     <string name="title_process_editor">Process editor</string>
+    <string name="title_calculation_result">Calculation result</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
     <string name="menu_process">Process</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_swap_icons">Swap icons</string>
+    <string name="menu_calculate">Calculate</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
