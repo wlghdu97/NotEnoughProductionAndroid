@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.model.process.view.ProcessView
+import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.main.viewholders.RecipeElementViewHolder
@@ -26,11 +26,11 @@ class ProcessElementAdapter(
     private val listener: ElementListener? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var process: ProcessView? = null
-    private var recipeNode: RecipeViewNode? = null
+    private var process: Process? = null
+    private var recipeNode: RecipeNode? = null
     private var outputListSize = 0
 
-    private val elementList = arrayListOf<RecipeElementView>()
+    private val elementList = arrayListOf<Element>()
 
     private var isIconVisible = false
     private var showConnection = true
@@ -57,7 +57,10 @@ class ProcessElementAdapter(
             })
         } else {
             val elementPosition = position - 1 - if (position > outputListSize) 1 else 0
-            (holder as ProcessElementViewHolder).bind(elementList[elementPosition])
+            val model = elementList[elementPosition]
+            if (model is RecipeElementView) {
+                (holder as ProcessElementViewHolder).bind(model)
+            }
         }
     }
 
@@ -70,17 +73,17 @@ class ProcessElementAdapter(
 
     override fun getItemCount(): Int {
         return recipeNode?.let {
-            val inputSize = it.recipe.itemList.size
-            val outputSize = it.recipe.resultItemList.size
+            val inputSize = it.recipe.getInputs().size
+            val outputSize = it.recipe.getOutput().size
             outputListSize = outputSize
             inputSize + outputSize + 2
         } ?: 0
     }
 
-    fun submitRecipeNode(process: ProcessView?, node: RecipeViewNode) {
+    fun submitRecipeNode(process: Process?, node: RecipeNode) {
         this.process = process
         this.recipeNode = node
-        val newList = node.recipe.resultItemList + node.recipe.itemList
+        val newList = node.recipe.getOutput() + node.recipe.getInputs()
         val callback = getDiffer(elementList, newList)
         val result = DiffUtil.calculateDiff(callback)
 

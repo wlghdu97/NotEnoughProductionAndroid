@@ -4,16 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PositionalDataSource
-import com.xhlab.nep.model.process.view.ProcessView
+import com.xhlab.nep.model.process.Process
 import javax.inject.Inject
 
 internal class ProcessRepoImpl @Inject constructor() : ProcessRepo {
 
-    override fun getProcess(processId: String): LiveData<ProcessView?> {
+    override fun getProcess(processId: String): LiveData<Process?> {
         return MutableLiveData(null)
     }
 
-    override fun getProcesses(): DataSource.Factory<Int, ProcessView> {
+    override fun getProcesses(): DataSource.Factory<Int, Process> {
         return ListDataSource(emptyList())
     }
 

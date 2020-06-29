@@ -1,97 +1,95 @@
 package com.xhlab.test_shared
 
-import com.xhlab.nep.model.Fluid
-import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Machine
-import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
-import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.EU
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.NONE
+import com.xhlab.nep.model.recipes.view.MachineRecipeView
+import com.xhlab.nep.model.recipes.view.RecipeElementView
 
 object ProcessData {
     val itemList = listOf(
-        /*0*/Item(1, "tile.stonebrick", "Cobblestone"),
-        /*1*/Item(1, "tile.sand.default", "Sand"),
-        /*2*/Item(1, "tile.gravel", "Gravel"),
-        /*3*/Item(3, "tile.gravel", "Gravel"),
-        /*4*/Item(1, "item.flint", "Flint"),
-        /*5*/Item(1, "item.SandDust", "Quartz Sand"),
-        /*6*/Item(1, "gt.metaitem.01.802", "Tiny Pile of Flint Dust"),
-        /*7*/Item(4, "gt.metaitem.01.802", "Tiny Pile of Flint Dust"),
-        /*8*/Item(1, "gt.metaitem.01.2890", "Glass Dust"),
-        /*9*/Item(1, "tile.glass", "Glass"),
+        RecipeElementViewImpl(0, 1, "tile.stonebrick", "Cobblestone", 0),
+        RecipeElementViewImpl(1, 1, "tile.sand.default", "Sand", 0),
+        RecipeElementViewImpl(2, 1, "tile.gravel", "Gravel", 0),
+        RecipeElementViewImpl(3, 3, "tile.gravel", "Gravel", 0),
+        RecipeElementViewImpl(4, 1, "item.flint", "Flint", 0),
+        RecipeElementViewImpl(5, 1, "item.SandDust", "Quartz Sand", 0),
+        RecipeElementViewImpl(6, 1, "gt.metaitem.01.802", "Tiny Pile of Flint Dust", 0),
+        RecipeElementViewImpl(7, 4, "gt.metaitem.01.802", "Tiny Pile of Flint Dust", 0),
+        RecipeElementViewImpl(8, 1, "gt.metaitem.01.2890", "Glass Dust", 0),
+        RecipeElementViewImpl(9, 1, "tile.glass", "Glass", 0),
 
-        /*10*/Item(1, "gt.metaitem.01.30677", "Ethylene Cell"),
-        /*11*/Item(1, "gt.metaitem.01.30706", "Ethanol Cell"),
-        /*12*/Item(1, "tile.sapling.oak", "Sapling"),
-        /*13*/Item(1, "gt.metaitem.01.30460", "Hydrogen Sulfide Cell"),
-        /*14*/Item(1, "gt.metaitem.01.2022", "Sulfur Dust"),
-        /*15*/Item(1, "gt.metaitem.01.30001", "Hydrogen Cell"),
-        /*16*/Item(1, "ic2.itemCellEmpty", "Empty Cell"),
-        /*17*/Item(1, "gt.integrated_circuit", "Programmed Circuit", "1"),
-        /*18*/Item(1, "gt.integrated_circuit", "Programmed Circuit", "3")
+        RecipeElementViewImpl(10, 1, "gt.metaitem.01.30677", "Ethylene Cell", 0),
+        RecipeElementViewImpl(11, 1, "gt.metaitem.01.30706", "Ethanol Cell", 0),
+        RecipeElementViewImpl(12, 1, "tile.sapling.oak", "Sapling", 0),
+        RecipeElementViewImpl(13, 1, "gt.metaitem.01.30460", "Hydrogen Sulfide Cell", 0),
+        RecipeElementViewImpl(14, 1, "gt.metaitem.01.2022", "Sulfur Dust", 0),
+        RecipeElementViewImpl(15, 1, "gt.metaitem.01.30001", "Hydrogen Cell", 0),
+        RecipeElementViewImpl(16, 1, "ic2.itemCellEmpty", "Empty Cell", 0),
+        RecipeElementViewImpl(17, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "1"),
+        RecipeElementViewImpl(18, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "3")
     )
 
     val fluidList = listOf(
-        /*0*/Fluid(1500, "fluid.molten.plastic", "Molten Polyethylene"),
-        /*1*/Fluid(7000, "fluid.oxygen", "Oxygen Gas"),
-        /*2*/Fluid(500, "fluid.oxygen", "Oxygen Gas"),
-        /*3*/Fluid(1000, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid"),
-        /*4*/Fluid(40, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid"),
-        /*5*/Fluid(750, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid"),
-        /*6*/Fluid(1000, "fluid.sulfuricacid", "Sulfuric Acid"),
-        /*7*/Fluid(20, "fluid.sulfuricacid", "Sulfuric Acid"),
-        /*8*/Fluid(1000, "fluid.bioethanol", "Ethanol"),
-        /*9*/Fluid(20, "fluid.bioethanol", "Ethanol"),
-        /*10*/Fluid(40, "ic2.fluidBiomass", "Biomass"),
-        /*11*/Fluid(100, "ic2.fluidBiomass", "Biomass"),
-        /*12*/Fluid(1000, "fluid.tile.water", "Water"),
-        /*13*/Fluid(1500, "fluid.tile.water", "Water"),
-        /*14*/Fluid(1000, "fluid.liquid_hydricsulfur", "Hydrogen Sulfide"),
-        /*15*/Fluid(2000, "fluid.hydrogen", "Hydrogen Gas"),
-        /*16*/Fluid(1000, "fluid.hydrogen", "Hydrogen Gas")
+        RecipeElementViewImpl(19, 1500, "fluid.molten.plastic", "Molten Polyethylene", 0),
+        RecipeElementViewImpl(20, 7000, "fluid.oxygen", "Oxygen Gas", 0),
+        RecipeElementViewImpl(21, 500, "fluid.oxygen", "Oxygen Gas", 0),
+        RecipeElementViewImpl(22, 1000, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
+        RecipeElementViewImpl(23, 40, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
+        RecipeElementViewImpl(24, 750, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
+        RecipeElementViewImpl(25, 1000, "fluid.sulfuricacid", "Sulfuric Acid", 0),
+        RecipeElementViewImpl(26, 20, "fluid.sulfuricacid", "Sulfuric Acid", 0),
+        RecipeElementViewImpl(27, 1000, "fluid.bioethanol", "Ethanol", 0),
+        RecipeElementViewImpl(28, 20, "fluid.bioethanol", "Ethanol", 0),
+        RecipeElementViewImpl(29, 40, "ic2.fluidBiomass", "Biomass", 0),
+        RecipeElementViewImpl(30, 100, "ic2.fluidBiomass", "Biomass", 0),
+        RecipeElementViewImpl(31, 1000, "fluid.tile.water", "Water", 0),
+        RecipeElementViewImpl(32, 1500, "fluid.tile.water", "Water", 0),
+        RecipeElementViewImpl(33, 1000, "fluid.liquid_hydricsulfur", "Hydrogen Sulfide", 0),
+        RecipeElementViewImpl(34, 2000, "fluid.hydrogen", "Hydrogen Gas", 0),
+        RecipeElementViewImpl(35, 1000, "fluid.hydrogen", "Hydrogen Gas", 0)
     )
 
     val elementList = itemList + fluidList
 
     val machineList = listOf(
-        /*0*/Machine(0, "gregtech", "Forge Hammer"),
-        /*1*/Machine(1, "gregtech", "Macerator"),
-        /*2*/Machine(2, "gregtech", "Alloy Smelter"),
-        /*3*/Machine(3, "vanilla", "Crafting Table"),
+        Machine(0, "gregtech", "Forge Hammer"),
+        Machine(1, "gregtech", "Macerator"),
+        Machine(2, "gregtech", "Alloy Smelter"),
+        Machine(3, "vanilla", "Crafting Table"),
 
-        /*4*/Machine(4, "gregtech", "Chemical Reactor"),
-        /*5*/Machine(5, "gregtech", "Fluid Canner"),
-        /*6*/Machine(6, "gregtech", "Distillery"),
-        /*7*/Machine(7, "gregtech", "Brewing Machine"),
-        /*8*/Machine(8, "gregtech", "Electrolyzer")
+        Machine(4, "gregtech", "Chemical Reactor"),
+        Machine(5, "gregtech", "Fluid Canner"),
+        Machine(6, "gregtech", "Distillery"),
+        Machine(7, "gregtech", "Brewing Machine"),
+        Machine(8, "gregtech", "Electrolyzer")
     )
 
-    val recipeList = listOf<Recipe>(
-        /*0*/MachineRecipe(true, 10, EU.type, 16, 0, listOf(itemList[0]), listOf(itemList[2]), listOf(), listOf()),
-        /*1*/MachineRecipe(true, 10, EU.type, 16, 0, listOf(itemList[2]), listOf(itemList[1]), listOf(), listOf()),
-        /*2*/MachineRecipe(true, 0, NONE.type, 0, 3, listOf(itemList[3]), listOf(itemList[4]), listOf(), listOf()),
-        /*3*/MachineRecipe(true, 200, EU.type, 8, 1, listOf(itemList[1]), listOf(itemList[5]), listOf(), listOf()),
-        /*4*/MachineRecipe(true, 400, EU.type, 2, 1, listOf(itemList[4]), listOf(itemList[7]), listOf(), listOf()),
-        /*5*/MachineRecipe(true, 0, NONE.type, 0, 3, listOf(itemList[5], itemList[6]), listOf(itemList[8]), listOf(), listOf()),
-        /*6*/MachineRecipe(true, 200, EU.type, 16, 2, listOf(itemList[8]), listOf(itemList[9]), listOf(), listOf()),
+    val recipeList = listOf(
+        MachineRecipeViewImpl(0, true, 10, EU.type, 16, 0, machineList[0].name, listOf(itemList[0]), listOf(itemList[2])),
+        MachineRecipeViewImpl(1, true, 10, EU.type, 16, 0, machineList[0].name, listOf(itemList[2]), listOf(itemList[1])),
+        MachineRecipeViewImpl(2, true, 0, NONE.type, 0, 3, machineList[3].name, listOf(itemList[3]), listOf(itemList[4])),
+        MachineRecipeViewImpl(3, true, 200, EU.type, 8, 1, machineList[1].name, listOf(itemList[1]), listOf(itemList[5])),
+        MachineRecipeViewImpl(4, true, 400, EU.type, 2, 1, machineList[1].name, listOf(itemList[4]), listOf(itemList[7])),
+        MachineRecipeViewImpl(5, true, 0, NONE.type, 0, 3, machineList[3].name, listOf(itemList[5], itemList[6]), listOf(itemList[8])),
+        MachineRecipeViewImpl(6, true, 200, EU.type, 16, 2, machineList[2].name, listOf(itemList[8]), listOf(itemList[9])),
 
-        /*7*/MachineRecipe(true, 1120, EU.type, 30, 4, listOf(itemList[10], itemList[17]), listOf(itemList[16]), listOf(fluidList[1]), listOf(fluidList[0])),
-        /*8*/MachineRecipe(true, 1200, EU.type, 120, 4, listOf(itemList[11], itemList[17]), listOf(itemList[10]), listOf(fluidList[6]), listOf(fluidList[3])),
-        /*9*/MachineRecipe(true, 16, EU.type, 1, 5, listOf(itemList[16]), listOf(itemList[11]), listOf(fluidList[8]), listOf()),
-        /*10*/MachineRecipe(true, 16, EU.type, 24, 6, listOf(itemList[17]), listOf(), listOf(fluidList[10]), listOf(fluidList[9])),
-        /*11*/MachineRecipe(true, 800, EU.type, 3, 7, listOf(itemList[12]), listOf(), listOf(fluidList[12]), listOf(fluidList[11])),
-        /*12*/MachineRecipe(true, 30, EU.type, 30, 6, listOf(itemList[17]), listOf(), listOf(fluidList[4]), listOf(fluidList[7])),
-        /*13*/MachineRecipe(true, 60, EU.type, 30, 4, listOf(itemList[13]), listOf(itemList[16]), listOf(fluidList[12]), listOf(fluidList[5])),
-        /*14*/MachineRecipe(true, 16, EU.type, 1, 5, listOf(itemList[16]), listOf(itemList[13]), listOf(fluidList[14]), listOf()),
-        /*15*/MachineRecipe(true, 60, EU.type, 8, 4, listOf(itemList[14], itemList[17]), listOf(), listOf(fluidList[15]), listOf(fluidList[14])),
-        /*16*/MachineRecipe(true, 16, EU.type, 1, 5, listOf(itemList[15]), listOf(itemList[16]), listOf(), listOf(fluidList[16])),
-        /*17*/MachineRecipe(true, 2000, EU.type, 30, 8, listOf(itemList[16], itemList[18]), listOf(itemList[15]), listOf(fluidList[13]), listOf(fluidList[2]))
+        MachineRecipeViewImpl(7, true, 1120, EU.type, 30, 4, machineList[4].name, listOf(itemList[10], itemList[17], fluidList[1]), listOf(itemList[16], fluidList[0])),
+        MachineRecipeViewImpl(8, true, 1200, EU.type, 120, 4, machineList[4].name, listOf(itemList[11], itemList[17], fluidList[6]), listOf(itemList[10], fluidList[3])),
+        MachineRecipeViewImpl(9, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[16], fluidList[8]), listOf(itemList[11])),
+        MachineRecipeViewImpl(10, true, 16, EU.type, 24, 6, machineList[6].name, listOf(itemList[17], fluidList[10]), listOf(fluidList[9])),
+        MachineRecipeViewImpl(11, true, 800, EU.type, 3, 7, machineList[7].name, listOf(itemList[12], fluidList[12]), listOf(fluidList[11])),
+        MachineRecipeViewImpl(12, true, 30, EU.type, 30, 6, machineList[6].name, listOf(itemList[17], fluidList[4]), listOf(fluidList[7])),
+        MachineRecipeViewImpl(13, true, 60, EU.type, 30, 4, machineList[4].name, listOf(itemList[13], fluidList[12]), listOf(itemList[16], fluidList[5])),
+        MachineRecipeViewImpl(14, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[16], fluidList[14]), listOf(itemList[13])),
+        MachineRecipeViewImpl(15, true, 60, EU.type, 8, 4, machineList[4].name, listOf(itemList[14], itemList[17], fluidList[15]), listOf(fluidList[14])),
+        MachineRecipeViewImpl(16, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[15]), listOf(itemList[16], fluidList[16])),
+        MachineRecipeViewImpl(17, true, 2000, EU.type, 30, 8, machineList[8].name, listOf(itemList[16], itemList[18], fluidList[13]), listOf(itemList[15], fluidList[2]))
     )
 
-    val processGlass: Process<Recipe>
+    val processGlass: Process
         get() = Process("process01", "Primitive glass forge", recipeList[6], itemList[9]).apply {
             connectRecipe(recipeList[5], recipeList[6], itemList[8])
             connectRecipe(recipeList[4], recipeList[5], itemList[6])
@@ -102,7 +100,7 @@ object ProcessData {
             connectRecipe(recipeList[0], recipeList[1], itemList[2])
         }
 
-    val processPE: Process<Recipe>
+    val processPE: Process
         get() = Process("process02", "Polyethylene process", recipeList[7], fluidList[0]).apply {
             connectRecipe(recipeList[7], recipeList[9], itemList[16], true)
             connectRecipe(recipeList[8], recipeList[7], itemList[10])
@@ -126,6 +124,8 @@ object ProcessData {
             markNotConsumed(recipeList[15], itemList[17])
             markNotConsumed(recipeList[17], itemList[18])
         }
+
+    val processList = listOf(processGlass, processPE)
 
     val processGlassTree = RecipeNode(
         recipeList[6],
@@ -219,4 +219,25 @@ object ProcessData {
             )
         )
     )
+
+    data class MachineRecipeViewImpl(
+        override val recipeId: Long,
+        override val isEnabled: Boolean,
+        override val duration: Int,
+        override val powerType: Int,
+        override val ept: Int,
+        override val machineId: Int,
+        override val machineName: String,
+        override val itemList: List<RecipeElementView>,
+        override val resultItemList: List<RecipeElementView>
+    ) : MachineRecipeView()
+
+    data class RecipeElementViewImpl(
+        override val id: Long,
+        override val amount: Int,
+        override val unlocalizedName: String,
+        override val localizedName: String,
+        override val type: Int,
+        override val metaData: String? = null
+    ) : RecipeElementView()
 }

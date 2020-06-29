@@ -10,11 +10,10 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
+import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
-import com.xhlab.nep.model.process.view.ProcessView
 import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
-import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
 import org.jetbrains.anko.layoutInflater
@@ -22,17 +21,15 @@ import java.text.NumberFormat
 import java.util.*
 import kotlin.math.min
 
-typealias RecipeViewNode = RecipeNode<RecipeView>
-
 class ProcessTreeAdapter(
     private val treeListener: ProcessTreeListener? = null
 ) : RecyclerView.Adapter<ProcessTreeAdapter.TreeViewHolder>() {
 
-    private var process: ProcessView? = null
-    private var root: RecipeViewNode? = null
+    private var process: Process? = null
+    private var root: RecipeNode? = null
 
     private val visibleList = arrayListOf<RecipeViewDegreeNode>()
-    private val expandedNodes = mutableSetOf<RecipeViewNode>()
+    private val expandedNodes = mutableSetOf<RecipeNode>()
 
     private var isIconVisible = false
     private var showConnection = true
@@ -50,7 +47,7 @@ class ProcessTreeAdapter(
 
     override fun getItemCount() = visibleList.size
 
-    fun submitProcess(process: ProcessView) {
+    fun submitProcess(process: Process) {
         this.process = process
         this.root = process.getRecipeDFSTree()
         recalculateVisibleList()
@@ -78,7 +75,7 @@ class ProcessTreeAdapter(
         }
     }
 
-    private fun getPreOrderedList(root: RecipeViewNode): ArrayList<RecipeViewDegreeNode> {
+    private fun getPreOrderedList(root: RecipeNode): ArrayList<RecipeViewDegreeNode> {
         val list = arrayListOf<RecipeViewDegreeNode>()
         preOrderTraverse(0, null, root, list)
         return list
@@ -86,8 +83,8 @@ class ProcessTreeAdapter(
 
     private fun preOrderTraverse(
         degree: Int,
-        prevNode: RecipeViewNode?,
-        node: RecipeViewNode,
+        prevNode: RecipeNode?,
+        node: RecipeNode,
         list: ArrayList<RecipeViewDegreeNode>
     ) {
         if (prevNode == null || expandedNodes.contains(prevNode)) {
@@ -212,7 +209,7 @@ class ProcessTreeAdapter(
         }
     }
 
-    data class RecipeViewDegreeNode(val degree: Int, val node: RecipeViewNode)
+    data class RecipeViewDegreeNode(val degree: Int, val node: RecipeNode)
 
     interface ProcessTreeListener {
         fun onProcessTreeExpanded(position: Int)

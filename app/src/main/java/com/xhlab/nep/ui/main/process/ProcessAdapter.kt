@@ -9,14 +9,14 @@ import androidx.core.view.isGone
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
-import com.xhlab.nep.model.process.view.ProcessView
+import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.layoutInflater
 
 class ProcessAdapter(
     private val listener: ProcessListener? = null
-) : PagedListAdapter<ProcessView, ProcessAdapter.ProcessViewHolder>(Differ) {
+) : PagedListAdapter<Process, ProcessAdapter.ProcessViewHolder>(Differ) {
 
     private var isIconVisible = false
 
@@ -34,7 +34,7 @@ class ProcessAdapter(
         notifyDataSetChanged()
     }
 
-    inner class ProcessViewHolder(itemView: View) : BindableViewHolder<ProcessView>(itemView) {
+    inner class ProcessViewHolder(itemView: View) : BindableViewHolder<Process>(itemView) {
         private val icon: ImageView = itemView.findViewById(R.id.output_icon)
         private val name: TextView = itemView.findViewById(R.id.process_name)
         private val description: TextView = itemView.findViewById(R.id.description)
@@ -46,7 +46,7 @@ class ProcessAdapter(
             }
         }
 
-        override fun bindNotNull(model: ProcessView) {
+        override fun bindNotNull(model: Process) {
             icon.isGone = !isIconVisible
             if (isIconVisible) {
                 icon.setIcon(model.targetOutput.unlocalizedName)
@@ -61,12 +61,12 @@ class ProcessAdapter(
         }
     }
 
-    private object Differ : DiffUtil.ItemCallback<ProcessView>() {
-        override fun areItemsTheSame(oldItem: ProcessView, newItem: ProcessView): Boolean {
+    private object Differ : DiffUtil.ItemCallback<Process>() {
+        override fun areItemsTheSame(oldItem: Process, newItem: Process): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ProcessView, newItem: ProcessView): Boolean {
+        override fun areContentsTheSame(oldItem: Process, newItem: Process): Boolean {
             return (oldItem.id == newItem.id &&
                     oldItem.name == newItem.name)
         }

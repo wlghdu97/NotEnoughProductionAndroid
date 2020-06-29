@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.domain.process
 
 import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.model.process.view.ProcessView
+import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.domain.UseCase
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +73,7 @@ class ResourceRateCalculationUseCase @Inject constructor()
         )
     }
 
-    data class Parameter(val process: ProcessView)
+    data class Parameter(val process: Process)
 
     data class Result(
         val recipes: List<Pair<RecipeView, Double>>,

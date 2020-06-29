@@ -4,22 +4,22 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import java.util.*
 
-open class Process<R : Recipe>(
+open class Process(
     val id: String,
     val name: String,
-    val rootRecipe: R,
+    val rootRecipe: Recipe,
     val targetOutput: Element
 ) {
-    private val vertices = LinkedList<R>()
+    private val vertices = LinkedList<Recipe>()
     private val edges = LinkedList<ArrayList<Edge>>()
 
     init {
         connectRecipe(rootRecipe, null, targetOutput)
     }
 
-    fun connectRecipe(from: R, to: R?, element: Element, reversed: Boolean = false) {
+    fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false) {
 
-        fun addRecipeNode(recipe: R) {
+        fun addRecipeNode(recipe: Recipe) {
             if (vertices.indexOf(recipe) == -1) {
                 vertices.add(recipe)
                 edges.add(arrayListOf())
@@ -35,7 +35,7 @@ open class Process<R : Recipe>(
         }
     }
 
-    fun disconnectRecipe(from: R, to: R, element: Element, reversed: Boolean = false) {
+    fun disconnectRecipe(from: Recipe, to: Recipe, element: Element, reversed: Boolean = false) {
         val edgeIndex = vertices.indexOf(from)
         val targetIndex = vertices.indexOf(to)
         if (edgeIndex != -1 && targetIndex != -1) {
@@ -48,7 +48,7 @@ open class Process<R : Recipe>(
         }
     }
 
-    fun markNotConsumed(recipe: R, element: Element, consumed: Boolean = false): Boolean {
+    fun markNotConsumed(recipe: Recipe, element: Element, consumed: Boolean = false): Boolean {
         if (!vertices.contains(recipe)) {
             return false
         }
@@ -69,12 +69,12 @@ open class Process<R : Recipe>(
         }
     }
 
-    private fun checkConnection(input: R, output: R, key: String): Boolean {
+    private fun checkConnection(input: Recipe, output: Recipe, key: String): Boolean {
         return (input.getInputs().find { it.unlocalizedName == key } != null &&
                 output.getOutput().find { it.unlocalizedName == key } != null)
     }
 
-    fun removeRecipeNode(recipe: R): Boolean {
+    fun removeRecipeNode(recipe: Recipe): Boolean {
         val vertexIndex = vertices.indexOf(recipe)
         if (vertexIndex == 0) {
             // can't remove root
@@ -97,14 +97,14 @@ open class Process<R : Recipe>(
         return true
     }
 
-    fun getRecipeDFSTree(): RecipeNode<R> {
+    fun getRecipeDFSTree(): RecipeNode {
         val visited = BooleanArray(vertices.size) { false }
         return dfs(0, visited)
     }
 
-    private fun dfs(vertex: Int, visited: BooleanArray): RecipeNode<R> {
+    private fun dfs(vertex: Int, visited: BooleanArray): RecipeNode {
         visited[vertex] = true
-        val childNodes = arrayListOf<RecipeNode<R>>()
+        val childNodes = arrayListOf<RecipeNode>()
         for (adj in edges[vertex]) {
             if (!visited[adj.index] || edges[adj.index].isEmpty()) {
                 childNodes.add(dfs(adj.index, visited))
@@ -113,7 +113,7 @@ open class Process<R : Recipe>(
         return RecipeNode(vertices[vertex], childNodes)
     }
 
-    fun getConnectionStatus(recipe: R, key: Element): ConnectionStatus {
+    fun getConnectionStatus(recipe: Recipe, key: Element): ConnectionStatus {
         if (recipe == rootRecipe && targetOutput == key) {
             return ConnectionStatus.FINAL_OUTPUT
         }
