@@ -159,14 +159,26 @@ open class Process<R : Recipe>(
     }
 
     fun getElementLeafKeyList(): List<String> {
-        val keySet = getElementKeyList().toMutableSet()
-        keySet.remove(targetOutput.unlocalizedName)
-        for (edge in edges) {
-            for ((_, key, _) in edge) {
-                keySet.remove(key)
+        val keyMap = hashMapOf<String, Int>()
+        for (vertex in vertices) {
+            for (input in vertex.getInputs()) {
+                val key = keyMap[input.unlocalizedName]
+                if (key == null) {
+                    keyMap[input.unlocalizedName] = 1
+                } else {
+                    keyMap[input.unlocalizedName] = key + 1
+                }
             }
         }
-        return keySet.toList()
+        for (edge in edges) {
+            for ((_, edgeKey, _) in edge) {
+                val key = keyMap[edgeKey]
+                if (key != null) {
+                    keyMap[edgeKey] = key - 1
+                }
+            }
+        }
+        return keyMap.filter { it.value >= 1 }.keys.toList()
     }
 
     fun getRecipeNodeCount(): Int {
