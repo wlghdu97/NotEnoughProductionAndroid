@@ -12,7 +12,7 @@ class ProcessViewTest {
         assertEquals(7, ProcessViewData.processGlass.getEdgesCount())
 
         assertEquals(11, ProcessViewData.processPE.getRecipeNodeCount())
-        assertEquals(15, ProcessViewData.processPE.getEdgesCount())
+        assertEquals(21, ProcessViewData.processPE.getEdgesCount())
     }
 
     @Test
@@ -91,7 +91,7 @@ class ProcessViewTest {
             .map { it.unlocalizedName to it.toView() }
             .toMap()
         assertEquals(processGlassMap.keys, ProcessViewData.processGlass.getElementMap().keys)
-        val processPEMap = ProcessData.elementList.subList(10, 34)
+        val processPEMap = ProcessData.elementList.subList(10, 36)
             .distinctBy { it.unlocalizedName }
             .map { it.unlocalizedName to it.toView() }
             .toMap()
@@ -116,7 +116,7 @@ class ProcessViewTest {
         val processGlassKeyList = ProcessViewData.processGlass.getElementKeyList()
         assertEquals(processGlassList.size, processGlassKeyList.size)
         assertEquals(processGlassKeyList.intersect(processGlassList).size, processGlassList.size)
-        val processPEList = ProcessData.elementList.subList(10, 34).map { it.unlocalizedName }.distinct()
+        val processPEList = ProcessData.elementList.subList(10, 36).map { it.unlocalizedName }.distinct()
         val processPEKeyList = ProcessViewData.processPE.getElementKeyList()
         assertEquals(processPEList.size, processPEKeyList.size)
         assertEquals(processPEKeyList.intersect(processPEList).size, processPEList.size)
@@ -131,7 +131,7 @@ class ProcessViewTest {
         val processPEList = setOf(
             ProcessData.elementList[12],
             ProcessData.elementList[14],
-            ProcessData.elementList[29]
+            ProcessData.elementList[31]
         ).map { it.unlocalizedName }.distinct()
         val processPELeafKeyList = ProcessViewData.processPE.getElementLeafKeyList()
         assertEquals(processPEList.size, processPELeafKeyList.size)

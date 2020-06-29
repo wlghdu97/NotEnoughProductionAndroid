@@ -39,6 +39,12 @@ object ProcessViewData {
             connectMachineRecipe(machineRecipeList[16], machineRecipeList[17], ProcessData.itemList[16], true)
             connectMachineRecipe(machineRecipeList[17], machineRecipeList[16], ProcessData.itemList[15])
             connectMachineRecipe(machineRecipeList[17], machineRecipeList[7], ProcessData.fluidList[2])
+            markNotConsumed(machineRecipeList[7], ProcessData.itemList[17])
+            markNotConsumed(machineRecipeList[8], ProcessData.itemList[17])
+            markNotConsumed(machineRecipeList[10], ProcessData.itemList[17])
+            markNotConsumed(machineRecipeList[12], ProcessData.itemList[17])
+            markNotConsumed(machineRecipeList[15], ProcessData.itemList[17])
+            markNotConsumed(machineRecipeList[17], ProcessData.itemList[18])
         }
 
     val processViewList = listOf(processGlass, processPE)

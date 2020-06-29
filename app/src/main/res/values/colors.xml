@@ -8,8 +8,9 @@
 
     <color name="colorFinalOutput">#64dd17</color>
     <color name="colorPluggedToParent">#ffab00</color>
-    <color name="colorPluggedToChild">#2962ff</color>
+    <color name="colorPluggedToChild">#2979ff</color>
     <color name="colorUnplugged">#424242</color>
+    <color name="colorInfinite">#7c4dff</color>
 
     <color name="colorDegree01">#e8f5e9</color>
     <color name="colorDegree02">#c8e6c9</color>

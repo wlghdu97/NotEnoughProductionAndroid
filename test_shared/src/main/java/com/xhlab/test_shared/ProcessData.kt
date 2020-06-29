@@ -29,7 +29,9 @@ object ProcessData {
         /*13*/Item(1, "gt.metaitem.01.30460", "Hydrogen Sulfide Cell"),
         /*14*/Item(1, "gt.metaitem.01.2022", "Sulfur Dust"),
         /*15*/Item(1, "gt.metaitem.01.30001", "Hydrogen Cell"),
-        /*16*/Item(1, "ic2.itemCellEmpty", "Empty Cell")
+        /*16*/Item(1, "ic2.itemCellEmpty", "Empty Cell"),
+        /*17*/Item(1, "gt.integrated_circuit", "Programmed Circuit", "1"),
+        /*18*/Item(1, "gt.integrated_circuit", "Programmed Circuit", "3")
     )
 
     val fluidList = listOf(
@@ -46,7 +48,7 @@ object ProcessData {
         /*10*/Fluid(40, "ic2.fluidBiomass", "Biomass"),
         /*11*/Fluid(100, "ic2.fluidBiomass", "Biomass"),
         /*12*/Fluid(1000, "fluid.tile.water", "Water"),
-        /*13*/Fluid(3000, "fluid.tile.water", "Water"),
+        /*13*/Fluid(1500, "fluid.tile.water", "Water"),
         /*14*/Fluid(1000, "fluid.liquid_hydricsulfur", "Hydrogen Sulfide"),
         /*15*/Fluid(2000, "fluid.hydrogen", "Hydrogen Gas"),
         /*16*/Fluid(1000, "fluid.hydrogen", "Hydrogen Gas")
@@ -76,17 +78,17 @@ object ProcessData {
         /*5*/MachineRecipe(true, 0, NONE.type, 0, 3, listOf(itemList[5], itemList[6]), listOf(itemList[8]), listOf(), listOf()),
         /*6*/MachineRecipe(true, 200, EU.type, 16, 2, listOf(itemList[8]), listOf(itemList[9]), listOf(), listOf()),
 
-        /*7*/MachineRecipe(true, 1120, EU.type, 30, 4, listOf(itemList[10]), listOf(itemList[16]), listOf(fluidList[1]), listOf(fluidList[0])),
-        /*8*/MachineRecipe(true, 1200, EU.type, 120, 4, listOf(itemList[11]), listOf(itemList[10]), listOf(fluidList[6]), listOf(fluidList[3])),
+        /*7*/MachineRecipe(true, 1120, EU.type, 30, 4, listOf(itemList[10], itemList[17]), listOf(itemList[16]), listOf(fluidList[1]), listOf(fluidList[0])),
+        /*8*/MachineRecipe(true, 1200, EU.type, 120, 4, listOf(itemList[11], itemList[17]), listOf(itemList[10]), listOf(fluidList[6]), listOf(fluidList[3])),
         /*9*/MachineRecipe(true, 16, EU.type, 1, 5, listOf(itemList[16]), listOf(itemList[11]), listOf(fluidList[8]), listOf()),
-        /*10*/MachineRecipe(true, 16, EU.type, 24, 6, listOf(), listOf(), listOf(fluidList[10]), listOf(fluidList[9])),
+        /*10*/MachineRecipe(true, 16, EU.type, 24, 6, listOf(itemList[17]), listOf(), listOf(fluidList[10]), listOf(fluidList[9])),
         /*11*/MachineRecipe(true, 800, EU.type, 3, 7, listOf(itemList[12]), listOf(), listOf(fluidList[12]), listOf(fluidList[11])),
-        /*12*/MachineRecipe(true, 30, EU.type, 30, 6, listOf(), listOf(), listOf(fluidList[4]), listOf(fluidList[7])),
+        /*12*/MachineRecipe(true, 30, EU.type, 30, 6, listOf(itemList[17]), listOf(), listOf(fluidList[4]), listOf(fluidList[7])),
         /*13*/MachineRecipe(true, 60, EU.type, 30, 4, listOf(itemList[13]), listOf(itemList[16]), listOf(fluidList[12]), listOf(fluidList[5])),
         /*14*/MachineRecipe(true, 16, EU.type, 1, 5, listOf(itemList[16]), listOf(itemList[13]), listOf(fluidList[14]), listOf()),
-        /*15*/MachineRecipe(true, 60, EU.type, 8, 4, listOf(itemList[14]), listOf(), listOf(fluidList[15]), listOf(fluidList[14])),
+        /*15*/MachineRecipe(true, 60, EU.type, 8, 4, listOf(itemList[14], itemList[17]), listOf(), listOf(fluidList[15]), listOf(fluidList[14])),
         /*16*/MachineRecipe(true, 16, EU.type, 1, 5, listOf(itemList[15]), listOf(itemList[16]), listOf(), listOf(fluidList[16])),
-        /*17*/MachineRecipe(true, 2000, EU.type, 30, 8, listOf(itemList[16]), listOf(itemList[15]), listOf(fluidList[13]), listOf(fluidList[2]))
+        /*17*/MachineRecipe(true, 2000, EU.type, 30, 8, listOf(itemList[16], itemList[18]), listOf(itemList[15]), listOf(fluidList[13]), listOf(fluidList[2]))
     )
 
     val processGlass: Process<Recipe>
@@ -117,6 +119,12 @@ object ProcessData {
             connectRecipe(recipeList[16], recipeList[17], itemList[16], true)
             connectRecipe(recipeList[17], recipeList[16], itemList[15])
             connectRecipe(recipeList[17], recipeList[7], fluidList[2])
+            markNotConsumed(recipeList[7], itemList[17])
+            markNotConsumed(recipeList[8], itemList[17])
+            markNotConsumed(recipeList[10], itemList[17])
+            markNotConsumed(recipeList[12], itemList[17])
+            markNotConsumed(recipeList[15], itemList[17])
+            markNotConsumed(recipeList[17], itemList[18])
         }
 
     val processGlassTree = RecipeNode(

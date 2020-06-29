@@ -34,6 +34,18 @@ fun ProcessView.disconnectMachineRecipe(
     )
 }
 
+fun ProcessView.markNotConsumed(
+    recipe: MachineRecipe,
+    key: Element,
+    consumed: Boolean = false
+) {
+    markNotConsumed(
+        recipe = recipe.toView(),
+        element = key.toView(),
+        consumed = consumed
+    )
+}
+
 fun MachineRecipe.toView() = ProcessViewData.MachineRecipeViewImpl(
     recipeId = ProcessViewData.machineRecipeList.indexOf(this).toLong(),
     itemList = getInputs().map { it.toView() },

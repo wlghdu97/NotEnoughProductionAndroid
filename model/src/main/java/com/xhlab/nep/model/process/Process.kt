@@ -48,6 +48,27 @@ open class Process<R : Recipe>(
         }
     }
 
+    fun markNotConsumed(recipe: R, element: Element, consumed: Boolean = false): Boolean {
+        if (!vertices.contains(recipe)) {
+            return false
+        }
+        val connection = getConnectionStatus(recipe, element)
+        return if (connection == ConnectionStatus.UNCONNECTED) {
+            val input = recipe.getInputs().find { it.unlocalizedName == element.unlocalizedName }
+            if (input == null) {
+                false
+            } else {
+                when (consumed) {
+                    true -> disconnectRecipe(recipe, recipe, element)
+                    false -> connectRecipe(recipe, recipe, element)
+                }
+                true
+            }
+        } else {
+            false
+        }
+    }
+
     private fun checkConnection(input: R, output: R, key: String): Boolean {
         return (input.getInputs().find { it.unlocalizedName == key } != null &&
                 output.getOutput().find { it.unlocalizedName == key } != null)
@@ -119,9 +140,16 @@ open class Process<R : Recipe>(
                         ConnectionStatus.UNCONNECTED
                 }
             }
+            edge.index == index -> ConnectionStatus.NOT_CONSUMED
             edge.reversed -> ConnectionStatus.CONNECTED_TO_PARENT
             else -> ConnectionStatus.CONNECTED_TO_CHILD
         }
+    }
+
+    fun isElementNotConsumed(recipe: Recipe, key: Element): Boolean {
+        val index = vertices.indexOf(recipe)
+        val edge = edges[index].find { it.key == key.unlocalizedName }
+        return edge?.index == index
     }
 
     fun getRecipeArray(): Array<Recipe> {
@@ -192,6 +220,6 @@ open class Process<R : Recipe>(
     data class Edge(val index: Int, val key: String, val reversed: Boolean = false)
 
     enum class ConnectionStatus {
-        CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT
+        CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT, NOT_CONSUMED
     }
 }

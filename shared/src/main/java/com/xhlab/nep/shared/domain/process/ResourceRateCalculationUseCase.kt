@@ -33,7 +33,9 @@ class ResourceRateCalculationUseCase @Inject constructor()
         for ((index, recipe) in recipes.withIndex()) {
             for (input in recipe.getInputs()) {
                 val key = input.unlocalizedName
-                constraints[index][keyList.indexOf(key)] = -input.amount.toDouble()
+                if (!process.isElementNotConsumed(recipe, input)) {
+                    constraints[index][keyList.indexOf(key)] = -input.amount.toDouble()
+                }
             }
             for (output in recipe.getOutput()) {
                 val key = output.unlocalizedName
