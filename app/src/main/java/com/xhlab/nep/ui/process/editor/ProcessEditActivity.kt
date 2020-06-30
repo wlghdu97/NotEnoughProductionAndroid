@@ -1,9 +1,13 @@
 package com.xhlab.nep.ui.process.editor
 
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
@@ -37,7 +41,26 @@ class ProcessEditActivity :
         setSupportActionBar(toolbar)
         supportActionBar?.setTitle(R.string.title_process_editor)
 
-        process_tree.adapter = processTreeAdapter
+        with(process_tree) {
+            adapter = processTreeAdapter
+            layoutManager = object : LinearLayoutManager(context) {
+                override fun smoothScrollToPosition(
+                    recyclerView: RecyclerView,
+                    state: RecyclerView.State,
+                    position: Int
+                ) {
+                    super.smoothScrollToPosition(recyclerView, state, position)
+                    val smoothScroller: LinearSmoothScroller =
+                        object : LinearSmoothScroller(recyclerView.context) {
+                            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                                return 80f / displayMetrics.densityDpi
+                            }
+                        }
+                    smoothScroller.targetPosition = position
+                    startSmoothScroll(smoothScroller)
+                }
+            }
+        }
     }
 
     override fun initViewModel() {
