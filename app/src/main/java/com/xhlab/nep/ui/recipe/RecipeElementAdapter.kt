@@ -7,16 +7,18 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
+import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.main.viewholders.RecipeElementViewHolder
+import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
 import com.xhlab.nep.ui.util.DiffCallback
 import com.xhlab.nep.util.setIcon
 
 class RecipeElementAdapter(
     private val listener: ElementListener? = null
-) : RecyclerView.Adapter<RecipeElementViewHolder>() {
+) : RecyclerView.Adapter<ElementViewHolder>() {
 
     private val elementList = ArrayList<RecipeElementView>()
     private var isIconVisible = false
@@ -33,17 +35,17 @@ class RecipeElementAdapter(
         result.dispatchUpdatesTo(this)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeElementViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(when (viewType) {
                 0 -> R.layout.holder_element
                 1 -> R.layout.holder_element_ore_chain
                 else -> throw IllegalArgumentException("invalid view type.")
             }, parent, false)
-        return DefaultRecipeElementViewHolder(view)
+        return DefaultElementViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RecipeElementViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ElementViewHolder, position: Int) {
         holder.bind(elementList[position])
     }
 
@@ -61,15 +63,18 @@ class RecipeElementAdapter(
         notifyDataSetChanged()
     }
 
-    inner class DefaultRecipeElementViewHolder(itemView: View) : RecipeElementViewHolder(itemView) {
+    inner class DefaultElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
 
         init {
             itemView.setOnClickListener {
-                model?.let { listener?.onClick(it.id, it.type) }
+                val model = model
+                if (model != null && model is ElementView) {
+                    listener?.onClick(model.id, model.type)
+                }
             }
         }
 
-        override fun bindNotNull(model: RecipeElementView) {
+        override fun bindNotNull(model: Element) {
             super.bindNotNull(model)
             icon.isGone = !isIconVisible
             if (isIconVisible) {

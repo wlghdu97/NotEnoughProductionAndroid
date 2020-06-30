@@ -8,7 +8,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.xhlab.nep.R
-import com.xhlab.nep.model.recipes.view.RecipeElementView
+import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
@@ -16,8 +17,8 @@ import org.jetbrains.anko.textResource
 import java.text.NumberFormat
 import java.util.*
 
-open class RecipeElementViewHolder(itemView: View)
-    : BindableViewHolder<RecipeElementView>(itemView) {
+open class ElementViewHolder(itemView: View)
+    : BindableViewHolder<Element>(itemView) {
 
     private val integerFormat = NumberFormat.getIntegerInstance(Locale.getDefault())
 
@@ -36,10 +37,18 @@ open class RecipeElementViewHolder(itemView: View)
         }
     }
 
-    override fun bindNotNull(model: RecipeElementView) {
-        val metaData = when (!model.metaData.isNullOrEmpty()) {
-            true -> " : ${model.metaData}"
-            false -> ""
+    override fun bindNotNull(model: Element) {
+        var metaData = ""
+        if (model is ElementView) {
+            metaData = when (!model.metaData.isNullOrEmpty()) {
+                true -> " : ${model.metaData}"
+                false -> ""
+            }
+            type?.textResource = when (model.type) {
+                ElementEntity.ITEM -> R.string.txt_item
+                ElementEntity.FLUID -> R.string.txt_fluid
+                else -> R.string.txt_unknown
+            }
         }
         val localizedName = when (model.localizedName.isEmpty()) {
             true -> context.getString(R.string.txt_unnamed)
@@ -57,12 +66,6 @@ open class RecipeElementViewHolder(itemView: View)
         unlocalizedName.text = when (model.unlocalizedName.isEmpty()) {
             true -> context.getString(R.string.txt_unnamed)
             false -> model.unlocalizedName
-        }
-
-        type?.textResource = when (model.type) {
-            ElementEntity.ITEM -> R.string.txt_item
-            ElementEntity.FLUID -> R.string.txt_fluid
-            else -> R.string.txt_unknown
         }
     }
 }

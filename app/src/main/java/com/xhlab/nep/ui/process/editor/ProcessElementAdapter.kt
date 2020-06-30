@@ -13,9 +13,8 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
-import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.main.viewholders.RecipeElementViewHolder
+import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
@@ -57,10 +56,7 @@ class ProcessElementAdapter(
             })
         } else {
             val elementPosition = position - 1 - if (position > outputListSize) 1 else 0
-            val model = elementList[elementPosition]
-            if (model is RecipeElementView) {
-                (holder as ProcessElementViewHolder).bind(model)
-            }
+            (holder as ProcessElementViewHolder).bind(elementList[elementPosition])
         }
     }
 
@@ -104,12 +100,12 @@ class ProcessElementAdapter(
 
     private fun isHeaderPosition(position: Int) = (position == 0 || position == outputListSize + 1)
 
-    inner class ProcessElementViewHolder(itemView: View) : RecipeElementViewHolder(itemView) {
+    inner class ProcessElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
 
         private val context: Context
             get() = itemView.context
 
-        override fun bindNotNull(model: RecipeElementView) {
+        override fun bindNotNull(model: Element) {
             super.bindNotNull(model)
 
             if (!showConnection && isIconVisible) {
