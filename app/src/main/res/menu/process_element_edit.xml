@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_disconnect"
+        android:title="@string/menu_disconnect"/>
+    <item
+        android:id="@+id/menu_connect_to_parent"
+        android:title="@string/menu_connect_to_parent"/>
+    <item
+        android:id="@+id/menu_connect_to_child"
+        android:title="@string/menu_connect_to_child"/>
+</menu>

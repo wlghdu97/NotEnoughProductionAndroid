@@ -2,11 +2,15 @@ package com.xhlab.nep.ui.process.editor
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
@@ -14,7 +18,6 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.process.SupplierRecipe
-import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
@@ -23,9 +26,7 @@ import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.layoutInflater
 import kotlin.math.min
 
-class ProcessElementAdapter(
-    private val listener: ElementListener? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var process: Process? = null
     private var recipeNode: RecipeNode? = null
@@ -38,7 +39,7 @@ class ProcessElementAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layout = when (viewType) {
-            0 -> R.layout.holder_element
+            0 -> R.layout.holder_process_element
             1 -> R.layout.holder_recipe_node_element_header
             else -> throw IllegalArgumentException()
         }
@@ -103,13 +104,33 @@ class ProcessElementAdapter(
 
     private fun isHeaderPosition(position: Int) = (position == 0 || position == outputListSize + 1)
 
-    inner class ProcessElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
+    inner class ProcessElementViewHolder(itemView: View)
+        : ElementViewHolder(itemView), PopupMenu.OnMenuItemClickListener {
+        private val menuButton: ImageButton = itemView.findViewById(R.id.btn_menu)
+        private var connectionStatus = Process.ConnectionStatus.UNCONNECTED
 
         private val context: Context
             get() = itemView.context
 
+        init {
+            menuButton.setOnClickListener { view ->
+                PopupMenu(context, view).apply {
+                    setOnMenuItemClickListener(this@ProcessElementViewHolder)
+                    inflate(R.menu.process_element_edit)
+                    show()
+                }
+            }
+        }
+
         override fun bindNotNull(model: Element) {
             super.bindNotNull(model)
+
+            val process = process
+            val recipeNode = recipeNode
+            connectionStatus = when (process != null && recipeNode != null) {
+                true -> process.getConnectionStatus(recipeNode.recipe, model)
+                false -> Process.ConnectionStatus.UNCONNECTED
+            }
 
             if (!showConnection && isIconVisible) {
                 icon.setIcon(model.unlocalizedName)
@@ -118,12 +139,7 @@ class ProcessElementAdapter(
                 icon.scaleX = 1f
                 icon.scaleY = 1f
             } else {
-                val process = process
-                val recipeNode = recipeNode
-                val status = if (process != null && recipeNode != null) {
-                    process.getConnectionStatus(recipeNode.recipe, model)
-                } else Process.ConnectionStatus.UNCONNECTED
-                when (status) {
+                when (connectionStatus) {
                     Process.ConnectionStatus.CONNECTED_TO_CHILD -> {
                         icon.imageResource = R.drawable.ic_power_24dp
                         icon.imageTintList = getColorStateList(R.color.colorPluggedToChild)
@@ -171,6 +187,15 @@ class ProcessElementAdapter(
                     model.localizedName
                 )
             }
+
+            menuButton.isGone = connectionStatus == Process.ConnectionStatus.FINAL_OUTPUT
+        }
+
+        override fun onMenuItemClick(menuItem: MenuItem): Boolean {
+            when (menuItem.itemId) {
+
+            }
+            return false
         }
 
         private fun getColorStateList(@ColorRes color: Int): ColorStateList {

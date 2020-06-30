@@ -28,6 +28,12 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_swap_icons">Swap icons</string>
     <string name="menu_calculate">Calculate</string>
+    <string name="menu_disconnect">Disconnect</string>
+    <string name="menu_connect_to_parent">Connect to parent</string>
+    <string name="menu_connect_to_child">Connect to child</string>
+    <string name="menu_attach_supplier">Attach supplier</string>
+    <string name="menu_mark_not_consumed">Mark not consumed</string>
+    <string name="menu_remove_mark">Remove mark</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
