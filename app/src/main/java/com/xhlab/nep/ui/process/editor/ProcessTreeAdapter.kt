@@ -144,6 +144,8 @@ class ProcessTreeAdapter(
             chevron.isGone = model.node.childNodes.isEmpty()
             if (!expandedNodes.contains(model.node)) {
                 chevron.rotation = 90f
+            } else {
+                chevron.rotation = 270f
             }
 
             if (recipe is MachineRecipeView) {

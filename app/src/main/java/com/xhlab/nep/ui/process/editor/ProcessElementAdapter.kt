@@ -52,9 +52,10 @@ class ProcessElementAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (isHeaderPosition(position)) {
+            val context = holder.itemView.context
             (holder as HeaderViewHolder).bind(when (position == 0) {
-                true -> "Output"
-                false -> "Input"
+                true -> context.getString(R.string.txt_output)
+                false -> context.getString(R.string.txt_input)
             })
         } else {
             val elementPosition = position - 1 - if (position > outputListSize) 1 else 0

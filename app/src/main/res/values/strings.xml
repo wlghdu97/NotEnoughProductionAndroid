@@ -56,6 +56,8 @@
 
     <string name="txt_ingredients">Ingredients</string>
     <string name="txt_byproducts">Byproducts</string>
+    <string name="txt_input">Input</string>
+    <string name="txt_output">Output</string>
 
     <string name="txt_loaded">Loaded</string>
     <string name="txt_unloaded">Unloaded</string>

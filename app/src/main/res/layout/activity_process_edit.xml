@@ -16,6 +16,9 @@
             android:id="@+id/process_tree"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingBottom="4dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
