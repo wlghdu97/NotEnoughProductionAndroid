@@ -3,6 +3,7 @@ package com.xhlab.test_shared
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
+import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.EU
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.NONE
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
@@ -89,6 +90,10 @@ object ProcessData {
         MachineRecipeViewImpl(17, true, 2000, EU.type, 30, 8, machineList[8].name, listOf(itemList[16], itemList[18], fluidList[13]), listOf(itemList[15], fluidList[2]))
     )
 
+    val supplierRecipeList = listOf(
+        SupplierRecipe(fluidList[1])
+    )
+
     val processGlass: Process
         get() = Process("process01", "Primitive glass forge", recipeList[6], itemList[9]).apply {
             connectRecipe(recipeList[5], recipeList[6], itemList[8])
@@ -123,6 +128,7 @@ object ProcessData {
             markNotConsumed(recipeList[12], itemList[17])
             markNotConsumed(recipeList[15], itemList[17])
             markNotConsumed(recipeList[17], itemList[18])
+            connectRecipe(supplierRecipeList[0], recipeList[7], fluidList[1])
         }
 
     val processList = listOf(processGlass, processPE)
@@ -216,6 +222,10 @@ object ProcessData {
                         )
                     )
                 )
+            ),
+            RecipeNode(
+                supplierRecipeList[0],
+                listOf()
             )
         )
     )

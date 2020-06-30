@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
+import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.ui.util.BindableViewHolder
@@ -132,8 +133,10 @@ class ProcessTreeAdapter(
 
         override fun bindNotNull(model: RecipeViewDegreeNode) {
             val recipe = model.node.recipe
-            if (recipe is MachineRecipeView) {
-                machineName.text = recipe.machineName
+            machineName.text = when (recipe) {
+                is MachineRecipeView -> recipe.machineName
+                is SupplierRecipe -> context.getString(R.string.txt_supplier)
+                else -> context.getString(R.string.txt_unnamed)
             }
 
             degree.text = context.formatString(R.string.form_degree, model.degree)

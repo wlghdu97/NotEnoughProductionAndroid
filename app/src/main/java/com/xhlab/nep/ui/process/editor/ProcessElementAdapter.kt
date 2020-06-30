@@ -13,6 +13,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
+import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
 import com.xhlab.nep.ui.util.BindableViewHolder
@@ -20,6 +21,7 @@ import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.layoutInflater
+import kotlin.math.min
 
 class ProcessElementAdapter(
     private val listener: ElementListener? = null
@@ -69,10 +71,10 @@ class ProcessElementAdapter(
 
     override fun getItemCount(): Int {
         return recipeNode?.let {
-            val inputSize = it.recipe.getInputs().size
-            val outputSize = it.recipe.getOutput().size
-            outputListSize = outputSize
-            inputSize + outputSize + 2
+            val inputListSize = it.recipe.getInputs().size
+            outputListSize = it.recipe.getOutput().size
+            // if input list is empty, hide input header
+            outputListSize + inputListSize + min(inputListSize, 1) + 1
         } ?: 0
     }
 
@@ -159,11 +161,15 @@ class ProcessElementAdapter(
                 }
             }
 
-            name.text = context.formatString(
-                R.string.form_item_with_amount,
-                model.amount,
+            name.text = if (recipeNode?.recipe is SupplierRecipe) {
                 model.localizedName
-            )
+            } else {
+                context.formatString(
+                    R.string.form_item_with_amount,
+                    model.amount,
+                    model.localizedName
+                )
+            }
         }
 
         private fun getColorStateList(@ColorRes color: Int): ColorStateList {

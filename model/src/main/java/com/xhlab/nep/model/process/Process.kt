@@ -153,7 +153,7 @@ open class Process(
     }
 
     fun getRecipeArray(): Array<Recipe> {
-        return vertices.toTypedArray()
+        return vertices.filterNot { it is SupplierRecipe }.toTypedArray()
     }
 
     fun getElementMap(): Map<String, Element> {
@@ -188,13 +188,18 @@ open class Process(
 
     fun getElementLeafKeyList(): List<String> {
         val keyMap = hashMapOf<String, Int>()
+        val whiteList = mutableSetOf<String>()
         for (vertex in vertices) {
-            for (input in vertex.getInputs()) {
-                val key = keyMap[input.unlocalizedName]
-                if (key == null) {
-                    keyMap[input.unlocalizedName] = 1
-                } else {
-                    keyMap[input.unlocalizedName] = key + 1
+            if (vertex is SupplierRecipe) {
+                whiteList.addAll(vertex.getOutput().map { it.unlocalizedName })
+            } else {
+                for (input in vertex.getInputs()) {
+                    val key = keyMap[input.unlocalizedName]
+                    if (key == null) {
+                        keyMap[input.unlocalizedName] = 1
+                    } else {
+                        keyMap[input.unlocalizedName] = key + 1
+                    }
                 }
             }
         }
@@ -206,11 +211,14 @@ open class Process(
                 }
             }
         }
+        for (key in whiteList) {
+            keyMap[key] = 1
+        }
         return keyMap.filter { it.value >= 1 }.keys.toList()
     }
 
     fun getRecipeNodeCount(): Int {
-        return vertices.size
+        return vertices.filterNot { it is SupplierRecipe }.size
     }
 
     fun getEdgesCount(): Int {

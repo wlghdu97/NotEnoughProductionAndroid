@@ -62,6 +62,7 @@
     <string name="txt_empty">Empty</string>
 
     <string name="txt_crafting_table">Crafting Table</string>
+    <string name="txt_supplier">Ingredient Supplier</string>
     <string name="txt_unknown_recipe">Unknown recipe</string>
 
     <string name="txt_db_not_loaded">

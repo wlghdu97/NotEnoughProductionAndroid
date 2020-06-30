@@ -12,7 +12,7 @@ class ProcessTest {
         assertEquals(7, ProcessData.processGlass.getEdgesCount())
 
         assertEquals(11, ProcessData.processPE.getRecipeNodeCount())
-        assertEquals(21, ProcessData.processPE.getEdgesCount())
+        assertEquals(22, ProcessData.processPE.getEdgesCount())
     }
 
     @Test
@@ -127,6 +127,7 @@ class ProcessTest {
         val processPEList = setOf(
             ProcessData.elementList[12],
             ProcessData.elementList[14],
+            ProcessData.elementList[20],
             ProcessData.elementList[31]
         ).map { it.unlocalizedName }.distinct()
         val processPELeafKeyList = ProcessData.processPE.getElementLeafKeyList()
