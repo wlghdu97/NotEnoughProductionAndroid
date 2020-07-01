@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
@@ -32,7 +33,7 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var recipeNode: RecipeNode? = null
     private var outputListSize = 0
 
-    private val elementList = arrayListOf<Element>()
+    private val elementList = arrayListOf<ElementConnection>()
 
     private var isIconVisible = false
     private var showConnection = true
@@ -40,14 +41,16 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layout = when (viewType) {
             0 -> R.layout.holder_process_element
-            1 -> R.layout.holder_recipe_node_element_header
+            1 -> R.layout.holder_process_element_multi
+            2 -> R.layout.holder_recipe_node_element_header
             else -> throw IllegalArgumentException()
         }
         val view = parent.context.layoutInflater.inflate(layout, parent, false)
-        return if (viewType == 0) {
-            ProcessElementViewHolder(view)
-        } else {
-            HeaderViewHolder(view)
+        return when (viewType) {
+            0 -> ProcessElementViewHolder(view)
+            1 -> ProcessElementMultiConnectionViewHolder(view)
+            2 -> HeaderViewHolder(view)
+            else -> throw IllegalArgumentException()
         }
     }
 
@@ -59,15 +62,23 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 false -> context.getString(R.string.txt_input)
             })
         } else {
-            val elementPosition = position - 1 - if (position > outputListSize) 1 else 0
-            (holder as ProcessElementViewHolder).bind(elementList[elementPosition])
+            val elementPosition = getElementPosition(position)
+            when (holder) {
+                is ProcessElementViewHolder ->
+                    holder.bind(elementList[elementPosition])
+                is ProcessElementMultiConnectionViewHolder ->
+                    holder.bind(elementList[elementPosition])
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return when (isHeaderPosition(position)) {
-            true -> 1
-            false -> 0
+            true -> 2
+            false -> when (elementList[getElementPosition(position)].connections.size == 1) {
+                true -> 0
+                false -> 1
+            }
         }
     }
 
@@ -81,9 +92,18 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     fun submitRecipeNode(process: Process?, node: RecipeNode) {
+        if (process == null) {
+            return
+        }
         this.process = process
         this.recipeNode = node
-        val newList = node.recipe.getOutput() + node.recipe.getInputs()
+        val elements = node.recipe.getOutput() + node.recipe.getInputs()
+        val newList = elements.map { ElementConnection(
+            amount = it.amount,
+            unlocalizedName = it.unlocalizedName,
+            localizedName = it.localizedName,
+            connections = process.getConnectionStatus(node.recipe, it))
+        }
         val callback = getDiffer(elementList, newList)
         val result = DiffUtil.calculateDiff(callback)
 
@@ -102,12 +122,50 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    private fun isHeaderPosition(position: Int) = (position == 0 || position == outputListSize + 1)
+    private fun isHeaderPosition(position: Int)
+            = (position == 0 || position == outputListSize + 1)
+
+    private fun getElementPosition(position: Int)
+            = position - 1 - if (position > outputListSize) 1 else 0
+
+    inner class ProcessElementMultiConnectionViewHolder(itemView: View)
+        : BindableViewHolder<ElementConnection>(itemView) {
+        private val connectionList: RecyclerView = itemView.findViewById(R.id.connection_list)
+        private val adapter = MultiConnectionAdapter()
+
+        init {
+            connectionList.adapter = adapter
+        }
+
+        override fun bindNotNull(model: ElementConnection) {
+            adapter.notifyDataSetChanged()
+        }
+
+        private inner class MultiConnectionAdapter
+            : RecyclerView.Adapter<ProcessElementViewHolder>() {
+
+            override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+            ): ProcessElementViewHolder {
+                val view = parent.context.layoutInflater
+                    .inflate(R.layout.holder_process_element, parent, false)
+                return ProcessElementViewHolder(view)
+            }
+
+            override fun onBindViewHolder(holder: ProcessElementViewHolder, position: Int) {
+                holder.bind(model)
+            }
+
+            override fun getItemCount() = model?.connections?.size ?: 0
+        }
+    }
 
     inner class ProcessElementViewHolder(itemView: View)
         : ElementViewHolder(itemView), PopupMenu.OnMenuItemClickListener {
         private val menuButton: ImageButton = itemView.findViewById(R.id.btn_menu)
-        private var connectionStatus = Process.ConnectionStatus.UNCONNECTED
+
+        private var connectionStatus = UNCONNECTED
 
         private val context: Context
             get() = itemView.context
@@ -125,11 +183,9 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun bindNotNull(model: Element) {
             super.bindNotNull(model)
 
-            val process = process
-            val recipeNode = recipeNode
-            connectionStatus = when (process != null && recipeNode != null) {
-                true -> process.getConnectionStatus(recipeNode.recipe, model)
-                false -> Process.ConnectionStatus.UNCONNECTED
+            connectionStatus = when (model is ElementConnection) {
+                true -> model.connections[min(adapterPosition, model.connections.size - 1)]
+                false -> UNCONNECTED
             }
 
             if (!showConnection && isIconVisible) {
@@ -140,35 +196,35 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 icon.scaleY = 1f
             } else {
                 when (connectionStatus) {
-                    Process.ConnectionStatus.CONNECTED_TO_CHILD -> {
+                    CONNECTED_TO_CHILD -> {
                         icon.imageResource = R.drawable.ic_power_24dp
                         icon.imageTintList = getColorStateList(R.color.colorPluggedToChild)
                         icon.rotation = 180f
                         icon.scaleX = 1f
                         icon.scaleY = 1f
                     }
-                    Process.ConnectionStatus.CONNECTED_TO_PARENT -> {
+                    CONNECTED_TO_PARENT -> {
                         icon.imageResource = R.drawable.ic_power_24dp
                         icon.imageTintList = getColorStateList(R.color.colorPluggedToParent)
                         icon.rotation = 0f
                         icon.scaleX = 1f
                         icon.scaleY = 1f
                     }
-                    Process.ConnectionStatus.UNCONNECTED -> {
+                    UNCONNECTED -> {
                         icon.imageResource = R.drawable.ic_outlet_24dp
                         icon.imageTintList = getColorStateList(R.color.colorUnplugged)
                         icon.rotation = 0f
                         icon.scaleX = 0.8f
                         icon.scaleY = 0.8f
                     }
-                    Process.ConnectionStatus.FINAL_OUTPUT -> {
+                    FINAL_OUTPUT -> {
                         icon.imageResource = R.drawable.ic_flag_24dp
                         icon.imageTintList = getColorStateList(R.color.colorFinalOutput)
                         icon.rotation = 0f
                         icon.scaleX = 1f
                         icon.scaleY = 1f
                     }
-                    Process.ConnectionStatus.NOT_CONSUMED -> {
+                    NOT_CONSUMED -> {
                         icon.imageResource = R.drawable.ic_power_off_24dp
                         icon.imageTintList = getColorStateList(R.color.colorInfinite)
                         icon.rotation = 180f
@@ -188,7 +244,7 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 )
             }
 
-            menuButton.isGone = connectionStatus == Process.ConnectionStatus.FINAL_OUTPUT
+            menuButton.isGone = connectionStatus == FINAL_OUTPUT
         }
 
         override fun onMenuItemClick(menuItem: MenuItem): Boolean {
@@ -211,9 +267,16 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
+    data class ElementConnection(
+        override val amount: Int,
+        override val localizedName: String,
+        override val unlocalizedName: String,
+        val connections: List<Process.ConnectionStatus>
+    ) : Element()
+
     private fun getDiffer(
-        oldList: List<Element>,
-        newList: List<Element>
+        oldList: List<ElementConnection>,
+        newList: List<ElementConnection>
     ): DiffUtil.Callback {
         return object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

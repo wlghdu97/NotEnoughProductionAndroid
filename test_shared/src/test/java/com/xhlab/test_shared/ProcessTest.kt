@@ -51,19 +51,19 @@ class ProcessTest {
         val processGlass = ProcessData.processGlass
         assertEquals(
             Process.ConnectionStatus.FINAL_OUTPUT,
-            processGlass.getConnectionStatus(processGlass.rootRecipe, processGlass.targetOutput)
+            processGlass.getConnectionStatus(processGlass.rootRecipe, processGlass.targetOutput)[0]
         )
         assertEquals(
             Process.ConnectionStatus.CONNECTED_TO_PARENT,
-            processGlass.getConnectionStatus(ProcessData.recipeList[3], ProcessData.itemList[5])
+            processGlass.getConnectionStatus(ProcessData.recipeList[3], ProcessData.itemList[5])[0]
         )
         assertEquals(
             Process.ConnectionStatus.CONNECTED_TO_CHILD,
-            processGlass.getConnectionStatus(ProcessData.recipeList[5], ProcessData.itemList[5])
+            processGlass.getConnectionStatus(ProcessData.recipeList[5], ProcessData.itemList[5])[0]
         )
         assertEquals(
             Process.ConnectionStatus.UNCONNECTED,
-            processGlass.getConnectionStatus(ProcessData.recipeList[0], ProcessData.itemList[0])
+            processGlass.getConnectionStatus(ProcessData.recipeList[0], ProcessData.itemList[0])[0]
         )
     }
 
@@ -72,11 +72,11 @@ class ProcessTest {
         val processPE = ProcessData.processPE
         assertEquals(
             Process.ConnectionStatus.CONNECTED_TO_CHILD,
-            processPE.getConnectionStatus(ProcessData.recipeList[7], ProcessData.itemList[16])
+            processPE.getConnectionStatus(ProcessData.recipeList[7], ProcessData.itemList[16])[0]
         )
         assertEquals(
             Process.ConnectionStatus.CONNECTED_TO_PARENT,
-            processPE.getConnectionStatus(ProcessData.recipeList[9], ProcessData.itemList[16])
+            processPE.getConnectionStatus(ProcessData.recipeList[9], ProcessData.itemList[16])[0]
         )
     }
 
