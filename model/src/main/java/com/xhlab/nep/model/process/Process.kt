@@ -17,7 +17,7 @@ open class Process(
         connectRecipe(rootRecipe, null, targetOutput)
     }
 
-    fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false) {
+    fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false): Boolean {
 
         fun addRecipeNode(recipe: Recipe) {
             if (vertices.indexOf(recipe) == -1) {
@@ -26,12 +26,21 @@ open class Process(
             }
         }
 
+        fun checkConnection(input: Recipe, output: Recipe, key: String): Boolean {
+            return (input.getInputs().find { it.unlocalizedName == key } != null &&
+                    output.getOutput().find { it.unlocalizedName == key } != null)
+        }
+
         addRecipeNode(from)
-        if (to != null) {
+        return if (to != null) {
             val key = element.unlocalizedName
-            checkConnection(to, from, key)
+            if (checkConnection(from, to, key)) {
+                return false
+            }
             addRecipeNode(to)
             edges[vertices.indexOf(to)].add(Edge(vertices.indexOf(from), key, reversed))
+        } else {
+            false
         }
     }
 
