@@ -33,6 +33,10 @@ class GeneralSharedPreference @Inject constructor(
     override val isDarkTheme: LiveData<Boolean?>
         get() = _isDarkTheme
 
+    private val _showDisconnectionAlert = MutableLiveData<Boolean>(getShowDisconnectionAlert())
+    override val showDisconnectionAlert: LiveData<Boolean>
+        get() = _showDisconnectionAlert
+
     override fun getFirstDBLoad(): Boolean {
         return preference.getBoolean(app.getString(R.string.key_db_first_load), true)
     }
@@ -47,6 +51,10 @@ class GeneralSharedPreference @Inject constructor(
 
     override fun getDarkTheme(): Boolean {
         return preference.getBoolean(app.getString(R.string.key_theme), false)
+    }
+
+    override fun getShowDisconnectionAlert(): Boolean {
+        return preference.getBoolean(app.getString(R.string.key_show_disconnection_alert), true)
     }
 
     override fun setDBLoaded(value: Boolean) {
@@ -67,6 +75,11 @@ class GeneralSharedPreference @Inject constructor(
         _isDarkTheme.postValue(value)
     }
 
+    override fun setShowDisconnectionAlert(value: Boolean) {
+        preference.edit().putBoolean(app.getString(R.string.key_show_disconnection_alert), value).apply()
+        _showDisconnectionAlert.postValue(value)
+    }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
             app.getString(R.string.key_db_first_load) ->
@@ -77,6 +90,8 @@ class GeneralSharedPreference @Inject constructor(
                 _isIconLoaded.value = getIconLoaded()
             app.getString(R.string.key_theme) ->
                 _isDarkTheme.value = getDarkTheme()
+            app.getString(R.string.key_show_disconnection_alert) ->
+                _showDisconnectionAlert.value = getShowDisconnectionAlert()
         }
     }
 }

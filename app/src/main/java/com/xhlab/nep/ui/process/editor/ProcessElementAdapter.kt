@@ -27,9 +27,10 @@ import org.jetbrains.anko.imageResource
 import org.jetbrains.anko.layoutInflater
 import kotlin.math.min
 
-class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ProcessElementAdapter(
+    private val processEditListener: ProcessEditListener? = null
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var process: Process? = null
     private var recipeNode: RecipeNode? = null
     private var outputListSize = 0
 
@@ -91,24 +92,13 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         } ?: 0
     }
 
-    fun submitRecipeNode(process: Process?, node: RecipeNode) {
-        if (process == null) {
-            return
-        }
-        this.process = process
+    fun submitConnectionList(node: RecipeNode, list: List<ElementConnection>) {
         this.recipeNode = node
-        val elements = node.recipe.getOutput() + node.recipe.getInputs()
-        val newList = elements.map { ElementConnection(
-            amount = it.amount,
-            unlocalizedName = it.unlocalizedName,
-            localizedName = it.localizedName,
-            connections = process.getConnectionStatus(node.recipe, it))
-        }
-        val callback = getDiffer(elementList, newList)
+        val callback = getDiffer(elementList, list)
         val result = DiffUtil.calculateDiff(callback)
 
         elementList.clear()
-        elementList.addAll(newList)
+        elementList.addAll(list)
         result.dispatchUpdatesTo(this)
     }
 
@@ -165,18 +155,25 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         : ElementViewHolder(itemView), PopupMenu.OnMenuItemClickListener {
         private val menuButton: ImageButton = itemView.findViewById(R.id.btn_menu)
 
-        private var connectionStatus = UNCONNECTED
+        private var connectionStatus = Process.Connection(UNCONNECTED, null)
+        private val popupMenu = PopupMenu(context, menuButton)
+        private val disconnect: MenuItem
+        private val connectToParent: MenuItem
+        private val connectToChild: MenuItem
 
         private val context: Context
             get() = itemView.context
 
         init {
-            menuButton.setOnClickListener { view ->
-                PopupMenu(context, view).apply {
-                    setOnMenuItemClickListener(this@ProcessElementViewHolder)
-                    inflate(R.menu.process_element_edit)
-                    show()
-                }
+            with (popupMenu) {
+                setOnMenuItemClickListener(this@ProcessElementViewHolder)
+                inflate(R.menu.process_element_edit)
+                disconnect = menu.findItem(R.id.menu_disconnect)
+                connectToParent = menu.findItem(R.id.menu_connect_to_parent)
+                connectToChild = menu.findItem(R.id.menu_connect_to_child)
+            }
+            menuButton.setOnClickListener {
+                popupMenu.show()
             }
         }
 
@@ -185,7 +182,7 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             connectionStatus = when (model is ElementConnection) {
                 true -> model.connections[min(adapterPosition, model.connections.size - 1)]
-                false -> UNCONNECTED
+                false -> Process.Connection(UNCONNECTED, null)
             }
 
             if (!showConnection && isIconVisible) {
@@ -195,7 +192,7 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 icon.scaleX = 1f
                 icon.scaleY = 1f
             } else {
-                when (connectionStatus) {
+                when (connectionStatus.status) {
                     CONNECTED_TO_CHILD -> {
                         icon.imageResource = R.drawable.ic_power_24dp
                         icon.imageTintList = getColorStateList(R.color.colorPluggedToChild)
@@ -244,14 +241,31 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 )
             }
 
-            menuButton.isGone = connectionStatus == FINAL_OUTPUT
+            connectionStatus.status.let {
+                menuButton.isGone = it == FINAL_OUTPUT
+                disconnect.isVisible = (it == CONNECTED_TO_PARENT || it == CONNECTED_TO_CHILD)
+                connectToParent.isVisible = false
+                connectToChild.isVisible = false
+            }
         }
 
         override fun onMenuItemClick(menuItem: MenuItem): Boolean {
-            when (menuItem.itemId) {
-
+            val to = recipeNode?.recipe
+            val element = model
+            return if (to != null && element != null) {
+                when (menuItem.itemId) {
+                    R.id.menu_disconnect -> {
+                        val from = connectionStatus.connectedRecipe
+                        val reversed = connectionStatus.reversed
+                        if (from != null) {
+                            processEditListener?.onDisconnect(from, to, element, reversed)
+                        }
+                    }
+                }
+                true
+            } else {
+                false
             }
-            return false
         }
 
         private fun getColorStateList(@ColorRes color: Int): ColorStateList {
@@ -271,7 +285,7 @@ class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override val amount: Int,
         override val localizedName: String,
         override val unlocalizedName: String,
-        val connections: List<Process.ConnectionStatus>
+        val connections: List<Process.Connection>
     ) : Element()
 
     private fun getDiffer(

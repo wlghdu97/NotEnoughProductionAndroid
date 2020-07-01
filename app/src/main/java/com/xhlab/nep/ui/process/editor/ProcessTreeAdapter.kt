@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
+import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.process.SupplierRecipe
@@ -23,14 +24,15 @@ import java.util.*
 import kotlin.math.min
 
 class ProcessTreeAdapter(
-    private val treeListener: ProcessTreeListener? = null
+    private val treeListener: ProcessTreeListener? = null,
+    private val processEditListener: ProcessEditListener? = null
 ) : RecyclerView.Adapter<ProcessTreeAdapter.TreeViewHolder>() {
 
     private var process: Process? = null
     private var root: RecipeNode? = null
 
     private val visibleList = arrayListOf<RecipeViewDegreeNode>()
-    private val expandedNodes = mutableSetOf<RecipeNode>()
+    private val expandedNodes = mutableSetOf<Recipe>()
 
     private var isIconVisible = false
     private var showConnection = true
@@ -88,10 +90,19 @@ class ProcessTreeAdapter(
         node: RecipeNode,
         list: ArrayList<RecipeViewDegreeNode>
     ) {
-        if (prevNode == null || expandedNodes.contains(prevNode)) {
-            list.add(RecipeViewDegreeNode(degree, node))
+        if (prevNode == null || expandedNodes.contains(prevNode.recipe)) {
+            val elements = node.recipe.getOutput() + node.recipe.getInputs()
+            val connectionList = elements.map {
+                ProcessElementAdapter.ElementConnection(
+                    amount = it.amount,
+                    unlocalizedName = it.unlocalizedName,
+                    localizedName = it.localizedName,
+                    connections = process!!.getConnectionStatus(node.recipe, it)
+                )
+            }
+            list.add(RecipeViewDegreeNode(degree, node, connectionList))
         } else {
-            expandedNodes.remove(node)
+            expandedNodes.remove(node.recipe)
         }
         for (child in node.childNodes) {
             preOrderTraverse(degree + 1, node, child, list)
@@ -107,7 +118,7 @@ class ProcessTreeAdapter(
         private val properties: TextView = itemView.findViewById(R.id.recipe_properties)
         private val elementList: RecyclerView = itemView.findViewById(R.id.element_list)
 
-        private val elementListAdapter = ProcessElementAdapter()
+        private val elementListAdapter = ProcessElementAdapter(processEditListener)
 
         private val context: Context
             get() = itemView.context
@@ -115,11 +126,11 @@ class ProcessTreeAdapter(
         init {
             header.setOnClickListener {
                 model?.let {
-                    if (expandedNodes.contains(it.node)) {
-                        expandedNodes.remove(it.node)
+                    if (expandedNodes.contains(it.node.recipe)) {
+                        expandedNodes.remove(it.node.recipe)
                         chevron.animate().rotation(90f)
                     } else {
-                        expandedNodes.add(it.node)
+                        expandedNodes.add(it.node.recipe)
                         chevron.animate().rotation(270f)
 
                         val position = adapterPosition + it.node.childNodes.size
@@ -142,7 +153,7 @@ class ProcessTreeAdapter(
             degree.text = context.formatString(R.string.form_degree, model.degree)
 
             chevron.isGone = model.node.childNodes.isEmpty()
-            if (!expandedNodes.contains(model.node)) {
+            if (!expandedNodes.contains(model.node.recipe)) {
                 chevron.rotation = 90f
             } else {
                 chevron.rotation = 270f
@@ -171,7 +182,7 @@ class ProcessTreeAdapter(
             }
 
             with (elementListAdapter) {
-                submitRecipeNode(process, model.node)
+                submitConnectionList(model.node, model.connectionList)
                 setIconVisible(isIconVisible)
                 setShowConnection(showConnection)
             }
@@ -197,7 +208,7 @@ class ProcessTreeAdapter(
     ): DiffUtil.Callback {
         return object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-                return oldList[oldItemPosition].node.recipe == newList[newItemPosition].node.recipe
+                return oldList[oldItemPosition].node == newList[newItemPosition].node
             }
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -214,7 +225,11 @@ class ProcessTreeAdapter(
         }
     }
 
-    data class RecipeViewDegreeNode(val degree: Int, val node: RecipeNode)
+    data class RecipeViewDegreeNode(
+        val degree: Int,
+        val node: RecipeNode,
+        val connectionList: List<ProcessElementAdapter.ElementConnection>
+    )
 
     interface ProcessTreeListener {
         fun onProcessTreeExpanded(position: Int)

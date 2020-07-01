@@ -16,4 +16,6 @@
 
     <string name="key_icon_category">icon_category</string>
     <string name="key_icon_status">icon_load_status</string>
+
+    <string name="key_show_disconnection_alert">show_disconnection_alert</string>
 </resources>
