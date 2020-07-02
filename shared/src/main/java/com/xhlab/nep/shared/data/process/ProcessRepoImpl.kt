@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import androidx.paging.PositionalDataSource
+import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
 import javax.inject.Inject
 
@@ -15,6 +17,35 @@ internal class ProcessRepoImpl @Inject constructor() : ProcessRepo {
 
     override fun getProcesses(): DataSource.Factory<Int, Process> {
         return ListDataSource(emptyList())
+    }
+
+    override fun connectRecipe(
+        processId: String,
+        from: Recipe,
+        to: Recipe,
+        element: Element,
+        reversed: Boolean
+    ) {
+        TODO("not implemented")
+    }
+
+    override fun disconnectRecipe(
+        processId: String,
+        from: Recipe,
+        to: Recipe,
+        element: Element,
+        reversed: Boolean
+    ) {
+        TODO("not implemented")
+    }
+
+    override fun markNotConsumed(
+        processId: String,
+        recipe: Recipe,
+        element: Element,
+        consumed: Boolean
+    ) {
+        TODO("not implemented")
     }
 
     // TODO temporary pasted

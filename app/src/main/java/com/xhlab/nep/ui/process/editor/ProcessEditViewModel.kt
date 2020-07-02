@@ -1,29 +1,28 @@
 package com.xhlab.nep.ui.process.editor
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ProcessCalculationNavigationUseCase
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
+import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import javax.inject.Inject
 
 class ProcessEditViewModel @Inject constructor(
+    private val processRepo: ProcessRepo,
     private val loadProcessUseCase: LoadProcessUseCase,
     private val calculationNavigationUseCase: ProcessCalculationNavigationUseCase,
     private val generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ProcessEditListener {
 
-    private val _process = MediatorLiveData<Process>()
-    val process: LiveData<Process>
-        get() = _process
+    val process = loadProcessUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded
 
@@ -37,12 +36,6 @@ class ProcessEditViewModel @Inject constructor(
 
     private var disconnectionPayload: DisconnectionPayload? = null
 
-    init {
-        _process.addSource(loadProcessUseCase.observe()) {
-            _process.postValue(it.data)
-        }
-    }
-
     fun init(processId: String?) {
         if (processId == null) {
             throw NullPointerException("process id is null.")
@@ -53,9 +46,8 @@ class ProcessEditViewModel @Inject constructor(
         )
     }
 
-    fun toggleIconMode() {
-        _iconMode.postValue(_iconMode.value != true)
-    }
+    private fun requireProcessId()
+            = process.value?.id ?: throw NullPointerException("process id is null.")
 
     override fun onDisconnect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         if (generalPreference.getShowDisconnectionAlert()) {
@@ -67,11 +59,15 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
-        val currentProcess = process.value
-        if (currentProcess != null) {
-            val result = currentProcess.markNotConsumed(recipe, element, consumed)
-            if (result) {
-                _process.postValue(currentProcess)
+        launchSuspendFunction {
+            processRepo.markNotConsumed(requireProcessId(), recipe, element, consumed)
+        }
+    }
+
+    private fun disconnect(payload: DisconnectionPayload?) {
+        launchSuspendFunction {
+            if (payload != null) with (payload) {
+                processRepo.disconnectRecipe(requireProcessId(), from, to, element, reversed)
             }
         }
     }
@@ -83,16 +79,8 @@ class ProcessEditViewModel @Inject constructor(
         disconnect(disconnectionPayload)
     }
 
-    private fun disconnect(payload: DisconnectionPayload?) {
-        val currentProcess = process.value
-        if (currentProcess != null && payload != null) {
-            with (payload) {
-                val result = currentProcess.disconnectRecipe(from, to, element, reversed)
-                if (result) {
-                    _process.postValue(currentProcess)
-                }
-            }
-        }
+    fun toggleIconMode() {
+        _iconMode.postValue(_iconMode.value != true)
     }
 
     fun navigateToCalculation() {

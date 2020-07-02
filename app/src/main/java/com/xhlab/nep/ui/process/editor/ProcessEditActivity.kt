@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_process_edit.*
@@ -69,7 +70,7 @@ class ProcessEditActivity :
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(intent?.getStringExtra(PROCESS_ID))
 
-        viewModel.process.observe(this) {
+        viewModel.process.observeNotNull(this) {
             supportActionBar?.subtitle = it.name
             processTreeAdapter.submitProcess(it)
         }
