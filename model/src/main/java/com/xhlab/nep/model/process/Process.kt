@@ -71,7 +71,11 @@ open class Process(
             return false
         }
         val connections = getConnectionStatus(recipe, element)
-        return if (connections.size == 1 && connections[0].status == UNCONNECTED) {
+        val status = when (consumed) {
+            true -> NOT_CONSUMED
+            false -> UNCONNECTED
+        }
+        return if (connections.size == 1 && connections[0].status == status) {
             val input = recipe.getInputs().find { it.unlocalizedName == element.unlocalizedName }
             if (input == null) {
                 false

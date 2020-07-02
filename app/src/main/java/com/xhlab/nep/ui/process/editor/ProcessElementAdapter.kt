@@ -160,6 +160,7 @@ class ProcessElementAdapter(
         private val disconnect: MenuItem
         private val connectToParent: MenuItem
         private val connectToChild: MenuItem
+        private val markNotConsumed: MenuItem
 
         private val context: Context
             get() = itemView.context
@@ -171,6 +172,7 @@ class ProcessElementAdapter(
                 disconnect = menu.findItem(R.id.menu_disconnect)
                 connectToParent = menu.findItem(R.id.menu_connect_to_parent)
                 connectToChild = menu.findItem(R.id.menu_connect_to_child)
+                markNotConsumed = menu.findItem(R.id.menu_mark_not_consumed)
             }
             menuButton.setOnClickListener {
                 popupMenu.show()
@@ -242,10 +244,15 @@ class ProcessElementAdapter(
             }
 
             connectionStatus.status.let {
-                menuButton.isGone = it == FINAL_OUTPUT
+                menuButton.isGone = (it == FINAL_OUTPUT)
                 disconnect.isVisible = (it == CONNECTED_TO_PARENT || it == CONNECTED_TO_CHILD)
                 connectToParent.isVisible = false
                 connectToChild.isVisible = false
+                markNotConsumed.isVisible = (it == UNCONNECTED || it == NOT_CONSUMED)
+                markNotConsumed.setTitle(when (it == UNCONNECTED) {
+                    true -> R.string.menu_mark_not_consumed
+                    false -> R.string.menu_mark_consumed
+                })
             }
         }
 
@@ -260,6 +267,10 @@ class ProcessElementAdapter(
                         if (from != null) {
                             processEditListener?.onDisconnect(from, to, element, reversed)
                         }
+                    }
+                    R.id.menu_mark_not_consumed -> {
+                        val consume = connectionStatus.status == NOT_CONSUMED
+                        processEditListener?.onMarkNotConsumed(to, element, consume)
                     }
                 }
                 true

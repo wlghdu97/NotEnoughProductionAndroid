@@ -9,4 +9,7 @@
     <item
         android:id="@+id/menu_connect_to_child"
         android:title="@string/menu_connect_to_child"/>
+    <item
+        android:id="@+id/menu_mark_not_consumed"
+        android:title="@string/menu_mark_not_consumed"/>
 </menu>

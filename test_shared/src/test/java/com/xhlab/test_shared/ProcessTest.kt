@@ -86,6 +86,21 @@ class ProcessTest {
     }
 
     @Test
+    fun processMarkNotConsumed() {
+        val processPE = ProcessData.processPE
+        processPE.markNotConsumed(ProcessData.recipeList[7], ProcessData.itemList[17], true)
+        assertEquals(
+            Process.ConnectionStatus.UNCONNECTED,
+            processPE.getConnectionStatus(ProcessData.recipeList[7], ProcessData.itemList[17])[0].status
+        )
+        processPE.markNotConsumed(ProcessData.recipeList[7], ProcessData.itemList[17])
+        assertEquals(
+            Process.ConnectionStatus.NOT_CONSUMED,
+            processPE.getConnectionStatus(ProcessData.recipeList[7], ProcessData.itemList[17])[0].status
+        )
+    }
+
+    @Test
     fun processElementMap() {
         val processGlassMap = ProcessData.elementList.subList(0, 10)
             .distinctBy { it.unlocalizedName }

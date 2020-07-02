@@ -66,6 +66,16 @@ class ProcessEditViewModel @Inject constructor(
         }
     }
 
+    override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
+        val currentProcess = process.value
+        if (currentProcess != null) {
+            val result = currentProcess.markNotConsumed(recipe, element, consumed)
+            if (result) {
+                _process.postValue(currentProcess)
+            }
+        }
+    }
+
     fun disconnect(disableAlert: Boolean) {
         if (disableAlert) {
             generalPreference.setShowDisconnectionAlert(false)

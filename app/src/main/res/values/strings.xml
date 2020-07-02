@@ -34,7 +34,7 @@
     <string name="menu_connect_to_child">Connect to child</string>
     <string name="menu_attach_supplier">Attach supplier</string>
     <string name="menu_mark_not_consumed">Mark not consumed</string>
-    <string name="menu_remove_mark">Remove mark</string>
+    <string name="menu_mark_consumed">Mark consumed</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
