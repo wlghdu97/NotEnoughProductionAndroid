@@ -1,7 +1,5 @@
 package com.xhlab.nep.model
 
-import com.xhlab.nep.model.Element
-
 abstract class ElementView : Element() {
     abstract val id: Long
     abstract override val unlocalizedName: String
