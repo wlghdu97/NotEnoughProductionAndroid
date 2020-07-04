@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class ProcessEditActivity :
     DaggerAppCompatActivity(),
-    ProcessTreeAdapter.ProcessTreeListener,
+    RecipeTreeAdapter.ProcessTreeListener,
     ViewInit
 {
     @Inject
@@ -31,7 +31,7 @@ class ProcessEditActivity :
 
     private lateinit var viewModel: ProcessEditViewModel
 
-    private val processTreeAdapter by lazy { ProcessTreeAdapter(this, viewModel) }
+    private val processTreeAdapter by lazy { RecipeTreeAdapter(this, viewModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +84,11 @@ class ProcessEditActivity :
         }
 
         viewModel.showDisconnectionAlert.observe(this) {
-            showDisconnectionAlert()
+            showDisconnectionAlert(it)
+        }
+
+        viewModel.connectRecipe.observe(this) {
+            showConnectionSelectionAlert(it)
         }
     }
 
@@ -110,7 +114,7 @@ class ProcessEditActivity :
     }
 
     @SuppressLint("InflateParams")
-    private fun showDisconnectionAlert() {
+    private fun showDisconnectionAlert(payload: ProcessEditViewModel.DisconnectionPayload) {
         val view = layoutInflater.inflate(R.layout.layout_disconnection_alert, null)
         val checkbox = view.findViewById<CheckBox>(R.id.checkbox)
         MaterialAlertDialogBuilder(this)
@@ -118,9 +122,20 @@ class ProcessEditActivity :
             .setMessage(R.string.txt_disconnect_recipe)
             .setView(view)
             .setPositiveButton(R.string.btn_ok) { _, _ ->
-                viewModel.disconnect(checkbox.isChecked)
+                viewModel.disconnect(payload, checkbox.isChecked)
             }
             .setNegativeButton(R.string.btn_cancel, null)
+            .show()
+    }
+
+    private fun showConnectionSelectionAlert(constraint: ProcessEditViewModel.ConnectionConstraint) {
+        MaterialAlertDialogBuilder(this)
+            .setItems(R.array.connection_selection) { _, index ->
+                when (index) {
+                    0 -> viewModel.navigateToInternalRecipeSelection(constraint)
+                    1 -> Unit
+                }
+            }
             .show()
     }
 

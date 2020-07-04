@@ -30,11 +30,13 @@ class ProcessEditViewModel @Inject constructor(
     val iconMode: LiveData<Boolean>
         get() = _iconMode
 
-    private val _showDisconnectionAlert = LiveEvent<Unit>()
-    val showDisconnectionAlert: LiveData<Unit>
+    private val _showDisconnectionAlert = LiveEvent<DisconnectionPayload>()
+    val showDisconnectionAlert: LiveData<DisconnectionPayload>
         get() = _showDisconnectionAlert
 
-    private var disconnectionPayload: DisconnectionPayload? = null
+    private val _connectRecipe = LiveEvent<ConnectionConstraint>()
+    val connectRecipe: LiveData<ConnectionConstraint>
+        get() = _connectRecipe
 
     fun init(processId: String?) {
         if (processId == null) {
@@ -51,11 +53,18 @@ class ProcessEditViewModel @Inject constructor(
 
     override fun onDisconnect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         if (generalPreference.getShowDisconnectionAlert()) {
-            disconnectionPayload = DisconnectionPayload(from, to, element, reversed)
-            _showDisconnectionAlert.postValue(Unit)
+            _showDisconnectionAlert.postValue(DisconnectionPayload(from, to, element, reversed))
         } else {
             disconnect(DisconnectionPayload(from, to, element, reversed))
         }
+    }
+
+    override fun onConnectToParent(recipe: Recipe, degree: Int, elementKey: String) {
+        _connectRecipe.postValue(ConnectionConstraint(true, recipe, degree, elementKey))
+    }
+
+    override fun onConnectToChild(recipe: Recipe, degree: Int, elementKey: String) {
+        _connectRecipe.postValue(ConnectionConstraint(false, recipe, degree, elementKey))
     }
 
     override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
@@ -64,36 +73,44 @@ class ProcessEditViewModel @Inject constructor(
         }
     }
 
-    private fun disconnect(payload: DisconnectionPayload?) {
+    private fun disconnect(payload: DisconnectionPayload) {
         launchSuspendFunction {
-            if (payload != null) with (payload) {
+            with (payload) {
                 processRepo.disconnectRecipe(requireProcessId(), from, to, element, reversed)
             }
         }
     }
 
-    fun disconnect(disableAlert: Boolean) {
+    fun disconnect(payload: DisconnectionPayload, disableAlert: Boolean) {
         if (disableAlert) {
             generalPreference.setShowDisconnectionAlert(false)
         }
-        disconnect(disconnectionPayload)
+        disconnect(payload)
     }
 
     fun toggleIconMode() {
         _iconMode.postValue(_iconMode.value != true)
     }
 
-    fun navigateToCalculation() {
-        val processId = process.value?.id
-        if (processId != null) {
-            invokeUseCase(
-                useCase = calculationNavigationUseCase,
-                params = ProcessCalculationNavigationUseCase.Parameter(processId)
-            )
-        }
+    fun navigateToInternalRecipeSelection(constraint: ConnectionConstraint) {
+
     }
 
-    private data class DisconnectionPayload(
+    fun navigateToCalculation() {
+        invokeUseCase(
+            useCase = calculationNavigationUseCase,
+            params = ProcessCalculationNavigationUseCase.Parameter(requireProcessId())
+        )
+    }
+
+    data class ConnectionConstraint(
+        val connectToParent: Boolean,
+        val recipe: Recipe,
+        val degree: Int,
+        val elementKey: String
+    )
+
+    data class DisconnectionPayload(
         val from: Recipe,
         val to: Recipe,
         val element: Element,

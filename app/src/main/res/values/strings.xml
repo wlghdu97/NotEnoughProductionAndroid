@@ -35,6 +35,8 @@
     <string name="menu_attach_supplier">Attach supplier</string>
     <string name="menu_mark_not_consumed">Mark not consumed</string>
     <string name="menu_mark_consumed">Mark consumed</string>
+    <string name="menu_connect_to_existing">Connect to existing</string>
+    <string name="menu_connect_to_new_recipe">Connect to new recipe</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>

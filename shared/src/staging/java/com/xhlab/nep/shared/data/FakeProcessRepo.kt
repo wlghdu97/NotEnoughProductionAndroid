@@ -31,7 +31,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
     override fun connectRecipe(
         processId: String,
         from: Recipe,
-        to: Recipe,
+        to: Recipe?,
         element: Element,
         reversed: Boolean
     ) {
