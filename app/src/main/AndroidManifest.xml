@@ -47,7 +47,7 @@
 
         <activity
             android:name=".ui.process.editor.selection.internal.InternalRecipeSelectionActivity"
-            android:parentActivityName=".ui.main.MainActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
             android:launchMode="singleTop"/>
 
         <activity
