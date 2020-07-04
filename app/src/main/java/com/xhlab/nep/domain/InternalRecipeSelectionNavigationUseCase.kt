@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.Intent
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.domain.UseCase
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity.Companion.CONNECT_TO_PARENT
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity.Companion.ELEMENT_KEY
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity.Companion.PROCESS_ID
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity.Companion.RECIPE_DEGREE
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity.Companion.RECIPE
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.CONNECT_TO_PARENT
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.ELEMENT_KEY
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.PROCESS_ID
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.RECIPE_DEGREE
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.RECIPE
 import javax.inject.Inject
 
 class InternalRecipeSelectionNavigationUseCase @Inject constructor(

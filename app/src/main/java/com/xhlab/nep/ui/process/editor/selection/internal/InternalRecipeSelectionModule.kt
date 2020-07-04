@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.process.editor.selection
+package com.xhlab.nep.ui.process.editor.selection.internal
 
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey

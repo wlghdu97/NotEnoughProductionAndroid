@@ -10,8 +10,8 @@ import com.xhlab.nep.ui.process.editor.ProcessEditActivity
 import com.xhlab.nep.ui.process.editor.ProcessEditModule
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationActivity
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationModule
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity
-import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionModule
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionModule
 import com.xhlab.nep.ui.recipe.MachineRecipeListActivity
 import com.xhlab.nep.ui.recipe.MachineRecipeListModule
 import dagger.Module

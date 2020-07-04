@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.process.editor.selection
+package com.xhlab.nep.ui.process.editor.selection.internal
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +13,7 @@ import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.ui.process.editor.selection.RecipeSelectionListener
 import javax.inject.Inject
 
 class InternalRecipeSelectionViewModel @Inject constructor(
