@@ -39,7 +39,12 @@ open class Process(
                 throw IllegalArgumentException("connection cannot be established.")
             }
             addRecipeNode(to)
-            edges[vertices.indexOf(to)].add(Edge(vertices.indexOf(from), key, reversed))
+            val edges = edges[vertices.indexOf(to)]
+            val edge = Edge(vertices.indexOf(from), key, reversed)
+            when (!edges.contains(edge)) {
+                true -> edges.add(edge)
+                false -> false
+            }
         } else {
             false
         }
@@ -141,6 +146,10 @@ open class Process(
             }
         }
         return RecipeNode(vertices[vertex], childNodes)
+    }
+
+    fun isRecipeConnected(from: Recipe, to: Recipe, key: String, reversed: Boolean): Boolean {
+        return edges[vertices.indexOf(to)].contains(Edge(vertices.indexOf(from), key, reversed))
     }
 
     fun getConnectionStatus(recipe: Recipe, key: Element): List<Connection> {

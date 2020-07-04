@@ -46,12 +46,20 @@ class RecipeSelectionAdapter(
                         true -> degree < constraint.degree
                         false -> degree > constraint.degree
                     }
-                    val isNodeVisible = if (isNodeInDegree) {
-                        getKeyElement(node, constraint, reversed) != null
-                    } else {
-                        false
+                    val isNodeVisible = when (isNodeInDegree) {
+                        true -> getKeyElement(node, constraint, reversed) != null
+                        false -> false
                     }
-                    if (isNodeVisible) {
+                    val isRecipeConnected = when (isNodeVisible) {
+                        true -> {
+                            val from = constraint.recipe
+                            val to = node.recipe
+                            val key = constraint.elementKey
+                            process!!.isRecipeConnected(from, to, key, reversed)
+                        }
+                        false -> false
+                    }
+                    if (isNodeVisible && !isRecipeConnected) {
                         list.add(node.toDegreeNode(process!!, degree))
                     }
                     queue.addAll(node.childNodes.map { degree + 1 to it })
