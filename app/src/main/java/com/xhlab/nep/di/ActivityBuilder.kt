@@ -10,6 +10,8 @@ import com.xhlab.nep.ui.process.editor.ProcessEditActivity
 import com.xhlab.nep.ui.process.editor.ProcessEditModule
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationActivity
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationModule
+import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionActivity
+import com.xhlab.nep.ui.process.editor.selection.InternalRecipeSelectionModule
 import com.xhlab.nep.ui.recipe.MachineRecipeListActivity
 import com.xhlab.nep.ui.recipe.MachineRecipeListModule
 import dagger.Module
@@ -32,6 +34,9 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = [ProcessEditModule::class])
     abstract fun provideProcessEditActivity(): ProcessEditActivity
+
+    @ContributesAndroidInjector(modules = [InternalRecipeSelectionModule::class])
+    abstract fun provideInternalRecipeSelectionActivity(): InternalRecipeSelectionActivity
 
     @ContributesAndroidInjector(modules = [ProcessCalculationModule::class])
     abstract fun provideProcessCalculationActivity(): ProcessCalculationActivity

@@ -40,6 +40,8 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
             val result = it.connectRecipe(from, to, element, reversed)
             if (result) {
                 process.postValue(it)
+            } else {
+                throw RuntimeException("failed to connect recipe")
             }
         }
     }

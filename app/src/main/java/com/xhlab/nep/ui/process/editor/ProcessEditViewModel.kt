@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
+import com.xhlab.nep.domain.InternalRecipeSelectionNavigationUseCase
 import com.xhlab.nep.domain.ProcessCalculationNavigationUseCase
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class ProcessEditViewModel @Inject constructor(
     private val processRepo: ProcessRepo,
     private val loadProcessUseCase: LoadProcessUseCase,
+    private val internalRecipeSelectionNavigationUseCase: InternalRecipeSelectionNavigationUseCase,
     private val calculationNavigationUseCase: ProcessCalculationNavigationUseCase,
     private val generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ProcessEditListener {
@@ -93,7 +95,16 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     fun navigateToInternalRecipeSelection(constraint: ConnectionConstraint) {
-
+        invokeUseCase(
+            useCase = internalRecipeSelectionNavigationUseCase,
+            params = InternalRecipeSelectionNavigationUseCase.Parameters(
+                processId = requireProcessId(),
+                connectToParent = constraint.connectToParent,
+                recipe = constraint.recipe,
+                degree = constraint.degree,
+                elementKey = constraint.elementKey
+            )
+        )
     }
 
     fun navigateToCalculation() {

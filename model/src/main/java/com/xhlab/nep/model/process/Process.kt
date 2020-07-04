@@ -36,7 +36,7 @@ open class Process(
         return if (to != null) {
             val key = element.unlocalizedName
             if (checkConnection(from, to, key)) {
-                return false
+                throw IllegalArgumentException("connection cannot be established.")
             }
             addRecipeNode(to)
             edges[vertices.indexOf(to)].add(Edge(vertices.indexOf(from), key, reversed))
