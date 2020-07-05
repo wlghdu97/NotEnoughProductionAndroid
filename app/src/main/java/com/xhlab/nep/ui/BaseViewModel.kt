@@ -9,6 +9,7 @@ import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.shared.util.Resource
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class BasicViewModel : BaseViewModel {
     override val refreshStatus = MediatorLiveData<Resource.Status>()
@@ -23,6 +24,7 @@ interface BaseViewModel {
         function: suspend () -> Result
     ) {
         val handler = CoroutineExceptionHandler { _, t ->
+            Timber.e(t)
             resultData?.postValue(Resource.error(t))
         }
         viewModelScope.launch(handler) {
