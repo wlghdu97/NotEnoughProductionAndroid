@@ -10,7 +10,6 @@ import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.process.editor.selection.RecipeSelectionAdapter
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity

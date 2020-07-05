@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.process.editor.selection
+package com.xhlab.nep.ui.process.editor.selection.internal
 
 import android.view.View
 import com.xhlab.nep.R

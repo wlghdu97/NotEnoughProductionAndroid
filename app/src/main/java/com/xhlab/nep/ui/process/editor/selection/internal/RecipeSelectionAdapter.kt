@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.process.editor.selection
+package com.xhlab.nep.ui.process.editor.selection.internal
 
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +9,9 @@ import com.xhlab.nep.ui.process.adapters.ProcessTreeViewHolder
 import com.xhlab.nep.ui.process.adapters.RecipeViewDegreeNode
 import com.xhlab.nep.ui.process.adapters.toDegreeNode
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.ui.process.editor.selection.RecipeSelectionListener
+import com.xhlab.nep.ui.process.editor.selection.getKeyElement
+import com.xhlab.nep.ui.process.editor.selection.isReversed
 import org.jetbrains.anko.layoutInflater
 import java.util.*
 
