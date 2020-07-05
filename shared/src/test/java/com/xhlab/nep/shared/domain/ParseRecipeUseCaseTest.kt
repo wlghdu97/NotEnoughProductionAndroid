@@ -149,6 +149,10 @@ class ParseRecipeUseCaseTest {
         override fun searchRecipeByElement(elementId: Long): DataSource.Factory<Int, RecipeView> {
             TODO("not implemented")
         }
+
+        override fun searchUsageRecipeByElement(elementId: Long): DataSource.Factory<Int, RecipeView> {
+            TODO("not implemented")
+        }
     }
 
     private class FakeMachineRepo : MachineRepo {
@@ -177,6 +181,13 @@ class ParseRecipeUseCaseTest {
         }
 
         override fun searchRecipeByElement(
+            elementId: Long,
+            machineId: Int
+        ): DataSource.Factory<Int, RecipeView> {
+            TODO("not implemented")
+        }
+
+        override fun searchUsageRecipeByElement(
             elementId: Long,
             machineId: Int
         ): DataSource.Factory<Int, RecipeView> {
