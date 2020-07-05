@@ -14,6 +14,7 @@ interface ElementRepo {
     fun getElements(): DataSource.Factory<Int, ElementView>
     fun getResultsByMachine(machineId: Int): DataSource.Factory<Int, ElementView>
     fun getRecipeMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
+    fun getUsageMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
     fun getUsagesByElement(elementId: Long): DataSource.Factory<Int, ElementView>
     fun getOreDictsByElement(elementId: Long): DataSource.Factory<Int, String>
     fun getReplacementsByElement(oreDictName: String): DataSource.Factory<Int, ElementView>
