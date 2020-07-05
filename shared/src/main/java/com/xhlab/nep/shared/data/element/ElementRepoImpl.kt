@@ -39,8 +39,8 @@ internal class ElementRepoImpl @Inject constructor(
     override fun getResultsByMachine(machineId: Int)
             = db.getElementDao().getMachineResults(machineId).map { it as ElementView }
 
-    override fun getMachinesByElement(elementId: Long)
-            = db.getElementDao().getMachinesByElement(elementId)
+    override fun getRecipeMachinesByElement(elementId: Long)
+            = db.getElementDao().getRecipeMachinesByElement(elementId)
 
     override fun getUsagesByElement(elementId: Long)
             = db.getElementDao().getUsagesByElement(elementId).map { it as ElementView }

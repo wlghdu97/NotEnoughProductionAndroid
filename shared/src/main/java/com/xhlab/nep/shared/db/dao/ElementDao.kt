@@ -35,7 +35,7 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
             GROUP BY name
         ) AS machines
     """)
-    abstract fun getMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
+    abstract fun getRecipeMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
 
     @Transaction
     @Query("""
