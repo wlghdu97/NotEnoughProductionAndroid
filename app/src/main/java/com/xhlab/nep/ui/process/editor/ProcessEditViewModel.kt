@@ -109,10 +109,16 @@ class ProcessEditViewModel @Inject constructor(
         )
     }
 
-    fun navigateToRecipeSelection(elementKey: String) {
+    fun navigateToRecipeSelection(constraint: ConnectionConstraint) {
         invokeUseCase(
             useCase = recipeSelectionNavigationUseCase,
-            params = RecipeSelectionNavigationUseCase.Parameter(elementKey)
+            params = RecipeSelectionNavigationUseCase.Parameters(
+                processId = requireProcessId(),
+                connectToParent = constraint.connectToParent,
+                recipe = constraint.recipe,
+                degree = constraint.degree,
+                elementKey = constraint.elementKey
+            )
         )
     }
 

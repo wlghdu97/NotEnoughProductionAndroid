@@ -3,7 +3,6 @@ package com.xhlab.nep.ui.process.editor.selection
 import android.view.View
 import android.view.ViewGroup
 import com.xhlab.nep.R
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.ui.process.adapters.ProcessTreeAdapter
 import com.xhlab.nep.ui.process.adapters.ProcessTreeViewHolder
@@ -37,7 +36,7 @@ class RecipeSelectionAdapter(
             val queue: Queue<Pair<Int, RecipeNode>> = LinkedList<Pair<Int, RecipeNode>>()
             queue.add(0 to root)
 
-            val reversed = isReversed(constraint)
+            val reversed = constraint.isReversed()
             do {
                 val degreeNode = queue.poll()
                 if (degreeNode != null) {
@@ -47,7 +46,7 @@ class RecipeSelectionAdapter(
                         false -> degree > constraint.degree
                     }
                     val isNodeVisible = when (isNodeInDegree) {
-                        true -> getKeyElement(node, constraint, reversed) != null
+                        true -> constraint.getKeyElement(node.recipe, reversed) != null
                         false -> false
                     }
                     val isRecipeConnected = when (isNodeVisible) {
@@ -70,29 +69,6 @@ class RecipeSelectionAdapter(
         } ?: arrayListOf()
     }
 
-    private fun isReversed(constraint: ProcessEditViewModel.ConnectionConstraint): Boolean {
-        val keyInOutput = constraint.recipe.getOutput().find {
-            it.unlocalizedName == constraint.elementKey
-        } != null
-        return constraint.connectToParent xor keyInOutput
-    }
-
-    private fun getKeyElement(
-        node: RecipeNode,
-        constraint: ProcessEditViewModel.ConnectionConstraint,
-        isReversed: Boolean? = isReversed(constraint)
-    ): Element? {
-        return if (constraint.connectToParent xor (isReversed == true)) {
-            node.recipe.getInputs().find {
-                it.unlocalizedName == constraint.elementKey
-            }
-        } else {
-            node.recipe.getOutput().find {
-                it.unlocalizedName == constraint.elementKey
-            }
-        }
-    }
-
     inner class SelectionViewHolder(itemView: View) : ProcessTreeViewHolder(itemView) {
         private val elementListAdapter = PlainElementAdapter()
 
@@ -101,10 +77,10 @@ class RecipeSelectionAdapter(
                 val constraint = constraint
                 val node = model?.node
                 if (constraint != null && node != null) {
-                    val reversed = isReversed(constraint)
+                    val reversed = constraint.isReversed()
                     val from = constraint.recipe
                     val to = node.recipe
-                    val element = getKeyElement(node, constraint, reversed)
+                    val element = constraint.getKeyElement(node.recipe, reversed)
                     if (element != null) {
                         when (constraint.connectToParent xor reversed) {
                             true -> listener?.onSelect(from, to, element, reversed)

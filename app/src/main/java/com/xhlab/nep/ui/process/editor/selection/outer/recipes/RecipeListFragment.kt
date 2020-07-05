@@ -9,6 +9,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
+import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.CONNECT_TO_PARENT
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
@@ -49,10 +50,14 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
 
         recipeSelectionViewModel.element.observeNotNull(this) {
-            viewModel.init(it.id)
+            viewModel.init(it.id, arguments?.getBoolean(CONNECT_TO_PARENT))
         }
 
         viewModel.recipeList.observe(this) {
+            recipeAdapter.submitList(it)
+        }
+
+        viewModel.usageList.observe(this) {
             recipeAdapter.submitList(it)
         }
     }

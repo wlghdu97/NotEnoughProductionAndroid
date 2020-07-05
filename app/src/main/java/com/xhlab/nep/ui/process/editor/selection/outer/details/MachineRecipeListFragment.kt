@@ -8,6 +8,8 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.CONNECT_TO_PARENT
+import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -20,6 +22,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var recipeSelectionViewModel: RecipeSelectionViewModel
     private lateinit var viewModel: MachineRecipeListViewModel
     private lateinit var recipeAdapter: RecipeSelectionAdapter
 
@@ -39,19 +42,32 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         with (recipe_list) {
-            recipeAdapter = RecipeSelectionAdapter(arguments?.getLong(ELEMENT_ID))
+            recipeAdapter = RecipeSelectionAdapter(
+                targetElementId = arguments?.getLong(ELEMENT_ID),
+                selectionListener = recipeSelectionViewModel
+            )
             adapter = recipeAdapter
             addItemDecoration(LinearItemSpacingDecorator(dip(4)))
         }
     }
 
     override fun initViewModel() {
+        recipeSelectionViewModel = requireActivity().viewModelProvider(viewModelFactory)
         viewModel = viewModelProvider(viewModelFactory)
         val elementId = arguments?.getLong(ELEMENT_ID)
         val machineId = arguments?.getInt(MACHINE_ID)
-        viewModel.init(elementId, machineId)
+        val connectToParent = arguments?.getBoolean(CONNECT_TO_PARENT)
+        viewModel.init(elementId, machineId, connectToParent)
+
+        recipeSelectionViewModel.constraint.observe(this) {
+            recipeAdapter.setConnectionConstraint(it)
+        }
 
         viewModel.recipeList.observe(this) {
+            recipeAdapter.submitList(it)
+        }
+
+        viewModel.usageList.observe(this) {
             recipeAdapter.submitList(it)
         }
 
