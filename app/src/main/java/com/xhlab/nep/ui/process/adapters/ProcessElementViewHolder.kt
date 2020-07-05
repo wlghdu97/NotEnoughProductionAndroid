@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
+import com.xhlab.nep.ui.adapters.ElementViewHolder
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.imageResource

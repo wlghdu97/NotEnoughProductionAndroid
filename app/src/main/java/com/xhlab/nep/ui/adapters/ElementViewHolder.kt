@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.main.viewholders
+package com.xhlab.nep.ui.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context

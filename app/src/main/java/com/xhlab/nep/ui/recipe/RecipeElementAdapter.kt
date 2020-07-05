@@ -12,7 +12,7 @@ import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
+import com.xhlab.nep.ui.adapters.ElementViewHolder
 import com.xhlab.nep.ui.util.DiffCallback
 import com.xhlab.nep.util.setIcon
 
