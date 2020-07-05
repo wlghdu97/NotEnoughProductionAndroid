@@ -285,6 +285,14 @@ open class Process(
         return edges.sumBy { it.size }
     }
 
+    fun getVertices(): List<Recipe> {
+        return vertices.toList()
+    }
+
+    fun getEdges(): List<List<Edge>> {
+        return edges.map { it.toList() }
+    }
+
     data class Edge(
         val index: Int,
         val key: String,
