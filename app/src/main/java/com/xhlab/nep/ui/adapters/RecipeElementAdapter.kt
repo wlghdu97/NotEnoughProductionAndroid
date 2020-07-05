@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.recipe
+package com.xhlab.nep.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,51 +12,51 @@ import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.main.viewholders.ElementViewHolder
 import com.xhlab.nep.ui.util.DiffCallback
 import com.xhlab.nep.util.setIcon
 
-class RecipeElementAdapter(
+open class RecipeElementAdapter(
     private val listener: ElementListener? = null
 ) : RecyclerView.Adapter<ElementViewHolder>() {
 
     private val elementList = ArrayList<RecipeElementView>()
-    private var isIconVisible = false
+    protected var isIconVisible = false
 
-    fun submitList(list: List<RecipeElementView>) {
-        val callback = RecipeElementDiffCallback(
-            elementList,
-            list
-        )
-        val result = DiffUtil.calculateDiff(callback)
-
-        elementList.clear()
-        elementList.addAll(list)
-        result.dispatchUpdatesTo(this)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(when (viewType) {
                 0 -> R.layout.holder_element
                 1 -> R.layout.holder_element_ore_chain
                 else -> throw IllegalArgumentException("invalid view type.")
             }, parent, false)
-        return DefaultElementViewHolder(view)
+        return createViewHolder(view)
+    }
+
+    protected open fun createViewHolder(itemView: View): ElementViewHolder {
+        return DefaultElementViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ElementViewHolder, position: Int) {
         holder.bind(elementList[position])
     }
 
-    override fun getItemViewType(position: Int): Int {
+    final override fun getItemViewType(position: Int): Int {
         return when (elementList[position].type) {
             ORE_CHAIN -> 1
             else -> 0
         }
     }
 
-    override fun getItemCount() = elementList.size
+    final override fun getItemCount() = elementList.size
+
+    fun submitList(list: List<RecipeElementView>) {
+        val callback = RecipeElementDiffCallback(elementList, list)
+        val result = DiffUtil.calculateDiff(callback)
+
+        elementList.clear()
+        elementList.addAll(list)
+        result.dispatchUpdatesTo(this)
+    }
 
     fun setIconVisibility(isVisible: Boolean) {
         isIconVisible = isVisible

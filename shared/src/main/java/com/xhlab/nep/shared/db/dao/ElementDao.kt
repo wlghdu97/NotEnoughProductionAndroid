@@ -35,7 +35,29 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
             GROUP BY name
         ) AS machines
     """)
-    abstract fun getMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
+    abstract fun getRecipeMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
+
+    @Transaction
+    @Query("""
+        SELECT
+        machines.id AS machineId, 
+        machines.name AS machineName, 
+        machines.mod_name AS modName,
+        machines.recipeCount AS recipeCount
+        FROM (
+            SELECT machine.id, machine.name, machine.mod_name,
+            COUNT(DISTINCT machine_recipe.recipe_id) AS recipeCount FROM machine_recipe
+            INNER JOIN machine ON machine.id = machine_recipe.machine_id
+            WHERE machine_recipe.target_item_id = :elementId
+            GROUP BY machine.name
+            UNION ALL
+            SELECT -1 AS id, "Crafting Table" AS name, "minecraft" AS mod_name,
+            COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
+            WHERE recipe.target_item_id = :elementId
+            GROUP BY name
+        ) AS machines
+    """)
+    abstract fun getUsageMachinesByElement(elementId: Long): DataSource.Factory<Int, RecipeMachineView>
 
     @Transaction
     @Query("""

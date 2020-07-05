@@ -12,6 +12,10 @@ internal class ElementRepoImpl @Inject constructor(
 
     private val io = Dispatchers.IO
 
+    override suspend fun getIdByKey(unlocalizedName: String) = withContext(io) {
+        db.getElementDao().getId(unlocalizedName)
+    }
+
     override suspend fun getElementDetail(id: Long) = withContext(io) {
         db.getElementDao().getElementDetail(id)
     }
@@ -35,8 +39,11 @@ internal class ElementRepoImpl @Inject constructor(
     override fun getResultsByMachine(machineId: Int)
             = db.getElementDao().getMachineResults(machineId).map { it as ElementView }
 
-    override fun getMachinesByElement(elementId: Long)
-            = db.getElementDao().getMachinesByElement(elementId)
+    override fun getRecipeMachinesByElement(elementId: Long)
+            = db.getElementDao().getRecipeMachinesByElement(elementId)
+
+    override fun getUsageMachinesByElement(elementId: Long)
+            = db.getElementDao().getUsageMachinesByElement(elementId)
 
     override fun getUsagesByElement(elementId: Long)
             = db.getElementDao().getUsagesByElement(elementId).map { it as ElementView }

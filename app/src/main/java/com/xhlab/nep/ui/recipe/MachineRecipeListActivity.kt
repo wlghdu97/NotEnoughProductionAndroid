@@ -5,6 +5,7 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity

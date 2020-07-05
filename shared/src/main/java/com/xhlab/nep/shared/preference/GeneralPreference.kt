@@ -17,4 +17,8 @@ interface GeneralPreference {
     val isDarkTheme: LiveData<Boolean?>
     fun getDarkTheme(): Boolean
     fun setDarkTheme(value: Boolean)
+
+    val showDisconnectionAlert: LiveData<Boolean>
+    fun getShowDisconnectionAlert(): Boolean
+    fun setShowDisconnectionAlert(value: Boolean)
 }

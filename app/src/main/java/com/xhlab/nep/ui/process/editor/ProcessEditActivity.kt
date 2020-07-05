@@ -1,13 +1,16 @@
 package com.xhlab.nep.ui.process.editor
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.CheckBox
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
@@ -20,7 +23,7 @@ import javax.inject.Inject
 
 class ProcessEditActivity :
     DaggerAppCompatActivity(),
-    ProcessTreeAdapter.ProcessTreeListener,
+    RecipeTreeAdapter.ProcessTreeListener,
     ViewInit
 {
     @Inject
@@ -28,7 +31,7 @@ class ProcessEditActivity :
 
     private lateinit var viewModel: ProcessEditViewModel
 
-    private val processTreeAdapter by lazy { ProcessTreeAdapter(this) }
+    private val processTreeAdapter by lazy { RecipeTreeAdapter(this, viewModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,6 +82,14 @@ class ProcessEditActivity :
         viewModel.iconMode.observe(this) {
             processTreeAdapter.setShowConnection(it)
         }
+
+        viewModel.showDisconnectionAlert.observe(this) {
+            showDisconnectionAlert(it)
+        }
+
+        viewModel.connectRecipe.observe(this) {
+            showConnectionSelectionAlert(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -100,6 +111,32 @@ class ProcessEditActivity :
 
     override fun onProcessTreeExpanded(position: Int) {
         process_tree.smoothScrollToPosition(position)
+    }
+
+    @SuppressLint("InflateParams")
+    private fun showDisconnectionAlert(payload: ProcessEditViewModel.DisconnectionPayload) {
+        val view = layoutInflater.inflate(R.layout.layout_disconnection_alert, null)
+        val checkbox = view.findViewById<CheckBox>(R.id.checkbox)
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.title_disconnect_recipe)
+            .setMessage(R.string.txt_disconnect_recipe)
+            .setView(view)
+            .setPositiveButton(R.string.btn_ok) { _, _ ->
+                viewModel.disconnect(payload, checkbox.isChecked)
+            }
+            .setNegativeButton(R.string.btn_cancel, null)
+            .show()
+    }
+
+    private fun showConnectionSelectionAlert(constraint: ProcessEditViewModel.ConnectionConstraint) {
+        MaterialAlertDialogBuilder(this)
+            .setItems(R.array.connection_selection) { _, index ->
+                when (index) {
+                    0 -> viewModel.navigateToInternalRecipeSelection(constraint)
+                    1 -> viewModel.navigateToRecipeSelection(constraint)
+                }
+            }
+            .show()
     }
 
     companion object {

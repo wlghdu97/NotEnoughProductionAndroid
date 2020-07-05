@@ -2,6 +2,7 @@ package com.xhlab.nep.model.process
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import java.util.*
 
 open class Process(
@@ -17,7 +18,7 @@ open class Process(
         connectRecipe(rootRecipe, null, targetOutput)
     }
 
-    fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false) {
+    fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false): Boolean {
 
         fun addRecipeNode(recipe: Recipe) {
             if (vertices.indexOf(recipe) == -1) {
@@ -26,25 +27,47 @@ open class Process(
             }
         }
 
+        fun checkConnection(input: Recipe, output: Recipe, key: String): Boolean {
+            return (input.getInputs().find { it.unlocalizedName == key } != null &&
+                    output.getOutput().find { it.unlocalizedName == key } != null)
+        }
+
         addRecipeNode(from)
-        if (to != null) {
+        return if (to != null) {
             val key = element.unlocalizedName
-            checkConnection(to, from, key)
+            if (checkConnection(from, to, key)) {
+                throw IllegalArgumentException("connection cannot be established.")
+            }
             addRecipeNode(to)
-            edges[vertices.indexOf(to)].add(Edge(vertices.indexOf(from), key, reversed))
+            val edges = edges[vertices.indexOf(to)]
+            val edge = Edge(vertices.indexOf(from), key, reversed)
+            when (!edges.contains(edge)) {
+                true -> edges.add(edge)
+                false -> false
+            }
+        } else {
+            false
         }
     }
 
-    fun disconnectRecipe(from: Recipe, to: Recipe, element: Element, reversed: Boolean = false) {
-        val edgeIndex = vertices.indexOf(from)
-        val targetIndex = vertices.indexOf(to)
-        if (edgeIndex != -1 && targetIndex != -1) {
+    fun disconnectRecipe(from: Recipe, to: Recipe, element: Element, reversed: Boolean = false): Boolean {
+        val edgeIndex = vertices.indexOf(if (reversed) to else from)
+        val targetIndex = vertices.indexOf(if (reversed) from else to)
+        return if (edgeIndex != -1 && targetIndex != -1) {
             val edge = edges[targetIndex].find {
                 it.index == edgeIndex &&
                 it.key == element.unlocalizedName &&
                 it.reversed == reversed
             }
-            edges[targetIndex].remove(edge)
+            when {
+                edge == null ->
+                    disconnectRecipe(to, from, element, reversed)
+                edges[targetIndex].remove(edge) ->
+                    removeIslands()
+                else -> false
+            }
+        } else {
+            false
         }
     }
 
@@ -52,8 +75,12 @@ open class Process(
         if (!vertices.contains(recipe)) {
             return false
         }
-        val connection = getConnectionStatus(recipe, element)
-        return if (connection == ConnectionStatus.UNCONNECTED) {
+        val connections = getConnectionStatus(recipe, element)
+        val status = when (consumed) {
+            true -> NOT_CONSUMED
+            false -> UNCONNECTED
+        }
+        return if (connections.size == 1 && connections[0].status == status) {
             val input = recipe.getInputs().find { it.unlocalizedName == element.unlocalizedName }
             if (input == null) {
                 false
@@ -69,18 +96,13 @@ open class Process(
         }
     }
 
-    private fun checkConnection(input: Recipe, output: Recipe, key: String): Boolean {
-        return (input.getInputs().find { it.unlocalizedName == key } != null &&
-                output.getOutput().find { it.unlocalizedName == key } != null)
-    }
-
     fun removeRecipeNode(recipe: Recipe): Boolean {
         val vertexIndex = vertices.indexOf(recipe)
         if (vertexIndex == 0) {
             // can't remove root
             return false
         }
-        for (index in 0 until edges.size) {
+        for (index in edges.indices) {
             val targetEdges = edges[index].filter { it.index == vertexIndex }
             edges[index].removeAll(targetEdges)
         }
@@ -95,6 +117,19 @@ open class Process(
             }
         }
         return true
+    }
+
+    private fun removeIslands(): Boolean {
+        val visited = BooleanArray(vertices.size) { false }
+        dfs(0, visited)
+        val visitedList = visited.mapIndexed { index, it -> vertices[index] to it }
+        var result = true
+        for ((vertex, connected) in visitedList) {
+            if (!connected && !removeRecipeNode(vertex)) {
+                result = false
+            }
+        }
+        return result
     }
 
     fun getRecipeDFSTree(): RecipeNode {
@@ -113,37 +148,62 @@ open class Process(
         return RecipeNode(vertices[vertex], childNodes)
     }
 
-    fun getConnectionStatus(recipe: Recipe, key: Element): ConnectionStatus {
+    fun isRecipeConnected(from: Recipe, to: Recipe, key: String, reversed: Boolean): Boolean {
+        return edges[vertices.indexOf(to)].contains(Edge(vertices.indexOf(from), key, reversed))
+    }
+
+    fun getConnectionStatus(recipe: Recipe, key: Element): List<Connection> {
+        if (vertices.indexOf(recipe) == -1) {
+            return emptyList()
+        }
         if (recipe == rootRecipe && targetOutput == key) {
-            return ConnectionStatus.FINAL_OUTPUT
+            return listOf(Connection(FINAL_OUTPUT, rootRecipe))
         }
         val index = vertices.indexOf(recipe)
-        val edge = edges[index].find { it.key == key.unlocalizedName }
-        return when {
-            edge == null -> {
-                var parentEdge: Edge? = null
-                for ((edgeIndex, otherEdge) in edges.withIndex()) {
-                    if (edgeIndex == index) {
-                        continue
-                    }
-                    parentEdge = otherEdge.find { it.index == index && it.key == key.unlocalizedName }
-                    if (parentEdge != null) {
-                        break
+        val edges = edges[index].filter { it.key == key.unlocalizedName }
+        val connections = arrayListOf<Connection>()
+        if (edges.isEmpty()) {
+            val parentEdges = findParentEdges(recipe, key)
+            if (parentEdges.isNotEmpty()) {
+                for ((edgeIndex , parentEdge) in parentEdges) {
+                    val parentRecipe = vertices[edgeIndex]
+                    if (parentEdge != null && parentEdge.reversed) {
+                        connections.add(Connection(CONNECTED_TO_CHILD, parentRecipe, true))
+                    } else if (parentEdge != null) {
+                        connections.add(Connection(CONNECTED_TO_PARENT, parentRecipe))
                     }
                 }
-                when {
-                    parentEdge != null && parentEdge.reversed ->
-                        ConnectionStatus.CONNECTED_TO_CHILD
-                    parentEdge != null ->
-                        ConnectionStatus.CONNECTED_TO_PARENT
-                    else ->
-                        ConnectionStatus.UNCONNECTED
-                }
+            } else {
+                connections.add(Connection(UNCONNECTED))
             }
-            edge.index == index -> ConnectionStatus.NOT_CONSUMED
-            edge.reversed -> ConnectionStatus.CONNECTED_TO_PARENT
-            else -> ConnectionStatus.CONNECTED_TO_CHILD
+        } else {
+            for (edge in edges) {
+                connections.add(when {
+                    edge.index == index ->
+                        Connection(NOT_CONSUMED, recipe)
+                    edge.reversed ->
+                        Connection(CONNECTED_TO_PARENT, vertices[edge.index], true)
+                    else ->
+                        Connection(CONNECTED_TO_CHILD, vertices[edge.index])
+                })
+            }
         }
+        return connections
+    }
+
+    private fun findParentEdges(recipe: Recipe, key: Element): List<Pair<Int, Edge?>> {
+        val index = vertices.indexOf(recipe)
+        val edgeList = arrayListOf<Pair<Int, Edge?>>()
+        for ((edgeIndex, otherEdge) in edges.withIndex()) {
+            if (edgeIndex == index) {
+                continue
+            }
+            val edges = otherEdge.filter { it.index == index && it.key == key.unlocalizedName }
+            if (edges.isNotEmpty()) {
+                edgeList.addAll(edges.map { edgeIndex to it })
+            }
+        }
+        return edgeList
     }
 
     fun isElementNotConsumed(recipe: Recipe, key: Element): Boolean {
@@ -225,7 +285,17 @@ open class Process(
         return edges.sumBy { it.size }
     }
 
-    data class Edge(val index: Int, val key: String, val reversed: Boolean = false)
+    data class Edge(
+        val index: Int,
+        val key: String,
+        val reversed: Boolean = false
+    )
+
+    data class Connection(
+        val status: ConnectionStatus,
+        val connectedRecipe: Recipe? = null,
+        val reversed: Boolean = false
+    )
 
     enum class ConnectionStatus {
         CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT, NOT_CONSUMED

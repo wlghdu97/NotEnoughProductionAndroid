@@ -18,7 +18,7 @@ class LoadRecipeMachineListUseCase @Inject constructor(
         val config = PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)
             .build()
-        val dataSource = elementRepo.getMachinesByElement(params.elementId)
+        val dataSource = elementRepo.getRecipeMachinesByElement(params.elementId)
         val liveData = LivePagedListBuilder(dataSource, config).build()
         emitSource(Transformations.map(liveData) { Resource.success(it) })
     }

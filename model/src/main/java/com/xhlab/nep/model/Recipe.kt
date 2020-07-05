@@ -1,6 +1,8 @@
 package com.xhlab.nep.model
 
-interface Recipe {
+import java.io.Serializable
+
+interface Recipe : Serializable {
     fun getInputs(): List<Element>
     fun getOutput(): List<Element>
 }

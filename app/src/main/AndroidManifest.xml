@@ -46,6 +46,16 @@
             android:launchMode="singleTop"/>
 
         <activity
+            android:name=".ui.process.editor.selection.internal.InternalRecipeSelectionActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.process.editor.selection.outer.RecipeSelectionActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
             android:name=".ui.process.calculator.ProcessCalculationActivity"
             android:parentActivityName=".ui.process.editor.ProcessEditActivity"
             android:launchMode="singleTop"/>
