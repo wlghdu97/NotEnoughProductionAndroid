@@ -91,6 +91,7 @@ abstract class RecipeDetailViewHolder(itemView: View) : BindableViewHolder<Recip
                 )
                 val byproductList = model.resultItemList.filter { it.id != targetElementId }
                 byproductAdapter.submitList(byproductList)
+                byproductAdapter.setIconVisibility(isIconVisible)
                 byproductGroup?.isGone = byproductList.isEmpty()
             }
             is CraftingRecipeView -> {
