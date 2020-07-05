@@ -133,7 +133,7 @@ class ProcessEditActivity :
             .setItems(R.array.connection_selection) { _, index ->
                 when (index) {
                     0 -> viewModel.navigateToInternalRecipeSelection(constraint)
-                    1 -> Unit
+                    1 -> viewModel.navigateToRecipeSelection(constraint.elementKey)
                 }
             }
             .show()

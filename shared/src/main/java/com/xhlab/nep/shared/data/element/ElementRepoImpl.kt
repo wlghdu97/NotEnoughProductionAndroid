@@ -12,6 +12,10 @@ internal class ElementRepoImpl @Inject constructor(
 
     private val io = Dispatchers.IO
 
+    override suspend fun getIdByKey(unlocalizedName: String) = withContext(io) {
+        db.getElementDao().getId(unlocalizedName)
+    }
+
     override suspend fun getElementDetail(id: Long) = withContext(io) {
         db.getElementDao().getElementDetail(id)
     }
