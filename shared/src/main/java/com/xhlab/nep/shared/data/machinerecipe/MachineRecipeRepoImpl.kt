@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.data.machinerecipe
 
-import com.xhlab.nep.shared.db.AppDatabase
 import com.xhlab.nep.model.recipes.view.RecipeView
+import com.xhlab.nep.shared.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -23,6 +23,16 @@ internal class MachineRecipeRepoImpl @Inject constructor(
             it.also {
                 it.itemList = db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId)
                 it.resultItemList = db.getRecipeResultDao().getElementListOfResult(it.recipeId)
+            } as RecipeView
+        }
+    }
+
+    override fun searchUsageRecipeByElement(elementId: Long, machineId: Int)
+            = db.getMachineRecipeDao().searchUsageRecipeIdByElement(elementId, machineId).map {
+        runBlocking {
+            it.also {
+                it.itemList = db.getRecipeResultDao().getElementListOfResult(it.recipeId)
+                it.resultItemList = db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId)
             } as RecipeView
         }
     }

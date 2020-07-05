@@ -32,4 +32,15 @@ abstract class RecipeDao : BaseDao<RecipeEntity>() {
     abstract fun searchRecipeIdByElement(
         elementId: Long
     ): DataSource.Factory<Int, RoomCraftingRecipeView>
+
+    @Transaction
+    @Query("""
+        SELECT recipe.recipe_id FROM recipe
+        WHERE recipe.target_item_id = :elementId
+        GROUP BY recipe.recipe_id
+        ORDER BY recipe.amount
+    """)
+    abstract fun searchUsageRecipeIdByElement(
+        elementId: Long
+    ): DataSource.Factory<Int, RoomCraftingRecipeView>
 }
