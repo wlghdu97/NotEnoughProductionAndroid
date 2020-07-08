@@ -20,14 +20,21 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_item_browser.*
 import javax.inject.Inject
 
-class ItemBrowserFragment : DaggerFragment(), ViewInit {
+class ItemBrowserFragment : DaggerFragment, ViewInit {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var viewModel: ItemBrowserViewModel
 
-    private val elementAdapter by lazy { ElementDetailAdapter(viewModel) }
+    private var listener: ElementListener? = null
+    private val elementAdapter by lazy { ElementDetailAdapter(listener) }
+
+    constructor() : super()
+
+    constructor(listener: ElementListener) : super() {
+        this.listener = listener
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,6 +56,9 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
+        if (listener == null) {
+            this.listener = viewModel
+        }
 
         viewModel.isDBLoaded.observe(this) {
             element_list.isGone = !it

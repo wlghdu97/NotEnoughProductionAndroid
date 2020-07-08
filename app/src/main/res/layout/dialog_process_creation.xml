@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp">
@@ -23,11 +24,14 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/target_recipe"
+        android:id="@+id/btn_target_recipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/btn_select_target_recipe"
+        tools:icon="@mipmap/ic_launcher"
+        app:iconSize="24dp"
+        app:iconTint="@null"
         app:layout_constraintTop_toBottomOf="@id/name_input_layout"
         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
 
