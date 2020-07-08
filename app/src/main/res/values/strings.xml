@@ -23,6 +23,7 @@
     <string name="title_calculation_result">Calculation result</string>
     <string name="title_disconnect_recipe">Disconnect recipe?</string>
     <string name="title_select_recipe_to_connect">Select recipe to connect</string>
+    <string name="title_create_process">Create process</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
@@ -45,8 +46,11 @@
     <string name="btn_close">Close</string>
     <string name="btn_load">Load</string>
     <string name="btn_use_existing">Use existing</string>
+    <string name="btn_create">Create</string>
+    <string name="btn_select_target_recipe">Select target recipe</string>
 
     <string name="hint_search_element">Search item</string>
+    <string name="hint_name">Name</string>
 
     <string name="tab_recipes">Recipes</string>
     <string name="tab_usages">Usages</string>
@@ -103,6 +107,7 @@
     </string>
     <string name="txt_do_not_show_again">Do not show again</string>
     <string name="txt_invalid_uri">Invalid file uri.</string>
+    <string name="txt_name_empty">Name must not be empty.</string>
 
     <string name="error_open_file_failed">Failed to open file.</string>
     <string name="error_connect_recipe_failed">Failed to connect recipe.</string>

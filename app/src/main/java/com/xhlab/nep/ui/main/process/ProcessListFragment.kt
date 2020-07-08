@@ -8,6 +8,7 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_process_list.*
@@ -38,6 +39,10 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         process_list.adapter = processAdapter
+
+        fab_add.setOnClickListener {
+            showProcessCreationDialog()
+        }
     }
 
     override fun initViewModel() {
@@ -50,5 +55,13 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
         viewModel.processList.observe(this) {
             processAdapter.submitList(it)
         }
+    }
+
+    private fun showProcessCreationDialog() {
+        ProcessCreationDialog().show(childFragmentManager, PROCESS_CREATION_TAG)
+    }
+
+    companion object {
+        private const val PROCESS_CREATION_TAG = "process_creation_tag"
     }
 }
