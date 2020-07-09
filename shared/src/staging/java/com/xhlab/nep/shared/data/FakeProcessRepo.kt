@@ -6,6 +6,7 @@ import androidx.paging.DataSource
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.util.ListDataSource
 import com.xhlab.test_shared.ProcessData
@@ -24,7 +25,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         }
     }
 
-    override fun getProcesses(): DataSource.Factory<Int, Process> {
+    override fun getProcesses(): DataSource.Factory<Int, ProcessSummary> {
         return ListDataSource(ProcessData.processList)
     }
 

@@ -9,14 +9,14 @@ import androidx.core.view.isGone
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
-import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.layoutInflater
 
 class ProcessAdapter(
     private val listener: ProcessListener? = null
-) : PagedListAdapter<Process, ProcessAdapter.ProcessViewHolder>(Differ) {
+) : PagedListAdapter<ProcessSummary, ProcessAdapter.ProcessViewHolder>(Differ) {
 
     private var isIconVisible = false
 
@@ -34,7 +34,7 @@ class ProcessAdapter(
         notifyDataSetChanged()
     }
 
-    inner class ProcessViewHolder(itemView: View) : BindableViewHolder<Process>(itemView) {
+    inner class ProcessViewHolder(itemView: View) : BindableViewHolder<ProcessSummary>(itemView) {
         private val icon: ImageView = itemView.findViewById(R.id.output_icon)
         private val name: TextView = itemView.findViewById(R.id.process_name)
         private val description: TextView = itemView.findViewById(R.id.description)
@@ -42,34 +42,37 @@ class ProcessAdapter(
 
         init {
             itemView.setOnClickListener {
-                model?.let { listener?.onClick(it.id) }
+                model?.let { listener?.onClick(it.processId) }
             }
         }
 
-        override fun bindNotNull(model: Process) {
+        override fun bindNotNull(model: ProcessSummary) {
             icon.isGone = !isIconVisible
             if (isIconVisible) {
-                icon.setIcon(model.targetOutput.unlocalizedName)
+                icon.setIcon(model.unlocalizedName)
             }
             name.text = model.name
             description.text = String.format(
                 itemView.context.getString(R.string.form_process_description),
-                model.targetOutput.amount,
-                model.targetOutput.localizedName,
-                model.getRecipeNodeCount()
+                model.amount,
+                model.localizedName,
+                model.nodeCount
             )
         }
     }
 
-    private object Differ : DiffUtil.ItemCallback<Process>() {
-        override fun areItemsTheSame(oldItem: Process, newItem: Process): Boolean {
-            return oldItem.id == newItem.id
+    private object Differ : DiffUtil.ItemCallback<ProcessSummary>() {
+        override fun areItemsTheSame(oldItem: ProcessSummary, newItem: ProcessSummary): Boolean {
+            return oldItem.processId == newItem.processId
         }
 
-        override fun areContentsTheSame(oldItem: Process, newItem: Process): Boolean {
-            return (oldItem.id == newItem.id &&
+        override fun areContentsTheSame(oldItem: ProcessSummary, newItem: ProcessSummary): Boolean {
+            return (oldItem.processId == newItem.processId &&
                     oldItem.name == newItem.name &&
-                    oldItem.getRecipeNodeCount() == newItem.getRecipeNodeCount())
+                    oldItem.localizedName == newItem.localizedName &&
+                    oldItem.unlocalizedName == newItem.unlocalizedName &&
+                    oldItem.amount == newItem.amount &&
+                    oldItem.nodeCount == newItem.nodeCount)
         }
     }
 }

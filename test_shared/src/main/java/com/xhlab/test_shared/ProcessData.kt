@@ -2,6 +2,7 @@ package com.xhlab.test_shared
 
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.EU
@@ -131,7 +132,16 @@ object ProcessData {
             connectRecipe(supplierRecipeList[0], recipeList[7], fluidList[1])
         }
 
-    val processList = listOf(processGlass, processPE)
+    val processList = listOf(processGlass, processPE).map {
+        ProcessSummaryImpl(
+            processId = it.id,
+            name = it.name,
+            unlocalizedName = it.targetOutput.unlocalizedName,
+            localizedName = it.targetOutput.localizedName,
+            amount = it.targetOutput.amount,
+            nodeCount = it.getRecipeNodeCount()
+        )
+    }
 
     val processGlassTree = RecipeNode(
         recipeList[6],
@@ -250,4 +260,13 @@ object ProcessData {
         override val type: Int,
         override val metaData: String? = null
     ) : RecipeElementView()
+
+    data class ProcessSummaryImpl(
+        override val processId: String,
+        override val name: String,
+        override val unlocalizedName: String,
+        override val localizedName: String,
+        override val amount: Int,
+        override val nodeCount: Int
+    ) : ProcessSummary()
 }

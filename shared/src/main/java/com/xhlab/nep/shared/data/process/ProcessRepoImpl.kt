@@ -7,6 +7,7 @@ import androidx.paging.DataSource
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.shared.db.ProcessDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,8 +27,8 @@ internal class ProcessRepoImpl @Inject constructor(
         getProcessInternal(processId)
     }
 
-    override fun getProcesses(): DataSource.Factory<Int, Process> {
-        return db.getProcessDao().getProcessList().map { mapper.map(it) }
+    override fun getProcesses(): DataSource.Factory<Int, ProcessSummary> {
+        return db.getProcessDao().getProcessList().map { it as ProcessSummary }
     }
 
     override suspend fun createProcess(name: String, targetRecipe: Recipe, keyElement: Element): Boolean {

@@ -6,25 +6,26 @@ import androidx.room.Dao
 import androidx.room.Query
 import com.xhlab.nep.shared.db.BaseDao
 import com.xhlab.nep.shared.db.entity.ProcessEntity
+import com.xhlab.nep.shared.db.view.RoomProcessSummary
 
 @Dao
 abstract class ProcessDao : BaseDao<ProcessEntity>() {
 
     @Query("""
         SELECT * FROM process
-        WHERE process.processId = :processId
+        WHERE process.process_id = :processId
     """)
     abstract suspend fun getProcess(processId: String): ProcessEntity?
 
     @Query("""
         SELECT * FROM process
-        WHERE process.processId = :processId
+        WHERE process.process_id = :processId
     """)
     abstract fun getProcessLiveData(processId: String): LiveData<ProcessEntity?>
 
     @Query("""
-        SELECT * FROM process
-        ORDER BY process.name
+        SELECT * FROM process_summary
+        ORDER BY process_summary.name
     """)
-    abstract fun getProcessList(): DataSource.Factory<Int, ProcessEntity>
+    abstract fun getProcessList(): DataSource.Factory<Int, RoomProcessSummary>
 }
