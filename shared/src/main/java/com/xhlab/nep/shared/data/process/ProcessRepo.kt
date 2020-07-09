@@ -9,6 +9,7 @@ import com.xhlab.nep.model.process.Process
 interface ProcessRepo {
     fun getProcess(processId: String): LiveData<Process?>
     fun getProcesses(): DataSource.Factory<Int, Process>
+    suspend fun createProcess(name: String, targetRecipe: Recipe, keyElement: Element): Boolean
     fun connectRecipe(processId: String, from: Recipe, to: Recipe?, element: Element, reversed: Boolean)
     fun disconnectRecipe(processId: String, from: Recipe, to: Recipe, element: Element, reversed: Boolean)
     fun markNotConsumed(processId: String, recipe: Recipe, element: Element, consumed: Boolean)

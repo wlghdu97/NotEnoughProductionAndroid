@@ -18,6 +18,7 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
+import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.process.creator.browser.ItemBrowserActivity
 import com.xhlab.nep.util.getIcon
@@ -102,6 +103,14 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
             nameInputLayout.helperText = when (it) {
                 true -> ""
                 false -> getString(R.string.txt_name_empty)
+            }
+        }
+
+        viewModel.creationResult.observe(this) {
+            if (it.isSuccessful()) {
+                dismiss()
+            } else {
+                longToast(R.string.error_failed_to_create_process)
             }
         }
     }

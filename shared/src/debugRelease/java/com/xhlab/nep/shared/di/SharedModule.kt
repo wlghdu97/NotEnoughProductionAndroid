@@ -16,6 +16,7 @@ import com.xhlab.nep.shared.data.oredict.ReplacementAdder
 import com.xhlab.nep.shared.data.process.ProcessMapper
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.data.process.ProcessRepoImpl
+import com.xhlab.nep.shared.data.process.RoomProcessMapper
 import com.xhlab.nep.shared.data.recipe.RecipeAdder
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepoImpl
@@ -65,5 +66,9 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideProcessRepo(db: ProcessDatabase, mapper: ProcessMapper): ProcessRepo = ProcessRepoImpl(db, mapper)
+    internal fun provideProcessRepo(
+        db: ProcessDatabase,
+        mapper: ProcessMapper,
+        roomMapper: RoomProcessMapper
+    ): ProcessRepo = ProcessRepoImpl(db, mapper, roomMapper)
 }

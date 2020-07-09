@@ -4,14 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.shared.data.process.ProcessRepo
+import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import javax.inject.Inject
 
 class ProcessCreationViewModel @Inject constructor(
-
+    private val processRepo: ProcessRepo
 ) : ViewModel(), BaseViewModel by BasicViewModel() {
 
     private val _processName = MutableLiveData<String?>(null)
@@ -25,6 +28,10 @@ class ProcessCreationViewModel @Inject constructor(
     private val _isNameValid = MediatorLiveData<Boolean?>()
     val isNameValid: LiveData<Boolean?>
         get() = _isNameValid
+
+    private val _creationResult = LiveEvent<Resource<Unit>>()
+    val creationResult: LiveData<Resource<Unit>>
+        get() = _creationResult
 
     init {
         _isNameValid.addSource(processName) {
@@ -41,6 +48,13 @@ class ProcessCreationViewModel @Inject constructor(
     }
 
     fun createProcess() {
-
+        val isNameValid = isNameValid.value
+        val recipePair = recipePair.value
+        if (isNameValid == true && recipePair != null) {
+            val name = processName.value.toString()
+            launchSuspendFunction(_creationResult) {
+                processRepo.createProcess(name, recipePair.first, recipePair.second)
+            }
+        }
     }
 }
