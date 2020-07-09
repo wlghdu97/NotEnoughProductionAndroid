@@ -1,9 +1,11 @@
 package com.xhlab.nep.ui.main.process
 
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.paging.PagedListAdapter
@@ -34,7 +36,9 @@ class ProcessAdapter(
         notifyDataSetChanged()
     }
 
-    inner class ProcessViewHolder(itemView: View) : BindableViewHolder<ProcessSummary>(itemView) {
+    inner class ProcessViewHolder(itemView: View)
+        : BindableViewHolder<ProcessSummary>(itemView), PopupMenu.OnMenuItemClickListener
+    {
         private val icon: ImageView = itemView.findViewById(R.id.output_icon)
         private val name: TextView = itemView.findViewById(R.id.process_name)
         private val description: TextView = itemView.findViewById(R.id.description)
@@ -43,6 +47,12 @@ class ProcessAdapter(
         init {
             itemView.setOnClickListener {
                 model?.let { listener?.onClick(it.processId) }
+            }
+            more.setOnClickListener {
+                PopupMenu(itemView.context, more).apply {
+                    inflate(R.menu.process_list)
+                    setOnMenuItemClickListener(this@ProcessViewHolder)
+                }.show()
             }
         }
 
@@ -58,6 +68,23 @@ class ProcessAdapter(
                 model.localizedName,
                 model.nodeCount
             )
+        }
+
+        override fun onMenuItemClick(menuItem: MenuItem): Boolean {
+            val summary = model
+            return if (summary != null) {
+                when (menuItem.itemId) {
+                    R.id.menu_edit_process_name ->
+                        listener?.onRename(summary.processId, summary.name)
+                    R.id.menu_export_process_string ->
+                        listener?.onExportString(summary.processId)
+                    R.id.menu_delete_process ->
+                        listener?.onDelete(summary.processId, summary.name)
+                }
+                true
+            } else {
+                false
+            }
         }
     }
 

@@ -38,6 +38,22 @@ internal class ProcessRepoImpl @Inject constructor(
         return result != -1L
     }
 
+    override suspend fun renameProcess(processId: String, name: String) = withContext(io) {
+        val liveData = getProcessInternal(processId)
+        val process = liveData.value
+        if (process != null) {
+            process.name = name.trim()
+            liveData.postValue(process)
+            db.getProcessDao().upsert(roomMapper.map(process))
+        } else {
+            throw ProcessNotFoundException()
+        }
+    }
+
+    override suspend fun deleteProcess(processId: String) = withContext(io) {
+        db.getProcessDao().deleteProcess(processId)
+    }
+
     override suspend fun connectRecipe(
         processId: String,
         from: Recipe,

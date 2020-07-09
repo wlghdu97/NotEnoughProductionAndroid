@@ -1,7 +1,10 @@
 package com.xhlab.nep.ui.main.process
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ProcessEditNavigationUseCase
+import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
@@ -10,6 +13,7 @@ import com.xhlab.nep.ui.BasicViewModel
 import javax.inject.Inject
 
 class ProcessListViewModel @Inject constructor(
+    private val processRepo: ProcessRepo,
     loadProcessListUseCase: LoadProcessListUseCase,
     private val processEditNavigationUseCase: ProcessEditNavigationUseCase,
     generalPreference: GeneralPreference
@@ -20,6 +24,18 @@ class ProcessListViewModel @Inject constructor(
     val processList = loadProcessListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded
+
+    private val _renameProcess = LiveEvent<Pair<String, String>>()
+    val renameProcess: LiveData<Pair<String, String>>
+        get() = _renameProcess
+
+    private val _exportProcess = LiveEvent<String>()
+    val exportProcess: LiveData<String>
+        get() = _exportProcess
+
+    private val _deleteProcess = LiveEvent<Pair<String, String>>()
+    val deleteProcess: LiveData<Pair<String, String>>
+        get() = _deleteProcess
 
     init {
         invokeMediatorUseCase(
@@ -33,5 +49,23 @@ class ProcessListViewModel @Inject constructor(
             useCase = processEditNavigationUseCase,
             params = ProcessEditNavigationUseCase.Parameter(id)
         )
+    }
+
+    override fun onRename(id: String, prevName: String) {
+        _renameProcess.postValue(id to prevName)
+    }
+
+    override fun onExportString(id: String) {
+        // TODO
+    }
+
+    override fun onDelete(id: String, name: String) {
+        _deleteProcess.postValue(id to name)
+    }
+
+    fun deleteProcess(processId: String) {
+        launchSuspendFunction {
+            processRepo.deleteProcess(processId)
+        }
     }
 }

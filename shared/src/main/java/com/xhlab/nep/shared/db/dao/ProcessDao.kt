@@ -28,4 +28,10 @@ abstract class ProcessDao : BaseDao<ProcessEntity>() {
         ORDER BY process_summary.name
     """)
     abstract fun getProcessList(): DataSource.Factory<Int, RoomProcessSummary>
+
+    @Query("""
+        DELETE FROM process
+        WHERE process.process_id = :processId
+    """)
+    abstract suspend fun deleteProcess(processId: String)
 }
