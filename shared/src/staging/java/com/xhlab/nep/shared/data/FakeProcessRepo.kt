@@ -16,7 +16,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
     private val processGlass = MutableLiveData(ProcessData.processGlass)
     private val processPE = MutableLiveData(ProcessData.processPE)
 
-    override fun getProcess(processId: String): LiveData<Process?> {
+    override suspend fun getProcess(processId: String): LiveData<Process?> {
         return when (processId) {
             processGlass.value?.id -> processGlass
             processPE.value?.id -> processPE
@@ -28,7 +28,15 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         return ListDataSource(ProcessData.processList)
     }
 
-    override fun connectRecipe(
+    override suspend fun createProcess(
+        name: String,
+        targetRecipe: Recipe,
+        keyElement: Element
+    ): Boolean {
+        TODO("not implemented")
+    }
+
+    override suspend fun connectRecipe(
         processId: String,
         from: Recipe,
         to: Recipe?,
@@ -46,7 +54,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         }
     }
 
-    override fun disconnectRecipe(
+    override suspend fun disconnectRecipe(
         processId: String,
         from: Recipe,
         to: Recipe,
@@ -62,7 +70,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         }
     }
 
-    override fun markNotConsumed(
+    override suspend fun markNotConsumed(
         processId: String,
         recipe: Recipe,
         element: Element,
