@@ -29,8 +29,8 @@ class ProcessDeserializer : JsonDeserializer<Process> {
         val edges = jsonObject.get("edges").asJsonArray.map { it.asJsonObject.toEdge() }
         for (edge in edges) {
             if (edge.from != edge.to) {
-                val from = vertices[if (edge.reversed) edge.from else edge.to]
-                val to = vertices[if (edge.reversed) edge.to else edge.from]
+                val from = vertices[edge.to]
+                val to = vertices[edge.from]
                 val element = from.getElement(edge.key)
                 if (element != null) {
                     process.connectRecipe(from, to, element, edge.reversed)
@@ -39,7 +39,7 @@ class ProcessDeserializer : JsonDeserializer<Process> {
                 val recipe = vertices[edge.from]
                 val element = recipe.getElement(edge.key)
                 if (element != null) {
-                    process.markNotConsumed(recipe, element, true)
+                    process.markNotConsumed(recipe, element, false)
                 }
             }
         }
