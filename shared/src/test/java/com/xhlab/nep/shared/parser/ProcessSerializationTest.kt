@@ -23,9 +23,18 @@ class ProcessSerializationTest {
     }
 
     @Test
-    fun deserialize() {
+    fun deserializeGlass() {
         val json = gson.toJson(ProcessData.processGlass)
         val original = ProcessData.processGlass
+        val new = gson.fromJson(json, Process::class.java)
+        assertEquals(original.getRecipeNodeCount(), new.getRecipeNodeCount())
+        assertEquals(original.getEdgesCount(), new.getEdgesCount())
+    }
+
+    @Test
+    fun deserializePE() {
+        val json = gson.toJson(ProcessData.processPE)
+        val original = ProcessData.processPE
         val new = gson.fromJson(json, Process::class.java)
         assertEquals(original.getRecipeNodeCount(), new.getRecipeNodeCount())
         assertEquals(original.getEdgesCount(), new.getEdgesCount())

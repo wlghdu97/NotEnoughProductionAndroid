@@ -10,7 +10,7 @@ data class RoomCraftingRecipeView(
     override val recipeId: Long
 ) : CraftingRecipeView() {
     @Ignore
-    override var itemList: List<RecipeElementView> = emptyList()
+    override val itemList: ArrayList<RecipeElementView> = arrayListOf()
     @Ignore
-    override var resultItemList: List<RecipeElementView> = emptyList()
+    override val resultItemList: ArrayList<RecipeElementView> = arrayListOf()
 }

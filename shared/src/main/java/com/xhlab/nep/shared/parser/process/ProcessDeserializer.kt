@@ -7,6 +7,8 @@ import com.google.gson.JsonObject
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import java.lang.reflect.Type
@@ -50,17 +52,29 @@ class ProcessDeserializer : JsonDeserializer<Process> {
         return (getInputs() + getOutput()).find { it.unlocalizedName == key }
     }
 
-    private fun JsonObject.toRecipe() = MachineRecipeViewImpl(
-        recipeId = get("recipeId").asLong,
-        isEnabled = get("isEnabled").asBoolean,
-        duration = get("duration").asInt,
-        powerType = get("powerType").asInt,
-        ept = get("ept").asInt,
-        machineId = get("machineId").asInt,
-        machineName = get("machineName").asString,
-        itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
-        resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
-    )
+    private fun JsonObject.toRecipe(): Recipe {
+        return if (get("machineName") != null) {
+            MachineRecipeViewImpl(
+                recipeId = get("recipeId").asLong,
+                isEnabled = get("isEnabled").asBoolean,
+                duration = get("duration").asInt,
+                powerType = get("powerType").asInt,
+                ept = get("ept").asInt,
+                machineId = get("machineId").asInt,
+                machineName = get("machineName").asString,
+                itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
+                resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
+            )
+        } else if (get("innerElement") != null) {
+            SupplierRecipe(get("innerElement").asJsonObject.toElement())
+        } else {
+            CraftingRecipeViewImpl(
+                recipeId = get("recipeId").asLong,
+                itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
+                resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
+            )
+        }
+    }
 
     private fun JsonObject.toElement() = RecipeElementViewImpl(
         id = get("id").asLong,
@@ -89,6 +103,12 @@ class ProcessDeserializer : JsonDeserializer<Process> {
         override val itemList: List<RecipeElementViewImpl>,
         override val resultItemList: List<RecipeElementViewImpl>
     ) : MachineRecipeView()
+
+    private data class CraftingRecipeViewImpl(
+        override val recipeId: Long,
+        override val itemList: List<RecipeElementView>,
+        override val resultItemList: List<RecipeElementView>
+    ) : CraftingRecipeView()
 
     private data class RecipeElementViewImpl(
         override val id: Long,
