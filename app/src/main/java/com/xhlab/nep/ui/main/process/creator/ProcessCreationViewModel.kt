@@ -55,6 +55,12 @@ class ProcessCreationViewModel @Inject constructor(
             launchSuspendFunction(_creationResult) {
                 processRepo.createProcess(name, recipePair.first, recipePair.second)
             }
+        } else if (isNameValid == null) {
+            _isNameValid.postValue(false)
+        } else {
+            _creationResult.postValue(Resource.error(EmptyTargetRecipeException()))
         }
     }
+
+    class EmptyTargetRecipeException : IllegalArgumentException()
 }

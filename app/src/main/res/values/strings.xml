@@ -114,6 +114,7 @@
     <string name="error_connect_recipe_failed">Failed to connect recipe.</string>
     <string name="error_failed_to_fetch_recipe">Failed to fetch recipe.</string>
     <string name="error_failed_to_create_process">Failed to create process.</string>
+    <string name="error_empty_target_recipe">Please select target recipe.</string>
 
     <string name="form_tab_recipes">Recipes (%d)</string>
     <string name="form_tab_usages">Usages (%d)</string>

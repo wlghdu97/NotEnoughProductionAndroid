@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
 import com.google.android.material.button.MaterialButton
@@ -49,7 +50,7 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_create_process)
             .setView(dialogView)
-            .setPositiveButton(R.string.btn_create) { _, _  -> viewModel.createProcess()}
+            .setPositiveButton(R.string.btn_create, null)
             .setNegativeButton(R.string.btn_cancel, null)
             .create()
     }
@@ -72,6 +73,13 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
 
         recipeButton.setOnClickListener {
             startItemBrowserForResult()
+        }
+
+        dialog?.setOnShowListener {
+            val createButton = (it as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE)
+            createButton.setOnClickListener {
+                viewModel.createProcess()
+            }
         }
     }
 
@@ -107,10 +115,13 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
         }
 
         viewModel.creationResult.observe(this) {
-            if (it.isSuccessful()) {
-                dismiss()
-            } else {
-                longToast(R.string.error_failed_to_create_process)
+            when {
+                it.isSuccessful() ->
+                    dismiss()
+                it.throwable is ProcessCreationViewModel.EmptyTargetRecipeException ->
+                    longToast(R.string.error_empty_target_recipe)
+                else ->
+                    longToast(R.string.error_failed_to_create_process)
             }
         }
     }
