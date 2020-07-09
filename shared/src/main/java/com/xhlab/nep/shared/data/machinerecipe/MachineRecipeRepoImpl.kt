@@ -21,8 +21,8 @@ internal class MachineRecipeRepoImpl @Inject constructor(
             = db.getMachineRecipeDao().searchRecipeIdByElement(elementId, machineId).map {
         runBlocking {
             it.also {
-                it.itemList = db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId)
-                it.resultItemList = db.getRecipeResultDao().getElementListOfResult(it.recipeId)
+                it.itemList.addAll(db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId))
+                it.resultItemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
             } as RecipeView
         }
     }
@@ -31,8 +31,8 @@ internal class MachineRecipeRepoImpl @Inject constructor(
             = db.getMachineRecipeDao().searchUsageRecipeIdByElement(elementId, machineId).map {
         runBlocking {
             it.also {
-                it.itemList = db.getRecipeResultDao().getElementListOfResult(it.recipeId)
-                it.resultItemList = db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId)
+                it.itemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
+                it.resultItemList.addAll(db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId))
             } as RecipeView
         }
     }
