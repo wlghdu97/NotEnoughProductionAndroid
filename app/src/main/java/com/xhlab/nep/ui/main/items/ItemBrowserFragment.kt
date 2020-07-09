@@ -1,6 +1,5 @@
 package com.xhlab.nep.ui.main.items
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,11 +35,6 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
         this.listener = listener
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        initViewModel()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +45,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        initViewModel()
         initView()
     }
 
