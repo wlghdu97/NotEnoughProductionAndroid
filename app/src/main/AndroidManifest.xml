@@ -41,6 +41,10 @@
             android:launchMode="singleTop"/>
 
         <activity
+            android:name=".ui.main.process.creator.browser.ItemBrowserActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
             android:name=".ui.process.editor.ProcessEditActivity"
             android:parentActivityName=".ui.main.MainActivity"
             android:launchMode="singleTop"/>

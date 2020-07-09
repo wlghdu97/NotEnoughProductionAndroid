@@ -1,6 +1,5 @@
 package com.xhlab.nep.ui.main.items
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,18 +19,20 @@ import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_item_browser.*
 import javax.inject.Inject
 
-class ItemBrowserFragment : DaggerFragment(), ViewInit {
+class ItemBrowserFragment : DaggerFragment, ViewInit {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var viewModel: ItemBrowserViewModel
 
-    private val elementAdapter by lazy { ElementDetailAdapter(viewModel) }
+    private var listener: ElementListener? = null
+    private val elementAdapter by lazy { ElementDetailAdapter(listener) }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        initViewModel()
+    constructor() : super()
+
+    constructor(listener: ElementListener) : super() {
+        this.listener = listener
     }
 
     override fun onCreateView(
@@ -44,11 +45,15 @@ class ItemBrowserFragment : DaggerFragment(), ViewInit {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        initViewModel()
         initView()
     }
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
+        if (listener == null) {
+            this.listener = viewModel
+        }
 
         viewModel.isDBLoaded.observe(this) {
             element_list.isGone = !it

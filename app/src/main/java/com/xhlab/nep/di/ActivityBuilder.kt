@@ -6,14 +6,16 @@ import com.xhlab.nep.ui.main.MainActivity
 import com.xhlab.nep.ui.main.MainModule
 import com.xhlab.nep.ui.main.machines.details.MachineResultActivity
 import com.xhlab.nep.ui.main.machines.details.MachineResultModule
-import com.xhlab.nep.ui.process.editor.ProcessEditActivity
-import com.xhlab.nep.ui.process.editor.ProcessEditModule
+import com.xhlab.nep.ui.main.process.creator.browser.ItemBrowserActivity
+import com.xhlab.nep.ui.main.process.creator.browser.ItemBrowserModule
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationActivity
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationModule
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionModule
+import com.xhlab.nep.ui.process.editor.ProcessEditActivity
+import com.xhlab.nep.ui.process.editor.ProcessEditModule
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionModule
+import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
+import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionModule
 import com.xhlab.nep.ui.recipe.MachineRecipeListActivity
 import com.xhlab.nep.ui.recipe.MachineRecipeListModule
 import dagger.Module
@@ -33,6 +35,9 @@ abstract class ActivityBuilder {
 
     @ContributesAndroidInjector(modules = [MachineRecipeListModule::class])
     abstract fun provideMachineRecipeListActivity(): MachineRecipeListActivity
+
+    @ContributesAndroidInjector(modules = [ItemBrowserModule::class])
+    abstract fun provideItemBrowserActivity(): ItemBrowserActivity
 
     @ContributesAndroidInjector(modules = [ProcessEditModule::class])
     abstract fun provideProcessEditActivity(): ProcessEditActivity

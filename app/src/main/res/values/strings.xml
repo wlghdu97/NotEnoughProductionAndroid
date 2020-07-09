@@ -23,6 +23,8 @@
     <string name="title_calculation_result">Calculation result</string>
     <string name="title_disconnect_recipe">Disconnect recipe?</string>
     <string name="title_select_recipe_to_connect">Select recipe to connect</string>
+    <string name="title_create_process">Create process</string>
+    <string name="title_select_target_element">Select target element</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
@@ -45,8 +47,11 @@
     <string name="btn_close">Close</string>
     <string name="btn_load">Load</string>
     <string name="btn_use_existing">Use existing</string>
+    <string name="btn_create">Create</string>
+    <string name="btn_select_target_recipe">Select target recipe</string>
 
     <string name="hint_search_element">Search item</string>
+    <string name="hint_name">Name</string>
 
     <string name="tab_recipes">Recipes</string>
     <string name="tab_usages">Usages</string>
@@ -103,9 +108,13 @@
     </string>
     <string name="txt_do_not_show_again">Do not show again</string>
     <string name="txt_invalid_uri">Invalid file uri.</string>
+    <string name="txt_name_empty">Name must not be empty.</string>
 
     <string name="error_open_file_failed">Failed to open file.</string>
     <string name="error_connect_recipe_failed">Failed to connect recipe.</string>
+    <string name="error_failed_to_fetch_recipe">Failed to fetch recipe.</string>
+    <string name="error_failed_to_create_process">Failed to create process.</string>
+    <string name="error_empty_target_recipe">Please select target recipe.</string>
 
     <string name="form_tab_recipes">Recipes (%d)</string>
     <string name="form_tab_usages">Usages (%d)</string>
@@ -117,4 +126,5 @@
     <string name="form_machine_property">%s %s, %s seconds, total %s %s</string>
     <string name="form_process_description">%dx %s\n%d nodes</string>
     <string name="form_degree">Depth : %d</string>
+    <string name="form_recipe_details">%s recipe\n%dx %s</string>
 </resources>

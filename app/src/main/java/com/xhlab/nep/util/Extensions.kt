@@ -1,6 +1,7 @@
 package com.xhlab.nep.util
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Base64
 import android.widget.ImageView
 import androidx.annotation.StringRes
@@ -46,11 +47,15 @@ fun Context.getIconsFile(fileName: String): File {
     return File(getExternalFilesDir("icons"), fileName)
 }
 
+fun Context.getIcon(unlocalizedName: String): Drawable? {
+    val encodedName = Base64.encodeToString(unlocalizedName.toByteArray(), Base64.NO_WRAP)
+    return Drawable.createFromPath(getIconsFile("${encodedName}.png").path)
+}
+
 fun ImageView.setIcon(unlocalizedName: String) {
     val requestOptions = RequestOptions.bitmapTransform(RoundedCorners(16))
-    val encodedName = Base64.encodeToString(unlocalizedName.toByteArray(), Base64.NO_WRAP)
     Glide.with(context)
-        .load(context.getIconsFile("${encodedName}.png"))
+        .load(context.getIcon(unlocalizedName))
         .apply(requestOptions)
         .into(this)
 }
