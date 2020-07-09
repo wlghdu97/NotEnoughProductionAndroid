@@ -51,7 +51,7 @@ class ProcessCreationViewModel @Inject constructor(
         val isNameValid = isNameValid.value
         val recipePair = recipePair.value
         if (isNameValid == true && recipePair != null) {
-            val name = processName.value.toString()
+            val name = processName.value.toString().trim()
             launchSuspendFunction(_creationResult) {
                 processRepo.createProcess(name, recipePair.first, recipePair.second)
             }
