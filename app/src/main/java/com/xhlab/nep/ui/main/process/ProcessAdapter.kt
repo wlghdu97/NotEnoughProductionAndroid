@@ -68,7 +68,8 @@ class ProcessAdapter(
 
         override fun areContentsTheSame(oldItem: Process, newItem: Process): Boolean {
             return (oldItem.id == newItem.id &&
-                    oldItem.name == newItem.name)
+                    oldItem.name == newItem.name &&
+                    oldItem.getRecipeNodeCount() == newItem.getRecipeNodeCount())
         }
     }
 }
