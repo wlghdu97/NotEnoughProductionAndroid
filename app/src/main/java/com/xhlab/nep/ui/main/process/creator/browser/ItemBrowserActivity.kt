@@ -67,6 +67,7 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
             arguments = Bundle().apply { putLong(ELEMENT_ID, elementId) }
         }
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, RECIPE_LIST_TAG)
             .addToBackStack(null)
             .commit()
@@ -80,6 +81,7 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
             }
         }
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, MACHINE_RECIPE_LIST_TAG)
             .addToBackStack(null)
             .commit()
