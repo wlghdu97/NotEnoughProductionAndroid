@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
-import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.ui.main.items.ElementListener
@@ -42,9 +41,8 @@ open class RecipeDetailAdapter(
 
     final override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is CraftingRecipeView -> 0
             is MachineRecipeView -> 1
-            else -> throw IllegalArgumentException("invalid recipe view type.")
+            else -> 0
         }
     }
 
