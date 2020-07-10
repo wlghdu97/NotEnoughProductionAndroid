@@ -5,7 +5,7 @@ import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.recipes.view.RecipeMachineView
 
 interface ElementRepo {
-    suspend fun getIdByKey(unlocalizedName: String): Long?
+    suspend fun getIdsByKey(unlocalizedName: String): List<Long>
     suspend fun getElementDetail(id: Long): ElementView?
     suspend fun deleteAll()
     fun searchByName(term: String): DataSource.Factory<Int, ElementView>

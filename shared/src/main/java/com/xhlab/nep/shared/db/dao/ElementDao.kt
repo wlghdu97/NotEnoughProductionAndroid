@@ -4,10 +4,10 @@ import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
+import com.xhlab.nep.model.recipes.view.RecipeMachineView
 import com.xhlab.nep.shared.db.BaseDao
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.shared.db.view.RoomElementView
-import com.xhlab.nep.model.recipes.view.RecipeMachineView
 
 @Dao
 abstract class ElementDao : BaseDao<ElementEntity>() {
@@ -165,6 +165,12 @@ abstract class ElementDao : BaseDao<ElementEntity>() {
         WHERE element.unlocalized_name = :unlocalizedName
     """)
     abstract suspend fun getId(unlocalizedName: String): Long
+
+    @Query("""
+        SELECT element.id FROM element
+        WHERE element.unlocalized_name = :unlocalizedName
+    """)
+    abstract suspend fun getIds(unlocalizedName: String): List<Long>
 
     @Query("""
         SELECT chain_element_id FROM ore_dict_chain

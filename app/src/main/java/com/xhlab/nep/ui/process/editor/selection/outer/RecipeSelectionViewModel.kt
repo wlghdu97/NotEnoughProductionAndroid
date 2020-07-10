@@ -26,10 +26,14 @@ class RecipeSelectionViewModel @Inject constructor(
 {
     private val processId = MutableLiveData<String>()
 
-    private val _element = MediatorLiveData<Resource<ElementView>>()
-    val element = Transformations.map(_element) {
-        if (it.isSuccessful()) it.data else null
+    private val _elements = MediatorLiveData<Resource<List<ElementView>>>()
+    val elements = Transformations.map(_elements) {
+        if (it.isSuccessful() && it?.data!!.size > 1) it.data else null
     }
+
+    private val _element = MediatorLiveData<ElementView?>()
+    val element: LiveData<ElementView?>
+        get() = _element
 
     private val _constraint = MutableLiveData<ProcessEditViewModel.ConnectionConstraint>()
     val constraint: LiveData<ProcessEditViewModel.ConnectionConstraint>
@@ -42,6 +46,15 @@ class RecipeSelectionViewModel @Inject constructor(
     private val _connectionResult = LiveEvent<Resource<Unit>>()
     val connectionResult: LiveData<Resource<Unit>>
         get() = _connectionResult
+
+    init {
+        _element.addSource(_elements) {
+            val elements = it?.data
+            if (elements?.size == 1) {
+                _element.postValue(elements[0])
+            }
+        }
+    }
 
     fun init(
         processId: String?,
@@ -60,7 +73,7 @@ class RecipeSelectionViewModel @Inject constructor(
             else -> {
                 this.processId.value = processId
                 invokeUseCase(
-                    resultData = _element,
+                    resultData = _elements,
                     useCase = loadElementDetailWithKeyUseCase,
                     params = LoadElementDetailWithKeyUseCase.Parameter(elementKey)
                 )
@@ -71,6 +84,10 @@ class RecipeSelectionViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun submitElement(element: ElementView) {
+        _element.postValue(element)
     }
 
     private fun requireElementId()

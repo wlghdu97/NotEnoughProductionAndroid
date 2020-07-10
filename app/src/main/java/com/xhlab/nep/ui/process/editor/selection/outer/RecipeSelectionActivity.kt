@@ -2,9 +2,11 @@ package com.xhlab.nep.ui.process.editor.selection.outer
 
 import android.os.Bundle
 import androidx.lifecycle.observe
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
@@ -61,6 +63,10 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             elementKey = intent?.getStringExtra(ELEMENT_KEY)
         )
 
+        viewModel.elements.observeNotNull(this) {
+            showElementSelectionDialog(it)
+        }
+
         viewModel.element.observeNotNull(this) {
             supportActionBar?.subtitle = it.localizedName
         }
@@ -80,6 +86,16 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
                 ).show()
             }
         }
+    }
+
+    private fun showElementSelectionDialog(elementList: List<ElementView>) {
+        val nameArray = elementList.map { it.localizedName }.toTypedArray()
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.title_select_element)
+            .setItems(nameArray) { _, index -> viewModel.submitElement(elementList[index]) }
+            .setNegativeButton(R.string.btn_cancel) { _, _ -> finish() }
+            .setCancelable(false)
+            .show()
     }
 
     private fun navigateToDetails(elementId: Long, machineId: Int) {

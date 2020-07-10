@@ -29,6 +29,7 @@
     <string name="title_delete_process">Delete process \"%s\"?</string>
     <string name="title_export_result">Export result</string>
     <string name="title_import_process">Import process with string</string>
+    <string name="title_select_element">Multiple items detected</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>

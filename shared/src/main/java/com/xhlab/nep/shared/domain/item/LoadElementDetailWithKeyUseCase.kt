@@ -7,13 +7,24 @@ import javax.inject.Inject
 
 class LoadElementDetailWithKeyUseCase @Inject constructor(
     private val elementRepo: ElementRepo
-) : UseCase<LoadElementDetailWithKeyUseCase.Parameter, ElementView>() {
+) : UseCase<LoadElementDetailWithKeyUseCase.Parameter, List<ElementView>>() {
 
-    override suspend fun execute(params: Parameter): ElementView {
-        val elementId = elementRepo.getIdByKey(params.key)
-            ?: throw NullPointerException("element id not found.")
-        return elementRepo.getElementDetail(elementId)
-            ?: throw NullPointerException("element not found.")
+    override suspend fun execute(params: Parameter): List<ElementView> {
+        val ids = elementRepo.getIdsByKey(params.key)
+        return if (ids.isEmpty()) {
+            throw NullPointerException("element id not found.")
+        } else {
+            val list = arrayListOf<ElementView>()
+            for (id in ids) {
+                val elementView = elementRepo.getElementDetail(id)
+                if (elementView != null) {
+                    list.add(elementView)
+                } else {
+                    throw NullPointerException("element not found.")
+                }
+            }
+            list
+        }
     }
 
     data class Parameter(val key: String)
