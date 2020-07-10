@@ -1,9 +1,8 @@
 package com.xhlab.nep.ui.process.editor.selection.outer.details
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
@@ -41,6 +40,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
+        setHasOptionsMenu(true)
         with (recipe_list) {
             recipeAdapter = RecipeSelectionAdapter(
                 targetElementId = arguments?.getLong(ELEMENT_ID),
@@ -74,6 +74,22 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         viewModel.isIconLoaded.observe(this) { isLoaded ->
             recipeAdapter.setIconVisibility(isLoaded)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.recipe_search, menu)
+        val searchMenu = menu.findItem(R.id.menu_search)
+        with (searchMenu.actionView as SearchView) {
+            queryHint = getString(R.string.hint_search_ingredient)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?) = false
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.searchIngredients(newText ?: "")
+                    return true
+                }
+            })
+        }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     companion object {

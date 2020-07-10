@@ -36,13 +36,21 @@ internal class MachineRecipeRepoImpl @Inject constructor(
         }
     }
 
-    override fun searchUsageRecipeByElement(elementId: Long, machineId: Int)
-            = db.getMachineRecipeDao().searchUsageRecipeIdByElement(elementId, machineId).map {
-        runBlocking {
-            it.also {
-                it.itemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
-                it.resultItemList.addAll(db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId))
-            } as RecipeView
+    override fun searchUsageRecipeByElement(
+        elementId: Long,
+        machineId: Int,
+        term: String
+    ): DataSource.Factory<Int, RecipeView> {
+        return when (term.isEmpty()) {
+            true -> db.getMachineRecipeDao().searchUsageRecipeIdByElement(elementId, machineId)
+            false -> db.getMachineRecipeDao().searchUsageRecipeIdByElement(elementId, machineId, "*$term*")
+        }.map {
+            runBlocking {
+                it.also {
+                    it.itemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
+                    it.resultItemList.addAll(db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId))
+                } as RecipeView
+            }
         }
     }
 }

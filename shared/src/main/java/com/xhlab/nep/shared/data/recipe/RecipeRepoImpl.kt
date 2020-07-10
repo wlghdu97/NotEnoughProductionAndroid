@@ -37,13 +37,20 @@ internal class RecipeRepoImpl @Inject constructor(
         }
     }
 
-    override fun searchUsageRecipeByElement(elementId: Long)
-            = db.getRecipeDao().searchUsageRecipeIdByElement(elementId).map {
-        runBlocking {
-            it.also {
-                it.itemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
-                it.resultItemList.addAll(db.getRecipeDao().getElementListOfRecipe(it.recipeId))
-            } as RecipeView
+    override fun searchUsageRecipeByElement(
+        elementId: Long,
+        term: String
+    ): DataSource.Factory<Int, RecipeView> {
+        return when (term.isEmpty()) {
+            true -> db.getRecipeDao().searchUsageRecipeIdByElement(elementId)
+            false -> db.getRecipeDao().searchUsageRecipeIdByElement(elementId, "*$term*")
+        }.map {
+            runBlocking {
+                it.also {
+                    it.itemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
+                    it.resultItemList.addAll(db.getRecipeDao().getElementListOfRecipe(it.recipeId))
+                } as RecipeView
+            }
         }
     }
 

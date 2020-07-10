@@ -97,4 +97,32 @@ abstract class MachineRecipeDao : BaseDao<MachineRecipeEntity>() {
         elementId: Long,
         machineId: Int
     ): DataSource.Factory<Int, RoomMachineRecipeView>
+
+    @Transaction
+    @Query("""
+        SELECT 
+        machine_recipe.recipe_id,
+        machine_recipe.enabled,
+        machine_recipe.duration,
+        machine_recipe.power_type,
+        machine_recipe.ept,
+        machine_recipe.meta_data,
+        machine.id AS machine_id,
+        machine.name AS machine_name
+        FROM machine_recipe
+        INNER JOIN machine ON machine.id = :machineId
+        INNER JOIN recipe_result ON recipe_result.recipe_id = machine_recipe.recipe_id
+        INNER JOIN element_fts ON element_fts.docid = recipe_result.result_item_id
+        WHERE 
+        machine_recipe.target_item_id = :elementId AND
+        machine_recipe.machine_id = machine.id AND
+        element_fts MATCH :term
+        GROUP BY machine_recipe.recipe_id
+        ORDER BY machine_recipe.amount DESC
+    """)
+    abstract fun searchUsageRecipeIdByElement(
+        elementId: Long,
+        machineId: Int,
+        term: String
+    ): DataSource.Factory<Int, RoomMachineRecipeView>
 }

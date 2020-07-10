@@ -9,5 +9,5 @@ interface RecipeRepo {
     suspend fun getElementListByRecipe(recipeId: Long): List<RecipeElementView>
     suspend fun insertRecipes(recipes: List<Recipe>)
     fun searchRecipeByElement(elementId: Long, term: String): DataSource.Factory<Int, RecipeView>
-    fun searchUsageRecipeByElement(elementId: Long): DataSource.Factory<Int, RecipeView>
+    fun searchUsageRecipeByElement(elementId: Long, term: String): DataSource.Factory<Int, RecipeView>
 }

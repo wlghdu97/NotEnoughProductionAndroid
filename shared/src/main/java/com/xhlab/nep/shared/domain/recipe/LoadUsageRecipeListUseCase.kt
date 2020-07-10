@@ -17,13 +17,13 @@ class LoadUsageRecipeListUseCase @Inject constructor(
 ) : MediatorUseCase<LoadUsageRecipeListUseCase.Parameters, PagedList<RecipeView>>() {
 
     override fun executeInternal(params: Parameters) = liveData<Resource<PagedList<RecipeView>>> {
-        val (elementId, machineId) = params
+        val (elementId, machineId, term) = params
         val config = PagedList.Config.Builder()
             .setPageSize(PAGE_SIZE)
             .build()
         val dataSource = when (machineId == CRAFTING_BENCH) {
-            true -> recipeRepo.searchUsageRecipeByElement(elementId)
-            false -> machineRecipeRepo.searchUsageRecipeByElement(elementId, machineId)
+            true -> recipeRepo.searchUsageRecipeByElement(elementId, term)
+            false -> machineRecipeRepo.searchUsageRecipeByElement(elementId, machineId, term)
         }
         val liveData = LivePagedListBuilder(dataSource, config).build()
         emitSource(Transformations.map(liveData) { Resource.success(it) })
@@ -31,7 +31,8 @@ class LoadUsageRecipeListUseCase @Inject constructor(
 
     data class Parameters(
         val elementId: Long,
-        val machineId: Int
+        val machineId: Int,
+        val term: String = ""
     )
 
     companion object {
