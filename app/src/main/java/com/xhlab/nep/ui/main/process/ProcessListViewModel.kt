@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ProcessEditNavigationUseCase
 import com.xhlab.nep.shared.data.process.ProcessRepo
+import com.xhlab.nep.shared.domain.process.ExportProcessStringUseCase
 import com.xhlab.nep.shared.domain.process.LoadProcessListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class ProcessListViewModel @Inject constructor(
     private val processRepo: ProcessRepo,
     loadProcessListUseCase: LoadProcessListUseCase,
+    private val exportProcessStringUseCase: ExportProcessStringUseCase,
     private val processEditNavigationUseCase: ProcessEditNavigationUseCase,
     generalPreference: GeneralPreference
 ) : ViewModel(),
@@ -29,8 +31,8 @@ class ProcessListViewModel @Inject constructor(
     val renameProcess: LiveData<Pair<String, String>>
         get() = _renameProcess
 
-    private val _exportProcess = LiveEvent<String>()
-    val exportProcess: LiveData<String>
+    private val _exportProcess = LiveEvent<Resource<String>>()
+    val exportProcess: LiveData<Resource<String>>
         get() = _exportProcess
 
     private val _deleteProcess = LiveEvent<Pair<String, String>>()
@@ -56,7 +58,11 @@ class ProcessListViewModel @Inject constructor(
     }
 
     override fun onExportString(id: String) {
-        // TODO
+        invokeUseCase(
+            resultData = _exportProcess,
+            useCase = exportProcessStringUseCase,
+            params = ExportProcessStringUseCase.Parameter(id)
+        )
     }
 
     override fun onDelete(id: String, name: String) {

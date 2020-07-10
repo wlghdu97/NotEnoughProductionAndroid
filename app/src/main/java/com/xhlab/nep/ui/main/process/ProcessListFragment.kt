@@ -6,10 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog
+import com.xhlab.nep.ui.main.process.export.ProcessExportDialog
+import com.xhlab.nep.ui.main.process.export.ProcessExportDialog.Companion.EXPORTED_STRING
+import com.xhlab.nep.ui.main.process.importer.ProcessImportDialog
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCESS_ID
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCESS_NAME
@@ -45,7 +50,7 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
         process_list.adapter = processAdapter
 
         fab_add.setOnClickListener {
-            showProcessCreationDialog()
+            showProcessCreationSelectionAlert()
         }
     }
 
@@ -65,7 +70,11 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
         }
 
         viewModel.exportProcess.observe(this) {
-
+            if (it.isSuccessful()) {
+                showExportStringDialog(it.data!!)
+            } else if (it.throwable != null) {
+                Snackbar.make(root, R.string.error_failed_to_export_string, Snackbar.LENGTH_LONG).show()
+            }
         }
 
         viewModel.deleteProcess.observe(this) { (processId, name) ->
@@ -73,8 +82,23 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
         }
     }
 
+    private fun showProcessCreationSelectionAlert() {
+        MaterialAlertDialogBuilder(context)
+            .setItems(R.array.process_creation) { _, index ->
+                when (index) {
+                    0 -> showProcessCreationDialog()
+                    1 -> showProcessImportDialog()
+                }
+            }
+            .show()
+    }
+
     private fun showProcessCreationDialog() {
         ProcessCreationDialog().show(childFragmentManager, PROCESS_CREATION_TAG)
+    }
+
+    private fun showProcessImportDialog() {
+        ProcessImportDialog().show(childFragmentManager, PROCESS_IMPORT_TAG)
     }
 
     private fun showProcessRenameDialog(processId: String, name: String) {
@@ -84,6 +108,14 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
                 putString(PROCESS_NAME, name)
             }
         }.show(childFragmentManager, PROCESS_RENAME_TAG)
+    }
+
+    private fun showExportStringDialog(string: String) {
+        ProcessExportDialog().apply {
+            arguments = Bundle().apply {
+                putString(EXPORTED_STRING, string)
+            }
+        }.show(childFragmentManager, PROCESS_EXPORT_TAG)
     }
 
     private fun showProcessRemovalDialog(processId: String, name: String) {
@@ -97,6 +129,8 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
 
     companion object {
         private const val PROCESS_CREATION_TAG = "process_creation_tag"
+        private const val PROCESS_IMPORT_TAG = "process_import_tag"
         private const val PROCESS_RENAME_TAG = "process_rename_tag"
+        private const val PROCESS_EXPORT_TAG = "process_export_tag"
     }
 }

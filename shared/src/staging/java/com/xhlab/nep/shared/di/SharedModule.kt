@@ -1,6 +1,8 @@
 package com.xhlab.nep.shared.di
 
 import android.app.Application
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.xhlab.nep.shared.data.FakeProcessRepo
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.element.ElementRepoImpl
@@ -25,6 +27,10 @@ import javax.inject.Singleton
 @Module(includes = [RoomModule::class])
 @Suppress("unused")
 class SharedModule {
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = GsonBuilder().create()
+
     @Provides
     @Singleton
     fun provideGeneralPreference(app: Application): GeneralPreference = GeneralSharedPreference(app)

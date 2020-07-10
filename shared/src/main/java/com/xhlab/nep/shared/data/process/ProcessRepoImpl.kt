@@ -38,6 +38,10 @@ internal class ProcessRepoImpl @Inject constructor(
         return result != -1L
     }
 
+    override suspend fun insertProcess(process: Process) {
+        db.getProcessDao().insert(roomMapper.map(process))
+    }
+
     override suspend fun renameProcess(processId: String, name: String) = withContext(io) {
         val liveData = getProcessInternal(processId)
         val process = liveData.value
@@ -52,6 +56,10 @@ internal class ProcessRepoImpl @Inject constructor(
 
     override suspend fun deleteProcess(processId: String) = withContext(io) {
         db.getProcessDao().deleteProcess(processId)
+    }
+
+    override suspend fun exportProcessString(processId: String) = withContext(io) {
+        db.getProcessDao().getProcessJson(processId)
     }
 
     override suspend fun connectRecipe(

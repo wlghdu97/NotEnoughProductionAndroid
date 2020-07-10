@@ -5,6 +5,8 @@ import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.ChildFragmentScope
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationModule
+import com.xhlab.nep.ui.main.process.importer.ProcessImportDialog
+import com.xhlab.nep.ui.main.process.importer.ProcessImportModule
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameModule
 import dagger.Binds
@@ -23,6 +25,10 @@ abstract class ProcessListModule {
     @ChildFragmentScope
     @ContributesAndroidInjector(modules = [ProcessCreationModule::class])
     abstract fun provideProcessCreationDialog(): ProcessCreationDialog
+
+    @ChildFragmentScope
+    @ContributesAndroidInjector(modules = [ProcessImportModule::class])
+    abstract fun provideProcessImportDialog(): ProcessImportDialog
 
     @ChildFragmentScope
     @ContributesAndroidInjector(modules = [ProcessRenameModule::class])

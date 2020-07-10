@@ -18,6 +18,12 @@ abstract class ProcessDao : BaseDao<ProcessEntity>() {
     abstract suspend fun getProcess(processId: String): ProcessEntity?
 
     @Query("""
+        SELECT process.json FROM process
+        WHERE process.process_id = :processId
+    """)
+    abstract suspend fun getProcessJson(processId: String): String?
+
+    @Query("""
         SELECT * FROM process
         WHERE process.process_id = :processId
     """)

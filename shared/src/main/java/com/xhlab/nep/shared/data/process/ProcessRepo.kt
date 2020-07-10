@@ -11,8 +11,10 @@ interface ProcessRepo {
     fun getProcesses(): DataSource.Factory<Int, ProcessSummary>
     suspend fun getProcess(processId: String): LiveData<Process?>
     suspend fun createProcess(name: String, targetRecipe: Recipe, keyElement: Element): Boolean
+    suspend fun insertProcess(process: Process)
     suspend fun renameProcess(processId: String, name: String)
     suspend fun deleteProcess(processId: String)
+    suspend fun exportProcessString(processId: String): String?
     suspend fun connectRecipe(processId: String, from: Recipe, to: Recipe?, element: Element, reversed: Boolean)
     suspend fun disconnectRecipe(processId: String, from: Recipe, to: Recipe, element: Element, reversed: Boolean)
     suspend fun markNotConsumed(processId: String, recipe: Recipe, element: Element, consumed: Boolean)

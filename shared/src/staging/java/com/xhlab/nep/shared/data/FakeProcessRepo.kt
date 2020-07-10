@@ -37,6 +37,10 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         TODO("not implemented")
     }
 
+    override suspend fun insertProcess(process: Process) {
+        TODO("not implemented")
+    }
+
     override suspend fun renameProcess(processId: String, name: String) {
         TODO("not implemented")
     }
@@ -44,6 +48,11 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
     override suspend fun deleteProcess(processId: String) {
         TODO("not implemented")
     }
+
+    override suspend fun exportProcessString(processId: String): String {
+        TODO("not implemented")
+    }
+
     override suspend fun connectRecipe(
         processId: String,
         from: Recipe,
