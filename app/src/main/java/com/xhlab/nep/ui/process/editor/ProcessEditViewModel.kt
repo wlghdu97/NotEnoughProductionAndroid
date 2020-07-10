@@ -1,6 +1,7 @@
 package com.xhlab.nep.ui.process.editor
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
@@ -8,7 +9,9 @@ import com.xhlab.nep.domain.InternalRecipeSelectionNavigationUseCase
 import com.xhlab.nep.domain.ProcessCalculationNavigationUseCase
 import com.xhlab.nep.domain.RecipeSelectionNavigationUseCase
 import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -42,6 +45,10 @@ class ProcessEditViewModel @Inject constructor(
     val connectRecipe: LiveData<ConnectionConstraint>
         get() = _connectRecipe
 
+    private val _modificationResult = MediatorLiveData<Resource<Unit>>()
+    val modificationResult: LiveData<Resource<Unit>>
+        get() = _modificationResult
+
     fun init(processId: String?) {
         if (processId == null) {
             throw NullPointerException("process id is null.")
@@ -72,13 +79,13 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
-        launchSuspendFunction {
+        launchSuspendFunction(_modificationResult) {
             processRepo.markNotConsumed(requireProcessId(), recipe, element, consumed)
         }
     }
 
     private fun disconnect(payload: DisconnectionPayload) {
-        launchSuspendFunction {
+        launchSuspendFunction(_modificationResult) {
             with (payload) {
                 processRepo.disconnectRecipe(requireProcessId(), from, to, element, reversed)
             }
@@ -90,6 +97,16 @@ class ProcessEditViewModel @Inject constructor(
             generalPreference.setShowDisconnectionAlert(false)
         }
         disconnect(payload)
+    }
+
+    fun attachSupplier(recipe: Recipe, keyElement: String) {
+        launchSuspendFunction(_modificationResult) {
+            val element = recipe.getInputs().find { it.unlocalizedName == keyElement }
+            if (element is ElementView) {
+                val supplier = SupplierRecipe(element)
+                processRepo.connectRecipe(requireProcessId(), supplier, recipe, element, false)
+            }
+        }
     }
 
     fun toggleIconMode() {

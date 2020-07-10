@@ -135,6 +135,7 @@
     <string name="error_empty_target_recipe">Please select target recipe.</string>
     <string name="error_failed_to_rename_process">Failed to rename process.</string>
     <string name="error_failed_to_export_string">Failed to export string.</string>
+    <string name="error_failed_to_modify_process">Failed to modify process.</string>
 
     <string name="form_tab_recipes">Recipes (%d)</string>
     <string name="form_tab_usages">Usages (%d)</string>

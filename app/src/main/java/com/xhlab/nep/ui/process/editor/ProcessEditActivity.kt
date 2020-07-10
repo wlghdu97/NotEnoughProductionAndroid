@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
@@ -90,6 +91,12 @@ class ProcessEditActivity :
         viewModel.connectRecipe.observe(this) {
             showConnectionSelectionAlert(it)
         }
+
+        viewModel.modificationResult.observe(this) {
+            if (it.throwable != null) {
+                Snackbar.make(root, R.string.error_failed_to_modify_process, Snackbar.LENGTH_LONG).show()
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -129,11 +136,16 @@ class ProcessEditActivity :
     }
 
     private fun showConnectionSelectionAlert(constraint: ProcessEditViewModel.ConnectionConstraint) {
+        val arrayId = when (constraint.connectToParent) {
+            true -> R.array.connection_selection
+            false -> R.array.connection_selection_child
+        }
         MaterialAlertDialogBuilder(this)
-            .setItems(R.array.connection_selection) { _, index ->
+            .setItems(arrayId) { _, index ->
                 when (index) {
                     0 -> viewModel.navigateToInternalRecipeSelection(constraint)
                     1 -> viewModel.navigateToRecipeSelection(constraint)
+                    2 -> viewModel.attachSupplier(constraint.recipe, constraint.elementKey)
                 }
             }
             .show()
