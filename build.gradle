@@ -21,11 +21,14 @@ buildscript {
         timber_version = "4.7.1"
         math_version = "3.6.1"
 
+        analytics_version = "17.4.4"
+
         junit_version = "4.12"
         core_testing_version = "1.1.1"
         mockito_version = "3.2.0"
         mockito_kotlin_version = "2.2.0"
         coroutine_test_version = "1.3.2"
+        test_fragment_version = "1.1.0-rc04"
         test_runner_version = "1.2.0"
         test_junit_version = "1.1.1"
         espresso_version = "3.2.0"
@@ -35,6 +38,8 @@ buildscript {
 
         jacoco_version = "0.8.1"
         jacocoEnabled = System.getProperty("jacocoEnabled") ?: "false"
+
+        google_services_version = "4.3.3"
     }
 
     repositories {
@@ -47,6 +52,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jacoco:org.jacoco.core:$jacoco_version"
+        classpath "com.google.gms:google-services:$google_services_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
