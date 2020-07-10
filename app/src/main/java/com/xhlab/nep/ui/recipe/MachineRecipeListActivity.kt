@@ -1,6 +1,8 @@
 package com.xhlab.nep.ui.recipe
 
 import android.os.Bundle
+import android.view.Menu
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
@@ -62,6 +64,22 @@ class MachineRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
             addItemDecoration(LinearItemSpacingDecorator(dip(4)))
         }
         recipe_list.adapter = recipeAdapter
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.recipe_search, menu)
+        val searchMenu = menu.findItem(R.id.menu_search)
+        with (searchMenu.actionView as SearchView) {
+            queryHint = getString(R.string.hint_search_ingredient)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?) = false
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    viewModel.searchIngredients(newText ?: "")
+                    return true
+                }
+            })
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 
     companion object {

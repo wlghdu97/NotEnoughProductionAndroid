@@ -50,6 +50,7 @@
     <string name="menu_delete_process">Delete</string>
     <string name="menu_create_new">Create new</string>
     <string name="menu_import_from_string">Import from string</string>
+    <string name="menu_search">Search</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
@@ -64,6 +65,7 @@
     <string name="btn_import">Import</string>
 
     <string name="hint_search_element">Search item</string>
+    <string name="hint_search_ingredient">Search ingredients</string>
     <string name="hint_name">Name</string>
     <string name="hint_exported_string">Exported string</string>
 

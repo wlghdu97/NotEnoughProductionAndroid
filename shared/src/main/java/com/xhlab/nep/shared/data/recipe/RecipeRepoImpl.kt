@@ -1,5 +1,6 @@
 package com.xhlab.nep.shared.data.recipe
 
+import androidx.paging.DataSource
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.db.AppDatabase
@@ -19,13 +20,20 @@ internal class RecipeRepoImpl @Inject constructor(
         db.getRecipeDao().getElementListOfRecipe(recipeId)
     }
 
-    override fun searchRecipeByElement(elementId: Long)
-            = db.getRecipeDao().searchRecipeIdByElement(elementId).map {
-        runBlocking {
-            it.also {
-                it.itemList.addAll(db.getRecipeDao().getElementListOfRecipe(it.recipeId))
-                it.resultItemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
-            } as RecipeView
+    override fun searchRecipeByElement(
+        elementId: Long,
+        term: String
+    ): DataSource.Factory<Int, RecipeView> {
+        return when (term.isEmpty()) {
+            true -> db.getRecipeDao().searchRecipeIdByElement(elementId)
+            false -> db.getRecipeDao().searchRecipeIdByElement(elementId, "*$term*")
+        }.map {
+            runBlocking {
+                it.also {
+                    it.itemList.addAll(db.getRecipeDao().getElementListOfRecipe(it.recipeId))
+                    it.resultItemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
+                } as RecipeView
+            }
         }
     }
 

@@ -36,6 +36,20 @@ abstract class RecipeDao : BaseDao<RecipeEntity>() {
     @Transaction
     @Query("""
         SELECT recipe.recipe_id FROM recipe
+        INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+        INNER JOIN element_fts ON element_fts.docid = recipe.target_item_id
+        WHERE recipe.recipe_id = recipe_result.recipe_id AND element_fts MATCH :term
+        GROUP BY recipe.recipe_id
+        ORDER BY recipe.amount
+    """)
+    abstract fun searchRecipeIdByElement(
+        elementId: Long,
+        term: String
+    ): DataSource.Factory<Int, RoomCraftingRecipeView>
+
+    @Transaction
+    @Query("""
+        SELECT recipe.recipe_id FROM recipe
         WHERE recipe.target_item_id = :elementId
         GROUP BY recipe.recipe_id
         ORDER BY recipe.amount
