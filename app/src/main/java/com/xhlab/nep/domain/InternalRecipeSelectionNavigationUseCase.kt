@@ -7,6 +7,7 @@ import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.CONNECT_TO_PARENT
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.ELEMENT_KEY
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.ELEMENT_TYPE
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.PROCESS_ID
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.RECIPE_DEGREE
 import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.RECIPE
@@ -23,6 +24,7 @@ class InternalRecipeSelectionNavigationUseCase @Inject constructor(
             putExtra(RECIPE, params.recipe)
             putExtra(RECIPE_DEGREE, params.degree)
             putExtra(ELEMENT_KEY, params.elementKey)
+            putExtra(ELEMENT_TYPE, params.elementType)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         })
     }
@@ -32,6 +34,7 @@ class InternalRecipeSelectionNavigationUseCase @Inject constructor(
         val connectToParent: Boolean,
         val recipe: Recipe,
         val degree: Int,
-        val elementKey: String
+        val elementKey: String,
+        val elementType: Int
     )
 }

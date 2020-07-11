@@ -70,12 +70,12 @@ class ProcessEditViewModel @Inject constructor(
         }
     }
 
-    override fun onConnectToParent(recipe: Recipe, degree: Int, elementKey: String) {
-        _connectRecipe.postValue(ConnectionConstraint(true, recipe, degree, elementKey))
+    override fun onConnectToParent(recipe: Recipe, degree: Int, elementKey: String, elementType: Int) {
+        _connectRecipe.postValue(ConnectionConstraint(true, recipe, degree, elementKey, elementType))
     }
 
-    override fun onConnectToChild(recipe: Recipe, degree: Int, elementKey: String) {
-        _connectRecipe.postValue(ConnectionConstraint(false, recipe, degree, elementKey))
+    override fun onConnectToChild(recipe: Recipe, degree: Int, elementKey: String, elementType: Int) {
+        _connectRecipe.postValue(ConnectionConstraint(false, recipe, degree, elementKey, elementType))
     }
 
     override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
@@ -121,7 +121,8 @@ class ProcessEditViewModel @Inject constructor(
                 connectToParent = constraint.connectToParent,
                 recipe = constraint.recipe,
                 degree = constraint.degree,
-                elementKey = constraint.elementKey
+                elementKey = constraint.elementKey,
+                elementType = constraint.elementType
             )
         )
     }
@@ -134,7 +135,8 @@ class ProcessEditViewModel @Inject constructor(
                 connectToParent = constraint.connectToParent,
                 recipe = constraint.recipe,
                 degree = constraint.degree,
-                elementKey = constraint.elementKey
+                elementKey = constraint.elementKey,
+                elementType = constraint.elementType
             )
         )
     }
@@ -150,7 +152,8 @@ class ProcessEditViewModel @Inject constructor(
         val connectToParent: Boolean,
         val recipe: Recipe,
         val degree: Int,
-        val elementKey: String
+        val elementKey: String,
+        val elementType: Int
     )
 
     data class DisconnectionPayload(

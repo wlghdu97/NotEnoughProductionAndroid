@@ -43,27 +43,24 @@ class InternalRecipeSelectionViewModel @Inject constructor(
         connectToParent: Boolean?,
         from: Recipe?,
         degree: Int?,
-        elementKey: String?
+        elementKey: String?,
+        elementType: Int?
     ) {
-        when {
-            processId == null ||
-            connectToParent == null ||
-            from == null ||
-            degree == null ||
-            elementKey == null ->
-                throw NullPointerException("init values are null.")
-            else -> {
-                invokeMediatorUseCase(
-                    useCase = loadProcessUseCase,
-                    params = LoadProcessUseCase.Parameter(processId)
-                )
-                _constraint.postValue(
-                    ProcessEditViewModel.ConnectionConstraint(
-                        connectToParent, from, degree, elementKey
-                    )
-                )
-            }
-        }
+        requireNotNull(processId)
+        requireNotNull(connectToParent)
+        requireNotNull(from)
+        requireNotNull(degree)
+        requireNotNull(elementKey)
+        requireNotNull(elementType)
+        invokeMediatorUseCase(
+            useCase = loadProcessUseCase,
+            params = LoadProcessUseCase.Parameter(processId)
+        )
+        _constraint.postValue(
+            ProcessEditViewModel.ConnectionConstraint(
+                connectToParent, from, degree, elementKey, elementType
+            )
+        )
     }
 
     private fun requireProcessId()

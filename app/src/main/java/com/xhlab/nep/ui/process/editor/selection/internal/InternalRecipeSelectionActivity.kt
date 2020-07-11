@@ -47,7 +47,8 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             connectToParent = intent?.getBooleanExtra(CONNECT_TO_PARENT, false),
             from = intent?.getSerializableExtra(RECIPE) as? Recipe,
             degree = intent?.getIntExtra(RECIPE_DEGREE, 0),
-            elementKey = intent?.getStringExtra(ELEMENT_KEY)
+            elementKey = intent?.getStringExtra(ELEMENT_KEY),
+            elementType = intent?.getIntExtra(ELEMENT_TYPE, -1)
         )
 
         viewModel.process.observeNotNull(this) {
@@ -99,5 +100,6 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         const val RECIPE = "recipe"
         const val RECIPE_DEGREE = "recipe_degree"
         const val ELEMENT_KEY = "element_key"
+        const val ELEMENT_TYPE = "element_Type"
     }
 }
