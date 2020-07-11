@@ -9,6 +9,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.ui.process.adapters.ElementConnection
 import com.xhlab.nep.ui.process.adapters.ProcessElementAdapter
 import com.xhlab.nep.ui.process.adapters.ProcessElementViewHolder
 
@@ -71,7 +72,10 @@ class ElementAdapter(
 
         override fun onMenuItemClick(menuItem: MenuItem): Boolean {
             val to = recipeNode?.node?.recipe
-            val element = model
+            val element = when (model) {
+                is ElementConnection -> (model as ElementConnection).element
+                else -> model
+            }
             return if (to != null && element != null) {
                 when (menuItem.itemId) {
                     R.id.menu_disconnect -> {
