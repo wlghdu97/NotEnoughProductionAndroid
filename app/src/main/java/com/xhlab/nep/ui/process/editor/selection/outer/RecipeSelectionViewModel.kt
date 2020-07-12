@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.util.Resource
@@ -20,8 +21,6 @@ class RecipeSelectionViewModel @Inject constructor(
     BaseViewModel by BasicViewModel(),
     RecipeSelectionListener
 {
-    private val processId = MutableLiveData<String>()
-
     private val _constraint = MutableLiveData<ProcessEditViewModel.ConnectionConstraint>()
     val constraint: LiveData<ProcessEditViewModel.ConnectionConstraint>
         get() = _constraint
@@ -30,30 +29,13 @@ class RecipeSelectionViewModel @Inject constructor(
     val connectionResult: LiveData<Resource<Unit>>
         get() = _connectionResult
 
-    fun init(
-        processId: String?,
-        connectToParent: Boolean?,
-        from: Recipe?,
-        degree: Int?,
-        elementKey: String?,
-        elementType: Int?
-    ) {
-        requireNotNull(processId)
-        requireNotNull(connectToParent)
-        requireNotNull(from)
-        requireNotNull(degree)
-        requireNotNull(elementKey)
-        requireNotNull(elementType)
-        this.processId.value = processId
-        _constraint.postValue(
-            ProcessEditViewModel.ConnectionConstraint(
-                connectToParent, from, degree, elementKey, elementType
-            )
-        )
+    fun init(constraint: ProcessEditViewModel.ConnectionConstraint?) {
+        requireNotNull(constraint)
+        _constraint.postValue(constraint)
     }
 
     private fun requireProcessId()
-            = processId.value ?: throw NullPointerException("process id is null.")
+            = constraint.value?.processId ?: throw NullPointerException("process id is null.")
 
     override fun onSelect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         launchSuspendFunction(_connectionResult) {

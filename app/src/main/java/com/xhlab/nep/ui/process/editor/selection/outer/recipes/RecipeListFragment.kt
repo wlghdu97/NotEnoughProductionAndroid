@@ -12,7 +12,6 @@ import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.CONNECT_TO_PARENT
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.MACHINE_RECIPE_LIST_TAG
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.details.MachineRecipeListFragment
@@ -117,5 +116,6 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     companion object {
         const val ELEMENT_ID = "element_id"
         const val ELEMENT_KEY = "element_key"
+        const val CONNECT_TO_PARENT = "connect_to_parent"
     }
 }

@@ -56,7 +56,7 @@ class RecipeSelectionAdapter(
                         true -> {
                             val from = constraint.recipe
                             val to = node.recipe
-                            val key = constraint.elementKey
+                            val key = constraint.element.unlocalizedName
                             process!!.isRecipeConnected(from, to, key, reversed)
                         }
                         false -> false

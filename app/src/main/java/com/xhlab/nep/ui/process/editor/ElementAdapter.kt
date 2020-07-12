@@ -10,7 +10,6 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import com.xhlab.nep.model.process.SupplierRecipe
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.ui.process.adapters.ElementConnection
 import com.xhlab.nep.ui.process.adapters.ProcessElementAdapter
 import com.xhlab.nep.ui.process.adapters.ProcessElementViewHolder
@@ -90,25 +89,17 @@ class ElementAdapter(
                     R.id.menu_connect_to_parent -> {
                         val recipe = recipeNode?.node?.recipe
                         val degree = recipeNode?.degree
-                        val key = element.unlocalizedName
-                        val type = when (element) {
-                            is ElementView -> element.type
-                            else -> ITEM
-                        }
+                        val view = element as ElementView
                         if (recipe != null && degree != null) {
-                            processEditListener?.onConnectToParent(recipe, degree, key, type)
+                            processEditListener?.onConnectToParent(recipe, view, degree)
                         }
                     }
                     R.id.menu_connect_to_child -> {
                         val recipe = recipeNode?.node?.recipe
                         val degree = recipeNode?.degree
-                        val key = element.unlocalizedName
-                        val type = when (element) {
-                            is ElementView -> element.type
-                            else -> ITEM
-                        }
+                        val view = element as ElementView
                         if (recipe != null && degree != null) {
-                            processEditListener?.onConnectToChild(recipe, degree, key, type)
+                            processEditListener?.onConnectToChild(recipe, view, degree)
                         }
                     }
                     R.id.menu_mark_not_consumed -> {

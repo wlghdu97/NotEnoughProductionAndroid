@@ -5,10 +5,10 @@ import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
 import com.xhlab.nep.ui.process.editor.selection.outer.replacements.ReplacementListFragment
 import com.xhlab.nep.util.viewModelProvider
@@ -38,19 +38,20 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-        viewModel.init(
-            processId = intent?.getStringExtra(PROCESS_ID),
-            connectToParent = intent?.getBooleanExtra(CONNECT_TO_PARENT, false),
-            from = intent?.getSerializableExtra(RECIPE) as? Recipe,
-            degree = intent?.getIntExtra(RECIPE_DEGREE, 0),
-            elementKey = intent?.getStringExtra(ELEMENT_KEY),
-            elementType = intent?.getIntExtra(ELEMENT_TYPE, -1)
-        )
+        viewModel.init(intent?.getSerializableExtra(CONSTRAINT) as? ProcessEditViewModel.ConnectionConstraint)
 
         viewModel.constraint.observe(this) {
-            when (it.elementType) {
-                ORE_CHAIN -> showReplacementListFragment(it.elementKey)
-                else -> showRecipeListFragment(it.elementKey)
+            val elementKey = it.element.unlocalizedName
+            when (it.element.type) {
+                ORE_CHAIN -> {
+                    val replacements = it.element.unlocalizedName.split(',')
+                    if (replacements.size > 1) {
+                        showOreDictListFragment()
+                    } else {
+                        showReplacementListFragment(elementKey)
+                    }
+                }
+                else -> showRecipeListFragment(elementKey)
             }
         }
 
@@ -76,6 +77,9 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             .commit()
     }
 
+    private fun showOreDictListFragment() {
+    }
+
     private fun showReplacementListFragment(elementKey: String) {
         val replacementListFragment = ReplacementListFragment().apply {
             arguments = Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
@@ -87,14 +91,10 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
     companion object {
         const val RECIPE_LIST_TAG = "recipe_list_tag"
+        const val ORE_DICT_LIST_TAG = "ore_dict_list_tag"
         const val REPLACEMENT_LIST_TAG = "replacement_list_tag"
         const val MACHINE_RECIPE_LIST_TAG = "machine_recipe_list_tag"
 
-        const val PROCESS_ID = "process_id"
-        const val CONNECT_TO_PARENT = "connect_to_parent"
-        const val RECIPE = "recipe"
-        const val RECIPE_DEGREE = "recipe_degree"
-        const val ELEMENT_KEY = "element_key"
-        const val ELEMENT_TYPE = "element_type"
+        const val CONSTRAINT = "constraint"
     }
 }

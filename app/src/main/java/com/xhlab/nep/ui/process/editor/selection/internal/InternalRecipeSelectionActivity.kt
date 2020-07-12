@@ -7,9 +7,9 @@ import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
@@ -42,14 +42,7 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-        viewModel.init(
-            processId = intent?.getStringExtra(PROCESS_ID),
-            connectToParent = intent?.getBooleanExtra(CONNECT_TO_PARENT, false),
-            from = intent?.getSerializableExtra(RECIPE) as? Recipe,
-            degree = intent?.getIntExtra(RECIPE_DEGREE, 0),
-            elementKey = intent?.getStringExtra(ELEMENT_KEY),
-            elementType = intent?.getIntExtra(ELEMENT_TYPE, -1)
-        )
+        viewModel.init(intent?.getSerializableExtra(CONSTRAINT) as? ProcessEditViewModel.ConnectionConstraint)
 
         viewModel.process.observeNotNull(this) {
             processTreeAdapter.submitProcess(it)
@@ -95,11 +88,6 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
     }
 
     companion object {
-        const val PROCESS_ID = "process_id"
-        const val CONNECT_TO_PARENT = "connect_to_parent"
-        const val RECIPE = "recipe"
-        const val RECIPE_DEGREE = "recipe_degree"
-        const val ELEMENT_KEY = "element_key"
-        const val ELEMENT_TYPE = "element_Type"
+        const val CONSTRAINT = "constraint"
     }
 }
