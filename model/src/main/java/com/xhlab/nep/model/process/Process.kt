@@ -162,31 +162,29 @@ open class Process(
         val index = vertices.indexOf(recipe)
         val edges = edges[index].filter { it.key == key.unlocalizedName }
         val connections = arrayListOf<Connection>()
-        if (edges.isEmpty()) {
-            val parentEdges = findParentEdges(recipe, key)
-            if (parentEdges.isNotEmpty()) {
-                for ((edgeIndex , parentEdge) in parentEdges) {
-                    val parentRecipe = vertices[edgeIndex]
-                    if (parentEdge != null && parentEdge.reversed) {
-                        connections.add(Connection(CONNECTED_TO_CHILD, parentRecipe, true))
-                    } else if (parentEdge != null) {
-                        connections.add(Connection(CONNECTED_TO_PARENT, parentRecipe))
-                    }
+        val parentEdges = findParentEdges(recipe, key)
+        if (parentEdges.isNotEmpty()) {
+            for ((edgeIndex , parentEdge) in parentEdges) {
+                val parentRecipe = vertices[edgeIndex]
+                if (parentEdge != null && parentEdge.reversed) {
+                    connections.add(Connection(CONNECTED_TO_CHILD, parentRecipe, true))
+                } else if (parentEdge != null) {
+                    connections.add(Connection(CONNECTED_TO_PARENT, parentRecipe))
                 }
-            } else {
-                connections.add(Connection(UNCONNECTED))
             }
-        } else {
-            for (edge in edges) {
-                connections.add(when {
-                    edge.index == index ->
-                        Connection(NOT_CONSUMED, recipe)
-                    edge.reversed ->
-                        Connection(CONNECTED_TO_PARENT, vertices[edge.index], true)
-                    else ->
-                        Connection(CONNECTED_TO_CHILD, vertices[edge.index])
-                })
-            }
+        }
+        for (edge in edges) {
+            connections.add(when {
+                edge.index == index ->
+                    Connection(NOT_CONSUMED, recipe)
+                edge.reversed ->
+                    Connection(CONNECTED_TO_PARENT, vertices[edge.index], true)
+                else ->
+                    Connection(CONNECTED_TO_CHILD, vertices[edge.index])
+            })
+        }
+        if (connections.isEmpty()) {
+            connections.add(Connection(UNCONNECTED))
         }
         return connections
     }
