@@ -1,12 +1,10 @@
 package com.xhlab.test_shared
 
 import com.xhlab.nep.model.Machine
-import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.model.process.ProcessSummary
-import com.xhlab.nep.model.process.RecipeNode
-import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.process.*
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.EU
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.NONE
+import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 
@@ -31,7 +29,14 @@ object ProcessData {
         RecipeElementViewImpl(15, 1, "gt.metaitem.01.30001", "Hydrogen Cell", 0),
         RecipeElementViewImpl(16, 1, "ic2.itemCellEmpty", "Empty Cell", 0),
         RecipeElementViewImpl(17, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "1"),
-        RecipeElementViewImpl(18, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "3")
+        RecipeElementViewImpl(18, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "3"),
+
+        RecipeElementViewImpl(19, 1, "tile.chest", "Chest", 0),
+        RecipeElementViewImpl(20, 4, "logWood", "Ore Chain", 3),
+        RecipeElementViewImpl(21, 4, "plankWood", "Ore Chain", 3),
+
+        RecipeElementViewImpl(22, 1, "tile.log.oak", "Oak Wood", 0),
+        RecipeElementViewImpl(23, 4, "tile.wood.oak", "Oak Wood Planks", 0)
     )
 
     val fluidList = listOf(
@@ -51,7 +56,8 @@ object ProcessData {
         RecipeElementViewImpl(32, 1500, "fluid.tile.water", "Water", 0),
         RecipeElementViewImpl(33, 1000, "fluid.liquid_hydricsulfur", "Hydrogen Sulfide", 0),
         RecipeElementViewImpl(34, 2000, "fluid.hydrogen", "Hydrogen Gas", 0),
-        RecipeElementViewImpl(35, 1000, "fluid.hydrogen", "Hydrogen Gas", 0)
+        RecipeElementViewImpl(35, 1000, "fluid.hydrogen", "Hydrogen Gas", 0),
+        RecipeElementViewImpl(36, 5, "fluid.tile.water", "Water", 1)
     )
 
     val elementList = itemList + fluidList
@@ -66,7 +72,8 @@ object ProcessData {
         Machine(5, "gregtech", "Fluid Canner"),
         Machine(6, "gregtech", "Distillery"),
         Machine(7, "gregtech", "Brewing Machine"),
-        Machine(8, "gregtech", "Electrolyzer")
+        Machine(8, "gregtech", "Electrolyzer"),
+        Machine(9, "gregtech", "Cutting Machine")
     )
 
     val recipeList = listOf(
@@ -88,11 +95,20 @@ object ProcessData {
         MachineRecipeViewImpl(14, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[16], fluidList[14]), listOf(itemList[13])),
         MachineRecipeViewImpl(15, true, 60, EU.type, 8, 4, machineList[4].name, listOf(itemList[14], itemList[17], fluidList[15]), listOf(fluidList[14])),
         MachineRecipeViewImpl(16, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[15]), listOf(itemList[16], fluidList[16])),
-        MachineRecipeViewImpl(17, true, 2000, EU.type, 30, 8, machineList[8].name, listOf(itemList[16], itemList[18], fluidList[13]), listOf(itemList[15], fluidList[2]))
+        MachineRecipeViewImpl(17, true, 2000, EU.type, 30, 8, machineList[8].name, listOf(itemList[16], itemList[18], fluidList[13]), listOf(itemList[15], fluidList[2])),
+
+        CraftingRecipeViewImpl(18, listOf(itemList[4], itemList[20], itemList[21]), listOf(itemList[19])),
+        MachineRecipeViewImpl(19, true, 400, EU.type, 7, 9, machineList[9].name, listOf(itemList[22], fluidList[17]), listOf(itemList[23]))
     )
 
     val supplierRecipeList = listOf(
-        SupplierRecipe(fluidList[1])
+        SupplierRecipe(fluidList[1]),
+        SupplierRecipe(itemList[22])
+    )
+
+    val oreChainRecipeList = listOf(
+        OreChainRecipe(itemList[20], itemList[22]),
+        OreChainRecipe(itemList[21], itemList[23])
     )
 
     val processGlass: Process
@@ -132,7 +148,15 @@ object ProcessData {
             connectRecipe(supplierRecipeList[0], recipeList[7], fluidList[1])
         }
 
-    val processList = listOf(processGlass, processPE).map {
+    val processChest: Process
+        get() = Process("process03", "Chest process", recipeList[18], itemList[19]).apply {
+            connectRecipe(oreChainRecipeList[0], recipeList[18], itemList[20])
+            connectRecipe(supplierRecipeList[1], oreChainRecipeList[0], itemList[22])
+            connectRecipe(oreChainRecipeList[1], recipeList[18], itemList[21])
+            connectRecipe(recipeList[19], oreChainRecipeList[1], itemList[23])
+        }
+
+    val processList = listOf(processGlass, processPE, processChest).map {
         ProcessSummaryImpl(
             processId = it.id,
             name = it.name,
@@ -251,6 +275,12 @@ object ProcessData {
         override val itemList: List<RecipeElementView>,
         override val resultItemList: List<RecipeElementView>
     ) : MachineRecipeView()
+
+    data class CraftingRecipeViewImpl(
+        override val recipeId: Long,
+        override val itemList: List<RecipeElementView>,
+        override val resultItemList: List<RecipeElementView>
+    ) : CraftingRecipeView()
 
     data class RecipeElementViewImpl(
         override val id: Long,

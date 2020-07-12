@@ -1,8 +1,8 @@
 package com.xhlab.nep.shared.domain.process
 
 import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.domain.UseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -65,7 +65,7 @@ class ResourceRateCalculationUseCase @Inject constructor()
         val elementMap = process.getElementMap()
         Result(
             recipes = List(recipes.size) {
-                recipes[it] as RecipeView to solution.point[it]
+                recipes[it] to solution.point[it]
             },
             suppliers = List(leafKeyList.size) {
                 elementMap[leafKeyList[it]] as ElementView to solution.point[recipes.size + it]
@@ -76,7 +76,7 @@ class ResourceRateCalculationUseCase @Inject constructor()
     data class Parameter(val process: Process)
 
     data class Result(
-        val recipes: List<Pair<RecipeView, Double>>,
+        val recipes: List<Pair<Recipe, Double>>,
         val suppliers: List<Pair<ElementView, Double>>
     )
 }
