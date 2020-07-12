@@ -10,6 +10,7 @@ import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
+import com.xhlab.nep.ui.process.editor.selection.outer.replacements.OreDictListFragment
 import com.xhlab.nep.ui.process.editor.selection.outer.replacements.ReplacementListFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
@@ -78,6 +79,10 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
     }
 
     private fun showOreDictListFragment() {
+        val oreDictListFragment = OreDictListFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, oreDictListFragment, ORE_DICT_LIST_TAG)
+            .commit()
     }
 
     private fun showReplacementListFragment(elementKey: String) {
