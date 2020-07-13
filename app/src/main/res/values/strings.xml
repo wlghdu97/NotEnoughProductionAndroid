@@ -155,4 +155,5 @@
     <string name="form_process_description">%dx %s\n%d nodes</string>
     <string name="form_degree">Depth : %d</string>
     <string name="form_recipe_details">%s recipe\n%dx %s</string>
+    <string name="form_ratio">x%s</string>
 </resources>

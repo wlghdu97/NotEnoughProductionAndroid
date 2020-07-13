@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.process.calculator.cycles.ProcessingOrderFragment
 import com.xhlab.nep.ui.process.calculator.ingredients.BaseIngredientsFragment
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
@@ -75,11 +76,12 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
         fragmentManager: FragmentManager
     ) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
+        private val processingOrderFragment by lazy { ProcessingOrderFragment() }
         private val baseIngredientsFragment by lazy { BaseIngredientsFragment() }
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
-                0 -> Fragment()
+                0 -> processingOrderFragment
                 1 -> baseIngredientsFragment
                 else -> throw IllegalArgumentException("invalid position.")
             }
