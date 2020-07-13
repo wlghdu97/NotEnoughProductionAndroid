@@ -10,6 +10,7 @@ import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationViewModel
+import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_processing_order.*
@@ -44,8 +45,8 @@ class ProcessingOrderFragment : DaggerFragment(), ViewInit {
     override fun initViewModel() {
         calculationViewModel = requireActivity().viewModelProvider(viewModelFactory)
 
-        calculationViewModel.process.observe(this) {
-
+        calculationViewModel.process.observeNotNull(this) {
+            adapter.submitProcess(it)
         }
 
         calculationViewModel.calculationResult.observe(this) {
