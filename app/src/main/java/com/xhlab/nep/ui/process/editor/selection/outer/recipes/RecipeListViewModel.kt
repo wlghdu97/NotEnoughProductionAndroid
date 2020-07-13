@@ -3,6 +3,8 @@ package com.xhlab.nep.ui.process.editor.selection.outer.recipes
 import androidx.lifecycle.*
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.process.OreChainRecipe
+import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
 import com.xhlab.nep.shared.domain.item.LoadElementDetailWithKeyUseCase
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeMachineListUseCase
@@ -12,16 +14,18 @@ import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.main.machines.MachineListener
+import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import javax.inject.Inject
 
 class RecipeListViewModel @Inject constructor(
+    private val processRepo: ProcessRepo,
     private val loadElementDetailUseCase: LoadElementDetailUseCase,
     private val loadElementDetailWithKeyUseCase: LoadElementDetailWithKeyUseCase,
     private val loadRecipeMachineListUseCase: LoadRecipeMachineListUseCase,
     private val loadUsageMachineListUseCase: LoadUsageMachineListUseCase
 ) : ViewModel(), BaseViewModel by BasicViewModel(), MachineListener {
 
-    private val connectToParent = MutableLiveData<Boolean>()
+    private val constraint = MutableLiveData<ProcessEditViewModel.ConnectionConstraint>()
 
     private val _elements = MediatorLiveData<Resource<List<ElementView>>>()
     val elements = Transformations.map(_elements) {
@@ -40,6 +44,10 @@ class RecipeListViewModel @Inject constructor(
     val navigateToDetails: LiveData<Triple<Long, Int, Boolean>>
         get() = _navigateToDetails
 
+    private val _modificationResult = LiveEvent<Resource<Unit>>()
+    val modificationResult: LiveData<Resource<Unit>>
+        get() = _modificationResult
+
     init {
         _element.addSource(_elements) {
             val elements = it?.data
@@ -49,7 +57,7 @@ class RecipeListViewModel @Inject constructor(
         }
         _element.addSource(element) {
             if (it != null) {
-                when (connectToParent.value == true) {
+                when (constraint.value?.connectToParent == true) {
                     true -> {
                         invokeMediatorUseCase(
                             useCase = loadUsageMachineListUseCase,
@@ -67,10 +75,10 @@ class RecipeListViewModel @Inject constructor(
         }
     }
 
-    fun init(elementId: Long?, connectToParent: Boolean?) {
+    fun init(elementId: Long?, constraint: ProcessEditViewModel.ConnectionConstraint?) {
         requireNotNull(elementId)
-        requireNotNull(connectToParent)
-        this.connectToParent.value = connectToParent
+        requireNotNull(constraint)
+        this.constraint.value = constraint
         invokeUseCase(
             resultData = _element,
             useCase = loadElementDetailUseCase,
@@ -78,10 +86,10 @@ class RecipeListViewModel @Inject constructor(
         )
     }
 
-    fun init(elementKey: String?, connectToParent: Boolean?) {
+    fun init(elementKey: String?, constraint: ProcessEditViewModel.ConnectionConstraint?) {
         requireNotNull(elementKey)
-        requireNotNull(connectToParent)
-        this.connectToParent.value = connectToParent
+        requireNotNull(constraint)
+        this.constraint.value = constraint
         invokeUseCase(
             resultData = _elements,
             useCase = loadElementDetailWithKeyUseCase,
@@ -96,8 +104,21 @@ class RecipeListViewModel @Inject constructor(
         _element.postValue(Resource.success(element))
     }
 
+    fun attachOreDictAsSupplier() {
+        launchSuspendFunction(_modificationResult) {
+            val constraint = constraint.value
+            val ingredient = element.value
+            if (constraint != null && ingredient is ElementView) {
+                val recipe = constraint.recipe
+                val target = constraint.element
+                val chainRecipe = OreChainRecipe(target, ingredient)
+                processRepo.connectRecipe(constraint.processId, chainRecipe, recipe, target, false)
+            }
+        }
+    }
+
     override fun onClick(machineId: Int) {
-        val connectToParent = connectToParent.value == true
+        val connectToParent = constraint.value?.connectToParent == true
         _navigateToDetails.postValue(Triple(requireElementId(), machineId, connectToParent))
     }
 }

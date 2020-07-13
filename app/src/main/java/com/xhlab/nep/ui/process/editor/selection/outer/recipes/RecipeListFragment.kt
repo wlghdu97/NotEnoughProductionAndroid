@@ -1,15 +1,14 @@
 package com.xhlab.nep.ui.process.editor.selection.outer.recipes
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.MACHINE_RECIPE_LIST_TAG
@@ -20,6 +19,7 @@ import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_recipe_list.*
+import org.jetbrains.anko.support.v4.longToast
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -47,6 +47,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
+        setHasOptionsMenu(true)
         recipe_list.adapter = recipeAdapter
     }
 
@@ -58,9 +59,9 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
             val elementKey = arguments?.getString(ELEMENT_KEY)
             val elementId = arguments?.getLong(ELEMENT_ID)
             if (elementKey != null) {
-                viewModel.init(elementKey, it.connectToParent)
+                viewModel.init(elementKey, it)
             } else {
-                viewModel.init(elementId, it.connectToParent)
+                viewModel.init(elementId, it)
             }
         }
 
@@ -87,6 +88,28 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         viewModel.navigateToDetails.observe(this) { (elementId, machineId, connectToParent) ->
             navigateToDetails(elementId, machineId, connectToParent)
         }
+
+        viewModel.modificationResult.observe(this) {
+            if (it.isSuccessful()) {
+                activity?.finish()
+            } else if (it.throwable != null) {
+                longToast(R.string.error_failed_to_modify_process)
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        if (arguments?.getLong(ELEMENT_ID) != 0L) {
+            inflater.inflate(R.menu.ore_dict_list_selection, menu)
+        }
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_attach_as_supplier) {
+            viewModel.attachOreDictAsSupplier()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun showElementSelectionDialog(elementList: List<ElementView>) {

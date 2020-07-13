@@ -51,6 +51,7 @@
     <string name="menu_create_new">Create new</string>
     <string name="menu_import_from_string">Import from string</string>
     <string name="menu_search">Search</string>
+    <string name="menu_attach_as_supplier">Attach as supplier</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
