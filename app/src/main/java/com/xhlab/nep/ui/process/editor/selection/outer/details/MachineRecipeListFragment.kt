@@ -7,7 +7,6 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.CONNECT_TO_PARENT
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.viewModelProvider
@@ -44,7 +43,8 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         with (recipe_list) {
             recipeAdapter = RecipeSelectionAdapter(
                 targetElementId = arguments?.getLong(ELEMENT_ID),
-                selectionListener = recipeSelectionViewModel
+                selectionListener = recipeSelectionViewModel,
+                oreDictSelectionListener = recipeSelectionViewModel
             )
             adapter = recipeAdapter
             addItemDecoration(LinearItemSpacingDecorator(dip(4)))
@@ -95,5 +95,6 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     companion object {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
+        const val CONNECT_TO_PARENT = "connect_to_parent"
     }
 }

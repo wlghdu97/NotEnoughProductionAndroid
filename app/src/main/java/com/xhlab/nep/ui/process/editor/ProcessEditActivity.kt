@@ -145,7 +145,7 @@ class ProcessEditActivity :
                 when (index) {
                     0 -> viewModel.navigateToInternalRecipeSelection(constraint)
                     1 -> viewModel.navigateToRecipeSelection(constraint)
-                    2 -> viewModel.attachSupplier(constraint.recipe, constraint.elementKey)
+                    2 -> viewModel.attachSupplier(constraint.recipe, constraint.element.unlocalizedName)
                 }
             }
             .show()

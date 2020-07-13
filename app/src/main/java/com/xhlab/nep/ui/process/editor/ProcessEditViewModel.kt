@@ -18,6 +18,7 @@ import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import java.io.Serializable
 import javax.inject.Inject
 
 class ProcessEditViewModel @Inject constructor(
@@ -33,7 +34,7 @@ class ProcessEditViewModel @Inject constructor(
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _iconMode = MutableLiveData<Boolean>(true)
+    private val _iconMode = MutableLiveData(true)
     val iconMode: LiveData<Boolean>
         get() = _iconMode
 
@@ -70,12 +71,12 @@ class ProcessEditViewModel @Inject constructor(
         }
     }
 
-    override fun onConnectToParent(recipe: Recipe, degree: Int, elementKey: String) {
-        _connectRecipe.postValue(ConnectionConstraint(true, recipe, degree, elementKey))
+    override fun onConnectToParent(recipe: Recipe, element: ElementView, degree: Int) {
+        _connectRecipe.postValue(ConnectionConstraint(requireProcessId(), true, recipe, element, degree))
     }
 
-    override fun onConnectToChild(recipe: Recipe, degree: Int, elementKey: String) {
-        _connectRecipe.postValue(ConnectionConstraint(false, recipe, degree, elementKey))
+    override fun onConnectToChild(recipe: Recipe, element: ElementView, degree: Int) {
+        _connectRecipe.postValue(ConnectionConstraint(requireProcessId(), false, recipe, element, degree))
     }
 
     override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
@@ -116,26 +117,14 @@ class ProcessEditViewModel @Inject constructor(
     fun navigateToInternalRecipeSelection(constraint: ConnectionConstraint) {
         invokeUseCase(
             useCase = internalRecipeSelectionNavigationUseCase,
-            params = InternalRecipeSelectionNavigationUseCase.Parameters(
-                processId = requireProcessId(),
-                connectToParent = constraint.connectToParent,
-                recipe = constraint.recipe,
-                degree = constraint.degree,
-                elementKey = constraint.elementKey
-            )
+            params = constraint
         )
     }
 
     fun navigateToRecipeSelection(constraint: ConnectionConstraint) {
         invokeUseCase(
             useCase = recipeSelectionNavigationUseCase,
-            params = RecipeSelectionNavigationUseCase.Parameters(
-                processId = requireProcessId(),
-                connectToParent = constraint.connectToParent,
-                recipe = constraint.recipe,
-                degree = constraint.degree,
-                elementKey = constraint.elementKey
-            )
+            params = constraint
         )
     }
 
@@ -147,11 +136,12 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     data class ConnectionConstraint(
+        val processId: String,
         val connectToParent: Boolean,
         val recipe: Recipe,
-        val degree: Int,
-        val elementKey: String
-    )
+        val element: ElementView,
+        val degree: Int
+    ) : Serializable
 
     data class DisconnectionPayload(
         val from: Recipe,

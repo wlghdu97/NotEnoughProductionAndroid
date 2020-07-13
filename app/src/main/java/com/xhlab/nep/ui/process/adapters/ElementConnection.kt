@@ -4,8 +4,13 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
 
 data class ElementConnection(
-    override val amount: Int,
-    override val localizedName: String,
-    override val unlocalizedName: String,
+    val element: Element,
     val connections: List<Process.Connection>
-) : Element()
+) : Element() {
+    override val amount: Int
+        get() = element.amount
+    override val localizedName: String
+        get() = element.localizedName
+    override val unlocalizedName: String
+        get() = element.unlocalizedName
+}

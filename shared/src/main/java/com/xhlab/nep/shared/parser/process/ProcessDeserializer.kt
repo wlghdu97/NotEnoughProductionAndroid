@@ -6,6 +6,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.process.OreChainRecipe
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
@@ -36,12 +37,16 @@ class ProcessDeserializer : JsonDeserializer<Process> {
                 val element = from.getElement(edge.key)
                 if (element != null) {
                     process.connectRecipe(from, to, element, edge.reversed)
+                } else {
+                    throw NullPointerException()
                 }
             } else {
                 val recipe = vertices[edge.from]
                 val element = recipe.getElement(edge.key)
                 if (element != null) {
                     process.markNotConsumed(recipe, element, false)
+                } else {
+                    throw NullPointerException()
                 }
             }
         }
@@ -53,26 +58,36 @@ class ProcessDeserializer : JsonDeserializer<Process> {
     }
 
     private fun JsonObject.toRecipe(): Recipe {
-        return if (get("machineName") != null) {
-            MachineRecipeViewImpl(
-                recipeId = get("recipeId").asLong,
-                isEnabled = get("isEnabled").asBoolean,
-                duration = get("duration").asInt,
-                powerType = get("powerType").asInt,
-                ept = get("ept").asInt,
-                machineId = get("machineId").asInt,
-                machineName = get("machineName").asString,
-                itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
-                resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
-            )
-        } else if (get("innerElement") != null) {
-            SupplierRecipe(get("innerElement").asJsonObject.toElement())
-        } else {
-            CraftingRecipeViewImpl(
-                recipeId = get("recipeId").asLong,
-                itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
-                resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
-            )
+        return when {
+            get("machineName") != null -> {
+                MachineRecipeViewImpl(
+                    recipeId = get("recipeId").asLong,
+                    isEnabled = get("isEnabled").asBoolean,
+                    duration = get("duration").asInt,
+                    powerType = get("powerType").asInt,
+                    ept = get("ept").asInt,
+                    machineId = get("machineId").asInt,
+                    machineName = get("machineName").asString,
+                    itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
+                    resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
+                )
+            }
+            get("innerElement") != null -> {
+                SupplierRecipe(get("innerElement").asJsonObject.toElement())
+            }
+            get("inputElement") != null -> {
+                OreChainRecipe(
+                    ingredient = get("inputElement").asJsonObject.toElement(),
+                    oreDictElement = get("outputElement").asJsonObject.toElement()
+                )
+            }
+            else -> {
+                CraftingRecipeViewImpl(
+                    recipeId = get("recipeId").asLong,
+                    itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
+                    resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
+                )
+            }
         }
     }
 

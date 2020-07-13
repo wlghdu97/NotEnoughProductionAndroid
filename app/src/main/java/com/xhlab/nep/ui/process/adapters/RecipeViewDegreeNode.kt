@@ -7,9 +7,7 @@ fun RecipeNode.toDegreeNode(process: Process, degree: Int): RecipeViewDegreeNode
     val elements = recipe.getOutput() + recipe.getInputs()
     val connectionList = elements.map {
         ElementConnection(
-            amount = it.amount,
-            unlocalizedName = it.unlocalizedName,
-            localizedName = it.localizedName,
+            element = it,
             connections = process.getConnectionStatus(recipe, it)
         )
     }

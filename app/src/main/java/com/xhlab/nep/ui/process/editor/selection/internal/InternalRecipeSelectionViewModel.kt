@@ -38,32 +38,13 @@ class InternalRecipeSelectionViewModel @Inject constructor(
     val connectionResult: LiveData<Resource<Unit>>
         get() = _connectionResult
 
-    fun init(
-        processId: String?,
-        connectToParent: Boolean?,
-        from: Recipe?,
-        degree: Int?,
-        elementKey: String?
-    ) {
-        when {
-            processId == null ||
-            connectToParent == null ||
-            from == null ||
-            degree == null ||
-            elementKey == null ->
-                throw NullPointerException("init values are null.")
-            else -> {
-                invokeMediatorUseCase(
-                    useCase = loadProcessUseCase,
-                    params = LoadProcessUseCase.Parameter(processId)
-                )
-                _constraint.postValue(
-                    ProcessEditViewModel.ConnectionConstraint(
-                        connectToParent, from, degree, elementKey
-                    )
-                )
-            }
-        }
+    fun init(constraint: ProcessEditViewModel.ConnectionConstraint?) {
+        requireNotNull(constraint)
+        invokeMediatorUseCase(
+            useCase = loadProcessUseCase,
+            params = LoadProcessUseCase.Parameter(constraint.processId)
+        )
+        _constraint.postValue(constraint)
     }
 
     private fun requireProcessId()

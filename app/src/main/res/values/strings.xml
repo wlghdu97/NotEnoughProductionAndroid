@@ -51,6 +51,7 @@
     <string name="menu_create_new">Create new</string>
     <string name="menu_import_from_string">Import from string</string>
     <string name="menu_search">Search</string>
+    <string name="menu_attach_as_supplier">Attach as supplier</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
@@ -96,6 +97,7 @@
 
     <string name="txt_crafting_table">Crafting Table</string>
     <string name="txt_supplier">Ingredient Supplier</string>
+    <string name="txt_ore_chain_recipe">Ore Dictionary Chain</string>
     <string name="txt_unknown_recipe">Unknown recipe</string>
 
     <string name="txt_db_not_loaded">
