@@ -72,11 +72,11 @@ class MachineRecipeListActivity : DaggerAppCompatActivity(), ViewInit {
         with (searchMenu.actionView as SearchView) {
             queryHint = getString(R.string.hint_search_ingredient)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?) = false
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    viewModel.searchIngredients(newText ?: "")
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    viewModel.searchIngredients(query ?: "")
                     return true
                 }
+                override fun onQueryTextChange(newText: String?) = false
             })
         }
         return super.onCreateOptionsMenu(menu)
