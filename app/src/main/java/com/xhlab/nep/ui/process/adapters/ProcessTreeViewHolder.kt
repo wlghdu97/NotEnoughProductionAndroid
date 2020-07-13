@@ -64,10 +64,7 @@ abstract class ProcessTreeViewHolder(itemView: View)
             properties.isGone = true
         }
 
-        val colorList =
-            getDegreeColorList(
-                context
-            )
+        val colorList = getDegreeColorList(context)
         val index = min(colorList.size - 1, model.degree)
         label.setImageDrawable(ColorDrawable(colorList[index]))
     }

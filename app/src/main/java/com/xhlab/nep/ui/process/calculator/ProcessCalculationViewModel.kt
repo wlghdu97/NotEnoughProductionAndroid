@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.domain.process.ResourceRateCalculationUseCase
+import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
@@ -13,12 +14,15 @@ import javax.inject.Inject
 
 class ProcessCalculationViewModel @Inject constructor(
     private val loadProcessUseCase: LoadProcessUseCase,
-    private val calculationUseCase: ResourceRateCalculationUseCase
+    private val calculationUseCase: ResourceRateCalculationUseCase,
+    generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel() {
 
     private val processId = MutableLiveData<String>()
 
     val process = loadProcessUseCase.observeOnly(Resource.Status.SUCCESS)
+
+    val isIconLoaded = generalPreference.isIconLoaded
 
     private val _calculationResult = MediatorLiveData<Resource<ResourceRateCalculationUseCase.Result>>()
     val calculationResult: LiveData<Resource<ResourceRateCalculationUseCase.Result>>

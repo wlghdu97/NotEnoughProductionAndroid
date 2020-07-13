@@ -1,6 +1,5 @@
 package com.xhlab.nep.ui.process.adapters
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
 import androidx.annotation.ColorRes
@@ -15,9 +14,6 @@ import kotlin.math.min
 
 abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
     protected var connectionStatus = Process.Connection(Process.ConnectionStatus.UNCONNECTED, null)
-
-    protected val context: Context
-        get() = itemView.context
 
     protected abstract val showConnection: Boolean
     protected abstract val isIconVisible: Boolean

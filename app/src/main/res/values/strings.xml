@@ -52,6 +52,8 @@
     <string name="menu_import_from_string">Import from string</string>
     <string name="menu_search">Search</string>
     <string name="menu_attach_as_supplier">Attach as supplier</string>
+    <string name="menu_process_cycle_list">Processing order</string>
+    <string name="menu_base_ingredients">Base ingredients</string>
 
     <string name="btn_ok">OK</string>
     <string name="btn_cancel">Cancel</string>
@@ -153,4 +155,6 @@
     <string name="form_process_description">%dx %s\n%d nodes</string>
     <string name="form_degree">Depth : %d</string>
     <string name="form_recipe_details">%s recipe\n%dx %s</string>
+    <string name="form_ratio">x%s</string>
+    <string name="form_processing_order">Depth : %d, Outputs : %s</string>
 </resources>
