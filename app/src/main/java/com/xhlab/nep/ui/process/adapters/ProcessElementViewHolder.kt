@@ -9,7 +9,6 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.ui.adapters.ElementViewHolder
-import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.imageResource
 import kotlin.math.min
@@ -24,7 +23,10 @@ abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(item
     protected abstract val isIconVisible: Boolean
 
     override fun bindNotNull(model: Element) {
-        super.bindNotNull(model)
+        super.bindNotNull(when (model) {
+            is ElementConnection -> model.element
+            else -> model
+        })
 
         connectionStatus = when (model is ElementConnection) {
             true -> model.connections[min(adapterPosition, model.connections.size - 1)]
@@ -76,12 +78,6 @@ abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(item
                 }
             }
         }
-
-        context.formatString(
-            R.string.form_item_with_amount,
-            model.amount,
-            model.localizedName
-        )
     }
 
     private fun getColorStateList(@ColorRes color: Int): ColorStateList {
