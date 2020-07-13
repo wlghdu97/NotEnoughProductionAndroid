@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.process.calculator.ingredients
+package com.xhlab.nep.ui.process.calculator.byproducts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,24 +16,24 @@ import com.xhlab.nep.ui.process.calculator.ProcessCalculationViewModel
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_base_ingredients.*
+import kotlinx.android.synthetic.main.fragment_byproducts.*
 import javax.inject.Inject
 
-class BaseIngredientsFragment : DaggerFragment(), ViewInit {
+class ByproductsFragment : DaggerFragment(), ViewInit {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var calculationViewModel: ProcessCalculationViewModel
     private lateinit var viewModel: ElementNavigatorViewModel
-    private val adapter by lazy { BaseIngredientAdapter(viewModel) }
+    private val adapter by lazy { ByproductsAdapter(viewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_base_ingredients, container, false)
+        return inflater.inflate(R.layout.fragment_byproducts, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class BaseIngredientsFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        base_ingredients_list.adapter = adapter
+        byproduct_list.adapter = adapter
     }
 
     override fun initViewModel() {
@@ -54,9 +54,13 @@ class BaseIngredientsFragment : DaggerFragment(), ViewInit {
             adapter.setIconVisibility(it)
         }
 
+        calculationViewModel.process.observeNotNull(this) {
+            adapter.submitProcess(it)
+        }
+
         calculationViewModel.calculationResult.observe(this) {
             if (it.isSuccessful()) {
-                adapter.submitList(it.data!!.suppliers)
+                adapter.submitRecipeRatioList(it.data!!.recipes)
             }
         }
 

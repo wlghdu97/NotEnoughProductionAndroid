@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.process.calculator.ingredients
+package com.xhlab.nep.ui.process.calculator
 
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
@@ -10,12 +10,14 @@ import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.ui.process.calculator.ingredients.ElementKeyListener
 import javax.inject.Inject
 
-class BaseIngredientsViewModel @Inject constructor(
+class ElementNavigatorViewModel @Inject constructor(
     private val loadElementDetailWithKeyUseCase: LoadElementDetailWithKeyUseCase,
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
-) : ViewModel(), BaseViewModel by BasicViewModel(), ElementKeyListener {
+) : ViewModel(), BaseViewModel by BasicViewModel(),
+    ElementKeyListener {
 
     private val _elements = MediatorLiveData<Resource<List<ElementView>>>()
     val elements = Transformations.map(_elements) {

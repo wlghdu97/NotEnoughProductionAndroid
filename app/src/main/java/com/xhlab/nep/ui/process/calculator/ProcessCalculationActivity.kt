@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.process.calculator.byproducts.ByproductsFragment
 import com.xhlab.nep.ui.process.calculator.cycles.ProcessingOrderFragment
 import com.xhlab.nep.ui.process.calculator.ingredients.BaseIngredientsFragment
 import com.xhlab.nep.util.observeNotNull
@@ -38,7 +39,7 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
 
         pagerAdapter = ProcessCalculationViewPagerAdapter(supportFragmentManager)
         with (view_pager) {
-            offscreenPageLimit = 1
+            offscreenPageLimit = 2
             adapter = pagerAdapter
         }
 
@@ -56,6 +57,10 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
                 }
                 R.id.menu_base_ingredients -> {
                     view_pager.currentItem = 1
+                    true
+                }
+                R.id.menu_byproducts -> {
+                    view_pager.currentItem = 2
                     true
                 }
                 else -> false
@@ -78,16 +83,18 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
 
         private val processingOrderFragment by lazy { ProcessingOrderFragment() }
         private val baseIngredientsFragment by lazy { BaseIngredientsFragment() }
+        private val byproductsFragment by lazy { ByproductsFragment() }
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> processingOrderFragment
                 1 -> baseIngredientsFragment
+                2 -> byproductsFragment
                 else -> throw IllegalArgumentException("invalid position.")
             }
         }
 
-        override fun getCount() = 2
+        override fun getCount() = 3
     }
 
     companion object {
