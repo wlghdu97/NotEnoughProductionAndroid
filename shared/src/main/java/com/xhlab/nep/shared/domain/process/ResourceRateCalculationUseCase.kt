@@ -59,6 +59,11 @@ class ResourceRateCalculationUseCase @Inject constructor()
             constraintList.add(LinearConstraint(row, Relationship.GEQ, rhs))
         }
 
+        for (index in keyList.indices) {
+            val row = DoubleArray(keyList.size) { idx -> if (idx == index) 1.0 else 0.0 }
+            constraintList.add(LinearConstraint(row, Relationship.GEQ, 0.0))
+        }
+
         val constraintsSet = LinearConstraintSet(constraintList)
         val solution = SimplexSolver().optimize(objective, constraintsSet, GoalType.MINIMIZE)
 
