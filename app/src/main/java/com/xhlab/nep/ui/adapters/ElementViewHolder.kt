@@ -27,7 +27,7 @@ open class ElementViewHolder(itemView: View)
     protected val unlocalizedName: TextView = itemView.findViewById(R.id.unlocalized_name)
     protected val type: TextView? = itemView.findViewById(R.id.type)
 
-    private val context: Context
+    protected val context: Context
         get() = itemView.context
 
     init {
@@ -38,23 +38,14 @@ open class ElementViewHolder(itemView: View)
     }
 
     override fun bindNotNull(model: Element) {
-        var metaData = ""
         if (model is ElementView) {
-            metaData = when (!model.metaData.isNullOrEmpty()) {
-                true -> " : ${model.metaData}"
-                false -> ""
-            }
             type?.textResource = when (model.type) {
                 ElementEntity.ITEM -> R.string.txt_item
                 ElementEntity.FLUID -> R.string.txt_fluid
                 else -> R.string.txt_unknown
             }
         }
-        val localizedName = when (model.localizedName.isEmpty()) {
-            true -> context.getString(R.string.txt_unnamed)
-            false -> model.localizedName.trim()
-        }
-        val nameText = "$localizedName$metaData"
+        val nameText = getNameText(model)
         name.text = when (model.amount == 0) {
             true -> nameText
             false -> context.formatString(
@@ -67,5 +58,20 @@ open class ElementViewHolder(itemView: View)
             true -> context.getString(R.string.txt_unnamed)
             false -> model.unlocalizedName
         }
+    }
+
+    protected fun getNameText(element: Element): String {
+        var metaData = ""
+        if (element is ElementView) {
+            metaData = when (!element.metaData.isNullOrEmpty()) {
+                true -> " : ${element.metaData}"
+                false -> ""
+            }
+        }
+        val localizedName = when (element.localizedName.isEmpty()) {
+            true -> context.getString(R.string.txt_unnamed)
+            false -> element.localizedName.trim()
+        }
+        return "$localizedName$metaData"
     }
 }
