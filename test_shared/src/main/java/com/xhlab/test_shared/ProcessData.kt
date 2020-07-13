@@ -36,7 +36,10 @@ object ProcessData {
         RecipeElementViewImpl(21, 4, "plankWood", "Ore Chain", 3),
 
         RecipeElementViewImpl(22, 1, "tile.log.oak", "Oak Wood", 0),
-        RecipeElementViewImpl(23, 4, "tile.wood.oak", "Oak Wood Planks", 0)
+        RecipeElementViewImpl(23, 4, "tile.wood.oak", "Oak Wood Planks", 0),
+
+        RecipeElementViewImpl(24, 1, "gt.metaitem.01.17874", "Polyethylene Sheet", 0),
+        RecipeElementViewImpl(25, 0, "gt.metaitem.01.32301", "Mold (Plate)", 0)
     )
 
     val fluidList = listOf(
@@ -57,7 +60,8 @@ object ProcessData {
         RecipeElementViewImpl(33, 1000, "fluid.liquid_hydricsulfur", "Hydrogen Sulfide", 0),
         RecipeElementViewImpl(34, 2000, "fluid.hydrogen", "Hydrogen Gas", 0),
         RecipeElementViewImpl(35, 1000, "fluid.hydrogen", "Hydrogen Gas", 0),
-        RecipeElementViewImpl(36, 5, "fluid.tile.water", "Water", 1)
+        RecipeElementViewImpl(36, 5, "fluid.tile.water", "Water", 1),
+        RecipeElementViewImpl(37, 144, "fluid.molten.plastic", "Molten Polyethylene", 0)
     )
 
     val elementList = itemList + fluidList
@@ -73,7 +77,8 @@ object ProcessData {
         Machine(6, "gregtech", "Distillery"),
         Machine(7, "gregtech", "Brewing Machine"),
         Machine(8, "gregtech", "Electrolyzer"),
-        Machine(9, "gregtech", "Cutting Machine")
+        Machine(9, "gregtech", "Cutting Machine"),
+        Machine(10, "gregtech", "Fluid Solidifier")
     )
 
     val recipeList = listOf(
@@ -98,7 +103,9 @@ object ProcessData {
         MachineRecipeViewImpl(17, true, 2000, EU.type, 30, 8, machineList[8].name, listOf(itemList[16], itemList[18], fluidList[13]), listOf(itemList[15], fluidList[2])),
 
         CraftingRecipeViewImpl(18, listOf(itemList[4], itemList[20], itemList[21]), listOf(itemList[19])),
-        MachineRecipeViewImpl(19, true, 400, EU.type, 7, 9, machineList[9].name, listOf(itemList[22], fluidList[17]), listOf(itemList[23]))
+        MachineRecipeViewImpl(19, true, 400, EU.type, 7, 9, machineList[9].name, listOf(itemList[22], fluidList[17]), listOf(itemList[23])),
+
+        MachineRecipeViewImpl(20, true, 40, EU.type, 7, 10, machineList[10].name, listOf(itemList[25], fluidList[18]), listOf(itemList[24]))
     )
 
     val supplierRecipeList = listOf(
@@ -156,7 +163,12 @@ object ProcessData {
             connectRecipe(recipeList[19], oreChainRecipeList[1], itemList[23])
         }
 
-    val processList = listOf(processGlass, processPE, processChest).map {
+    val processPlasticSheet: Process
+        get() = Process("process04", "Polyethylene sheet process", recipeList[20], itemList[24]).apply {
+            markNotConsumed(recipeList[20], itemList[25])
+        }
+
+    val processList = listOf(processGlass, processPE, processChest, processPlasticSheet).map {
         ProcessSummaryImpl(
             processId = it.id,
             name = it.name,
