@@ -16,8 +16,13 @@ fun ProcessEditViewModel.ConnectionConstraint.getKeyElement(
 ): Element? {
     val elementKey = element.unlocalizedName
     return if (connectToParent xor (isReversed == true)) {
-        node.getOutput().find { it.unlocalizedName == elementKey }
-    } else {
         node.getInputs().find { it.unlocalizedName == elementKey }
+    } else {
+        node.getOutput().find { it.unlocalizedName == elementKey }
     }
+}
+
+fun ProcessEditViewModel.ConnectionConstraint.getKeyElement(node: Recipe): Element? {
+    val elementKey = element.unlocalizedName
+    return (node.getInputs() + node.getOutput()).find { it.unlocalizedName == elementKey }
 }

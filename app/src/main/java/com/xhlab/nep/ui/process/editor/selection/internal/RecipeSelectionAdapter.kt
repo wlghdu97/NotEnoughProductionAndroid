@@ -83,7 +83,7 @@ class RecipeSelectionAdapter(
                     val reversed = constraint.isReversed()
                     val from = constraint.recipe
                     val to = node.recipe
-                    val element = constraint.getKeyElement(node.recipe, reversed)
+                    val element = constraint.getKeyElement(node.recipe)
                     if (element != null) {
                         when (constraint.connectToParent xor reversed) {
                             true -> listener?.onSelect(from, to, element, reversed)

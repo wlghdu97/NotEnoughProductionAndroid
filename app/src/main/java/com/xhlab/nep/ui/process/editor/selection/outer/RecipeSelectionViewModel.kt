@@ -7,6 +7,7 @@ import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.process.OreChainRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
@@ -19,7 +20,8 @@ class RecipeSelectionViewModel @Inject constructor(
     private val processRepo: ProcessRepo
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    RecipeSelectionListener
+    RecipeSelectionListener,
+    OreDictRecipeSelectionListener
 {
     private val _constraint = MutableLiveData<ProcessEditViewModel.ConnectionConstraint>()
     val constraint: LiveData<ProcessEditViewModel.ConnectionConstraint>
@@ -40,6 +42,23 @@ class RecipeSelectionViewModel @Inject constructor(
     override fun onSelect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         launchSuspendFunction(_connectionResult) {
             processRepo.connectRecipe(requireProcessId(), from, to, element, reversed)
+        }
+    }
+
+    override fun onSelectOreDict(
+        from: Recipe,
+        to: Recipe,
+        target: Element,
+        ingredient: Element,
+        reversed: Boolean
+    ) {
+        launchSuspendFunction(_connectionResult) {
+            if (target is ElementView && ingredient is ElementView) {
+                val bridgeRecipe = OreChainRecipe(target, ingredient)
+                val processId = requireProcessId()
+                processRepo.connectRecipe(processId, bridgeRecipe, to, target, reversed)
+                processRepo.connectRecipe(processId, from, bridgeRecipe, ingredient, reversed)
+            }
         }
     }
 }

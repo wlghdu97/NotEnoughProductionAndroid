@@ -43,7 +43,8 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         with (recipe_list) {
             recipeAdapter = RecipeSelectionAdapter(
                 targetElementId = arguments?.getLong(ELEMENT_ID),
-                selectionListener = recipeSelectionViewModel
+                selectionListener = recipeSelectionViewModel,
+                oreDictSelectionListener = recipeSelectionViewModel
             )
             adapter = recipeAdapter
             addItemDecoration(LinearItemSpacingDecorator(dip(4)))
