@@ -35,7 +35,11 @@ open class Process(
         addRecipeNode(from)
         return if (to != null) {
             val key = element.unlocalizedName
-            if (checkConnection(from, to, key)) {
+            val isConnectionPossible = when(from == to) {
+                true -> true
+                false -> checkConnection(to, from, key)
+            }
+            if (!isConnectionPossible) {
                 throw IllegalArgumentException("connection cannot be established.")
             }
             addRecipeNode(to)
