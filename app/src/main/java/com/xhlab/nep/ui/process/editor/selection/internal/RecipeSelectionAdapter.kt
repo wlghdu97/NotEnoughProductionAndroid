@@ -12,6 +12,7 @@ import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.RecipeSelectionListener
 import com.xhlab.nep.ui.process.editor.selection.getKeyElement
 import com.xhlab.nep.ui.process.editor.selection.isReversed
+import com.xhlab.nep.ui.process.editor.selection.select
 import org.jetbrains.anko.layoutInflater
 import java.util.*
 
@@ -80,16 +81,7 @@ class RecipeSelectionAdapter(
                 val constraint = constraint
                 val node = model?.node
                 if (constraint != null && node != null) {
-                    val reversed = constraint.isReversed()
-                    val from = constraint.recipe
-                    val to = node.recipe
-                    val element = constraint.getKeyElement(node.recipe)
-                    if (element != null) {
-                        when (constraint.connectToParent xor reversed) {
-                            true -> listener?.onSelect(from, to, element, reversed)
-                            false -> listener?.onSelect(to, from, element, reversed)
-                        }
-                    }
+                    constraint.select(node.recipe, listener)
                 }
             }
             elementList.adapter = elementListAdapter

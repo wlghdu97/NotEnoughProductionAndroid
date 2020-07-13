@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.process.editor.selection.outer.replacements
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.shared.domain.item.LoadReplacementListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -16,6 +17,8 @@ class ReplacementListViewModel @Inject constructor(
     generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ElementListener {
 
+    private val oreDictName = MutableLiveData<String>()
+
     val replacementList = loadReplacementListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded
@@ -23,6 +26,24 @@ class ReplacementListViewModel @Inject constructor(
     private val _navigateToRecipeList = MediatorLiveData<Long>()
     val navigateToRecipeList: LiveData<Long>
         get() = _navigateToRecipeList
+
+    private val _navigateToRecipeListWithKey = MediatorLiveData<String>()
+    val navigateToRecipeListWithKey: LiveData<String>
+        get() = _navigateToRecipeListWithKey
+
+    init {
+        loadReplacementListUseCase.observe().addSource(oreDictName) {
+            invokeMediatorUseCase(
+                useCase = loadReplacementListUseCase,
+                params = it
+            )
+        }
+        _navigateToRecipeList.addSource(replacementList) {
+            if (it != null && it.isEmpty()) {
+                _navigateToRecipeListWithKey.postValue(oreDictName.value)
+            }
+        }
+    }
 
     fun init(oreDictName: String?) {
         requireNotNull(oreDictName) {
@@ -32,10 +53,7 @@ class ReplacementListViewModel @Inject constructor(
         if (replacementList.value != null) {
             return
         }
-        invokeMediatorUseCase(
-            useCase = loadReplacementListUseCase,
-            params = oreDictName
-        )
+        this.oreDictName.value = oreDictName
     }
 
     override fun onClick(elementId: Long, elementType: Int) {

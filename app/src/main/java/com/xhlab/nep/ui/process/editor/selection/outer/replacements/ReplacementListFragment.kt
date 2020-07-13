@@ -63,6 +63,10 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         viewModel.navigateToRecipeList.observe(this) { elementId ->
             showRecipeListFragment(elementId)
         }
+
+        viewModel.navigateToRecipeListWithKey.observe(this) { elementKey ->
+            showRecipeListFragment(elementKey)
+        }
     }
 
     override fun initView() {
@@ -72,6 +76,15 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     private fun showRecipeListFragment(elementId: Long) {
         val recipeListFragment = RecipeListFragment().apply {
             arguments = Bundle().apply { putLong(RecipeListFragment.ELEMENT_ID, elementId) }
+        }
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.container, recipeListFragment, RecipeSelectionActivity.RECIPE_LIST_TAG)
+            .commit()
+    }
+
+    private fun showRecipeListFragment(elementKey: String) {
+        val recipeListFragment = RecipeListFragment().apply {
+            arguments = Bundle().apply { putString(RecipeListFragment.ELEMENT_KEY, elementKey) }
         }
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.container, recipeListFragment, RecipeSelectionActivity.RECIPE_LIST_TAG)
