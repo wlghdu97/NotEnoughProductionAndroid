@@ -45,7 +45,7 @@ class ResourceRateCalculationUseCase @Inject constructor(
             if (recipe is ProcessRecipe) {
                 val processId = recipe.getInputs()[0].unlocalizedName
                 val subProcess = subProcesses.find { it.id == processId }
-                    ?: throw NullPointerException()
+                    ?: throw SubProcessNotFoundException(processId)
                 subRecipes.add(Triple(index + 1, subProcess, subProcess.getRecipeArray()))
             }
         }
@@ -112,7 +112,7 @@ class ResourceRateCalculationUseCase @Inject constructor(
         val list = arrayListOf<Process>()
         for (processId in rootProcess.getSubProcessIds()) {
             val subProcess = processRepo.getProcess(processId)
-                ?: throw NullPointerException("could not find referenced process.")
+                ?: throw SubProcessNotFoundException(processId)
             list.add(subProcess)
         }
         return list
@@ -148,4 +148,6 @@ class ResourceRateCalculationUseCase @Inject constructor(
         val recipes: List<Pair<Recipe, Double>>,
         val suppliers: List<Pair<ElementView, Double>>
     )
+
+    class SubProcessNotFoundException(processId: String) : RuntimeException(processId)
 }
