@@ -2,6 +2,9 @@ package com.xhlab.test_shared
 
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.process.*
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.ProcessRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.EU
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.NONE
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView

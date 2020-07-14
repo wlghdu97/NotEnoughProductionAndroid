@@ -1,4 +1,4 @@
-package com.xhlab.nep.model.process
+package com.xhlab.nep.model.process.recipes
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView

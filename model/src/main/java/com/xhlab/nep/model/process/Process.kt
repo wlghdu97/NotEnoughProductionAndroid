@@ -4,6 +4,8 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
+import com.xhlab.nep.model.process.recipes.ProcessRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import java.util.*
 
 open class Process(

@@ -9,7 +9,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
-import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.ui.process.adapters.ElementConnection
 import com.xhlab.nep.ui.process.adapters.ProcessElementAdapter
 import com.xhlab.nep.ui.process.adapters.ProcessElementViewHolder

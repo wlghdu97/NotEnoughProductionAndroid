@@ -4,7 +4,7 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.model.process.ProcessRecipe
+import com.xhlab.nep.model.process.recipes.ProcessRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.UseCase
 import kotlinx.coroutines.Dispatchers

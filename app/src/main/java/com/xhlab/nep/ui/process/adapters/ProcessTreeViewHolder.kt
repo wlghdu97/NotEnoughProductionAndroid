@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
-import com.xhlab.nep.model.process.OreChainRecipe
-import com.xhlab.nep.model.process.ProcessRecipe
-import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.ProcessRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView

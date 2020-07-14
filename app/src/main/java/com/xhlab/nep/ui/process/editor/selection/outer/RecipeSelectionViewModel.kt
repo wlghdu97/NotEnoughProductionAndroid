@@ -7,7 +7,7 @@ import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel

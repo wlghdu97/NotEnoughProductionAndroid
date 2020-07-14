@@ -6,9 +6,9 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
