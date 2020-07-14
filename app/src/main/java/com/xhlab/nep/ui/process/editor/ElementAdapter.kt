@@ -59,7 +59,7 @@ class ElementAdapter(
 
             connectionStatus.status.let {
                 val degree = recipeNode?.degree ?: 0
-                menuButton.isGone = (it == FINAL_OUTPUT)
+                menuButton.isGone = (it == FINAL_OUTPUT || it == REFERENCE)
                 disconnect.isVisible = (it == CONNECTED_TO_PARENT || it == CONNECTED_TO_CHILD)
                 connectToParent.isVisible = (degree != 0 && (it != FINAL_OUTPUT || it != NOT_CONSUMED))
                 connectToChild.isVisible = (it != FINAL_OUTPUT || it != NOT_CONSUMED)
