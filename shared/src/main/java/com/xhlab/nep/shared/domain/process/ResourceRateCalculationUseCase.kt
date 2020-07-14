@@ -56,6 +56,9 @@ class ResourceRateCalculationUseCase @Inject constructor(
 
         for ((index, pair) in recipes.withIndex()) {
             val (recipe, process) = pair
+            if (recipe is ProcessRecipe) {
+                continue
+            }
             for (input in recipe.getInputs()) {
                 val key = input.unlocalizedName
                 if (!process.isElementNotConsumed(recipe, input)) {

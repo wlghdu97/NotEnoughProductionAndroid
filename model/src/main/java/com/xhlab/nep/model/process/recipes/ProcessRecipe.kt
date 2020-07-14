@@ -22,9 +22,9 @@ class ProcessRecipe : Recipe {
             localizedName = processName,
             unlocalizedName = processId,
             type = Process.PROCESS_REFERENCE,
-            metaData = null
+            metaData = null,
+            amount = 0
         )
-
     }
 
     constructor(element: ElementView, process: Process) : this(element, process.id, process.name)

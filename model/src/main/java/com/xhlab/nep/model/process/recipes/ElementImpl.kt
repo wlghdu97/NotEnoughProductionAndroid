@@ -7,7 +7,6 @@ data class ElementImpl(
     override val localizedName: String,
     override val unlocalizedName: String,
     override val type: Int,
-    override val metaData: String?
-) : ElementView() {
+    override val metaData: String?,
     override val amount: Int = 1
-}
+) : ElementView()
