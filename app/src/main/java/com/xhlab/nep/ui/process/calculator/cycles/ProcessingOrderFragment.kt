@@ -22,7 +22,6 @@ class ProcessingOrderFragment : DaggerFragment(), ViewInit {
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var calculationViewModel: ProcessCalculationViewModel
-    private lateinit var viewModel: ProcessingOrderViewModel
     private val adapter by lazy { ProcessingOrderAdapter() }
 
     override fun onCreateView(
@@ -45,10 +44,8 @@ class ProcessingOrderFragment : DaggerFragment(), ViewInit {
 
     override fun initViewModel() {
         calculationViewModel = requireActivity().viewModelProvider(viewModelFactory)
-        viewModel = viewModelProvider(viewModelFactory)
 
         calculationViewModel.process.observeNotNull(this) {
-            viewModel.init(it)
             adapter.submitProcess(it)
         }
 
@@ -58,7 +55,7 @@ class ProcessingOrderFragment : DaggerFragment(), ViewInit {
             }
         }
 
-        viewModel.subProcessList.observeNotNull(this) {
+        calculationViewModel.subProcessList.observeNotNull(this) {
             adapter.submitSubProcessList(it)
         }
     }
