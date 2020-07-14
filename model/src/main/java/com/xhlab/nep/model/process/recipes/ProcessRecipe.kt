@@ -38,4 +38,15 @@ class ProcessRecipe : Recipe {
     override fun getOutput(): List<Element> {
         return listOf(innerElement)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is ProcessRecipe) return false
+        return (getInputs()[0].unlocalizedName == other.getInputs()[0].unlocalizedName &&
+                getOutput()[0].unlocalizedName == other.getOutput()[0].unlocalizedName)
+    }
+
+    override fun hashCode(): Int {
+        return (getInputs()[0].unlocalizedName.hashCode() +
+                getOutput()[0].unlocalizedName.hashCode())
+    }
 }

@@ -20,4 +20,13 @@ class SupplierRecipe(element: ElementView) : Recipe {
     override fun getOutput(): List<Element> {
         return listOf(innerElement)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is SupplierRecipe) return false
+        return (getOutput()[0].unlocalizedName == other.getOutput()[0].unlocalizedName)
+    }
+
+    override fun hashCode(): Int {
+        return (getOutput()[0].unlocalizedName.hashCode())
+    }
 }
