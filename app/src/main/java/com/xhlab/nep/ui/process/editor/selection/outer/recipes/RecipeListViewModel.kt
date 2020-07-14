@@ -3,7 +3,7 @@ package com.xhlab.nep.ui.process.editor.selection.outer.recipes
 import androidx.lifecycle.*
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.model.process.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
 import com.xhlab.nep.shared.domain.item.LoadElementDetailWithKeyUseCase

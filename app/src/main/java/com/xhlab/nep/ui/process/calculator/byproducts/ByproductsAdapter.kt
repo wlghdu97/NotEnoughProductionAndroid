@@ -20,6 +20,9 @@ class ByproductsAdapter(
     private val listener: ElementKeyListener? = null
 ) : RecyclerView.Adapter<ByproductsAdapter.ByproductViewHolder>() {
 
+    private var root: Process? = null
+    private var subProcessList = arrayListOf<Process>()
+
     private val elementRatioMap = hashMapOf<Element, Double>()
     private val elementList = arrayListOf<Element>()
     private var isIconVisible = false
@@ -54,10 +57,28 @@ class ByproductsAdapter(
     }
 
     fun submitProcess(process: Process) {
-        val list = arrayListOf<Element>()
-        preOrderTraverse(process, 0, process.getRecipeDFSTree(), list)
+        root = process
+        calculateByproducts()
+    }
+
+    fun submitSubProcessList(subProcess: List<Process>) {
+        subProcessList.clear()
+        subProcessList.addAll(subProcess)
+        calculateByproducts()
+    }
+
+    private fun calculateByproducts() {
         elementList.clear()
-        elementList.addAll(list.distinct())
+        root?.let { root ->
+            val list = arrayListOf<Element>()
+            preOrderTraverse(root, 0, root.getRecipeDFSTree(), list)
+            elementList.addAll(list.distinct())
+            for (subProcess in subProcessList) {
+                val sublist = arrayListOf<Element>()
+                preOrderTraverse(subProcess, 0, subProcess.getRecipeDFSTree(), sublist)
+                elementList.addAll(sublist.distinct())
+            }
+        }
         notifyDataSetChanged()
     }
 

@@ -13,7 +13,7 @@ class LoadProcessUseCase @Inject constructor(
 ) : MediatorUseCase<LoadProcessUseCase.Parameter, Process>() {
 
     override fun executeInternal(params: Parameter) = liveData<Resource<Process>> {
-        val liveData = processRepo.getProcess(params.processId)
+        val liveData = processRepo.getProcessLiveData(params.processId)
         emitSource(Transformations.map(liveData) { Resource.success(it) })
     }
 

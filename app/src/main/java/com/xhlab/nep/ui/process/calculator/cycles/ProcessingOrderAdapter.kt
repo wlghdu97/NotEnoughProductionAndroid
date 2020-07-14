@@ -9,10 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.OreChainRecipe
-import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.model.process.RecipeNode
-import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.process.*
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.ProcessRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.ui.util.BindableViewHolder
@@ -27,6 +27,8 @@ class ProcessingOrderAdapter
     : RecyclerView.Adapter<ProcessingOrderAdapter.ProcessingOrderViewHolder>() {
 
     private val recipeList = arrayListOf<RecipeRatio>()
+    private var root: RecipeNode? = null
+    private var subProcessList = arrayListOf<Process>()
     private var degreeMap = hashMapOf<Recipe, Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessingOrderViewHolder {
@@ -42,18 +44,36 @@ class ProcessingOrderAdapter
     override fun getItemCount() = recipeList.size
 
     fun submitRecipeRatioList(list: List<RecipeRatio>) {
+        val newList = list.filterNot {
+            it.first is ProcessRecipe || it.first is OreChainRecipe
+        }.reversed()
         recipeList.clear()
-        recipeList.addAll(list.reversed())
+        recipeList.addAll(newList)
         notifyDataSetChanged()
     }
 
     fun submitProcess(process: Process) {
-        preOrderTraverse(0, process.getRecipeDFSTree())
+        root = process.getRecipeDFSTree()
+        preOrderTraverse(0, root!!)
         notifyDataSetChanged()
     }
 
+    fun submitSubProcessList(subProcess: List<Process>) {
+        subProcessList.clear()
+        subProcessList.addAll(subProcess)
+        root?.let { preOrderTraverse(0, it) }
+    }
+
     private fun preOrderTraverse(degree: Int, node: RecipeNode) {
-        degreeMap[node.recipe] = degree
+        val recipe = node.recipe
+        degreeMap[recipe] = degree
+        if (recipe is ProcessRecipe) {
+            val processId = recipe.getProcessId()
+            val subProcess = subProcessList.find { it.id == processId }
+            if (subProcess != null) {
+                preOrderTraverse(degree + 1, subProcess.getRecipeDFSTree())
+            }
+        }
         for (child in node.childNodes) {
             preOrderTraverse(degree + 1, child)
         }
@@ -79,6 +99,7 @@ class ProcessingOrderAdapter
                 is CraftingRecipeView -> context.getString(R.string.txt_crafting_table)
                 is SupplierRecipe -> context.getString(R.string.txt_supplier)
                 is OreChainRecipe -> context.getString(R.string.txt_ore_chain_recipe)
+                is ProcessRecipe -> context.getString(R.string.txt_process_reference)
                 else -> context.getString(R.string.txt_unnamed)
             }
             caption.text = context.formatString(

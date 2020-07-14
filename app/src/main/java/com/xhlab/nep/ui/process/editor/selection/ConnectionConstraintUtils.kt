@@ -3,7 +3,7 @@ package com.xhlab.nep.ui.process.editor.selection
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.OreDictRecipeSelectionListener

@@ -1,4 +1,4 @@
-package com.xhlab.nep.model.process
+package com.xhlab.nep.model.process.recipes
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
@@ -31,5 +31,16 @@ class OreChainRecipe(
 
     override fun getOutput(): List<Element> {
         return listOf(outputElement)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (other !is OreChainRecipe) return false
+        return (getInputs()[0].unlocalizedName == other.getInputs()[0].unlocalizedName &&
+                getOutput()[0].unlocalizedName == other.getOutput()[0].unlocalizedName)
+    }
+
+    override fun hashCode(): Int {
+        return (getInputs()[0].unlocalizedName.hashCode() +
+                getOutput()[0].unlocalizedName.hashCode())
     }
 }

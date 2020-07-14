@@ -11,6 +11,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.adapters.ProcessAdapter
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog
 import com.xhlab.nep.ui.main.process.export.ProcessExportDialog
 import com.xhlab.nep.ui.main.process.export.ProcessExportDialog.Companion.EXPORTED_STRING

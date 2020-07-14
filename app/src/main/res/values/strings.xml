@@ -30,6 +30,7 @@
     <string name="title_export_result">Export result</string>
     <string name="title_import_process">Import process with string</string>
     <string name="title_select_element">Multiple items detected</string>
+    <string name="title_select_process_to_connect">Select process to connect</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
@@ -41,6 +42,7 @@
     <string name="menu_connect_to_parent">Connect to parent</string>
     <string name="menu_connect_to_child">Connect to child</string>
     <string name="menu_attach_supplier">Attach supplier</string>
+    <string name="menu_attach_process_reference">Attach process</string>
     <string name="menu_mark_not_consumed">Mark not consumed</string>
     <string name="menu_mark_consumed">Mark consumed</string>
     <string name="menu_connect_to_existing">Connect to existing</string>
@@ -101,6 +103,7 @@
     <string name="txt_crafting_table">Crafting Table</string>
     <string name="txt_supplier">Ingredient Supplier</string>
     <string name="txt_ore_chain_recipe">Ore Dictionary Chain</string>
+    <string name="txt_process_reference">Process Reference</string>
     <string name="txt_unknown_recipe">Unknown recipe</string>
 
     <string name="txt_db_not_loaded">
@@ -144,6 +147,8 @@
     <string name="error_failed_to_rename_process">Failed to rename process.</string>
     <string name="error_failed_to_export_string">Failed to export string.</string>
     <string name="error_failed_to_modify_process">Failed to modify process.</string>
+    <string name="error_failed_to_find_solution">Failed to find solution.</string>
+    <string name="error_failed_to_find_sub_process">Sub process not found.</string>
 
     <string name="form_tab_recipes">Recipes (%d)</string>
     <string name="form_tab_usages">Usages (%d)</string>

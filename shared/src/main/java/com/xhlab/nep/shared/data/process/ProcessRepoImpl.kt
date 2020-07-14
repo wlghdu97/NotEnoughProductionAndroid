@@ -3,6 +3,7 @@ package com.xhlab.nep.shared.data.process
 import android.util.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.paging.DataSource
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
@@ -23,12 +24,34 @@ internal class ProcessRepoImpl @Inject constructor(
     private val io = Dispatchers.IO
     private val cache = LruCache<String, MutableLiveData<Process?>>(10)
 
-    override suspend fun getProcess(processId: String): LiveData<Process?> = withContext(io) {
+    override suspend fun getProcess(processId: String): Process? = withContext(io) {
+        val process = db.getProcessDao().getProcess(processId)
+        if (process != null) {
+            mapper.map(process)
+        } else null
+    }
+
+    override suspend fun getProcessLiveData(processId: String): LiveData<Process?> = withContext(io) {
         getProcessInternal(processId)
+    }
+
+    override suspend fun getSubProcesses(processIds: List<String>): LiveData<List<Process>?> {
+        val processList = db.getProcessDao().getProcessListById(processIds)
+        return Transformations.map(processList) {
+            it.mapNotNull { process ->
+                if (process != null) {
+                    mapper.map(process)
+                } else null
+            }
+        }
     }
 
     override fun getProcesses(): DataSource.Factory<Int, ProcessSummary> {
         return db.getProcessDao().getProcessList().map { it as ProcessSummary }
+    }
+
+    override fun getProcessesByTarget(targetElementKey: String): DataSource.Factory<Int, ProcessSummary> {
+        return db.getProcessDao().getProcessListByTarget(targetElementKey).map { it as ProcessSummary }
     }
 
     override suspend fun createProcess(name: String, targetRecipe: Recipe, keyElement: Element): Boolean {

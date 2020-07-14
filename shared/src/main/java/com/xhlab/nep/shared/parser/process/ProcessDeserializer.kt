@@ -6,9 +6,10 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.OreChainRecipe
+import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.process.recipes.ProcessRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
@@ -70,6 +71,14 @@ class ProcessDeserializer : JsonDeserializer<Process> {
                     machineName = get("machineName").asString,
                     itemList = get("itemList").asJsonArray.map { it.asJsonObject.toElement() },
                     resultItemList = get("resultItemList").asJsonArray.map { it.asJsonObject.toElement() }
+                )
+            }
+            get("processElement") != null -> {
+                val processElement = get("processElement").asJsonObject
+                ProcessRecipe(
+                    element = get("innerElement").asJsonObject.toElement(),
+                    processName = processElement.get("localizedName").asString,
+                    processId = processElement.get("unlocalizedName").asString
                 )
             }
             get("innerElement") != null -> {

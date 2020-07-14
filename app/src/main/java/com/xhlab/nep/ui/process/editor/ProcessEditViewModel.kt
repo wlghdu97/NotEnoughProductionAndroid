@@ -7,11 +7,12 @@ import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.InternalRecipeSelectionNavigationUseCase
 import com.xhlab.nep.domain.ProcessCalculationNavigationUseCase
+import com.xhlab.nep.domain.ProcessSelectionNavigationUseCase
 import com.xhlab.nep.domain.RecipeSelectionNavigationUseCase
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.SupplierRecipe
+import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -26,6 +27,7 @@ class ProcessEditViewModel @Inject constructor(
     private val loadProcessUseCase: LoadProcessUseCase,
     private val internalRecipeSelectionNavigationUseCase: InternalRecipeSelectionNavigationUseCase,
     private val recipeSelectionNavigationUseCase: RecipeSelectionNavigationUseCase,
+    private val processSelectionNavigationUseCase: ProcessSelectionNavigationUseCase,
     private val calculationNavigationUseCase: ProcessCalculationNavigationUseCase,
     private val generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ProcessEditListener {
@@ -124,6 +126,13 @@ class ProcessEditViewModel @Inject constructor(
     fun navigateToRecipeSelection(constraint: ConnectionConstraint) {
         invokeUseCase(
             useCase = recipeSelectionNavigationUseCase,
+            params = constraint
+        )
+    }
+
+    fun navigateToProcessSelection(constraint: ConnectionConstraint) {
+        invokeUseCase(
+            useCase = processSelectionNavigationUseCase,
             params = constraint
         )
     }

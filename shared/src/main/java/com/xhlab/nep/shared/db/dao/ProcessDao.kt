@@ -25,6 +25,12 @@ abstract class ProcessDao : BaseDao<ProcessEntity>() {
 
     @Query("""
         SELECT * FROM process
+        WHERE process.process_id IN(:processIds)
+    """)
+    abstract fun getProcessListById(processIds: List<String>): LiveData<List<ProcessEntity?>>
+
+    @Query("""
+        SELECT * FROM process
         WHERE process.process_id = :processId
     """)
     abstract fun getProcessLiveData(processId: String): LiveData<ProcessEntity?>
@@ -34,6 +40,15 @@ abstract class ProcessDao : BaseDao<ProcessEntity>() {
         ORDER BY process_summary.name
     """)
     abstract fun getProcessList(): DataSource.Factory<Int, RoomProcessSummary>
+
+    @Query("""
+        SELECT * FROM process_summary
+        WHERE process_summary.unlocalized_name = :targetElementKey
+        ORDER BY process_summary.name
+    """)
+    abstract fun getProcessListByTarget(
+        targetElementKey: String
+    ): DataSource.Factory<Int, RoomProcessSummary>
 
     @Query("""
         DELETE FROM process

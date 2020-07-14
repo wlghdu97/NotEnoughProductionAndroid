@@ -54,5 +54,9 @@ class ProcessingOrderFragment : DaggerFragment(), ViewInit {
                 adapter.submitRecipeRatioList(it.data!!.recipes)
             }
         }
+
+        calculationViewModel.subProcessList.observeNotNull(this) {
+            adapter.submitSubProcessList(it)
+        }
     }
 }

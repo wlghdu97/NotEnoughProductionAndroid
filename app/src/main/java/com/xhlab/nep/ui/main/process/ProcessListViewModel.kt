@@ -42,11 +42,11 @@ class ProcessListViewModel @Inject constructor(
     init {
         invokeMediatorUseCase(
             useCase = loadProcessListUseCase,
-            params = Unit
+            params = LoadProcessListUseCase.Parameter()
         )
     }
 
-    override fun onClick(id: String) {
+    override fun onClick(id: String, name: String) {
         invokeUseCase(
             useCase = processEditNavigationUseCase,
             params = ProcessEditNavigationUseCase.Parameter(id)

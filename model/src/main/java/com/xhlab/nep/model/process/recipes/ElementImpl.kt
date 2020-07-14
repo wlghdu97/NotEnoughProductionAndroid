@@ -1,4 +1,4 @@
-package com.xhlab.nep.model.process
+package com.xhlab.nep.model.process.recipes
 
 import com.xhlab.nep.model.ElementView
 
@@ -7,7 +7,6 @@ data class ElementImpl(
     override val localizedName: String,
     override val unlocalizedName: String,
     override val type: Int,
-    override val metaData: String?
-) : ElementView() {
+    override val metaData: String?,
     override val amount: Int = 1
-}
+) : ElementView()

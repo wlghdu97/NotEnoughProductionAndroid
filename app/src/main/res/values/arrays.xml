@@ -27,5 +27,6 @@
         <item>@string/menu_connect_to_existing</item>
         <item>@string/menu_connect_to_new_recipe</item>
         <item>@string/menu_attach_supplier</item>
+        <item>@string/menu_attach_process_reference</item>
     </string-array>
 </resources>

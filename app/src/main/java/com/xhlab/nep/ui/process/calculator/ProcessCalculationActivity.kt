@@ -1,12 +1,15 @@
 package com.xhlab.nep.ui.process.calculator
 
 import android.os.Bundle
+import androidx.core.view.isGone
+import androidx.lifecycle.observe
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.domain.process.ResourceRateCalculationUseCase
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.calculator.byproducts.ByproductsFragment
 import com.xhlab.nep.ui.process.calculator.cycles.ProcessingOrderFragment
@@ -74,6 +77,18 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
 
         viewModel.process.observeNotNull(this) {
             toolbar.subtitle = it.name
+        }
+
+        viewModel.calculationResult.observe(this) {
+            message.isGone = it.throwable == null
+            if (!message.isGone) {
+                message.text = when (it.throwable) {
+                    is ResourceRateCalculationUseCase.SubProcessNotFoundException ->
+                        "${getString(R.string.error_failed_to_find_sub_process)}\n${it.throwable?.message}"
+                    else ->
+                        getString(R.string.error_failed_to_find_solution)
+                }
+            }
         }
     }
 

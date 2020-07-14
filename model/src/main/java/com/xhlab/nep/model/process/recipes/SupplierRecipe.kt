@@ -1,4 +1,4 @@
-package com.xhlab.nep.model.process
+package com.xhlab.nep.model.process.recipes
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
@@ -21,13 +21,12 @@ class SupplierRecipe(element: ElementView) : Recipe {
         return listOf(innerElement)
     }
 
-    data class ElementImpl(
-        override val id: Long,
-        override val localizedName: String,
-        override val unlocalizedName: String,
-        override val type: Int,
-        override val metaData: String?
-    ) : ElementView() {
-        override val amount: Int = 1
+    override fun equals(other: Any?): Boolean {
+        if (other !is SupplierRecipe) return false
+        return (getOutput()[0].unlocalizedName == other.getOutput()[0].unlocalizedName)
+    }
+
+    override fun hashCode(): Int {
+        return (getOutput()[0].unlocalizedName.hashCode())
     }
 }

@@ -146,6 +146,7 @@ class ProcessEditActivity :
                     0 -> viewModel.navigateToInternalRecipeSelection(constraint)
                     1 -> viewModel.navigateToRecipeSelection(constraint)
                     2 -> viewModel.attachSupplier(constraint.recipe, constraint.element.unlocalizedName)
+                    3 -> viewModel.navigateToProcessSelection(constraint)
                 }
             }
             .show()
