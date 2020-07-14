@@ -163,9 +163,14 @@ object ProcessData {
             connectRecipe(recipeList[19], oreChainRecipeList[1], itemList[23])
         }
 
+    val processRecipeList = listOf(
+        ProcessRecipe(fluidList[18], processPE)
+    )
+
     val processPlasticSheet: Process
         get() = Process("process04", "Polyethylene sheet process", recipeList[20], itemList[24]).apply {
             markNotConsumed(recipeList[20], itemList[25])
+            connectRecipe(processRecipeList[0], recipeList[20], fluidList[18])
         }
 
     val processList = listOf(processGlass, processPE, processChest, processPlasticSheet).map {

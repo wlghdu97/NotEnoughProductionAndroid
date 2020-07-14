@@ -309,5 +309,8 @@ open class Process(
 
     enum class ConnectionStatus {
         CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT, NOT_CONSUMED
+
+    companion object {
+        const val PROCESS_REFERENCE = -1
     }
 }

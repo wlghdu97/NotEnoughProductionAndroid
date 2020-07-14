@@ -4,7 +4,7 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 
-class SupplierRecipe(element: ElementView) : Recipe {
+class ProcessRecipe(element: ElementView, process: Process) : Recipe {
     private val innerElement: Element = ElementImpl(
         id = element.id,
         localizedName = element.localizedName,
@@ -13,8 +13,16 @@ class SupplierRecipe(element: ElementView) : Recipe {
         metaData = element.metaData
     )
 
+    private val processElement: Element = ElementImpl(
+        id = 0,
+        localizedName = process.name,
+        unlocalizedName = process.id,
+        type = Process.PROCESS_REFERENCE,
+        metaData = null
+    )
+
     override fun getInputs(): List<Element> {
-        return emptyList()
+        return listOf(processElement)
     }
 
     override fun getOutput(): List<Element> {
