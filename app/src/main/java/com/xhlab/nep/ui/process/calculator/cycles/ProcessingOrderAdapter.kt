@@ -24,6 +24,8 @@ class ProcessingOrderAdapter
     : RecyclerView.Adapter<ProcessingOrderAdapter.ProcessingOrderViewHolder>() {
 
     private val recipeList = arrayListOf<RecipeRatio>()
+    private var root: RecipeNode? = null
+    private var subProcessList = arrayListOf<Process>()
     private var degreeMap = hashMapOf<Recipe, Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessingOrderViewHolder {
@@ -45,12 +47,27 @@ class ProcessingOrderAdapter
     }
 
     fun submitProcess(process: Process) {
-        preOrderTraverse(0, process.getRecipeDFSTree())
+        root = process.getRecipeDFSTree()
+        preOrderTraverse(0, root!!)
         notifyDataSetChanged()
     }
 
+    fun submitSubProcessList(subProcess: List<Process>) {
+        subProcessList.clear()
+        subProcessList.addAll(subProcess)
+        root?.let { preOrderTraverse(0, it) }
+    }
+
     private fun preOrderTraverse(degree: Int, node: RecipeNode) {
-        degreeMap[node.recipe] = degree
+        val recipe = node.recipe
+        degreeMap[recipe] = degree
+        if (recipe is ProcessRecipe) {
+            val processId = recipe.getProcessId()
+            val subProcess = subProcessList.find { it.id == processId }
+            if (subProcess != null) {
+                preOrderTraverse(degree + 1, subProcess.getRecipeDFSTree())
+            }
+        }
         for (child in node.childNodes) {
             preOrderTraverse(degree + 1, child)
         }

@@ -3,6 +3,7 @@ package com.xhlab.nep.shared.data.process
 import android.util.LruCache
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.paging.DataSource
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
@@ -32,6 +33,17 @@ internal class ProcessRepoImpl @Inject constructor(
 
     override suspend fun getProcessLiveData(processId: String): LiveData<Process?> = withContext(io) {
         getProcessInternal(processId)
+    }
+
+    override suspend fun getSubProcesses(processIds: List<String>): LiveData<List<Process>?> {
+        val processList = db.getProcessDao().getProcessListById(processIds)
+        return Transformations.map(processList) {
+            it.mapNotNull { process ->
+                if (process != null) {
+                    mapper.map(process)
+                } else null
+            }
+        }
     }
 
     override fun getProcesses(): DataSource.Factory<Int, ProcessSummary> {

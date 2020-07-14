@@ -39,8 +39,13 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         }
     }
 
+    override suspend fun getSubProcesses(processIds: List<String>): LiveData<List<Process>?> {
+        val processes = ProcessData.processList.filter { processIds.contains(it.id) }
+        return MutableLiveData(processes)
+    }
+
     override fun getProcesses(): DataSource.Factory<Int, ProcessSummary> {
-        return ListDataSource(ProcessData.processList)
+        return ListDataSource(ProcessData.processSummaryList)
     }
 
     override suspend fun createProcess(

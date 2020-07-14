@@ -5,6 +5,7 @@ import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.FragmentScope
 import com.xhlab.nep.ui.process.calculator.byproducts.ByproductsFragment
 import com.xhlab.nep.ui.process.calculator.cycles.ProcessingOrderFragment
+import com.xhlab.nep.ui.process.calculator.cycles.ProcessingOrderViewModel
 import com.xhlab.nep.ui.process.calculator.ingredients.BaseIngredientsFragment
 import dagger.Binds
 import dagger.Module
@@ -23,6 +24,11 @@ abstract class ProcessCalculationModule {
     @IntoMap
     @ViewModelKey(ElementNavigatorViewModel::class)
     abstract fun provideBaseIngredientsViewModel(viewModel: ElementNavigatorViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProcessingOrderViewModel::class)
+    abstract fun provideProcessingOrderViewModel(viewModel: ProcessingOrderViewModel): ViewModel
 
     @FragmentScope
     @ContributesAndroidInjector

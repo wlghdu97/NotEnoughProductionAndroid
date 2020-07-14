@@ -173,7 +173,9 @@ object ProcessData {
             connectRecipe(processRecipeList[0], recipeList[20], fluidList[18])
         }
 
-    val processList = listOf(processGlass, processPE, processChest, processPlasticSheet).map {
+    val processList = listOf(processGlass, processPE, processChest, processPlasticSheet)
+
+    val processSummaryList = processList.map {
         ProcessSummaryImpl(
             processId = it.id,
             name = it.name,

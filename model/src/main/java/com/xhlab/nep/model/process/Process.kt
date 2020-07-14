@@ -291,10 +291,8 @@ open class Process(
     fun getSubProcessIds(): List<String> {
         val list = arrayListOf<String>()
         for (vertex in vertices) {
-            for (input in vertex.getInputs()) {
-                if (input is ElementView && input.type == PROCESS_REFERENCE) {
-                    list.add(input.unlocalizedName)
-                }
+            if (vertex is ProcessRecipe) {
+                list.add(vertex.getProcessId())
             }
         }
         return list

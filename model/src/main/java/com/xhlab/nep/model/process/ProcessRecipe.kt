@@ -21,6 +21,8 @@ class ProcessRecipe(element: ElementView, process: Process) : Recipe {
         metaData = null
     )
 
+    fun getProcessId() = processElement.unlocalizedName
+
     override fun getInputs(): List<Element> {
         return listOf(processElement)
     }
