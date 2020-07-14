@@ -44,8 +44,11 @@ class ProcessingOrderAdapter
     override fun getItemCount() = recipeList.size
 
     fun submitRecipeRatioList(list: List<RecipeRatio>) {
+        val newList = list.filterNot {
+            it.first is ProcessRecipe || it.first is OreChainRecipe
+        }.reversed()
         recipeList.clear()
-        recipeList.addAll(list.reversed())
+        recipeList.addAll(newList)
         notifyDataSetChanged()
     }
 
