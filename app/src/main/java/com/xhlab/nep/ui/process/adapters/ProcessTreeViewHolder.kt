@@ -9,6 +9,7 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.process.OreChainRecipe
+import com.xhlab.nep.model.process.ProcessRecipe
 import com.xhlab.nep.model.process.SupplierRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
@@ -37,6 +38,7 @@ abstract class ProcessTreeViewHolder(itemView: View)
             is CraftingRecipeView -> context.getString(R.string.txt_crafting_table)
             is SupplierRecipe -> context.getString(R.string.txt_supplier)
             is OreChainRecipe -> context.getString(R.string.txt_ore_chain_recipe)
+            is ProcessRecipe -> context.getString(R.string.txt_process_reference)
             else -> context.getString(R.string.txt_unnamed)
         }
 

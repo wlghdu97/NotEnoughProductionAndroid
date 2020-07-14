@@ -1,6 +1,7 @@
 package com.xhlab.nep.model.process
 
 import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import java.util.*
@@ -188,7 +189,11 @@ open class Process(
             })
         }
         if (connections.isEmpty()) {
-            connections.add(Connection(UNCONNECTED))
+            connections.add(if (key is ElementView && key.type == PROCESS_REFERENCE) {
+                Connection(REFERENCE)
+            } else {
+                Connection(UNCONNECTED)
+            })
         }
         return connections
     }
@@ -308,7 +313,8 @@ open class Process(
     )
 
     enum class ConnectionStatus {
-        CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT, NOT_CONSUMED
+        CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT, NOT_CONSUMED, REFERENCE
+    }
 
     companion object {
         const val PROCESS_REFERENCE = -1
