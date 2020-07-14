@@ -5,24 +5,29 @@ import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
 
-class ProcessRecipe(element: ElementView, process: Process) : Recipe {
-    private val innerElement: Element =
-        ElementImpl(
+class ProcessRecipe : Recipe {
+    private val innerElement: Element
+    private val processElement: Element
+
+    constructor(element: ElementView, processId: String, processName: String) {
+        innerElement = ElementImpl(
             id = element.id,
             localizedName = element.localizedName,
             unlocalizedName = element.unlocalizedName,
             type = element.type,
             metaData = element.metaData
         )
-
-    private val processElement: Element =
-        ElementImpl(
+        processElement = ElementImpl(
             id = 0,
-            localizedName = process.name,
-            unlocalizedName = process.id,
+            localizedName = processName,
+            unlocalizedName = processId,
             type = Process.PROCESS_REFERENCE,
             metaData = null
         )
+
+    }
+
+    constructor(element: ElementView, process: Process) : this(element, process.id, process.name)
 
     fun getProcessId() = processElement.unlocalizedName
 

@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.main.process
+package com.xhlab.nep.ui.adapters
 
 import android.view.MenuItem
 import android.view.View
@@ -12,24 +12,27 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.process.ProcessSummary
+import com.xhlab.nep.ui.main.process.ProcessListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.layoutInflater
 
-class ProcessAdapter(
+open class ProcessAdapter(
     private val listener: ProcessListener? = null
 ) : PagedListAdapter<ProcessSummary, ProcessAdapter.ProcessViewHolder>(Differ) {
 
     private var isIconVisible = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessViewHolder {
-        val view = parent.context.layoutInflater.inflate(R.layout.holder_process, parent, false)
+    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessViewHolder {
+        val view = parent.context.layoutInflater.inflate(getHolderLayoutId(), parent, false)
         return ProcessViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ProcessViewHolder, position: Int) {
+    final override fun onBindViewHolder(holder: ProcessViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+
+    protected open fun getHolderLayoutId() = R.layout.holder_process
 
     fun setIconVisibility(isVisible: Boolean) {
         isIconVisible = isVisible
@@ -42,13 +45,13 @@ class ProcessAdapter(
         private val icon: ImageView = itemView.findViewById(R.id.output_icon)
         private val name: TextView = itemView.findViewById(R.id.process_name)
         private val description: TextView = itemView.findViewById(R.id.description)
-        private val more: ImageButton = itemView.findViewById(R.id.btn_more)
+        private val more: ImageButton? = itemView.findViewById(R.id.btn_more)
 
         init {
             itemView.setOnClickListener {
-                model?.let { listener?.onClick(it.processId) }
+                model?.let { listener?.onClick(it.processId, it.name) }
             }
-            more.setOnClickListener {
+            more?.setOnClickListener {
                 PopupMenu(itemView.context, more).apply {
                     inflate(R.menu.process_list)
                     setOnMenuItemClickListener(this@ProcessViewHolder)

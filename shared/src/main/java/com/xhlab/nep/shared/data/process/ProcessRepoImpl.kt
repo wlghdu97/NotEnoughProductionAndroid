@@ -50,6 +50,10 @@ internal class ProcessRepoImpl @Inject constructor(
         return db.getProcessDao().getProcessList().map { it as ProcessSummary }
     }
 
+    override fun getProcessesByTarget(targetElementKey: String): DataSource.Factory<Int, ProcessSummary> {
+        return db.getProcessDao().getProcessListByTarget(targetElementKey).map { it as ProcessSummary }
+    }
+
     override suspend fun createProcess(name: String, targetRecipe: Recipe, keyElement: Element): Boolean {
         val processId = UUID.randomUUID().toString()
         val process = Process(processId, name, targetRecipe, keyElement)

@@ -42,6 +42,15 @@ abstract class ProcessDao : BaseDao<ProcessEntity>() {
     abstract fun getProcessList(): DataSource.Factory<Int, RoomProcessSummary>
 
     @Query("""
+        SELECT * FROM process_summary
+        WHERE process_summary.unlocalized_name = :targetElementKey
+        ORDER BY process_summary.name
+    """)
+    abstract fun getProcessListByTarget(
+        targetElementKey: String
+    ): DataSource.Factory<Int, RoomProcessSummary>
+
+    @Query("""
         DELETE FROM process
         WHERE process.process_id = :processId
     """)
