@@ -19,7 +19,17 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
     private val processChest = MutableLiveData(ProcessData.processChest)
     private val processPlasticSheet = MutableLiveData(ProcessData.processPlasticSheet)
 
-    override suspend fun getProcess(processId: String): LiveData<Process?> {
+    override suspend fun getProcess(processId: String): Process? {
+        return when (processId) {
+            processGlass.value?.id -> ProcessData.processGlass
+            processPE.value?.id -> ProcessData.processPE
+            processChest.value?.id -> ProcessData.processChest
+            processPlasticSheet.value?.id -> ProcessData.processPlasticSheet
+            else -> null
+        }
+    }
+
+    override suspend fun getProcessLiveData(processId: String): LiveData<Process?> {
         return when (processId) {
             processGlass.value?.id -> processGlass
             processPE.value?.id -> processPE

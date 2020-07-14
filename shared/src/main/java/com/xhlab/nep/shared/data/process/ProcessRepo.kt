@@ -9,7 +9,8 @@ import com.xhlab.nep.model.process.ProcessSummary
 
 interface ProcessRepo {
     fun getProcesses(): DataSource.Factory<Int, ProcessSummary>
-    suspend fun getProcess(processId: String): LiveData<Process?>
+    suspend fun getProcess(processId: String): Process?
+    suspend fun getProcessLiveData(processId: String): LiveData<Process?>
     suspend fun createProcess(name: String, targetRecipe: Recipe, keyElement: Element): Boolean
     suspend fun insertProcess(process: Process)
     suspend fun renameProcess(processId: String, name: String)

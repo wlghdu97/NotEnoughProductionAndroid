@@ -23,7 +23,14 @@ internal class ProcessRepoImpl @Inject constructor(
     private val io = Dispatchers.IO
     private val cache = LruCache<String, MutableLiveData<Process?>>(10)
 
-    override suspend fun getProcess(processId: String): LiveData<Process?> = withContext(io) {
+    override suspend fun getProcess(processId: String): Process? = withContext(io) {
+        val process = db.getProcessDao().getProcess(processId)
+        if (process != null) {
+            mapper.map(process)
+        } else null
+    }
+
+    override suspend fun getProcessLiveData(processId: String): LiveData<Process?> = withContext(io) {
         getProcessInternal(processId)
     }
 

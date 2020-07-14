@@ -257,15 +257,19 @@ open class Process(
         val keyMap = hashMapOf<String, Int>()
         val whiteList = mutableSetOf<String>()
         for (vertex in vertices) {
-            if (vertex is SupplierRecipe) {
-                whiteList.addAll(vertex.getOutput().map { it.unlocalizedName })
-            } else {
-                for (input in vertex.getInputs()) {
-                    val key = keyMap[input.unlocalizedName]
-                    if (key == null) {
-                        keyMap[input.unlocalizedName] = 1
-                    } else {
-                        keyMap[input.unlocalizedName] = key + 1
+            when (vertex) {
+                is ProcessRecipe -> Unit
+                is SupplierRecipe -> {
+                    whiteList.addAll(vertex.getOutput().map { it.unlocalizedName })
+                }
+                else -> {
+                    for (input in vertex.getInputs()) {
+                        val key = keyMap[input.unlocalizedName]
+                        if (key == null) {
+                            keyMap[input.unlocalizedName] = 1
+                        } else {
+                            keyMap[input.unlocalizedName] = key + 1
+                        }
                     }
                 }
             }
@@ -282,6 +286,18 @@ open class Process(
             keyMap[key] = 1
         }
         return keyMap.filter { it.value >= 1 }.keys.toList()
+    }
+
+    fun getSubProcessIds(): List<String> {
+        val list = arrayListOf<String>()
+        for (vertex in vertices) {
+            for (input in vertex.getInputs()) {
+                if (input is ElementView && input.type == PROCESS_REFERENCE) {
+                    list.add(input.unlocalizedName)
+                }
+            }
+        }
+        return list
     }
 
     fun getRecipeNodeCount(): Int {
