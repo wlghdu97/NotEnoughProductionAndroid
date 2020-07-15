@@ -2,6 +2,7 @@ package com.xhlab.nep
 
 import com.crashlytics.android.Crashlytics
 import com.xhlab.nep.di.DaggerAppComponent
+import com.xhlab.nep.logging.CrashlyticsTree
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import io.fabric.sdk.android.Fabric
@@ -21,6 +22,8 @@ class NEPApp : DaggerApplication() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(CrashlyticsTree())
         }
     }
 
