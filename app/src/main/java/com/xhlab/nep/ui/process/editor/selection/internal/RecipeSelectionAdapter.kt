@@ -46,7 +46,7 @@ class RecipeSelectionAdapter(
                 if (degreeNode != null) {
                     val (degree, node) = degreeNode
                     val isNodeInDegree = when (constraint.connectToParent) {
-                        true -> degree <= constraint.degree
+                        true -> degree < constraint.degree
                         false -> degree >= constraint.degree
                     }
                     val isNodeVisible = when (isNodeInDegree) {
