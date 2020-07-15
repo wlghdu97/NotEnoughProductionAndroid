@@ -31,6 +31,7 @@
     <string name="title_import_process">Import process with string</string>
     <string name="title_select_element">Multiple items detected</string>
     <string name="title_select_process_to_connect">Select process to connect</string>
+    <string name="title_error">Something went wrong.</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
@@ -69,6 +70,7 @@
     <string name="btn_rename">Rename</string>
     <string name="btn_delete">Delete</string>
     <string name="btn_import">Import</string>
+    <string name="btn_relaunch">Restart</string>
 
     <string name="hint_search_element">Search item</string>
     <string name="hint_search_ingredient">Search ingredients</string>

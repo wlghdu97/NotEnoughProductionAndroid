@@ -69,6 +69,10 @@
             android:parentActivityName=".ui.process.editor.ProcessEditActivity"
             android:launchMode="singleTop"/>
 
+        <activity
+            android:name=".ui.ErrorActivity"
+            android:launchMode="singleInstance" />
+
         <service
             android:name=".service.ParseRecipeService"
             android:exported="false"
@@ -78,6 +82,10 @@
             android:name=".service.IconUnzipService"
             android:exported="false"
             android:stopWithTask="false"/>
+
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="no" />
 
     </application>
 
