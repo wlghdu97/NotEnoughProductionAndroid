@@ -163,4 +163,6 @@
     <string name="form_recipe_details">%s recipe\n%dx %s</string>
     <string name="form_ratio">x%s</string>
     <string name="form_processing_order">Depth : %d, Outputs : %s</string>
+
+    <string name="com.crashlytics.useFirebaseAppId" translatable="false">true</string>
 </resources>
