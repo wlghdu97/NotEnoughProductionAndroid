@@ -105,7 +105,7 @@ class ParseRecipeService @Inject constructor() : Service() {
 
     private fun getNotificationBuilder(): NotificationCompat.Builder {
         return NotificationCompat.Builder(this, CHANNEL_ID).apply {
-            setSmallIcon(R.mipmap.ic_launcher)
+            setSmallIcon(R.drawable.ic_nep_notification)
             setAutoCancel(true)
             priority = NotificationCompat.PRIORITY_DEFAULT
         }
