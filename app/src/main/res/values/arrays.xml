@@ -20,7 +20,6 @@
 
     <string-array name="connection_selection">
         <item>@string/menu_connect_to_existing</item>
-        <item>@string/menu_connect_to_new_recipe</item>
     </string-array>
 
     <string-array name="connection_selection_child">
