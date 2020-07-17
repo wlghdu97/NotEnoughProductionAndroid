@@ -12,6 +12,8 @@
 
 # Application classes that will be serialized/deserialized over Gson
 -keep class com.xhlab.nep.model.** { <fields>; }
+-keep class com.xhlab.nep.shared.db.entity.** { <fields>; }
+-keep class com.xhlab.nep.shared.db.view.** { <fields>; }
 
 # Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
