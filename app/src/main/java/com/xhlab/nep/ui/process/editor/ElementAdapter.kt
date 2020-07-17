@@ -62,7 +62,7 @@ class ElementAdapter(
                 menuButton.isGone = (it == FINAL_OUTPUT)
                 disconnect.isVisible = (it == CONNECTED_TO_PARENT || it == CONNECTED_TO_CHILD)
                 connectToParent.isVisible = (degree != 0 && (it != FINAL_OUTPUT || it != NOT_CONSUMED))
-                connectToChild.isVisible = (it != FINAL_OUTPUT || it != NOT_CONSUMED)
+                connectToChild.isVisible = (it != FINAL_OUTPUT && it != NOT_CONSUMED)
                 markNotConsumed.isVisible = (it == UNCONNECTED || it == NOT_CONSUMED)
                 markNotConsumed.setTitle(when (it == UNCONNECTED) {
                     true -> R.string.menu_mark_not_consumed
