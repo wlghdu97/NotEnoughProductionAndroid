@@ -26,7 +26,7 @@ class ImportProcessStringUseCase @Inject constructor(
         }
         val inflater = Inflater()
         inflater.setInput(decodedInput)
-        val buffer = ByteArray(1024)
+        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
         val baos = ByteArrayOutputStream(decodedInput.size)
         while (!inflater.finished()) {
             val count = inflater.inflate(buffer)
