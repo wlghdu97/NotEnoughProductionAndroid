@@ -18,7 +18,6 @@ class RoomProcessMapper @Inject constructor(
             element.targetOutput.localizedName,
             element.targetOutput.amount,
             element.getRecipeNodeCount(),
-            element.getSubProcessIds().size,
             gson.toJson(element)
         )
     }

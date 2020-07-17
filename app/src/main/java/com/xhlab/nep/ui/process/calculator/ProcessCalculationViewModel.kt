@@ -5,7 +5,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
-import com.xhlab.nep.shared.domain.process.LoadProcessWithSubProcessListUseCase
 import com.xhlab.nep.shared.domain.process.ResourceRateCalculationUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
@@ -15,7 +14,6 @@ import javax.inject.Inject
 
 class ProcessCalculationViewModel @Inject constructor(
     private val loadProcessUseCase: LoadProcessUseCase,
-    private val loadSubProcessListUseCase: LoadProcessWithSubProcessListUseCase,
     private val calculationUseCase: ResourceRateCalculationUseCase,
     generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel() {
@@ -23,24 +21,12 @@ class ProcessCalculationViewModel @Inject constructor(
     private val processId = MutableLiveData<String>()
 
     val process = loadProcessUseCase.observeOnly(Resource.Status.SUCCESS)
-    val subProcessList = loadSubProcessListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded
 
     private val _calculationResult = MediatorLiveData<Resource<ResourceRateCalculationUseCase.Result>>()
     val calculationResult: LiveData<Resource<ResourceRateCalculationUseCase.Result>>
         get() = _calculationResult
-
-    init {
-        loadSubProcessListUseCase.observe().addSource(process) {
-            if (it != null) {
-                invokeMediatorUseCase(
-                    useCase = loadSubProcessListUseCase,
-                    params = LoadProcessWithSubProcessListUseCase.Parameter(it)
-                )
-            }
-        }
-    }
 
     fun init(processId: String?) {
         if (processId == null) {

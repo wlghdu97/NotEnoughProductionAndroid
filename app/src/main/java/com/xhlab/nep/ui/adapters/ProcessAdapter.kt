@@ -74,17 +74,11 @@ open class ProcessAdapter(
                 icon.setIcon(model.unlocalizedName)
             }
             name.text = model.name
-            val subProcessCount = model.subProcessCount
-            val subProcessText = when(subProcessCount == 0) {
-                true -> context.getString(R.string.txt_standalone_process)
-                false -> resources.getQuantityString(R.plurals.sub_process, subProcessCount, subProcessCount)
-            }
             description.text = context.formatString(
                 R.string.form_process_description,
                 model.amount,
                 model.localizedName,
-                resources.getQuantityString(R.plurals.node, model.nodeCount, model.nodeCount),
-                subProcessText
+                resources.getQuantityString(R.plurals.node, model.nodeCount, model.nodeCount)
             )
         }
 

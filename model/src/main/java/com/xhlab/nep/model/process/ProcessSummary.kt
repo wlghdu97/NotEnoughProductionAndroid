@@ -7,5 +7,4 @@ abstract class ProcessSummary {
     abstract val localizedName: String
     abstract val amount: Int
     abstract val nodeCount: Int
-    abstract val subProcessCount: Int
 }

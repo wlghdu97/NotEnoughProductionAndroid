@@ -1,9 +1,10 @@
 package com.xhlab.test_shared
 
 import com.xhlab.nep.model.Machine
-import com.xhlab.nep.model.process.*
+import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.ProcessSummary
+import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
-import com.xhlab.nep.model.process.recipes.ProcessRecipe
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.EU
 import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.NONE
@@ -166,14 +167,10 @@ object ProcessData {
             connectRecipe(recipeList[19], oreChainRecipeList[1], itemList[23])
         }
 
-    val processRecipeList = listOf(
-        ProcessRecipe(fluidList[18], processPE)
-    )
-
     val processPlasticSheet: Process
         get() = Process("process04", "Polyethylene sheet process", recipeList[20], itemList[24]).apply {
             markNotConsumed(recipeList[20], itemList[25])
-            connectRecipe(processRecipeList[0], recipeList[20], fluidList[18])
+            connectProcess(processPE, recipeList[20], fluidList[18])
         }
 
     val processList = listOf(processGlass, processPE, processChest, processPlasticSheet)
@@ -185,8 +182,7 @@ object ProcessData {
             unlocalizedName = it.targetOutput.unlocalizedName,
             localizedName = it.targetOutput.localizedName,
             amount = it.targetOutput.amount,
-            nodeCount = it.getRecipeNodeCount(),
-            subProcessCount = it.getSubProcessIds().size
+            nodeCount = it.getRecipeNodeCount()
         )
     }
 
@@ -320,7 +316,6 @@ object ProcessData {
         override val unlocalizedName: String,
         override val localizedName: String,
         override val amount: Int,
-        override val nodeCount: Int,
-        override val subProcessCount: Int
+        override val nodeCount: Int
     ) : ProcessSummary()
 }

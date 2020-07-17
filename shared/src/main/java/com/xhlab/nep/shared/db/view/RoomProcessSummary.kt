@@ -13,8 +13,7 @@ import com.xhlab.nep.model.process.ProcessSummary
         process.unlocalized_name,
         process.localized_name,
         process.amount,
-        process.node_count,
-        process.sub_process_count
+        process.node_count
         FROM process
     """
 )
@@ -28,7 +27,5 @@ data class RoomProcessSummary(
     override val localizedName: String,
     override val amount: Int,
     @ColumnInfo(name = "node_count")
-    override val nodeCount: Int,
-    @ColumnInfo(name = "sub_process_count")
-    override val subProcessCount: Int
+    override val nodeCount: Int
 ) : ProcessSummary()

@@ -65,13 +65,6 @@ abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(item
                     icon.scaleX = 1f
                     icon.scaleY = 1f
                 }
-                Process.ConnectionStatus.REFERENCE -> {
-                    icon.imageResource = R.drawable.ic_link_24dp
-                    icon.imageTintList = getColorStateList(R.color.colorReference)
-                    icon.rotation = 0f
-                    icon.scaleX = 1f
-                    icon.scaleY = 1f
-                }
                 Process.ConnectionStatus.NOT_CONSUMED -> {
                     icon.imageResource = R.drawable.ic_power_off_24dp
                     icon.imageTintList = getColorStateList(R.color.colorInfinite)

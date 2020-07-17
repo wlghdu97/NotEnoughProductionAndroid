@@ -58,10 +58,6 @@ class ByproductsFragment : DaggerFragment(), ViewInit {
             adapter.submitProcess(it)
         }
 
-        calculationViewModel.subProcessList.observeNotNull(this) {
-            adapter.submitSubProcessList(it)
-        }
-
         calculationViewModel.calculationResult.observe(this) {
             if (it.isSuccessful()) {
                 adapter.submitRecipeRatioList(it.data!!.recipes)

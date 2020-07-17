@@ -1,10 +1,8 @@
 package com.xhlab.nep.model.process
 
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
-import com.xhlab.nep.model.process.recipes.ProcessRecipe
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import java.util.*
 
@@ -19,6 +17,27 @@ open class Process(
 
     init {
         connectRecipe(rootRecipe, null, targetOutput)
+    }
+
+    fun connectProcess(process: Process, target: Recipe?, element: Element): Boolean {
+        if (vertices.size != edges.size) {
+            throw RuntimeException("corrupted process")
+        }
+        for (edgeIndex in process.edges.indices) {
+            for (edge in process.edges[edgeIndex]) {
+                val from = process.vertices[edge.index]
+                val to = process.vertices[edgeIndex]
+                val elementKey = (to.getInputs() + to.getOutput()).find {
+                    it.unlocalizedName == edge.key
+                }
+                if (elementKey != null) {
+                    connectRecipe(from, to, elementKey, edge.reversed)
+                } else {
+                    throw NullPointerException()
+                }
+            }
+        }
+        return connectRecipe(process.rootRecipe, target, element)
     }
 
     fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false): Boolean {
@@ -191,11 +210,7 @@ open class Process(
             })
         }
         if (connections.isEmpty()) {
-            connections.add(if (key is ElementView && key.type == PROCESS_REFERENCE) {
-                Connection(REFERENCE)
-            } else {
-                Connection(UNCONNECTED)
-            })
+            connections.add(Connection(UNCONNECTED))
         }
         return connections
     }
@@ -260,7 +275,6 @@ open class Process(
         val whiteList = mutableSetOf<String>()
         for (vertex in vertices) {
             when (vertex) {
-                is ProcessRecipe -> Unit
                 is SupplierRecipe -> {
                     whiteList.addAll(vertex.getOutput().map { it.unlocalizedName })
                 }
@@ -288,16 +302,6 @@ open class Process(
             keyMap[key] = 1
         }
         return keyMap.filter { it.value >= 1 }.keys.toList()
-    }
-
-    fun getSubProcessIds(): List<String> {
-        val list = arrayListOf<String>()
-        for (vertex in vertices) {
-            if (vertex is ProcessRecipe) {
-                list.add(vertex.getProcessId())
-            }
-        }
-        return list
     }
 
     fun getRecipeNodeCount(): Int {
@@ -329,10 +333,6 @@ open class Process(
     )
 
     enum class ConnectionStatus {
-        CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT, NOT_CONSUMED, REFERENCE
-    }
-
-    companion object {
-        const val PROCESS_REFERENCE = -1
+        CONNECTED_TO_PARENT, CONNECTED_TO_CHILD, UNCONNECTED, FINAL_OUTPUT, NOT_CONSUMED
     }
 }

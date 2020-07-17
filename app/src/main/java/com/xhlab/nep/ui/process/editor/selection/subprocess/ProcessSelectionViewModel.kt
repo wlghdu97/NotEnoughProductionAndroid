@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hadilq.liveevent.LiveEvent
-import com.xhlab.nep.model.process.recipes.ProcessRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -48,17 +47,11 @@ class ProcessSelectionViewModel @Inject constructor(
     override fun onClick(id: String, name: String) {
         launchSuspendFunction(_connectionResult) {
             val constraint = requireConstraint()
-            val recipe = ProcessRecipe(
-                element = constraint.element,
-                processId = id,
-                processName = name
-            )
-            processRepo.connectRecipe(
+            processRepo.connectProcess(
                 processId = constraint.processId,
-                from = recipe,
+                fromProcessId = id,
                 to = constraint.recipe,
-                element = constraint.element,
-                reversed = false
+                element = constraint.element
             )
         }
     }

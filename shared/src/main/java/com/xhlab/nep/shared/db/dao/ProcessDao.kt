@@ -27,7 +27,7 @@ abstract class ProcessDao : BaseDao<ProcessEntity>() {
         SELECT * FROM process
         WHERE process.process_id IN(:processIds)
     """)
-    abstract fun getProcessListById(processIds: List<String>): LiveData<List<ProcessEntity?>>
+    abstract suspend fun getProcessListById(processIds: List<String>): List<ProcessEntity?>
 
     @Query("""
         SELECT * FROM process

@@ -108,8 +108,6 @@
     <string name="txt_process_reference">Process Reference</string>
     <string name="txt_unknown_recipe">Unknown recipe</string>
 
-    <string name="txt_standalone_process">standalone process</string>
-
     <string name="txt_db_not_loaded">
         DB is not loaded.
         \nPlease import your recEx json file.
@@ -162,7 +160,7 @@
     <string name="form_total">total %d items</string>
     <string name="form_item_with_amount">%sx %s</string>
     <string name="form_machine_property">%s %s, %s seconds, total %s %s</string>
-    <string name="form_process_description">%dx %s\n%s, %s</string>
+    <string name="form_process_description">%dx %s\n%s</string>
     <string name="form_degree">Depth : %d</string>
     <string name="form_recipe_details">%s recipe\n%dx %s</string>
     <string name="form_ratio">x%s</string>
@@ -171,11 +169,6 @@
     <plurals name="node">
         <item quantity="one">%d node</item>
         <item quantity="other">%d nodes</item>
-    </plurals>
-
-    <plurals name="sub_process">
-        <item quantity="one">%d subprocess</item>
-        <item quantity="other">%d subprocesses</item>
     </plurals>
 
     <string name="com.crashlytics.useFirebaseAppId" translatable="false">true</string>
