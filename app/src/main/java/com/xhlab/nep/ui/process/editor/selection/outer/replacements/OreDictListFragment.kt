@@ -71,6 +71,7 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
             arguments = Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
         }
         requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, replacementListFragment, RecipeSelectionActivity.REPLACEMENT_LIST_TAG)
             .commit()
     }

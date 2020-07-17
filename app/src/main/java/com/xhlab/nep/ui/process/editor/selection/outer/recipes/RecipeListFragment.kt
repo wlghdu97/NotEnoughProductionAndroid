@@ -134,6 +134,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
             }
         }
         requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, MACHINE_RECIPE_LIST_TAG)
             .addToBackStack(null)
             .commit()

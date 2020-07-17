@@ -87,6 +87,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
             arguments = Bundle().apply { putString(RecipeListFragment.ELEMENT_KEY, elementKey) }
         }
         requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, recipeListFragment, RecipeSelectionActivity.RECIPE_LIST_TAG)
             .commit()
     }

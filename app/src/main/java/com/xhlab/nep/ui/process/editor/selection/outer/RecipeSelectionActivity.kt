@@ -74,6 +74,7 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             arguments = Bundle().apply { putString(RecipeListFragment.ELEMENT_KEY, elementKey) }
         }
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, recipeListFragment, RECIPE_LIST_TAG)
             .commit()
     }
@@ -81,6 +82,7 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
     private fun showOreDictListFragment() {
         val oreDictListFragment = OreDictListFragment()
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, oreDictListFragment, ORE_DICT_LIST_TAG)
             .commit()
     }
@@ -90,6 +92,7 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             arguments = Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
         }
         supportFragmentManager.beginTransaction()
+            .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, replacementListFragment, REPLACEMENT_LIST_TAG)
             .commit()
     }
