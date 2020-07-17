@@ -116,8 +116,6 @@ class ParseRecipeService @Inject constructor() : Service() {
     }
 
     companion object {
-        private const val CHANNEL_ID = "parse_recipe_channel_id"
-        private const val NOTIFICATION_ID = 101
         const val JSON_URI = "json_uri"
     }
 }

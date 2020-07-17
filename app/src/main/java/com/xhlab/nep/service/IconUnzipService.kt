@@ -113,8 +113,6 @@ class IconUnzipService : Service() {
     }
 
     companion object {
-        private const val CHANNEL_ID = "icon_unzip_channel_id"
-        private const val NOTIFICATION_ID = 102
         const val ZIP_URI = "zip_uri"
     }
 }
