@@ -43,7 +43,10 @@ class NEPApp : DaggerApplication() {
     }
 
     private fun initFabric() {
-        val core = CrashlyticsCore.Builder().build()
+        val core = CrashlyticsCore.Builder()
+            .disabled(BuildConfig.DEBUG)
+            .build()
+
         val callback = object : InitializationCallback<Fabric> {
             override fun failure(e: Exception) = Unit
             override fun success(fabric: Fabric) {
