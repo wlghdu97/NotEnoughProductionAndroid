@@ -1,5 +1,6 @@
 package com.xhlab.nep.shared.parser.process
 
+import androidx.annotation.Keep
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
@@ -116,6 +117,7 @@ class ProcessDeserializer : JsonDeserializer<Process> {
         reversed = get("reversed").asBoolean
     )
 
+    @Keep
     private data class MachineRecipeViewImpl(
         override val recipeId: Long,
         override val isEnabled: Boolean,
@@ -128,12 +130,14 @@ class ProcessDeserializer : JsonDeserializer<Process> {
         override val resultItemList: List<RecipeElementViewImpl>
     ) : MachineRecipeView()
 
+    @Keep
     private data class CraftingRecipeViewImpl(
         override val recipeId: Long,
         override val itemList: List<RecipeElementView>,
         override val resultItemList: List<RecipeElementView>
     ) : CraftingRecipeView()
 
+    @Keep
     private data class RecipeElementViewImpl(
         override val id: Long,
         override val unlocalizedName: String,
@@ -143,6 +147,7 @@ class ProcessDeserializer : JsonDeserializer<Process> {
         override val metaData: String?
     ) : RecipeElementView()
 
+    @Keep
     private data class Edge(
         val from: Int,
         val to: Int,
