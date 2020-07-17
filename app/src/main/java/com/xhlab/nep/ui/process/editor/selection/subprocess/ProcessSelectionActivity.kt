@@ -1,6 +1,7 @@
 package com.xhlab.nep.ui.process.editor.selection.subprocess
 
 import android.os.Bundle
+import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
@@ -10,7 +11,7 @@ import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.fragment_process_list.*
+import kotlinx.android.synthetic.main.activity_process_selection.*
 import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
@@ -45,6 +46,7 @@ class ProcessSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
         viewModel.processList.observe(this) {
             processAdapter.submitList(it)
+            empty_text.isGone = it?.isEmpty() != true
         }
 
         viewModel.isIconLoaded.observe(this) {

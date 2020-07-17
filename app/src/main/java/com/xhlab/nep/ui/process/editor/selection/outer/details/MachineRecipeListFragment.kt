@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.process.editor.selection.outer.details
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
@@ -11,7 +12,7 @@ import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.activity_machine_recipe_list.*
+import kotlinx.android.synthetic.main.fragment_machine_recipe_list.*
 import org.jetbrains.anko.dip
 import javax.inject.Inject
 
@@ -65,10 +66,12 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
 
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
+            empty_text.isGone = it?.isEmpty() != true
         }
 
         viewModel.usageList.observe(this) {
             recipeAdapter.submitList(it)
+            empty_text.isGone = it?.isEmpty() != true
         }
 
         viewModel.isIconLoaded.observe(this) { isLoaded ->

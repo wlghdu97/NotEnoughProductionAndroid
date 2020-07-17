@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.process.editor.selection.internal
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
@@ -46,6 +47,7 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
         viewModel.process.observeNotNull(this) {
             processTreeAdapter.submitProcess(it)
+            empty_text.isGone = processTreeAdapter.itemCount != 0
         }
 
         viewModel.constraint.observe(this) {

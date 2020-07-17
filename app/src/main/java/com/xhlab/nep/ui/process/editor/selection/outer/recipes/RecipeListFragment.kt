@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.process.editor.selection.outer.recipes
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
@@ -79,10 +80,12 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
+            empty_text.isGone = it?.isEmpty() != true
         }
 
         viewModel.usageList.observe(this) {
             recipeAdapter.submitList(it)
+            empty_text.isGone = it?.isEmpty() != true
         }
 
         viewModel.navigateToDetails.observe(this) { (elementId, machineId, connectToParent) ->
