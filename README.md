@@ -1,15 +1,12 @@
 # NotEnoughProductionAndroid
 
-Android support for NotEnoughProduction. Currently wip
+![ic_launcher](https://user-images.githubusercontent.com/54768761/87744274-01a31980-c826-11ea-9a51-55b59b983e35.png)
+
+Android support for NotEnoughProduction
 
 ## Screenshots
 
-<div>
-<image width="20%" src="https://user-images.githubusercontent.com/54768761/86531485-b66f3980-befc-11ea-812f-e83b7d3f2deb.jpg"/>
-<image width="20%" src="https://user-images.githubusercontent.com/54768761/86531493-c25afb80-befc-11ea-9efb-77d7ddbe65ad.jpg"/>
-<image width="20%" src="https://user-images.githubusercontent.com/54768761/86531495-c850dc80-befc-11ea-9928-c103a9b592c4.jpg"/>
-<image width="20%" src="https://user-images.githubusercontent.com/54768761/86531499-cc7cfa00-befc-11ea-8e09-c1945170803e.jpg"/>
-</div>
+[https://imgur.com/a/JykAiVD]
 
 ## Original Project
 
