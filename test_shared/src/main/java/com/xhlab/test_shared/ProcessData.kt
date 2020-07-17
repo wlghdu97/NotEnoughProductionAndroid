@@ -185,7 +185,8 @@ object ProcessData {
             unlocalizedName = it.targetOutput.unlocalizedName,
             localizedName = it.targetOutput.localizedName,
             amount = it.targetOutput.amount,
-            nodeCount = it.getRecipeNodeCount()
+            nodeCount = it.getRecipeNodeCount(),
+            subProcessCount = it.getSubProcessIds().size
         )
     }
 
@@ -319,6 +320,7 @@ object ProcessData {
         override val unlocalizedName: String,
         override val localizedName: String,
         override val amount: Int,
-        override val nodeCount: Int
+        override val nodeCount: Int,
+        override val subProcessCount: Int
     ) : ProcessSummary()
 }

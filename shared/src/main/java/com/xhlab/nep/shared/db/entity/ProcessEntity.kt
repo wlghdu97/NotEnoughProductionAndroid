@@ -17,6 +17,8 @@ data class ProcessEntity(
     val amount: Int,
     @ColumnInfo(name = "node_count")
     val nodeCount: Int,
+    @ColumnInfo(name = "sub_process_count")
+    val subProcessCount: Int,
     @ColumnInfo(name = "json")
     val jsonString: String
 )

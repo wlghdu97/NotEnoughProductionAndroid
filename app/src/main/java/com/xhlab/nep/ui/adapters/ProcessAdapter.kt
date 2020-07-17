@@ -1,5 +1,7 @@
 package com.xhlab.nep.ui.adapters
 
+import android.content.Context
+import android.content.res.Resources
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.ui.main.process.ProcessListener
 import com.xhlab.nep.ui.util.BindableViewHolder
+import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import org.jetbrains.anko.layoutInflater
 
@@ -47,6 +50,12 @@ open class ProcessAdapter(
         private val description: TextView = itemView.findViewById(R.id.description)
         private val more: ImageButton? = itemView.findViewById(R.id.btn_more)
 
+        private val context: Context
+            get() = itemView.context
+
+        private val resources: Resources
+            get() = context.resources
+
         init {
             itemView.setOnClickListener {
                 model?.let { listener?.onClick(it.processId, it.name) }
@@ -65,11 +74,17 @@ open class ProcessAdapter(
                 icon.setIcon(model.unlocalizedName)
             }
             name.text = model.name
-            description.text = String.format(
-                itemView.context.getString(R.string.form_process_description),
+            val subProcessCount = model.subProcessCount
+            val subProcessText = when(subProcessCount == 0) {
+                true -> context.getString(R.string.txt_standalone_process)
+                false -> resources.getQuantityString(R.plurals.sub_process, subProcessCount, subProcessCount)
+            }
+            description.text = context.formatString(
+                R.string.form_process_description,
                 model.amount,
                 model.localizedName,
-                model.nodeCount
+                resources.getQuantityString(R.plurals.node, model.nodeCount, model.nodeCount),
+                subProcessText
             )
         }
 
