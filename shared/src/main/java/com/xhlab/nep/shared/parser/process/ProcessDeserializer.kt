@@ -33,8 +33,8 @@ class ProcessDeserializer : JsonDeserializer<Process> {
         val edges = jsonObject.get("edges").asJsonArray.map { it.asJsonObject.toEdge() }
         for (edge in edges) {
             if (edge.from != edge.to) {
-                val from = vertices[edge.to]
-                val to = vertices[edge.from]
+                val from = vertices[edge.from]
+                val to = vertices[edge.to]
                 val element = from.getElement(edge.key)
                 if (element != null) {
                     process.connectRecipe(from, to, element, edge.reversed)

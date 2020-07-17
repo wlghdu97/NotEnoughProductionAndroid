@@ -28,8 +28,8 @@ class ProcessSerializer : JsonSerializer<Process> {
         for ((fromIndex, edgeList) in src.getEdges().withIndex()) {
             for (edge in edgeList) {
                 val edgeObject = JsonObject().apply {
-                    add("from", context.serialize(fromIndex))
-                    add("to", context.serialize(edge.index))
+                    add("from", context.serialize(edge.index))
+                    add("to", context.serialize(fromIndex))
                     add("key", context.serialize(edge.key))
                     add("reversed", context.serialize(edge.reversed))
                 }
