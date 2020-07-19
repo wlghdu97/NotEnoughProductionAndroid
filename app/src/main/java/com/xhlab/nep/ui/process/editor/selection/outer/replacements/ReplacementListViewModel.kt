@@ -1,9 +1,9 @@
 package com.xhlab.nep.ui.process.editor.selection.outer.replacements
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.shared.domain.item.LoadReplacementListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
@@ -23,11 +23,11 @@ class ReplacementListViewModel @Inject constructor(
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _navigateToRecipeList = MediatorLiveData<Long>()
+    private val _navigateToRecipeList = LiveEvent<Long>()
     val navigateToRecipeList: LiveData<Long>
         get() = _navigateToRecipeList
 
-    private val _navigateToRecipeListWithKey = MediatorLiveData<String>()
+    private val _navigateToRecipeListWithKey = LiveEvent<String>()
     val navigateToRecipeListWithKey: LiveData<String>
         get() = _navigateToRecipeListWithKey
 
