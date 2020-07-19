@@ -37,7 +37,7 @@
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/unlocalized_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         tools:text="item.Item"
         android:maxLines="1"

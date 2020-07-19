@@ -54,9 +54,15 @@ open class ElementViewHolder(itemView: View)
                 nameText
             )
         }
-        unlocalizedName.text = when (model.unlocalizedName.isEmpty()) {
-            true -> context.getString(R.string.txt_unnamed)
-            false -> model.unlocalizedName
+        with (unlocalizedName) {
+            maxLines = when (model is ElementView && model.type == ElementEntity.ORE_CHAIN) {
+                true -> 2
+                false -> 1
+            }
+            text = when (model.unlocalizedName.isEmpty()) {
+                true -> context.getString(R.string.txt_unnamed)
+                false -> model.unlocalizedName
+            }
         }
     }
 
