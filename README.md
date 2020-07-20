@@ -4,10 +4,10 @@
 
 Android support for NotEnoughProduction
 
-## Screenshots
-
-[https://imgur.com/a/JykAiVD]
++ [Screenshots](https://imgur.com/a/JykAiVD) 
++ [Wiki](https://github.com/wlghdu97/NotEnoughProductionAndroid/wiki)
 
 ## Original Project
 
 [bigbass1997/NotEnoughProduction](https://github.com/bigbass1997/NotEnoughProduction)
+
