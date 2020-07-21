@@ -33,7 +33,7 @@ data class MachineRecipe(
 
     companion object {
         enum class PowerType(val type: Int) {
-            NONE(-1), EU(0), RF(1)
+            NONE(-1), EU(0), RF(1), FUEL(2)
         }
     }
 }

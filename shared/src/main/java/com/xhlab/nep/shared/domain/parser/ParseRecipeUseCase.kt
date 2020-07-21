@@ -26,6 +26,7 @@ class ParseRecipeUseCase @Inject constructor(
     private val shapedOreRecipeParser: ShapedOreRecipeParser,
     private val shapelessOreRecipeParser: ShapelessOreRecipeParser,
     private val replacementListParser: ReplacementListParser,
+    private val furnaceRecipeParser: FurnaceRecipeParser,
     private val elementRepo: ElementRepo,
     private val machineRepo: MachineRepo,
     private val generalPreference: GeneralPreference
@@ -95,6 +96,7 @@ class ParseRecipeUseCase @Inject constructor(
             "shapedOre" -> shapedOreRecipeParser.parse(type, reader)
             "shapelessOre" -> shapelessOreRecipeParser.parse(type, reader)
             "replacements" -> replacementListParser.parse(reader)
+            "furnace" -> furnaceRecipeParser.parse(type, reader)
             else -> machineRecipeParser.parse(type, reader)
         }.apply {
             consumeEach { emitLog(it) }

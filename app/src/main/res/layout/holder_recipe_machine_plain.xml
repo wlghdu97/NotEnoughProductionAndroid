@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/greg_properties"/>
+            app:layout_constraintBottom_toTopOf="@id/machine_properties"/>
 
         <include
             layout="@layout/layout_holder_recipe_machine"
@@ -31,7 +31,7 @@
             layout="@layout/layout_holder_ingredient_plain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/greg_properties"
+            app:layout_constraintTop_toBottomOf="@id/machine_properties"
             app:layout_constraintBottom_toTopOf="@id/layout_byproduct"/>
 
         <include

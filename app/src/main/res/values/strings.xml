@@ -91,6 +91,7 @@
 
     <string name="txt_eu">EU</string>
     <string name="txt_rf">RF</string>
+    <string name="txt_fuel">Fuel</string>
     <string name="txt_per_tick">/t</string>
 
     <string name="txt_ingredients">Ingredients</string>

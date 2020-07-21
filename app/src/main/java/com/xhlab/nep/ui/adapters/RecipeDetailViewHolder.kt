@@ -26,7 +26,7 @@ abstract class RecipeDetailViewHolder(itemView: View) : BindableViewHolder<Recip
     private val elementName: TextView? = itemView.findViewById(R.id.element_name)
     private val machineName: TextView = itemView.findViewById(R.id.machine_name)
 
-    private val gregProperty: TextView? = itemView.findViewById(R.id.greg_properties)
+    private val machineProperties: TextView? = itemView.findViewById(R.id.machine_properties)
 
     private val itemList: RecyclerView = itemView.findViewById(R.id.item_list)
     protected abstract val itemAdapter: RecipeElementAdapter
@@ -76,12 +76,13 @@ abstract class RecipeDetailViewHolder(itemView: View) : BindableViewHolder<Recip
                 val unit = when (model.powerType) {
                     MachineRecipe.Companion.PowerType.EU.type -> context.getString(R.string.txt_eu)
                     MachineRecipe.Companion.PowerType.RF.type -> context.getString(R.string.txt_rf)
+                    MachineRecipe.Companion.PowerType.FUEL.type -> context.getString(R.string.txt_fuel)
                     else -> context.getString(R.string.txt_unknown)
                 }
                 val unitTick = "$unit${context.getString(R.string.txt_per_tick)}"
                 val durationSec = model.duration / 20f
                 val total = model.ept.toLong() * model.duration
-                gregProperty?.text = context.formatString(
+                machineProperties?.text = context.formatString(
                     R.string.form_machine_property,
                     integerFormat.format(model.ept),
                     unitTick,
