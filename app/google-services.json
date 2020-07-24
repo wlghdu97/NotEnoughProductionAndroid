@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "103654627340",
+    "firebase_url": "https://not-enough-production.firebaseio.com",
+    "project_id": "not-enough-production",
+    "storage_bucket": "not-enough-production.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103654627340:android:cc18056c3eef7fb6a9b629",
+        "android_client_info": {
+          "package_name": "com.xhlab.nep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103654627340-m8adq10sgfte0g2hohhhki8dgfi89dio.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA61WFRGRB-SVrfeA8EowvsSM7i4imN3dY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103654627340-m8adq10sgfte0g2hohhhki8dgfi89dio.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,24 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.xhlab.nep">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <dist:module dist:instant="true" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        android:theme="@style/AppTheme"
+        android:name=".NEPApp">
+
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.main.machines.details.MachineResultActivity"/>
+
+        <activity
+            android:name=".ui.element.ElementDetailActivity"/>
+
+        <activity
+            android:name=".ui.recipe.MachineRecipeListActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.main.process.creator.browser.ItemBrowserActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.process.editor.ProcessEditActivity"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.process.editor.selection.internal.InternalRecipeSelectionActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.process.editor.selection.outer.RecipeSelectionActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.process.editor.selection.subprocess.ProcessSelectionActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.process.calculator.ProcessCalculationActivity"
+            android:parentActivityName=".ui.process.editor.ProcessEditActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.ErrorActivity"
+            android:launchMode="singleInstance" />
+
+        <service
+            android:name=".service.ParseRecipeService"
+            android:exported="false"
+            android:stopWithTask="false"/>
+
+        <service
+            android:name=".service.IconUnzipService"
+            android:exported="false"
+            android:stopWithTask="false"/>
+
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="no" />
+
     </application>
 
 </manifest>

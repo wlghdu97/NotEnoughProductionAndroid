@@ -1,15 +1,63 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.3.50'
+    ext {
+        kotlin_version = "1.3.50"
+        coroutine_version = "1.3.2"
+        anko_version = "0.10.8"
+
+        lifecycle_version = "2.2.0-rc03"
+        recyclerview_version = "1.1.0"
+        paging_version = "2.1.1"
+        preference_version = "1.1.0"
+        room_version = "2.2.3"
+        room_compiler_version = "2.2.1"
+        dagger_version = "2.24"
+        live_event_version = "1.2.0"
+        material_version = "1.2.0-alpha03"
+        material_progress_bar_version = "1.6.1"
+        glide_version = "4.10.0"
+        gson_version = "2.8.6"
+        timber_version = "4.7.1"
+        math_version = "3.6.1"
+
+        analytics_version = "17.4.4"
+        crashlytics_version = "2.10.1"
+
+        junit_version = "4.12"
+        core_testing_version = "1.1.1"
+        mockito_version = "3.2.0"
+        mockito_kotlin_version = "2.2.0"
+        coroutine_test_version = "1.3.2"
+        test_fragment_version = "1.1.0-rc04"
+        test_runner_version = "1.2.0"
+        test_junit_version = "1.1.1"
+        espresso_version = "3.2.0"
+        awaitibility_version = "3.1.6"
+        test_rules_version = "1.2.0"
+        test_orchestrator_version = "1.2.0"
+
+        jacoco_version = "0.8.1"
+        jacocoEnabled = System.getProperty("jacocoEnabled") ?: "false"
+
+        google_services_version = "4.3.3"
+        fabric_version = "1.29.0"
+    }
+
     repositories {
         google()
         jcenter()
-        
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
+
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jacoco:org.jacoco.core:$jacoco_version"
+        classpath "com.google.gms:google-services:$google_services_version"
+        classpath "io.fabric.tools:gradle:$fabric_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -19,8 +67,44 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven {
+            url 'https://s3.amazonaws.com/fabric-artifacts-private/internal-snapshots'
+        }
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
+}
+
+apply plugin: 'jacoco'
+
+task jacocoRootReport(type: JacocoReport, dependsOn: [
+        'app:jacocoTestReport',
+        'shared:jacocoTestReport'
+]) {
+    if (!tasks.findByPath("app:jacocoTestReport") || !tasks.findByPath("shared:jacocoTestReport")) {
+        return
+    }
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    getSourceDirectories().setFrom(
+            files([tasks.getByPath("app:jacocoTestReport").sourceDirectories,
+                   tasks.getByPath("shared:jacocoTestReport").sourceDirectories])
+    )
+
+    getClassDirectories().setFrom(
+            files([tasks.getByPath("app:jacocoTestReport").classDirectories,
+                   tasks.getByPath("shared:jacocoTestReport").classDirectories])
+    )
+
+    getExecutionData().setFrom(
+            files([tasks.getByPath("app:jacocoTestReport").executionData,
+                   tasks.getByPath("shared:jacocoTestReport").executionData])
+    )
 }
 
 task clean(type: Delete) {

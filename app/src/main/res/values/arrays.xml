@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="degreeColorList">
+        <item>@color/colorDegree01</item>
+        <item>@color/colorDegree02</item>
+        <item>@color/colorDegree03</item>
+        <item>@color/colorDegree04</item>
+        <item>@color/colorDegree05</item>
+        <item>@color/colorDegree06</item>
+        <item>@color/colorDegree07</item>
+        <item>@color/colorDegree08</item>
+        <item>@color/colorDegree09</item>
+        <item>@color/colorDegree10</item>
+    </integer-array>
+
+    <string-array name="process_creation">
+        <item>@string/menu_create_new</item>
+        <item>@string/menu_import_from_string</item>
+    </string-array>
+
+    <string-array name="connection_selection">
+        <item>@string/menu_connect_to_existing</item>
+    </string-array>
+
+    <string-array name="connection_selection_child">
+        <item>@string/menu_connect_to_existing</item>
+        <item>@string/menu_connect_to_new_recipe</item>
+        <item>@string/menu_attach_supplier</item>
+        <item>@string/menu_attach_process_reference</item>
+    </string-array>
+</resources>

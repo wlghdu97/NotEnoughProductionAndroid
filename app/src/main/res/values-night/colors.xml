@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffff5a</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#ffff00</color>
+
+    <color name="colorMediumWhite">#99ffffff</color>
+
+    <color name="colorDegree01">#fff8e1</color>
+    <color name="colorDegree02">#ffecb3</color>
+    <color name="colorDegree03">#ffe082</color>
+    <color name="colorDegree04">#ffd54f</color>
+    <color name="colorDegree05">#ffca28</color>
+    <color name="colorDegree06">#ffc107</color>
+    <color name="colorDegree07">#ffb300</color>
+    <color name="colorDegree08">#ffa000</color>
+    <color name="colorDegree09">#ff8f00</color>
+    <color name="colorDegree10">#ff6f00</color>
+</resources>
