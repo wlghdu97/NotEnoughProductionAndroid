@@ -32,6 +32,8 @@
     <string name="title_select_element">Multiple items detected</string>
     <string name="title_select_process_to_connect">Select process to connect</string>
     <string name="title_error">Something went wrong.</string>
+    <string name="title_misc">Misc</string>
+    <string name="title_privacy_policy">Privacy policy</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
@@ -168,10 +170,14 @@
     <string name="form_ratio">x%s</string>
     <string name="form_processing_order">Depth : %d, Outputs : %s</string>
 
+    <string name="key_privacy_policy">privacy_policy</string>
+
     <plurals name="node">
         <item quantity="one">%d node</item>
         <item quantity="other">%d nodes</item>
     </plurals>
+
+    <string name="url_privacy_policy" translatable="false">https://wlghdu97.github.io/nepandroid/privacy_policy</string>
 
     <string name="com.crashlytics.useFirebaseAppId" translatable="false">true</string>
 </resources>
