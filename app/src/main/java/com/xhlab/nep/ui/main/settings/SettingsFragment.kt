@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.lifecycle.observe
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -104,6 +105,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 false
             } else true
             result
+        }
+
+        findPreference<Preference>(getString(R.string.key_privacy_policy))?.setOnPreferenceClickListener {
+            startActivity(Intent(context, PrivacyPolicyActivity::class.java))
+            true
         }
     }
 

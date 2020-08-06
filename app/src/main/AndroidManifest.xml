@@ -31,6 +31,11 @@
         </activity>
 
         <activity
+            android:name=".ui.main.settings.PrivacyPolicyActivity"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
             android:name=".ui.main.machines.details.MachineResultActivity"/>
 
         <activity
