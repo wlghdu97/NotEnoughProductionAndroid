@@ -62,19 +62,20 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
         viewModel.init(elementId)
 
         viewModel.element.observeNotNull(this) { element ->
-            (activity as? AppCompatActivity)?.supportActionBar?.let {
-                it.title = when (element.localizedName.isEmpty()) {
-                    true -> getString(R.string.txt_unnamed)
-                    false -> element.localizedName.trim()
+            (activity as? AppCompatActivity)?.let { activity ->
+                activity.setSupportActionBar(toolbar)
+                activity.supportActionBar?.let {
+                    it.title = when (element.localizedName.isEmpty()) {
+                        true -> getString(R.string.txt_unnamed)
+                        false -> element.localizedName.trim()
+                    }
+                    it.subtitle = element.unlocalizedName.trim()
                 }
-                it.subtitle = element.unlocalizedName.trim()
             }
         }
     }
 
     override fun initView() {
-        (activity as? AppCompatActivity)?.setSupportActionBar(toolbar)
-
         val firstTab = tab_layout.getTabAt(0)
         if (firstTab != null) {
             firstTab.text = getString(when (elementType) {
