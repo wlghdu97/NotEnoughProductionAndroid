@@ -13,8 +13,7 @@ class MachineRecipeListNavigationUseCase @Inject constructor(
 
     override suspend fun execute(params: Parameters) {
         context.startActivity(Intent(context, MachineRecipeListActivity::class.java).apply {
-            putExtra(MachineRecipeListFragment.ELEMENT_ID, params.elementId)
-            putExtra(MachineRecipeListFragment.MACHINE_ID, params.machineId)
+            putExtras(MachineRecipeListFragment.getBundle(params))
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         })
     }

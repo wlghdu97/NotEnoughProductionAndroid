@@ -4,8 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.ui.element.ElementDetailActivity
-import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
-import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_TYPE
+import com.xhlab.nep.ui.element.ElementDetailFragment
 import javax.inject.Inject
 
 class ElementDetailNavigationUseCase @Inject constructor(
@@ -14,8 +13,7 @@ class ElementDetailNavigationUseCase @Inject constructor(
 
     override suspend fun execute(params: Parameters) {
         context.startActivity(Intent(context, ElementDetailActivity::class.java).apply {
-            putExtra(ELEMENT_ID, params.elementId)
-            putExtra(ELEMENT_TYPE, params.elementType)
+            putExtras(ElementDetailFragment.getBundle(params))
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         })
     }

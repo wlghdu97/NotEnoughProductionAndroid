@@ -69,16 +69,10 @@ class UsageListFragment : DaggerFragment(), ViewInit {
 
         viewModel.navigateToDetail.observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
-                val fragment = ElementDetailFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(ElementDetailFragment.ELEMENT_ID, it.elementId)
-                        putInt(ElementDetailFragment.ELEMENT_TYPE, it.elementType)
-                    }
-                }
                 val parent = requireParentFragment().requireParentFragment()
                 if (parent is ItemBrowserFragment) {
                     parent.childFragmentManager.beginTransaction()
-                        .replace(R.id.container, fragment)
+                        .replace(R.id.container, ElementDetailFragment.getFragment(it))
                         .addToBackStack(null)
                         .commit()
                     return@observe

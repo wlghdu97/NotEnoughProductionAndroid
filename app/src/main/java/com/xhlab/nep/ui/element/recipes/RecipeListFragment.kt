@@ -65,16 +65,10 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
         viewModel.navigateToRecipeList.observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
-                val fragment = MachineRecipeListFragment().apply {
-                    arguments = Bundle().apply {
-                        putLong(MachineRecipeListFragment.ELEMENT_ID, it.elementId)
-                        putInt(MachineRecipeListFragment.MACHINE_ID, it.machineId ?: -1)
-                    }
-                }
                 val parent = requireParentFragment().requireParentFragment()
                 if (parent is ItemBrowserFragment) {
                     parent.childFragmentManager.beginTransaction()
-                        .replace(R.id.container, fragment)
+                        .replace(R.id.container, MachineRecipeListFragment.getFragment(it))
                         .commit()
                     return@observe
                 }

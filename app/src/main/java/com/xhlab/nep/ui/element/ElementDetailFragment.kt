@@ -12,6 +12,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeListFragment
@@ -146,5 +147,16 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
     companion object {
         const val ELEMENT_ID = "element_id"
         const val ELEMENT_TYPE = "element_type"
+
+        fun getBundle(params: ElementDetailNavigationUseCase.Parameters): Bundle {
+            return Bundle().apply {
+                putLong(ELEMENT_ID, params.elementId)
+                putInt(ELEMENT_TYPE, params.elementType)
+            }
+        }
+
+        fun getFragment(params: ElementDetailNavigationUseCase.Parameters): Fragment {
+            return ElementDetailFragment().apply { arguments = getBundle(params) }
+        }
     }
 }

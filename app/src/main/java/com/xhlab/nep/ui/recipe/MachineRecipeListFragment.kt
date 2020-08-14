@@ -3,9 +3,11 @@ package com.xhlab.nep.ui.recipe
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.domain.MachineRecipeListNavigationUseCase
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
@@ -90,5 +92,16 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     companion object {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
+
+        fun getBundle(params: MachineRecipeListNavigationUseCase.Parameters): Bundle {
+            return Bundle().apply {
+                putLong(ELEMENT_ID, params.elementId)
+                putInt(MACHINE_ID, params.machineId ?: -1)
+            }
+        }
+
+        fun getFragment(params: MachineRecipeListNavigationUseCase.Parameters): Fragment {
+            return MachineRecipeListFragment().apply { arguments = getBundle(params) }
+        }
     }
 }
