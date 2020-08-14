@@ -13,12 +13,13 @@ import com.xhlab.nep.ui.dialogs.JsonParseDialog
 import com.xhlab.nep.ui.element.ElementDetailModule
 import com.xhlab.nep.ui.main.process.ProcessListFragment
 import com.xhlab.nep.ui.main.process.ProcessListModule
+import com.xhlab.nep.ui.recipe.MachineRecipeListModule
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
-@Module(includes = [ElementDetailModule::class])
+@Module(includes = [ElementDetailModule::class, MachineRecipeListModule::class])
 @Suppress("unused")
 abstract class MainModule {
     @Binds

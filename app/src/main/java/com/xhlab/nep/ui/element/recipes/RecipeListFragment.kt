@@ -11,6 +11,8 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.main.items.ItemBrowserFragment
+import com.xhlab.nep.ui.recipe.MachineRecipeListFragment
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -59,6 +61,25 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
+        }
+
+        viewModel.navigateToRecipeList.observe(this) {
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val fragment = MachineRecipeListFragment().apply {
+                    arguments = Bundle().apply {
+                        putLong(MachineRecipeListFragment.ELEMENT_ID, it.elementId)
+                        putInt(MachineRecipeListFragment.MACHINE_ID, it.machineId ?: -1)
+                    }
+                }
+                val parent = requireParentFragment().requireParentFragment()
+                if (parent is ItemBrowserFragment) {
+                    parent.childFragmentManager.beginTransaction()
+                        .replace(R.id.container, fragment)
+                        .commit()
+                    return@observe
+                }
+            }
+            viewModel.navigateToRecipeList(it)
         }
     }
 
