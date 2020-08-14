@@ -10,7 +10,7 @@ import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment

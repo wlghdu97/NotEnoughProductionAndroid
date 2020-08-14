@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.ui.element.ElementDetailActivity
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_TYPE
+import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_TYPE
 import javax.inject.Inject
 
 class ElementDetailNavigationUseCase @Inject constructor(

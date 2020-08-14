@@ -13,6 +13,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -77,6 +78,23 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
 
         viewModel.elementSearchResult.observeNotNull(this) {
             submitSearchResultList(it)
+        }
+
+        viewModel.navigateToDetail.observe(this) {
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val fragment = ElementDetailFragment().apply {
+                    arguments = Bundle().apply {
+                        putLong(ElementDetailFragment.ELEMENT_ID, it.elementId)
+                        putInt(ElementDetailFragment.ELEMENT_TYPE, it.elementType)
+                    }
+                }
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.container, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                viewModel.navigateToElementDetail(it)
+            }
         }
     }
 
