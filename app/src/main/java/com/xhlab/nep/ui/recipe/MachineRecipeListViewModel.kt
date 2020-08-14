@@ -1,8 +1,10 @@
 package com.xhlab.nep.ui.recipe
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -29,6 +31,10 @@ class MachineRecipeListViewModel @Inject constructor(
     val recipeList = loadRecipeListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded
+
+    private val _navigateToDetail = LiveEvent<ElementDetailNavigationUseCase.Parameters>()
+    val navigateToDetail: LiveData<ElementDetailNavigationUseCase.Parameters>
+        get() = _navigateToDetail
 
     // to prevent DiffUtil's index out of bound
     private var searchDebounceJob: Job? = null
@@ -68,9 +74,15 @@ class MachineRecipeListViewModel @Inject constructor(
     }
 
     override fun onClick(elementId: Long, elementType: Int) {
-        invokeUseCase(
-            elementDetailNavigationUseCase,
+        _navigateToDetail.postValue(
             ElementDetailNavigationUseCase.Parameters(elementId, elementType)
+        )
+    }
+
+    fun navigateToElementDetail(params: ElementDetailNavigationUseCase.Parameters) {
+        invokeUseCase(
+            useCase = elementDetailNavigationUseCase,
+            params = params
         )
     }
 }
