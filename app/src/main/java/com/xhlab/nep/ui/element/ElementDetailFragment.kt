@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.element
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,7 @@ import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeListFragment
 import com.xhlab.nep.ui.element.replacements.ReplacementContainerFragment
 import com.xhlab.nep.ui.element.usages.UsageListFragment
+import com.xhlab.nep.util.getCardBackgroundColor
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -66,6 +68,10 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
             (activity as? AppCompatActivity)?.let { activity ->
                 activity.setSupportActionBar(toolbar)
                 activity.supportActionBar?.let {
+                    if (resources.getBoolean(R.bool.isTablet)) {
+                        setHasOptionsMenu(true)
+                        it.setDisplayHomeAsUpEnabled(true)
+                    }
                     it.title = when (element.localizedName.isEmpty()) {
                         true -> getString(R.string.txt_unnamed)
                         false -> element.localizedName.trim()
@@ -77,6 +83,9 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
+        // make background opaque when tablet mode
+        root?.setBackgroundColor(requireContext().getCardBackgroundColor())
+
         val firstTab = tab_layout.getTabAt(0)
         if (firstTab != null) {
             firstTab.text = getString(when (elementType) {
@@ -106,6 +115,14 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            requireFragmentManager().popBackStack()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private inner class RecipeListPagerAdapter(

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.observe
 import androidx.paging.PagedList
 import com.xhlab.nep.R
@@ -82,10 +83,15 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
 
         viewModel.navigateToDetail.observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
-                childFragmentManager.beginTransaction()
-                    .replace(R.id.container, ElementDetailFragment.getFragment(it))
-                    .addToBackStack(null)
-                    .commit()
+                // clear all fragments, then add new fragment
+                with (childFragmentManager) {
+                    popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                    beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
+                        .add(R.id.container, ElementDetailFragment.getFragment(it))
+                        .addToBackStack(null)
+                        .commit()
+                }
             } else {
                 viewModel.navigateToElementDetail(it)
             }
@@ -107,6 +113,13 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
         }
 
         element_list.adapter = elementAdapter
+
+        if (resources.getBoolean(R.bool.isTablet)) {
+            val fragmentManager = childFragmentManager
+            fragmentManager.addOnBackStackChangedListener {
+                stack_empty_text?.isGone = fragmentManager.backStackEntryCount != 0
+            }
+        }
     }
 
     private fun submitSearchResultList(list: PagedList<ElementView>?) {

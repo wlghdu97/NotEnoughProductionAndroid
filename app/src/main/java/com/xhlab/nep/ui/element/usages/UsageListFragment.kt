@@ -72,7 +72,8 @@ class UsageListFragment : DaggerFragment(), ViewInit {
                 val parent = requireParentFragment().requireParentFragment()
                 if (parent is ItemBrowserFragment) {
                     parent.childFragmentManager.beginTransaction()
-                        .replace(R.id.container, ElementDetailFragment.getFragment(it))
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
+                        .add(R.id.container, ElementDetailFragment.getFragment(it))
                         .addToBackStack(null)
                         .commit()
                     return@observe

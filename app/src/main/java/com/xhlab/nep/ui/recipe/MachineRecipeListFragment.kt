@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.recipe
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
@@ -70,7 +71,9 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
                 val parent = requireParentFragment()
                 if (parent is ItemBrowserFragment) {
                     parent.childFragmentManager.beginTransaction()
-                        .replace(R.id.container, ElementDetailFragment.getFragment(it))
+                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
+                        .add(R.id.container, ElementDetailFragment.getFragment(it))
+                        .addToBackStack(null)
                         .commit()
                     return@observe
                 }
@@ -80,6 +83,16 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
+        recipe_list_toolbar?.let {
+            (activity as? AppCompatActivity)?.let { activity ->
+                activity.setSupportActionBar(it)
+                activity.supportActionBar?.let { actionBar ->
+                    setHasOptionsMenu(true)
+                    actionBar.setDisplayHomeAsUpEnabled(true)
+                }
+            }
+        }
+
         with (recipe_list) {
             recipeAdapter = RecipeDetailAdapter(elementId, viewModel)
             adapter = recipeAdapter
@@ -102,6 +115,14 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             })
         }
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            requireFragmentManager().popBackStack()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

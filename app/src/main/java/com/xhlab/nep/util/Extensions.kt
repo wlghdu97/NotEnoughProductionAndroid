@@ -1,17 +1,21 @@
 package com.xhlab.nep.util
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.Base64
+import android.util.TypedValue
 import android.widget.ImageView
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.xhlab.nep.R
 import java.io.File
 
 inline fun <reified T : ViewModel> Fragment.viewModelProvider(
@@ -50,6 +54,12 @@ fun Context.getIconsFile(fileName: String): File {
 fun Context.getIcon(unlocalizedName: String): Drawable? {
     val encodedName = Base64.encodeToString(unlocalizedName.toByteArray(), Base64.NO_WRAP)
     return Drawable.createFromPath(getIconsFile("${encodedName}.png").path)
+}
+
+fun Context.getCardBackgroundColor(): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(R.attr.colorSurface, typedValue, true)
+    return ColorUtils.compositeColors(Color.parseColor("#09FFFFFF"), typedValue.data)
 }
 
 fun ImageView.setIcon(unlocalizedName: String) {
