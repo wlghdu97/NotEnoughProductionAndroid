@@ -2,8 +2,10 @@ package com.xhlab.nep.ui.main.machines.details
 
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
+import com.xhlab.nep.di.scopes.FragmentScope
 import dagger.Binds
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 @Module
@@ -13,4 +15,8 @@ abstract class MachineResultModule {
     @IntoMap
     @ViewModelKey(MachineResultViewModel::class)
     abstract fun provideMachineResultViewModel(viewModel: MachineResultViewModel): ViewModel
+
+    @FragmentScope
+    @ContributesAndroidInjector
+    abstract fun provideMachineResultFragment(): MachineResultFragment
 }

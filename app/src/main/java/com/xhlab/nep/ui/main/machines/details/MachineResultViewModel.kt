@@ -1,6 +1,7 @@
 package com.xhlab.nep.ui.main.machines.details
 
 import androidx.lifecycle.*
+import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
@@ -31,6 +32,10 @@ class MachineResultViewModel @Inject constructor(
     val resultList = machineResultSearchUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded
+
+    private val _navigateToDetail = LiveEvent<ElementDetailNavigationUseCase.Parameters>()
+    val navigateToDetail: LiveData<ElementDetailNavigationUseCase.Parameters>
+        get() = _navigateToDetail
 
     // to prevent DiffUtil's index out of bound
     private var searchDebounceJob: Job? = null
@@ -68,9 +73,15 @@ class MachineResultViewModel @Inject constructor(
     }
 
     override fun onClick(elementId: Long, elementType: Int) {
+        _navigateToDetail.postValue(
+            ElementDetailNavigationUseCase.Parameters(elementId, elementType)
+        )
+    }
+
+    fun navigateToElementDetail(params: ElementDetailNavigationUseCase.Parameters) {
         invokeUseCase(
             useCase = elementDetailNavigationUseCase,
-            params = ElementDetailNavigationUseCase.Parameters(elementId, elementType)
+            params = params
         )
     }
 

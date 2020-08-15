@@ -12,7 +12,6 @@ import com.xhlab.nep.domain.MachineRecipeListNavigationUseCase
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
 import com.xhlab.nep.ui.element.ElementDetailFragment
-import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -69,16 +68,14 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         viewModel.navigateToDetail.observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment()
-                if (parent is ItemBrowserFragment) {
-                    parent.childFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                        .add(R.id.container, ElementDetailFragment.getFragment(it))
-                        .addToBackStack(null)
-                        .commit()
-                    return@observe
-                }
+                parent.childFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
+                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                viewModel.navigateToElementDetail(it)
             }
-            viewModel.navigateToElementDetail(it)
         }
     }
 

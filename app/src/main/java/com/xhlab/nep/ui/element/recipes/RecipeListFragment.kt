@@ -11,7 +11,6 @@ import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
-import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.recipe.MachineRecipeListFragment
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
@@ -66,16 +65,14 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         viewModel.navigateToRecipeList.observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment().requireParentFragment()
-                if (parent is ItemBrowserFragment) {
-                    parent.childFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                        .add(R.id.container, MachineRecipeListFragment.getFragment(it))
-                        .addToBackStack(null)
-                        .commit()
-                    return@observe
-                }
+                parent.childFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
+                    .add(R.id.container, MachineRecipeListFragment.getFragment(it))
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                viewModel.navigateToRecipeList(it)
             }
-            viewModel.navigateToRecipeList(it)
         }
     }
 
