@@ -10,7 +10,7 @@ import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
@@ -47,11 +47,11 @@ class UsageListFragment : DaggerFragment(), ViewInit {
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-        viewModel.init(arguments?.getLong(ELEMENT_ID))
+        viewModel.init(arguments?.getLong(ElementDetailFragment.ELEMENT_ID))
 
         // update parent tab item title
         viewModel.usageList.observe(this) {
-            val tabLayout = activity?.findViewById<TabLayout>(R.id.tab_layout)
+            val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
             tabLayout?.getTabAt(1)?.text = requireContext().formatString(
                 R.string.form_tab_usages,
                 it?.size ?: 0
@@ -64,6 +64,19 @@ class UsageListFragment : DaggerFragment(), ViewInit {
 
         viewModel.isIconLoaded.observe(this) { isLoaded ->
             usageAdapter.setIconVisibility(isLoaded)
+        }
+
+        viewModel.navigateToDetail.observe(this) {
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val parent = requireParentFragment().requireParentFragment()
+                parent.childFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
+                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                viewModel.navigateToElementDetail(it)
+            }
         }
     }
 

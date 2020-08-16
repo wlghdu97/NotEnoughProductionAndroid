@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.xhlab.nep.R
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
 
 class ReplacementContainerFragment : Fragment() {
 

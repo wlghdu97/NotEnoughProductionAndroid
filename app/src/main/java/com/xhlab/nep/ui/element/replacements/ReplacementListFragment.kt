@@ -9,6 +9,7 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
@@ -61,6 +62,19 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
 
         viewModel.isIconLoaded.observe(this) { isLoaded ->
             elementAdapter.setIconVisibility(isLoaded)
+        }
+
+        viewModel.navigateToDetail.observe(this) {
+            if (resources.getBoolean(R.bool.isTablet)) {
+                val parent = requireParentFragment().requireParentFragment()
+                parent.childFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
+                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .addToBackStack(null)
+                    .commit()
+            } else {
+                viewModel.navigateToElementDetail(it)
+            }
         }
     }
 

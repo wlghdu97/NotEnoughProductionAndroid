@@ -24,6 +24,10 @@ abstract class ElementDetailModule {
 
     @FragmentScope
     @ContributesAndroidInjector
+    abstract fun provideElementDetailFragment(): ElementDetailFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector
     abstract fun provideRecipeListFragment(): RecipeListFragment
 
     @FragmentScope

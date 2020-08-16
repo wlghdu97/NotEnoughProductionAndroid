@@ -9,7 +9,7 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_ore_dict_list.*

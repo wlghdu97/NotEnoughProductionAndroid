@@ -1,6 +1,8 @@
 package com.xhlab.nep.ui.main.machines
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.MachineResultNavigationUseCase
 import com.xhlab.nep.shared.domain.machine.LoadMachineListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -21,6 +23,10 @@ class MachineBrowserViewModel @Inject constructor(
 
     val isDBLoaded = generalPreference.isDBLoaded
 
+    private val _navigateToMachineResult = LiveEvent<MachineResultNavigationUseCase.Parameter>()
+    val navigateToMachineResult: LiveData<MachineResultNavigationUseCase.Parameter>
+        get() = _navigateToMachineResult
+
     init {
         invokeMediatorUseCase(
             useCase = loadMachineListUseCase,
@@ -29,9 +35,15 @@ class MachineBrowserViewModel @Inject constructor(
     }
 
     override fun onClick(machineId: Int) {
+        _navigateToMachineResult.postValue(
+            MachineResultNavigationUseCase.Parameter(machineId)
+        )
+    }
+
+    fun navigateToMachineResult(params: MachineResultNavigationUseCase.Parameter) {
         invokeUseCase(
             useCase = machineResultNavigationUseCase,
-            params = MachineResultNavigationUseCase.Parameter(machineId)
+            params = params
         )
     }
 }

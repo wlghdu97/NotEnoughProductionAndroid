@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.ui.main.machines.details.MachineResultActivity
-import com.xhlab.nep.ui.main.machines.details.MachineResultActivity.Companion.MACHINE_ID
+import com.xhlab.nep.ui.main.machines.details.MachineResultFragment
 import javax.inject.Inject
 
 class MachineResultNavigationUseCase @Inject constructor(
@@ -13,7 +13,7 @@ class MachineResultNavigationUseCase @Inject constructor(
 
     override suspend fun execute(params: Parameter) {
         context.startActivity(Intent(context, MachineResultActivity::class.java).apply {
-            putExtra(MACHINE_ID, params.machineId)
+            putExtras(MachineResultFragment.getBundle(params))
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         })
     }
