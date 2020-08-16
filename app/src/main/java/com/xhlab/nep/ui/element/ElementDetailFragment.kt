@@ -1,10 +1,7 @@
 package com.xhlab.nep.ui.element
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -115,6 +112,11 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
             override fun onTabReselected(tab: TabLayout.Tab) = Unit
             override fun onTabUnselected(tab: TabLayout.Tab) = Unit
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu.clear()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
