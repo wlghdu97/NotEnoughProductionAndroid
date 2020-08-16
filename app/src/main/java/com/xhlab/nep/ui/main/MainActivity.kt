@@ -11,7 +11,7 @@ import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.main.machines.MachineBrowserFragment
 import com.xhlab.nep.ui.main.process.ProcessListFragment
-import com.xhlab.nep.ui.main.settings.SettingsFragment
+import com.xhlab.nep.ui.main.settings.SettingsContainerFragment
 import com.xhlab.nep.util.updateGlobalTheme
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
@@ -85,14 +85,14 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
         private val itemBrowserFragment by lazy { ItemBrowserFragment() }
         private val machineBrowserFragment by lazy { MachineBrowserFragment() }
         private val processFragment by lazy { ProcessListFragment() }
-        private val settingsFragment by lazy { SettingsFragment() }
+        private val settingsContainerFragment by lazy { SettingsContainerFragment() }
 
         override fun getItem(position: Int): Fragment {
             return when (position) {
                 0 -> itemBrowserFragment
                 1 -> machineBrowserFragment
                 2 -> processFragment
-                3 -> settingsFragment
+                3 -> settingsContainerFragment
                 else -> throw IllegalArgumentException("invalid position.")
             }
         }
