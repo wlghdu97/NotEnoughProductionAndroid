@@ -51,7 +51,7 @@ class UsageListFragment : DaggerFragment(), ViewInit {
 
         // update parent tab item title
         viewModel.usageList.observe(this) {
-            val tabLayout = activity?.findViewById<TabLayout>(R.id.tab_layout)
+            val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
             tabLayout?.getTabAt(1)?.text = requireContext().formatString(
                 R.string.form_tab_usages,
                 it?.size ?: 0
