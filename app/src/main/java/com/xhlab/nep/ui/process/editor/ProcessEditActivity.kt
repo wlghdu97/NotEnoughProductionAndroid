@@ -13,13 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.ActivityProcessEditBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_process_edit.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class ProcessEditActivity :
@@ -30,22 +29,24 @@ class ProcessEditActivity :
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: ActivityProcessEditBinding
     private lateinit var viewModel: ProcessEditViewModel
 
     private val processTreeAdapter by lazy { RecipeTreeAdapter(this, viewModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_process_edit)
         initViewModel()
         initView()
     }
 
     override fun initView() {
-        setSupportActionBar(toolbar)
+        binding = ActivityProcessEditBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbarLayout.toolbar)
         supportActionBar?.setTitle(R.string.title_process_editor)
 
-        with(process_tree) {
+        with(binding.processTree) {
             adapter = processTreeAdapter
             layoutManager = object : LinearLayoutManager(context) {
                 override fun smoothScrollToPosition(
@@ -94,7 +95,7 @@ class ProcessEditActivity :
 
         viewModel.modificationResult.observe(this) {
             if (it.throwable != null) {
-                Snackbar.make(root, R.string.error_failed_to_modify_process, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, R.string.error_failed_to_modify_process, Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -117,7 +118,7 @@ class ProcessEditActivity :
     }
 
     override fun onProcessTreeExpanded(position: Int) {
-        process_tree.smoothScrollToPosition(position)
+        binding.processTree.smoothScrollToPosition(position)
     }
 
     @SuppressLint("InflateParams")

@@ -1,5 +1,6 @@
 package com.xhlab.nep.ui.process.calculator.ingredients
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -10,7 +11,6 @@ import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.adapters.ElementViewHolder
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
-import org.jetbrains.anko.layoutInflater
 import java.text.DecimalFormat
 
 class BaseIngredientAdapter(
@@ -22,7 +22,7 @@ class BaseIngredientAdapter(
     private var isIconVisible = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseIngredientViewHolder {
-        val view = parent.context.layoutInflater
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.holder_element, parent, false)
         return BaseIngredientViewHolder(view)
     }

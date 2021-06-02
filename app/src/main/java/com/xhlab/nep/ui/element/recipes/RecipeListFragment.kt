@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
@@ -15,7 +16,6 @@ import com.xhlab.nep.ui.recipe.MachineRecipeListFragment
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_recipe_list.*
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -23,6 +23,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentRecipeListBinding
     private lateinit var viewModel: RecipeListViewModel
 
     private val recipeAdapter by lazy { RecipeMachineAdapter(viewModel) }
@@ -36,8 +37,9 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_recipe_list, container, false)
+    ): View {
+        binding = FragmentRecipeListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -77,6 +79,6 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        recipe_list.adapter = recipeAdapter
+        binding.recipeList.adapter = recipeAdapter
     }
 }

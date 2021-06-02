@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentReplacementListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment
@@ -14,7 +15,6 @@ import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_replacement_list.*
 import javax.inject.Inject
 
 class ReplacementListFragment : DaggerFragment(), ViewInit {
@@ -22,6 +22,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentReplacementListBinding
     private lateinit var viewModel: ReplacementListViewModel
 
     private val elementAdapter by lazy { ElementDetailAdapter(viewModel) }
@@ -37,8 +38,9 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_replacement_list, container, false)
+    ): View {
+        binding = FragmentReplacementListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -53,7 +55,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
 
         viewModel.replacementList.observe(this) {
             elementAdapter.submitList(it)
-            ore_dict_name.text = requireContext().formatString(
+            binding.oreDictName.text = requireContext().formatString(
                 R.string.form_ore_dict_name,
                 oreDictName,
                 it?.size ?: 0
@@ -79,8 +81,8 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        ore_dict_name.text = oreDictName
-        replacement_list.adapter = elementAdapter
+        binding.oreDictName.text = oreDictName
+        binding.replacementList.adapter = elementAdapter
     }
 
     companion object {

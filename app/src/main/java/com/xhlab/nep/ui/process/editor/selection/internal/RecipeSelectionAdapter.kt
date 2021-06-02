@@ -1,5 +1,6 @@
 package com.xhlab.nep.ui.process.editor.selection.internal
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.xhlab.nep.R
@@ -13,7 +14,6 @@ import com.xhlab.nep.ui.process.editor.selection.RecipeSelectionListener
 import com.xhlab.nep.ui.process.editor.selection.getKeyElement
 import com.xhlab.nep.ui.process.editor.selection.isReversed
 import com.xhlab.nep.ui.process.editor.selection.select
-import org.jetbrains.anko.layoutInflater
 import java.util.*
 
 class RecipeSelectionAdapter(
@@ -23,7 +23,7 @@ class RecipeSelectionAdapter(
     private var constraint: ProcessEditViewModel.ConnectionConstraint? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectionViewHolder {
-        val view = parent.context.layoutInflater
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.holder_recipe_selection_node, parent, false)
         return SelectionViewHolder(view)
     }

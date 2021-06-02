@@ -15,7 +15,6 @@ import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
-import org.jetbrains.anko.textResource
 
 class ElementDetailAdapter (
     private val listener: ElementListener? = null
@@ -70,11 +69,11 @@ class ElementDetailAdapter (
                 true -> itemView.context.getString(R.string.txt_unnamed)
                 false -> model.unlocalizedName.trim()
             }
-            type.textResource = when (model.type) {
+            type.setText(when (model.type) {
                 ITEM -> R.string.txt_item
                 FLUID -> R.string.txt_fluid
                 else -> R.string.txt_unknown
-            }
+            })
         }
     }
 

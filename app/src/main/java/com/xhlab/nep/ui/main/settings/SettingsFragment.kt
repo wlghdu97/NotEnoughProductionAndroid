@@ -18,10 +18,10 @@ import com.xhlab.nep.service.IconUnzipService
 import com.xhlab.nep.service.ParseRecipeService
 import com.xhlab.nep.ui.dialogs.IconUnzipDialog
 import com.xhlab.nep.ui.dialogs.JsonParseDialog
+import com.xhlab.nep.util.longToast
 import com.xhlab.nep.util.updateGlobalTheme
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.AndroidSupportInjection
-import org.jetbrains.anko.support.v4.longToast
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragmentCompat() {

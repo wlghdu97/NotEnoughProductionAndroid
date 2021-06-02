@@ -6,14 +6,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
+import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_machine_recipe_list.*
-import org.jetbrains.anko.dip
 import javax.inject.Inject
 
 class MachineRecipeListFragment : DaggerFragment(), ViewInit {
@@ -21,6 +21,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentMachineRecipeListBinding
     private lateinit var recipeSelectionViewModel: RecipeSelectionViewModel
     private lateinit var viewModel: MachineRecipeListViewModel
     private lateinit var recipeAdapter: RecipeSelectionAdapter
@@ -29,8 +30,9 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_machine_recipe_list, container, false)
+    ): View {
+        binding = FragmentMachineRecipeListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -41,14 +43,14 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         setHasOptionsMenu(true)
-        with (recipe_list) {
+        with (binding.recipeList) {
             recipeAdapter = RecipeSelectionAdapter(
                 targetElementId = arguments?.getLong(ELEMENT_ID),
                 selectionListener = recipeSelectionViewModel,
                 oreDictSelectionListener = recipeSelectionViewModel
             )
             adapter = recipeAdapter
-            addItemDecoration(LinearItemSpacingDecorator(dip(4)))
+            addItemDecoration(LinearItemSpacingDecorator(context.dip(4)))
         }
     }
 
@@ -66,12 +68,12 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
 
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
-            empty_text.isGone = it?.isEmpty() != true
+            binding.emptyText.isGone = it?.isEmpty() != true
         }
 
         viewModel.usageList.observe(this) {
             recipeAdapter.submitList(it)
-            empty_text.isGone = it?.isEmpty() != true
+            binding.emptyText.isGone = it?.isEmpty() != true
         }
 
         viewModel.isIconLoaded.observe(this) { isLoaded ->

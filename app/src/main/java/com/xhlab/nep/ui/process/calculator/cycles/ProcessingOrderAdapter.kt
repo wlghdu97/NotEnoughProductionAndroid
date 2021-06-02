@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.process.calculator.cycles
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,14 +10,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.process.*
+import com.xhlab.nep.model.process.Process
+import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
-import org.jetbrains.anko.layoutInflater
 import java.text.DecimalFormat
 import kotlin.math.min
 
@@ -29,7 +30,7 @@ class ProcessingOrderAdapter
     private var degreeMap = hashMapOf<Recipe, Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessingOrderViewHolder {
-        val view = parent.context.layoutInflater
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.holder_processing_order, parent, false)
         return ProcessingOrderViewHolder(view)
     }

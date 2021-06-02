@@ -9,7 +9,6 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.ui.adapters.ElementViewHolder
 import com.xhlab.nep.util.setIcon
-import org.jetbrains.anko.imageResource
 import kotlin.math.min
 
 abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
@@ -38,35 +37,35 @@ abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(item
         } else {
             when (connectionStatus.status) {
                 Process.ConnectionStatus.CONNECTED_TO_CHILD -> {
-                    icon.imageResource = R.drawable.ic_power_24dp
+                    icon.setImageResource(R.drawable.ic_power_24dp)
                     icon.imageTintList = getColorStateList(R.color.colorPluggedToChild)
                     icon.rotation = 180f
                     icon.scaleX = 1f
                     icon.scaleY = 1f
                 }
                 Process.ConnectionStatus.CONNECTED_TO_PARENT -> {
-                    icon.imageResource = R.drawable.ic_power_24dp
+                    icon.setImageResource(R.drawable.ic_power_24dp)
                     icon.imageTintList = getColorStateList(R.color.colorPluggedToParent)
                     icon.rotation = 0f
                     icon.scaleX = 1f
                     icon.scaleY = 1f
                 }
                 Process.ConnectionStatus.UNCONNECTED -> {
-                    icon.imageResource = R.drawable.ic_outlet_24dp
+                    icon.setImageResource(R.drawable.ic_outlet_24dp)
                     icon.imageTintList = getColorStateList(R.color.colorUnplugged)
                     icon.rotation = 0f
                     icon.scaleX = 0.8f
                     icon.scaleY = 0.8f
                 }
                 Process.ConnectionStatus.FINAL_OUTPUT -> {
-                    icon.imageResource = R.drawable.ic_flag_24dp
+                    icon.setImageResource(R.drawable.ic_flag_24dp)
                     icon.imageTintList = getColorStateList(R.color.colorFinalOutput)
                     icon.rotation = 0f
                     icon.scaleX = 1f
                     icon.scaleY = 1f
                 }
                 Process.ConnectionStatus.NOT_CONSUMED -> {
-                    icon.imageResource = R.drawable.ic_power_off_24dp
+                    icon.setImageResource(R.drawable.ic_power_off_24dp)
                     icon.imageTintList = getColorStateList(R.color.colorInfinite)
                     icon.rotation = 180f
                     icon.scaleX = 1f

@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentElementDetailBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.shared.db.entity.ElementEntity
@@ -20,7 +21,6 @@ import com.xhlab.nep.util.getCardBackgroundColor
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_element_detail.*
 import javax.inject.Inject
 
 class ElementDetailFragment : DaggerFragment(), ViewInit {
@@ -28,6 +28,7 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentElementDetailBinding
     private lateinit var viewModel: ElementDetailViewModel
 
     private lateinit var viewPagerAdapter: FragmentStatePagerAdapter
@@ -39,8 +40,9 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_element_detail, container, false)
+    ): View {
+        binding = FragmentElementDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -63,7 +65,7 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
 
         viewModel.element.observeNotNull(this) { element ->
             (activity as? AppCompatActivity)?.let { activity ->
-                activity.setSupportActionBar(toolbar)
+                activity.setSupportActionBar(binding.toolbar)
                 activity.supportActionBar?.let {
                     if (resources.getBoolean(R.bool.isTablet)) {
                         setHasOptionsMenu(true)
@@ -81,9 +83,9 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         // make background opaque when tablet mode
-        root?.setBackgroundColor(requireContext().getCardBackgroundColor())
+        binding.root.setBackgroundColor(requireContext().getCardBackgroundColor())
 
-        val firstTab = tab_layout.getTabAt(0)
+        val firstTab = binding.tabLayout.getTabAt(0)
         if (firstTab != null) {
             firstTab.text = getString(when (elementType) {
                 ElementEntity.ORE_CHAIN -> R.string.tab_replacements
@@ -91,7 +93,7 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
             })
         }
 
-        with (view_pager) {
+        with (binding.viewPager) {
             viewPagerAdapter = when (elementType) {
                 ElementEntity.ORE_CHAIN -> ReplacementListPagerAdapter(childFragmentManager)
                 else -> RecipeListPagerAdapter(childFragmentManager)
@@ -99,14 +101,14 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
             adapter = viewPagerAdapter
             addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
                 override fun onPageSelected(position: Int) {
-                    tab_layout.selectTab(tab_layout.getTabAt(position))
+                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
                 }
             })
         }
 
-        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                view_pager.currentItem = tab.position
+                binding.viewPager.currentItem = tab.position
             }
 
             override fun onTabReselected(tab: TabLayout.Tab) = Unit

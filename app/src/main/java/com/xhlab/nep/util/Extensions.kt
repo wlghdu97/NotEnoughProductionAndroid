@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.util.Base64
 import android.util.TypedValue
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.graphics.ColorUtils
@@ -75,4 +76,16 @@ inline fun <reified T> LiveData<T?>.observeNotNull(
     crossinline block: (T) -> Unit
 ) = observe(lifecycleOwner) {
     if (it != null) { block(it) }
+}
+
+fun Fragment.longToast(@StringRes stringId: Int) {
+    Toast.makeText(context, stringId, Toast.LENGTH_LONG).show()
+}
+
+fun Context.dip(dp: Int): Int {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp.toFloat(),
+        resources.displayMetrics
+    ).toInt()
 }

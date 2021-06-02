@@ -1,5 +1,6 @@
 package com.xhlab.nep.ui.process.editor
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -11,7 +12,6 @@ import com.xhlab.nep.ui.process.adapters.ProcessTreeAdapter
 import com.xhlab.nep.ui.process.adapters.ProcessTreeViewHolder
 import com.xhlab.nep.ui.process.adapters.RecipeViewDegreeNode
 import com.xhlab.nep.ui.process.adapters.toDegreeNode
-import org.jetbrains.anko.layoutInflater
 
 class RecipeTreeAdapter(
     private val treeListener: ProcessTreeListener? = null,
@@ -21,7 +21,8 @@ class RecipeTreeAdapter(
     private val expandedNodes = mutableSetOf<Recipe>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TreeViewHolder {
-        val view = parent.context.layoutInflater.inflate(R.layout.holder_recipe_node, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.holder_recipe_node, parent, false)
         return TreeViewHolder(view)
     }
 

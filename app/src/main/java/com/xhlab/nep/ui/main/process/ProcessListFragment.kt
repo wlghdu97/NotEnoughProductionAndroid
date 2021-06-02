@@ -8,6 +8,7 @@ import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentProcessListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
@@ -21,7 +22,6 @@ import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCES
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCESS_NAME
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_process_list.*
 import javax.inject.Inject
 
 class ProcessListFragment : DaggerFragment(), ViewInit {
@@ -29,6 +29,7 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentProcessListBinding
     private lateinit var viewModel: ProcessListViewModel
 
     private val processAdapter by lazy { ProcessAdapter(viewModel) }
@@ -37,8 +38,9 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_process_list, container, false)
+    ): View {
+        binding = FragmentProcessListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -48,9 +50,9 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        process_list.adapter = processAdapter
+        binding.processList.adapter = processAdapter
 
-        fab_add.setOnClickListener {
+        binding.fabAdd.setOnClickListener {
             showProcessCreationSelectionAlert()
         }
     }
@@ -74,7 +76,7 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
             if (it.isSuccessful()) {
                 showExportStringDialog(it.data!!)
             } else if (it.throwable != null) {
-                Snackbar.make(root, R.string.error_failed_to_export_string, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(binding.root, R.string.error_failed_to_export_string, Snackbar.LENGTH_LONG).show()
             }
         }
 

@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.ActivityRecipeSelectionExistingBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
@@ -14,8 +15,6 @@ import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_recipe_selection_existing.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
@@ -23,22 +22,24 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: ActivityRecipeSelectionExistingBinding
     private lateinit var viewModel: InternalRecipeSelectionViewModel
 
     private val processTreeAdapter by lazy { RecipeSelectionAdapter(viewModel) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_recipe_selection_existing)
         initViewModel()
         initView()
     }
 
     override fun initView() {
-        setSupportActionBar(toolbar)
+        binding = ActivityRecipeSelectionExistingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbarLayout.toolbar)
         supportActionBar?.setTitle(R.string.title_select_recipe_to_connect)
 
-        recipe_list.adapter = processTreeAdapter
+        binding.recipeList.adapter = processTreeAdapter
     }
 
     override fun initViewModel() {
@@ -47,7 +48,7 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
         viewModel.process.observeNotNull(this) {
             processTreeAdapter.submitProcess(it)
-            empty_text.isGone = processTreeAdapter.itemCount != 0
+            binding.emptyText.isGone = processTreeAdapter.itemCount != 0
         }
 
         viewModel.constraint.observe(this) {
@@ -67,7 +68,7 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
                 finish()
             } else {
                 Snackbar.make(
-                    root,
+                    binding.root,
                     R.string.error_connect_recipe_failed,
                     Snackbar.LENGTH_LONG
                 ).show()

@@ -7,16 +7,16 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.domain.MachineRecipeListNavigationUseCase
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
 import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
+import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_machine_recipe_list.*
-import org.jetbrains.anko.support.v4.dip
 import javax.inject.Inject
 
 class MachineRecipeListFragment : DaggerFragment(), ViewInit {
@@ -24,6 +24,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentMachineRecipeListBinding
     private lateinit var viewModel: MachineRecipeListViewModel
 
     private lateinit var recipeAdapter: RecipeDetailAdapter
@@ -35,8 +36,9 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_machine_recipe_list, container, false)
+    ): View {
+        binding = FragmentMachineRecipeListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -80,7 +82,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        recipe_list_toolbar?.let {
+        binding.recipeListToolbar?.let {
             (activity as? AppCompatActivity)?.let { activity ->
                 activity.setSupportActionBar(it)
                 activity.supportActionBar?.let { actionBar ->
@@ -90,12 +92,12 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             }
         }
 
-        with (recipe_list) {
+        with(binding.recipeList) {
             recipeAdapter = RecipeDetailAdapter(elementId, viewModel)
             adapter = recipeAdapter
-            addItemDecoration(LinearItemSpacingDecorator(dip(4)))
+            addItemDecoration(LinearItemSpacingDecorator(context.dip(4)))
         }
-        recipe_list.adapter = recipeAdapter
+        binding.recipeList.adapter = recipeAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

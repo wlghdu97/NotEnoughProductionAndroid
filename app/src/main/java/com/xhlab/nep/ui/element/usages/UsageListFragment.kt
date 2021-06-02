@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentUsageListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment
@@ -15,7 +16,6 @@ import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_usage_list.*
 import javax.inject.Inject
 
 class UsageListFragment : DaggerFragment(), ViewInit {
@@ -23,6 +23,7 @@ class UsageListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentUsageListBinding
     private lateinit var viewModel: UsageListViewModel
 
     private val usageAdapter by lazy { ElementDetailAdapter(viewModel) }
@@ -36,8 +37,9 @@ class UsageListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_usage_list, container, false)
+    ): View {
+        binding = FragmentUsageListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -81,6 +83,6 @@ class UsageListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        usage_list.adapter = usageAdapter
+        binding.usageList.adapter = usageAdapter
     }
 }

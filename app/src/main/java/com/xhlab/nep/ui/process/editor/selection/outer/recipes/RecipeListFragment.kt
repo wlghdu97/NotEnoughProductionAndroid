@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.util.isSuccessful
@@ -16,11 +17,10 @@ import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.C
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.details.MachineRecipeListFragment
 import com.xhlab.nep.ui.process.editor.selection.outer.details.MachineRecipeListFragment.Companion.MACHINE_ID
+import com.xhlab.nep.util.longToast
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_recipe_list.*
-import org.jetbrains.anko.support.v4.longToast
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -28,6 +28,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentRecipeListBinding
     private lateinit var recipeSelectionViewModel: RecipeSelectionViewModel
     private lateinit var viewModel: RecipeListViewModel
 
@@ -37,8 +38,9 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_recipe_list, container, false)
+    ): View {
+        binding = FragmentRecipeListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -49,7 +51,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         setHasOptionsMenu(true)
-        recipe_list.adapter = recipeAdapter
+        binding.recipeList.adapter = recipeAdapter
     }
 
     override fun initViewModel() {
@@ -80,12 +82,12 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
         viewModel.recipeList.observe(this) {
             recipeAdapter.submitList(it)
-            empty_text.isGone = it?.isEmpty() != true
+            binding.emptyText.isGone = it?.isEmpty() != true
         }
 
         viewModel.usageList.observe(this) {
             recipeAdapter.submitList(it)
-            empty_text.isGone = it?.isEmpty() != true
+            binding.emptyText.isGone = it?.isEmpty() != true
         }
 
         viewModel.navigateToDetails.observe(this) { (elementId, machineId, connectToParent) ->

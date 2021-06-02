@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentOreDictListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.replacements.OreDictAdapter
@@ -14,7 +15,6 @@ import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_ore_dict_list.*
 import javax.inject.Inject
 
 class OreDictListFragment : DaggerFragment(), ViewInit {
@@ -22,6 +22,7 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentOreDictListBinding
     private lateinit var recipeSelectionViewModel: RecipeSelectionViewModel
     private lateinit var viewModel: OreDictListViewModel
 
@@ -36,8 +37,9 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_ore_dict_list, container, false)
+    ): View {
+        binding = FragmentOreDictListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,7 +48,7 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        ore_dict_list.adapter = oreDictAdapter
+        binding.oreDictList.adapter = oreDictAdapter
     }
 
     override fun initViewModel() {

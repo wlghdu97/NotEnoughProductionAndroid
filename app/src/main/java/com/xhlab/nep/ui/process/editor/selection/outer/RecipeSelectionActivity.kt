@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.ActivityRecipeSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.shared.util.isSuccessful
@@ -14,8 +15,6 @@ import com.xhlab.nep.ui.process.editor.selection.outer.replacements.OreDictListF
 import com.xhlab.nep.ui.process.editor.selection.outer.replacements.ReplacementListFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_recipe_selection_existing.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
@@ -23,17 +22,19 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: ActivityRecipeSelectionBinding
     private lateinit var viewModel: RecipeSelectionViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_recipe_selection)
         initViewModel()
         initView()
     }
 
     override fun initView() {
-        setSupportActionBar(toolbar)
+        binding = ActivityRecipeSelectionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbarLayout.toolbar)
         supportActionBar?.setTitle(R.string.title_select_recipe_to_connect)
     }
 
@@ -61,7 +62,7 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
                 finish()
             } else {
                 Snackbar.make(
-                    root,
+                    binding.root,
                     R.string.error_connect_recipe_failed,
                     Snackbar.LENGTH_LONG
                 ).show()

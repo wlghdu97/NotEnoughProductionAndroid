@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentMachineResultBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.domain.MachineResultNavigationUseCase
 import com.xhlab.nep.ui.ViewInit
@@ -18,8 +19,6 @@ import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_machine_result.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class MachineResultFragment : DaggerFragment(), ViewInit {
@@ -27,6 +26,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentMachineResultBinding
     private lateinit var viewModel: MachineResultViewModel
     private val adapter by lazy { ElementDetailAdapter(viewModel) }
 
@@ -34,8 +34,9 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_machine_result, container, false)
+    ): View {
+        binding = FragmentMachineResultBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -53,7 +54,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
         }
 
         viewModel.resultList.observe(this) {
-            total_text.text = String.format(getString(R.string.form_total), it?.size ?: 0)
+            binding.totalText.text = String.format(getString(R.string.form_total), it?.size ?: 0)
             adapter.submitList(it)
         }
 
@@ -77,7 +78,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         (activity as? AppCompatActivity)?.let {
-            it.setSupportActionBar(toolbar)
+            it.setSupportActionBar(binding.toolbarLayout.toolbar)
             it.supportActionBar?.let { actionBar ->
                 actionBar.title = getString(R.string.title_machine_result_list)
                 if (resources.getBoolean(R.bool.isTablet)) {
@@ -87,7 +88,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
             }
         }
 
-        with (search_view) {
+        with (binding.searchView) {
             setIconifiedByDefault(false)
             queryHint = getString(R.string.hint_search_element)
 
@@ -100,7 +101,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
             })
         }
 
-        result_list.adapter = adapter
+        binding.resultList.adapter = adapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

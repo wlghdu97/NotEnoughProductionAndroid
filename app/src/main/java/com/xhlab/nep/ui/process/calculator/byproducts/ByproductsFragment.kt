@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentByproductsBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.util.isSuccessful
@@ -16,7 +17,6 @@ import com.xhlab.nep.ui.process.calculator.ProcessCalculationViewModel
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_byproducts.*
 import javax.inject.Inject
 
 class ByproductsFragment : DaggerFragment(), ViewInit {
@@ -24,6 +24,7 @@ class ByproductsFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentByproductsBinding
     private lateinit var calculationViewModel: ProcessCalculationViewModel
     private lateinit var viewModel: ElementNavigatorViewModel
     private val adapter by lazy { ByproductsAdapter(viewModel) }
@@ -32,8 +33,9 @@ class ByproductsFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_byproducts, container, false)
+    ): View {
+        binding = FragmentByproductsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -43,7 +45,7 @@ class ByproductsFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        byproduct_list.adapter = adapter
+        binding.byproductList.adapter = adapter
     }
 
     override fun initViewModel() {

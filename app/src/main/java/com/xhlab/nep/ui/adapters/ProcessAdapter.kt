@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.adapters
 
 import android.content.Context
 import android.content.res.Resources
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +19,6 @@ import com.xhlab.nep.ui.main.process.ProcessListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
-import org.jetbrains.anko.layoutInflater
 
 open class ProcessAdapter(
     private val listener: ProcessListener? = null
@@ -27,7 +27,7 @@ open class ProcessAdapter(
     private var isIconVisible = false
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProcessViewHolder {
-        val view = parent.context.layoutInflater.inflate(getHolderLayoutId(), parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(getHolderLayoutId(), parent, false)
         return ProcessViewHolder(view)
     }
 

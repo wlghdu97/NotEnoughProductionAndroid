@@ -1,5 +1,6 @@
 package com.xhlab.nep.ui.process.adapters
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -7,7 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.ui.util.BindableViewHolder
-import org.jetbrains.anko.layoutInflater
 import kotlin.math.min
 
 abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -29,7 +29,7 @@ abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
             2 -> R.layout.holder_recipe_node_element_header
             else -> throw IllegalArgumentException()
         }
-        val view = parent.context.layoutInflater.inflate(layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(layout, parent, false)
         return when (viewType) {
             0 -> onCreateElementHolder(view)
             1 -> ProcessElementMultiConnectionViewHolder(view)
@@ -127,7 +127,7 @@ abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
                 parent: ViewGroup,
                 viewType: Int
             ): ProcessElementViewHolder {
-                val view = parent.context.layoutInflater
+                val view = LayoutInflater.from(parent.context)
                     .inflate(getElementHolderLayoutId(), parent, false)
                 return onCreateElementHolder(view)
             }

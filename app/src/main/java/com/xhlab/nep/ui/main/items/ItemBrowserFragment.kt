@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.observe
 import androidx.paging.PagedList
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.ViewInit
@@ -18,7 +19,6 @@ import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_item_browser.*
 import javax.inject.Inject
 
 class ItemBrowserFragment : DaggerFragment, ViewInit {
@@ -26,6 +26,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentItemBrowserBinding
     private lateinit var viewModel: ItemBrowserViewModel
 
     private var listener: ElementListener? = null
@@ -41,8 +42,9 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_item_browser, container, false)
+    ): View {
+        binding = FragmentItemBrowserBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -58,16 +60,20 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
         }
 
         viewModel.isDBLoaded.observe(this) {
-            element_list.isGone = !it
-            total_text.isGone = !it
-            db_not_loaded_text.isGone = it
+            with(binding) {
+                elementList.isGone = !it
+                totalText.isGone = !it
+                dbNotLoadedText.isGone = it
 
-            search_view.isEnabled = it
-            search_view.findViewById<EditText>(R.id.search_src_text).isEnabled = it
+                with(searchView) {
+                    isEnabled = it
+                    findViewById<EditText>(R.id.search_src_text).isEnabled = it
 
-            if (!it) {
-                search_view.setQuery("", false)
-                search_view.clearFocus()
+                    if (!it) {
+                        setQuery("", false)
+                        clearFocus()
+                    }
+                }
             }
             // init
             viewModel.searchElements("")
@@ -99,7 +105,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
     }
 
     override fun initView() {
-        with (search_view) {
+        with (binding.searchView) {
             setIconifiedByDefault(false)
             queryHint = getString(R.string.hint_search_element)
 
@@ -112,18 +118,18 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             })
         }
 
-        element_list.adapter = elementAdapter
+        binding.elementList.adapter = elementAdapter
 
         if (resources.getBoolean(R.bool.isTablet)) {
             val fragmentManager = childFragmentManager
             fragmentManager.addOnBackStackChangedListener {
-                stack_empty_text?.isGone = fragmentManager.backStackEntryCount != 0
+                binding.stackEmptyText?.isGone = fragmentManager.backStackEntryCount != 0
             }
         }
     }
 
     private fun submitSearchResultList(list: PagedList<ElementView>?) {
-        total_text.text = String.format(getString(R.string.form_matched_total), list?.size ?: 0)
+        binding.totalText.text = String.format(getString(R.string.form_matched_total), list?.size ?: 0)
         elementAdapter.submitList(list)
     }
 }

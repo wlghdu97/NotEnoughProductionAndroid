@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.ActivityItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
@@ -15,7 +16,6 @@ import com.xhlab.nep.ui.main.process.creator.browser.recipes.RecipeListFragment
 import com.xhlab.nep.ui.main.process.creator.browser.recipes.RecipeListFragment.Companion.ELEMENT_ID
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
@@ -23,17 +23,19 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: ActivityItemBrowserBinding
     private lateinit var viewModel: ProcessItemBrowserViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_item_browser)
         initViewModel()
         initView()
     }
 
     override fun initView() {
-        setSupportActionBar(toolbar)
+        binding = ActivityItemBrowserBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbarLayout.toolbar)
         supportActionBar?.setTitle(R.string.title_select_target_element)
 
         supportFragmentManager.beginTransaction()

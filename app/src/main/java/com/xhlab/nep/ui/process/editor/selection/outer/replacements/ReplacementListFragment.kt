@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentReplacementListSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ElementDetailAdapter
@@ -15,7 +16,6 @@ import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_replacement_list_selection.*
 import javax.inject.Inject
 
 class ReplacementListFragment : DaggerFragment(), ViewInit {
@@ -23,6 +23,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentReplacementListSelectionBinding
     private lateinit var recipeSelectionViewModel: RecipeSelectionViewModel
     private lateinit var viewModel: ReplacementListViewModel
 
@@ -32,8 +33,9 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_replacement_list_selection, container, false)
+    ): View {
+        binding = FragmentReplacementListSelectionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -70,7 +72,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        replacement_list.adapter = elementAdapter
+        binding.replacementList.adapter = elementAdapter
     }
 
     private fun showRecipeListFragment(elementId: Long) {

@@ -13,7 +13,6 @@ import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
-import org.jetbrains.anko.textResource
 import java.text.NumberFormat
 import java.util.*
 
@@ -39,11 +38,11 @@ open class ElementViewHolder(itemView: View)
 
     override fun bindNotNull(model: Element) {
         if (model is ElementView) {
-            type?.textResource = when (model.type) {
+            type?.setText(when (model.type) {
                 ElementEntity.ITEM -> R.string.txt_item
                 ElementEntity.FLUID -> R.string.txt_fluid
                 else -> R.string.txt_unknown
-            }
+            })
         }
         val nameText = getNameText(model)
         name.text = when (model.amount == 0) {

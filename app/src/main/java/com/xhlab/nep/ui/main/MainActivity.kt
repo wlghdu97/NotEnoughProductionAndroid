@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.ActivityMainBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
@@ -15,8 +16,6 @@ import com.xhlab.nep.ui.main.settings.SettingsContainerFragment
 import com.xhlab.nep.util.updateGlobalTheme
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity(), ViewInit {
@@ -24,6 +23,7 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
 
     private lateinit var pagerAdapter: MainViewPagerAdapter
@@ -40,37 +40,38 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
     }
 
     override fun initView() {
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbarLayout.toolbar)
 
         pagerAdapter = MainViewPagerAdapter(supportFragmentManager)
-        with (view_pager) {
+        with (binding.viewPager) {
             offscreenPageLimit = 3
             adapter = pagerAdapter
         }
 
-        view_pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+        binding.viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
-                bottom_navigation.menu.getItem(position).isChecked = true
+                binding.bottomNavigation.menu.getItem(position).isChecked = true
             }
         })
 
-        bottom_navigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_item_browser -> {
-                    view_pager.currentItem = 0
+                    binding.viewPager.currentItem = 0
                     true
                 }
                 R.id.menu_machine_browser -> {
-                    view_pager.currentItem = 1
+                    binding.viewPager.currentItem = 1
                     true
                 }
                 R.id.menu_process -> {
-                    view_pager.currentItem = 2
+                    binding.viewPager.currentItem = 2
                     true
                 }
                 R.id.menu_settings -> {
-                    view_pager.currentItem = 3
+                    binding.viewPager.currentItem = 3
                     true
                 }
                 else -> false

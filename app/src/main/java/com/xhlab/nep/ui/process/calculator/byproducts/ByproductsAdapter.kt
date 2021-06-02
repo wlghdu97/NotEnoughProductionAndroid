@@ -1,5 +1,6 @@
 package com.xhlab.nep.ui.process.calculator.byproducts
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
@@ -13,7 +14,6 @@ import com.xhlab.nep.ui.process.calculator.cycles.RecipeRatio
 import com.xhlab.nep.ui.process.calculator.ingredients.ElementKeyListener
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
-import org.jetbrains.anko.layoutInflater
 import java.text.DecimalFormat
 
 class ByproductsAdapter(
@@ -25,7 +25,7 @@ class ByproductsAdapter(
     private var isIconVisible = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ByproductViewHolder {
-        val view = parent.context.layoutInflater
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.holder_element, parent, false)
         return ByproductViewHolder(view)
     }

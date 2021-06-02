@@ -7,33 +7,29 @@ import android.os.Bundle
 import android.os.IBinder
 import android.text.TextUtils
 import android.view.KeyEvent
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.DialogWithProgressBinding
 import com.xhlab.nep.service.IServiceBinder
 import com.xhlab.nep.service.IconUnzipService
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.ViewInit
-import kotlinx.android.synthetic.main.dialog_with_progress.view.*
-import org.jetbrains.anko.layoutInflater
-import org.jetbrains.anko.textResource
 
 class IconUnzipDialog : ServiceBoundDialog<IconUnzipService>(), ViewInit {
 
-    private lateinit var dialogView: View
+    private lateinit var binding: DialogWithProgressBinding
     private var negativeButton: Button? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = requireContext().layoutInflater
         @Suppress("inflateParams")
-        dialogView = inflater.inflate(R.layout.dialog_with_progress, null)
+        binding = DialogWithProgressBinding.inflate(layoutInflater, null, false)
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_unzipping)
-            .setView(dialogView)
+            .setView(binding.root)
             .setNegativeButton(R.string.btn_abort, null)
             .setCancelable(false)
             .create()
@@ -47,12 +43,12 @@ class IconUnzipDialog : ServiceBoundDialog<IconUnzipService>(), ViewInit {
     override fun initService(service: IconUnzipService) {
         service.unzipLog.observe(this) {
             isTaskDone = it.status != Resource.Status.LOADING
-            dialogView.log.text = it.data?.message
-            dialogView.progress_bar.progress = it.data?.progress ?: 0
-            negativeButton?.textResource = when (isTaskDone) {
+            binding.log.text = it.data?.message
+            binding.progressBar.progress = it.data?.progress ?: 0
+            negativeButton?.setText(when (isTaskDone) {
                 true -> R.string.btn_close
                 false -> R.string.btn_abort
-            }
+            })
         }
     }
 
@@ -76,12 +72,12 @@ class IconUnzipDialog : ServiceBoundDialog<IconUnzipService>(), ViewInit {
             }
         }
 
-        with (dialogView.progress_bar) {
+        with (binding.progressBar) {
             isIndeterminate = false
             max = 100
         }
 
-        with (dialogView.log) {
+        with (binding.log) {
             ellipsize = TextUtils.TruncateAt.END
             maxLines = 1
         }

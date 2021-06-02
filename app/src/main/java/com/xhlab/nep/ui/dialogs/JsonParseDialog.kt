@@ -6,32 +6,28 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
 import android.view.KeyEvent
-import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.DialogWithProgressBinding
 import com.xhlab.nep.service.IServiceBinder
 import com.xhlab.nep.service.ParseRecipeService
 import com.xhlab.nep.shared.util.Resource
-import kotlinx.android.synthetic.main.dialog_with_progress.view.*
-import org.jetbrains.anko.layoutInflater
-import org.jetbrains.anko.textResource
 
 class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
 
-    private lateinit var dialogView: View
+    private lateinit var binding: DialogWithProgressBinding
     private var negativeButton: Button? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val inflater = requireContext().layoutInflater
         @Suppress("inflateParams")
-        dialogView = inflater.inflate(R.layout.dialog_with_progress, null)
+        binding = DialogWithProgressBinding.inflate(layoutInflater, null, false)
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_parsing)
-            .setView(dialogView)
+            .setView(binding.root)
             .setNegativeButton(R.string.btn_abort, null)
             .setCancelable(false)
             .create()
@@ -44,7 +40,7 @@ class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
 
     override fun initService(service: ParseRecipeService) {
         service.parseLog.observe(this) {
-            dialogView.log.text = it.data
+            binding.log.text = it.data
         }
 
         service.parseLog.observe(this) {
@@ -52,9 +48,9 @@ class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
                 Resource.Status.LOADING -> false
                 else -> true
             }
-            with (dialogView.progress_bar) {
+            with (binding.progressBar) {
                 isIndeterminate = !isTaskDone
-                negativeButton?.textResource = when (isTaskDone) {
+                negativeButton?.setText(when (isTaskDone) {
                     true -> {
                         progress = 100
                         R.string.btn_close
@@ -62,7 +58,7 @@ class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
                     false -> {
                         R.string.btn_abort
                     }
-                }
+                })
             }
         }
     }

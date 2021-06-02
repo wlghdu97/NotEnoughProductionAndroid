@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.observe
 import androidx.viewpager.widget.ViewPager
 import com.xhlab.nep.R
+import com.xhlab.nep.databinding.ActivityProcessCalculationBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.calculator.byproducts.ByproductsFragment
@@ -16,8 +17,6 @@ import com.xhlab.nep.ui.process.calculator.ingredients.BaseIngredientsFragment
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.activity_process_calculation.*
-import kotlinx.android.synthetic.main.layout_toolbar.*
 import javax.inject.Inject
 
 class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
@@ -25,44 +24,46 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: ActivityProcessCalculationBinding
     private lateinit var viewModel: ProcessCalculationViewModel
     private lateinit var pagerAdapter: ProcessCalculationViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_process_calculation)
         initViewModel()
         initView()
     }
 
     override fun initView() {
-        setSupportActionBar(toolbar)
+        binding = ActivityProcessCalculationBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbarLayout.toolbar)
         supportActionBar?.setTitle(R.string.title_calculation_result)
 
         pagerAdapter = ProcessCalculationViewPagerAdapter(supportFragmentManager)
-        with (view_pager) {
+        with (binding.viewPager) {
             offscreenPageLimit = 2
             adapter = pagerAdapter
         }
 
-        view_pager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+        binding.viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
             override fun onPageSelected(position: Int) {
-                bottom_navigation.menu.getItem(position).isChecked = true
+                binding.bottomNavigation.menu.getItem(position).isChecked = true
             }
         })
 
-        bottom_navigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.menu_process_cycle_list -> {
-                    view_pager.currentItem = 0
+                    binding.viewPager.currentItem = 0
                     true
                 }
                 R.id.menu_base_ingredients -> {
-                    view_pager.currentItem = 1
+                    binding.viewPager.currentItem = 1
                     true
                 }
                 R.id.menu_byproducts -> {
-                    view_pager.currentItem = 2
+                    binding.viewPager.currentItem = 2
                     true
                 }
                 else -> false
@@ -75,13 +76,15 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel.init(intent?.getStringExtra(PROCESS_ID))
 
         viewModel.process.observeNotNull(this) {
-            toolbar.subtitle = it.name
+            binding.toolbarLayout.toolbar.subtitle = it.name
         }
 
         viewModel.calculationResult.observe(this) {
-            message.isGone = it.throwable == null
-            if (!message.isGone) {
-                message.text = getString(R.string.error_failed_to_find_solution)
+            with(binding.message) {
+                isGone = it.throwable == null
+                if (!isGone) {
+                    text = getString(R.string.error_failed_to_find_solution)
+                }
             }
         }
     }

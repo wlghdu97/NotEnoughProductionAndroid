@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.observe
-import com.xhlab.nep.R
+import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
 import com.xhlab.nep.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
-import kotlinx.android.synthetic.main.fragment_recipe_list.*
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -20,6 +19,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
+    private lateinit var binding: FragmentRecipeListBinding
     private lateinit var processItemBrowserViewModel: ProcessItemBrowserViewModel
     private lateinit var viewModel: RecipeListViewModel
 
@@ -29,8 +29,9 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_recipe_list, container, false)
+    ): View {
+        binding = FragmentRecipeListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -40,7 +41,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     }
 
     override fun initView() {
-        recipe_list.adapter = recipeAdapter
+        binding.recipeList.adapter = recipeAdapter
     }
 
     override fun initViewModel() {
