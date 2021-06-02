@@ -41,10 +41,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         AndroidSupportInjection.inject(this)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initViewModel()
+    }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preference, rootKey)
         initPreference()
-        initViewModel()
     }
 
     private fun initViewModel() {
