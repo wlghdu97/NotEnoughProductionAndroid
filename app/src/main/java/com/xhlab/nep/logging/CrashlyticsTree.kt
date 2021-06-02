@@ -1,7 +1,7 @@
 package com.xhlab.nep.logging
 
 import android.util.Log
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
 
 class CrashlyticsTree : Timber.Tree() {
@@ -11,14 +11,15 @@ class CrashlyticsTree : Timber.Tree() {
             Log.VERBOSE, Log.DEBUG, Log.INFO -> return
         }
 
-        Crashlytics.setInt("priority", priority)
-        Crashlytics.setString("tag", tag)
-        Crashlytics.setString("message", message)
+        val instance = FirebaseCrashlytics.getInstance()
+        instance.setCustomKey("priority", priority)
+        instance.setCustomKey("tag", tag ?: "")
+        instance.setCustomKey("message", message)
 
         if (t == null) {
-            Crashlytics.logException(Exception(message))
+            instance.recordException(Exception(message))
         } else {
-            Crashlytics.logException(t)
+            instance.recordException(t)
         }
     }
 }

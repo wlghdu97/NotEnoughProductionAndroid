@@ -21,8 +21,9 @@ buildscript {
         timber_version = "4.7.1"
         math_version = "3.6.1"
 
-        analytics_version = "17.4.4"
-        crashlytics_version = "2.10.1"
+        firebase_core_version = "17.5.0"
+        firebase_analytics_version = "18.0.0"
+        crashlytics_version = "17.2.1"
 
         junit_version = "4.12"
         core_testing_version = "1.1.1"
@@ -41,15 +42,12 @@ buildscript {
         jacocoEnabled = System.getProperty("jacocoEnabled") ?: "false"
 
         google_services_version = "4.3.3"
-        fabric_version = "1.29.0"
+        crashlytics_gradle_version = '2.5.2'
     }
 
     repositories {
         google()
-        jcenter()
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
+        mavenCentral()
     }
 
     dependencies {
@@ -57,7 +55,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jacoco:org.jacoco.core:$jacoco_version"
         classpath "com.google.gms:google-services:$google_services_version"
-        classpath "io.fabric.tools:gradle:$fabric_version"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:$crashlytics_gradle_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -66,13 +64,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
-        maven {
-            url 'https://s3.amazonaws.com/fabric-artifacts-private/internal-snapshots'
-        }
-        maven {
-            url 'https://maven.fabric.io/public'
-        }
+        mavenCentral()
     }
 }
 
