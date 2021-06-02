@@ -1,10 +1,10 @@
 package com.xhlab.nep.ui.main.process.creator
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
@@ -34,9 +34,8 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
     private lateinit var binding: DialogProcessCreationBinding
     private lateinit var viewModel: ProcessCreationViewModel
 
-    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogProcessCreationBinding.inflate(layoutInflater, null, false)
+        binding = DialogProcessCreationBinding.inflate(LayoutInflater.from(context))
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_create_process)

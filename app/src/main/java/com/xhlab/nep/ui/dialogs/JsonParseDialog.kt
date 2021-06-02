@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.observe
@@ -22,8 +23,7 @@ class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
     private var negativeButton: Button? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        @Suppress("inflateParams")
-        binding = DialogWithProgressBinding.inflate(layoutInflater, null, false)
+        binding = DialogWithProgressBinding.inflate(LayoutInflater.from(context))
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_parsing)

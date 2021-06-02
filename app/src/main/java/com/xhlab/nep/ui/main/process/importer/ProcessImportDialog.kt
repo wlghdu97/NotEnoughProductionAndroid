@@ -1,11 +1,11 @@
 package com.xhlab.nep.ui.main.process.importer
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ClipDescription.MIMETYPE_TEXT_PLAIN
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
@@ -29,9 +29,8 @@ class ProcessImportDialog : DaggerDialogFragment(), ViewInit {
     private lateinit var binding: DialogProcessImportBinding
     private lateinit var viewModel: ProcessImportViewModel
 
-    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogProcessImportBinding.inflate(layoutInflater, null, false)
+        binding = DialogProcessImportBinding.inflate(LayoutInflater.from(context))
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_import_process)

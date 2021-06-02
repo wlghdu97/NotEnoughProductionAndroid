@@ -1,8 +1,8 @@
 package com.xhlab.nep.ui.main.process.rename
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
@@ -26,9 +26,8 @@ class ProcessRenameDialog : DaggerDialogFragment(), ViewInit {
     private lateinit var binding: DialogProcessRenameBinding
     private lateinit var viewModel: ProcessRenameViewModel
 
-    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogProcessRenameBinding.inflate(layoutInflater, null, false)
+        binding = DialogProcessRenameBinding.inflate(LayoutInflater.from(context))
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_rename_process)

@@ -1,11 +1,11 @@
 package com.xhlab.nep.ui.main.process.export
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
@@ -16,9 +16,8 @@ class ProcessExportDialog : DialogFragment() {
 
     private lateinit var binding: DialogProcessExportBinding
 
-    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        binding = DialogProcessExportBinding.inflate(layoutInflater, null, false)
+        binding = DialogProcessExportBinding.inflate(LayoutInflater.from(context))
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_export_result)
