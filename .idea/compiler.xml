@@ -4,5 +4,11 @@
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Not_Enough_Production.app" target="11" />
+      <module name="Not_Enough_Production.model" target="1.8" />
+      <module name="Not_Enough_Production.shared" target="11" />
+      <module name="Not_Enough_Production.test_shared" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
