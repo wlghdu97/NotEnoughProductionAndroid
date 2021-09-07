@@ -49,7 +49,7 @@ class MockLimitDataSource<T>(
     override fun isInvalid(): Boolean = false
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<T>) {
-        //callback.onResult(itemList.toMutableList())
+        // callback.onResult(itemList.toMutableList())
     }
 
     override fun loadRange(startPosition: Int, loadCount: Int): MutableList<T> {

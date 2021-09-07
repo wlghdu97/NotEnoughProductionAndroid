@@ -6,8 +6,8 @@ import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.ui.util.BindableViewHolder
 
-abstract class ProcessTreeAdapter
-    : RecyclerView.Adapter<BindableViewHolder<RecipeViewDegreeNode>>() {
+abstract class ProcessTreeAdapter :
+    RecyclerView.Adapter<BindableViewHolder<RecipeViewDegreeNode>>() {
 
     protected var process: Process? = null
     private var root: RecipeNode? = null

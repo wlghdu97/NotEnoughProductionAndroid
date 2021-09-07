@@ -47,8 +47,8 @@ class InternalRecipeSelectionViewModel @Inject constructor(
         _constraint.postValue(constraint)
     }
 
-    private fun requireProcessId()
-            = process.value?.id ?: throw NullPointerException("process id is null.")
+    private fun requireProcessId() =
+        process.value?.id ?: throw NullPointerException("process id is null.")
 
     override fun onSelect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         launchSuspendFunction(_connectionResult) {

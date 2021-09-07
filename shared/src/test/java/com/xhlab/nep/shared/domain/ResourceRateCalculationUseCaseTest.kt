@@ -12,7 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ResourceRateCalculationUseCaseTest  {
+class ResourceRateCalculationUseCaseTest {
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()

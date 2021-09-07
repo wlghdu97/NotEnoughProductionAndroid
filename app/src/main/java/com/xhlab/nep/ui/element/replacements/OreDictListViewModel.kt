@@ -13,8 +13,7 @@ class OreDictListViewModel @Inject constructor(
     private val loadOreDictListUseCase: LoadOreDictListUseCase
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    OreDictListener
-{
+    OreDictListener {
     val oreDictNameList = loadOreDictListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     private val _navigateToReplacementList = LiveEvent<String>()

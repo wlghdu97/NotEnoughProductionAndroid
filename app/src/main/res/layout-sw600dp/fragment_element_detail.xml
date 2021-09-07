@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -15,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:titleTextColor="@android:color/white"
-            app:subtitleTextColor="@color/colorMediumWhite"/>
+            app:subtitleTextColor="@color/colorMediumWhite" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
@@ -31,12 +30,12 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_recipes"/>
+                android:text="@string/tab_recipes" />
 
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/tab_usages"/>
+                android:text="@string/tab_usages" />
 
         </com.google.android.material.tabs.TabLayout>
 
@@ -46,6 +45,6 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -16,7 +16,7 @@ class RecipeSelectionElementAdapter : RecipeElementAdapter() {
     inner class PlainRecipeElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
 
         init {
-            with (itemView) {
+            with(itemView) {
                 background = null
                 isClickable = false
                 isFocusable = false

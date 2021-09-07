@@ -1,7 +1,10 @@
 package com.xhlab.nep.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.xhlab.nep.shared.domain.MediatorUseCase
 import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.shared.util.Resource
@@ -12,7 +15,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.RuntimeException
 
 class BaseViewModelTest {
 

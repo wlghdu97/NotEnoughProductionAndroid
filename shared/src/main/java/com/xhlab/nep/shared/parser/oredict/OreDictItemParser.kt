@@ -55,7 +55,7 @@ class OreDictItemParser @Inject constructor() : Parser<Element> {
     private fun parseOreDictNameList(reader: JsonReader): OreDictElement {
         val nameList = ArrayList<String>()
         reader.beginArray()
-        while(reader.hasNext()) {
+        while (reader.hasNext()) {
             nameList.add(reader.nextString())
         }
         reader.endArray()

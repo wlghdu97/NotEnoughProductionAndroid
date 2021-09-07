@@ -40,11 +40,11 @@ class MachineRecipeListViewModel @Inject constructor(
         )
     }
 
-    private fun requireElementId()
-            = elementId.value ?: throw NullPointerException("element id is null.")
+    private fun requireElementId() =
+        elementId.value ?: throw NullPointerException("element id is null.")
 
-    private fun requireMachineId()
-            = machineId.value ?: throw NullPointerException("machine id is null.")
+    private fun requireMachineId() =
+        machineId.value ?: throw NullPointerException("machine id is null.")
 
     fun searchIngredients(term: String) {
         searchDebounceJob?.cancel()

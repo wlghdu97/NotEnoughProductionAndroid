@@ -42,9 +42,8 @@ open class ProcessAdapter(
         notifyDataSetChanged()
     }
 
-    inner class ProcessViewHolder(itemView: View)
-        : BindableViewHolder<ProcessSummary>(itemView), PopupMenu.OnMenuItemClickListener
-    {
+    inner class ProcessViewHolder(itemView: View) : BindableViewHolder<ProcessSummary>(itemView),
+        PopupMenu.OnMenuItemClickListener {
         private val icon: ImageView = itemView.findViewById(R.id.output_icon)
         private val name: TextView = itemView.findViewById(R.id.process_name)
         private val description: TextView = itemView.findViewById(R.id.description)

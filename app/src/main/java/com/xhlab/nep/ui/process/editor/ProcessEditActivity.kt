@@ -24,8 +24,7 @@ import javax.inject.Inject
 class ProcessEditActivity :
     DaggerAppCompatActivity(),
     RecipeTreeAdapter.ProcessTreeListener,
-    ViewInit
-{
+    ViewInit {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
@@ -95,7 +94,11 @@ class ProcessEditActivity :
 
         viewModel.modificationResult.observe(this) {
             if (it.throwable != null) {
-                Snackbar.make(binding.root, R.string.error_failed_to_modify_process, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_failed_to_modify_process,
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
     }
@@ -146,7 +149,10 @@ class ProcessEditActivity :
                 when (index) {
                     0 -> viewModel.navigateToInternalRecipeSelection(constraint)
                     1 -> viewModel.navigateToRecipeSelection(constraint)
-                    2 -> viewModel.attachSupplier(constraint.recipe, constraint.element.unlocalizedName)
+                    2 -> viewModel.attachSupplier(
+                        constraint.recipe,
+                        constraint.element.unlocalizedName
+                    )
                     3 -> viewModel.navigateToProcessSelection(constraint)
                 }
             }

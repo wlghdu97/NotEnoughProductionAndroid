@@ -17,8 +17,7 @@ class ProcessItemBrowserViewModel @Inject constructor() : ViewModel(),
     BaseViewModel by BasicViewModel(),
     ElementListener,
     MachineListener,
-    RootRecipeSelectionListener
-{
+    RootRecipeSelectionListener {
     private val elementId = MutableLiveData<Long>()
 
     private val _navigateToMachineList = LiveEvent<Long>()
@@ -33,8 +32,8 @@ class ProcessItemBrowserViewModel @Inject constructor() : ViewModel(),
     val returnResult: LiveData<Pair<Recipe, Element>>
         get() = _returnResult
 
-    private fun requireElementId()
-            = elementId.value ?: throw NullPointerException("element id is null.")
+    private fun requireElementId() =
+        elementId.value ?: throw NullPointerException("element id is null.")
 
     override fun onClick(elementId: Long, elementType: Int) {
         this.elementId.postValue(elementId)

@@ -57,7 +57,7 @@ open class Process(
         addRecipeNode(from)
         return if (to != null) {
             val key = element.unlocalizedName
-            val isConnectionPossible = when(from == to) {
+            val isConnectionPossible = when (from == to) {
                 true -> true
                 false -> checkConnection(to, from, key)
             }
@@ -139,7 +139,7 @@ open class Process(
             for (edgeIndex in 0 until edges.size) {
                 val targetEdges = edges[edgeIndex].filter { it.index > vertexIndex }
                 edges[edgeIndex].removeAll(targetEdges)
-                edges[edgeIndex].addAll(targetEdges.map { it.copy(index = it.index-1) })
+                edges[edgeIndex].addAll(targetEdges.map { it.copy(index = it.index - 1) })
             }
         }
         return true
@@ -190,7 +190,7 @@ open class Process(
         val connections = arrayListOf<Connection>()
         val parentEdges = findParentEdges(recipe, key)
         if (parentEdges.isNotEmpty()) {
-            for ((edgeIndex , parentEdge) in parentEdges) {
+            for ((edgeIndex, parentEdge) in parentEdges) {
                 val parentRecipe = vertices[edgeIndex]
                 if (parentEdge != null && parentEdge.reversed) {
                     connections.add(Connection(CONNECTED_TO_CHILD, parentRecipe, true))

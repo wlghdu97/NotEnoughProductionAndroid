@@ -48,10 +48,14 @@ class ParseRecipeService @Inject constructor() : Service() {
         NotificationManagerCompat.from(this).apply {
             val builder = getNotificationBuilder().apply {
                 setProgress(100, 100, !isTaskDone)
-                setContentTitle(getString(when (isTaskDone) {
-                    true -> R.string.title_parsing_result
-                    false -> R.string.title_parsing_notification
-                }))
+                setContentTitle(
+                    getString(
+                        when (isTaskDone) {
+                            true -> R.string.title_parsing_result
+                            false -> R.string.title_parsing_notification
+                        }
+                    )
+                )
                 setContentText(it.data)
                 setContentIntent(pendingIntent)
                 setOngoing(!isTaskDone)

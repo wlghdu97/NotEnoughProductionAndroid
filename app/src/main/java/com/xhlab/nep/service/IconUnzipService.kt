@@ -48,10 +48,14 @@ class IconUnzipService : Service() {
         NotificationManagerCompat.from(this).apply {
             val builder = getNotificationBuilder().apply {
                 setProgress(100, it.data?.progress ?: 0, false)
-                setContentTitle(getString(when (isTaskDone) {
-                    true -> R.string.title_unzip_result
-                    false -> R.string.title_unzip_notification
-                }))
+                setContentTitle(
+                    getString(
+                        when (isTaskDone) {
+                            true -> R.string.title_unzip_result
+                            false -> R.string.title_unzip_notification
+                        }
+                    )
+                )
                 setContentText(it.data?.message)
                 setContentIntent(pendingIntent)
                 setOngoing(!isTaskDone)

@@ -3,13 +3,13 @@
     <item
         android:id="@+id/menu_process_cycle_list"
         android:title="@string/menu_process_cycle_list"
-        android:icon="@drawable/ic_list_alt_24dp"/>
+        android:icon="@drawable/ic_list_alt_24dp" />
     <item
         android:id="@+id/menu_base_ingredients"
         android:title="@string/menu_base_ingredients"
-        android:icon="@drawable/ic_eco_24dp"/>
+        android:icon="@drawable/ic_eco_24dp" />
     <item
         android:id="@+id/menu_byproducts"
         android:title="@string/menu_byproducts"
-        android:icon="@drawable/ic_delete_24dp"/>
+        android:icon="@drawable/ic_delete_24dp" />
 </menu>

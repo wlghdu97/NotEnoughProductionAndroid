@@ -5,8 +5,13 @@ import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.model.oredict.Replacement
-import com.xhlab.nep.model.recipes.*
+import com.xhlab.nep.model.recipes.MachineRecipe
+import com.xhlab.nep.model.recipes.ShapedOreDictRecipe
+import com.xhlab.nep.model.recipes.ShapedRecipe
+import com.xhlab.nep.model.recipes.ShapelessOreDictRecipe
+import com.xhlab.nep.model.recipes.ShapelessRecipe
 
+@Suppress("MagicNumber", "MaxLineLength")
 object RecipeData {
 
     val itemList = listOf(
@@ -65,7 +70,8 @@ object RecipeData {
             listOf(itemList[0]),
             listOf(itemList[1], itemList[2], itemList[3]),
             listOf(fluidList[0]),
-            listOf()),
+            listOf()
+        ),
         MachineRecipe(
             true, 500, 0, 16, 0,
             listOf(itemList[4]),
@@ -83,23 +89,26 @@ object RecipeData {
     )
 
     val shapedRecipeList = listOf(
-        ShapedRecipe(listOf(
-            itemList[10], itemList[10], itemList[10],
-            itemList[10], /*null*/      itemList[10],
-            itemList[10], itemList[10], itemList[10]),
+        ShapedRecipe(
+            listOf(
+                itemList[10], itemList[10], itemList[10],
+                itemList[10], /*null*/ itemList[10],
+                itemList[10], itemList[10], itemList[10]
+            ),
             itemList[11]
         )
     )
 
     val shapelessRecipeList = listOf(
-        ShapelessRecipe(listOf(
-            itemList[12], /*null*/      /*null*/
-            itemList[13]  /*null*/      /*null*/
-            /*null*/      /*null*/      /*null*/),
+        ShapelessRecipe(
+            listOf(
+                itemList[12], /*null*/ /*null*/
+                itemList[13] /*null*/ /*null*/
+                /*null*/ /*null*/ /*null*/
+            ),
             itemList[14]
         )
     )
-
 
     private val quartzList = OreDictElement(
         amount = 1,
@@ -114,18 +123,21 @@ object RecipeData {
     )
 
     val shapedOreRecipeList = listOf(
-        ShapedOreDictRecipe(listOf(
-            itemList[15], itemList[16], itemList[15],
-            quartzList,   itemList[15], quartzList,
-            itemList[17], itemList[15], itemList[17]
+        ShapedOreDictRecipe(
+            listOf(
+                itemList[15], itemList[16], itemList[15],
+                quartzList, itemList[15], quartzList,
+                itemList[17], itemList[15], itemList[17]
             ), itemList[18]
         )
     )
 
     val shapelessOreRecipeList = listOf(
-        ShapelessOreDictRecipe(listOf(
-            OreDictElement(1, listOf(replacementList[6].oreDictName))
-        ), itemList[27])
+        ShapelessOreDictRecipe(
+            listOf(
+                OreDictElement(1, listOf(replacementList[6].oreDictName))
+            ), itemList[27]
+        )
     )
 
     // sources -> type -> recipes

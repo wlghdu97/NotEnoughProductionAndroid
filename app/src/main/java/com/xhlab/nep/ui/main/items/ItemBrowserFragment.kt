@@ -90,7 +90,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
         viewModel.navigateToDetail.observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
-                with (childFragmentManager) {
+                with(childFragmentManager) {
                     popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
@@ -105,7 +105,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
     }
 
     override fun initView() {
-        with (binding.searchView) {
+        with(binding.searchView) {
             setIconifiedByDefault(false)
             queryHint = getString(R.string.hint_search_element)
 
@@ -129,7 +129,8 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
     }
 
     private fun submitSearchResultList(list: PagedList<ElementView>?) {
-        binding.totalText.text = String.format(getString(R.string.form_matched_total), list?.size ?: 0)
+        binding.totalText.text =
+            String.format(getString(R.string.form_matched_total), list?.size ?: 0)
         elementAdapter.submitList(list)
     }
 }

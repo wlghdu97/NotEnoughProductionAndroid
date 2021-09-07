@@ -45,7 +45,7 @@ class MainActivity : DaggerAppCompatActivity(), ViewInit {
         setSupportActionBar(binding.toolbarLayout.toolbar)
 
         pagerAdapter = MainViewPagerAdapter(supportFragmentManager)
-        with (binding.viewPager) {
+        with(binding.viewPager) {
             offscreenPageLimit = 3
             adapter = pagerAdapter
         }

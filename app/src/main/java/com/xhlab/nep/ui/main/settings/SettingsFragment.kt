@@ -65,21 +65,25 @@ class SettingsFragment : PreferenceFragmentCompat() {
         viewModel.isDBLoaded.observe(this) { isLoaded ->
             dbLoaded?.isChecked = isLoaded
             dbLoaded?.setSummaryProvider {
-                getString(when (isLoaded) {
-                    true -> R.string.txt_loaded
-                    false -> R.string.txt_empty
-                })
+                getString(
+                    when (isLoaded) {
+                        true -> R.string.txt_loaded
+                        false -> R.string.txt_empty
+                    }
+                )
             }
         }
 
         viewModel.isIconLoaded.observe(this) { isLoaded ->
             iconLoaded?.isChecked = isLoaded
             iconLoaded?.setSummaryProvider {
-                getString(when {
-                    isLoaded -> R.string.txt_loaded
-                    !isLoaded && !isExternalDirectoryEmpty() -> R.string.txt_unloaded
-                    else -> R.string.txt_empty
-                })
+                getString(
+                    when {
+                        isLoaded -> R.string.txt_loaded
+                        !isLoaded && !isExternalDirectoryEmpty() -> R.string.txt_unloaded
+                        else -> R.string.txt_empty
+                    }
+                )
             }
         }
     }

@@ -22,7 +22,7 @@ class ElementNavigatorViewModel @Inject constructor(
     private val _elements = MediatorLiveData<Resource<List<ElementView>>>()
     val elements = Transformations.map(_elements) {
         if (it.isSuccessful()) {
-            if(it.data!!.size == 1) {
+            if (it.data!!.size == 1) {
                 val element = it.data!![0]
                 navigateToDetails(element.id, element.type)
                 null

@@ -37,7 +37,7 @@ class ShapedOreRecipeParser @Inject constructor(
         var outputItem: Element? = null
 
         reader.beginObject()
-        while(reader.hasNext()) {
+        while (reader.hasNext()) {
             when (reader.nextName()) {
                 "iI" -> inputItems = oreDictItemParser.parseElements(reader)
                 "o" -> outputItem = oreDictItemParser.parseElement(reader)

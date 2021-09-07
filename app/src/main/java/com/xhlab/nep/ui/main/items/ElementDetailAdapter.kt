@@ -10,13 +10,13 @@ import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
+import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
-import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 
-class ElementDetailAdapter (
+class ElementDetailAdapter(
     private val listener: ElementListener? = null
 ) : PagedListAdapter<ElementView, ElementDetailAdapter.RecipeElementViewHolder>(DiffCallback) {
 
@@ -42,8 +42,8 @@ class ElementDetailAdapter (
         notifyDataSetChanged()
     }
 
-    inner class RecipeElementViewHolder(itemView: View)
-        : BindableViewHolder<ElementView>(itemView) {
+    inner class RecipeElementViewHolder(itemView: View) :
+        BindableViewHolder<ElementView>(itemView) {
 
         private val icon: ImageView = itemView.findViewById(R.id.icon)
         private val name: TextView = itemView.findViewById(R.id.name)
@@ -69,11 +69,13 @@ class ElementDetailAdapter (
                 true -> itemView.context.getString(R.string.txt_unnamed)
                 false -> model.unlocalizedName.trim()
             }
-            type.setText(when (model.type) {
-                ITEM -> R.string.txt_item
-                FLUID -> R.string.txt_fluid
-                else -> R.string.txt_unknown
-            })
+            type.setText(
+                when (model.type) {
+                    ITEM -> R.string.txt_item
+                    FLUID -> R.string.txt_fluid
+                    else -> R.string.txt_unknown
+                }
+            )
         }
     }
 

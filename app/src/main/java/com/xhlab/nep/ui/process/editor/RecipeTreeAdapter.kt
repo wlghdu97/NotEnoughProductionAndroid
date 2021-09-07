@@ -81,7 +81,7 @@ class RecipeTreeAdapter(
                 chevron.rotation = 270f
             }
 
-            with (elementListAdapter) {
+            with(elementListAdapter) {
                 submitConnectionList(model, model.connectionList)
                 setIconVisible(isIconVisible)
                 setShowConnection(showConnection)

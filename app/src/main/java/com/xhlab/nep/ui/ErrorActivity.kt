@@ -27,7 +27,7 @@ class ErrorActivity : AppCompatActivity() {
 
         val intent = intent.getParcelableExtra<Intent>(ERROR_EXTRA_INTENT)
         binding.activityRelaunchBtn.setOnClickListener {
-            with (intent) {
+            with(intent) {
                 startActivity(this)
                 finish()
             }

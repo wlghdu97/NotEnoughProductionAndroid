@@ -35,7 +35,8 @@ fun ProcessEditViewModel.ConnectionConstraint.select(
     if (keyElement != null) {
         if (oreDictListener != null &&
             recipe !is OreChainRecipe &&
-            element.type == ElementEntity.ORE_CHAIN) {
+            element.type == ElementEntity.ORE_CHAIN
+        ) {
             val ingredient = (to.getInputs() + to.getOutput()).find {
                 (it as? ElementView)?.id == targetElementId
             }

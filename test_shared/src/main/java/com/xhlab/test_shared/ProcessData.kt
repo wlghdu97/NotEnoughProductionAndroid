@@ -12,6 +12,7 @@ import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 
+@Suppress("MagicNumber", "MaxLineLength")
 object ProcessData {
     val itemList = listOf(
         RecipeElementViewImpl(0, 1, "tile.stonebrick", "Cobblestone", 0),

@@ -18,8 +18,7 @@ class ReplacementListViewModel @Inject constructor(
     generalPreference: GeneralPreference
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    ElementListener
-{
+    ElementListener {
     val replacementList = loadReplacementListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded

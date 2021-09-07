@@ -16,7 +16,7 @@ import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import java.text.NumberFormat
-import java.util.*
+import java.util.Locale
 
 abstract class RecipeDetailViewHolder(itemView: View) : BindableViewHolder<RecipeView>(itemView) {
 

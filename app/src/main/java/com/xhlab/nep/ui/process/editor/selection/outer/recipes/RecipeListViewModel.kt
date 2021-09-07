@@ -97,8 +97,8 @@ class RecipeListViewModel @Inject constructor(
         )
     }
 
-    private fun requireElementId()
-            = element.value?.id ?: throw NullPointerException("element id is null.")
+    private fun requireElementId() =
+        element.value?.id ?: throw NullPointerException("element id is null.")
 
     fun submitElement(element: ElementView) {
         _element.postValue(Resource.success(element))

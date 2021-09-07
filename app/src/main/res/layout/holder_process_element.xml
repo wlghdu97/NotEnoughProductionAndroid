@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/name"/>
+        app:layout_constraintEnd_toStartOf="@id/name" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
@@ -34,7 +33,7 @@
         app:layout_constraintEnd_toStartOf="@id/btn_menu"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintVertical_chainStyle="packed"
-        style="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+        style="@style/TextAppearance.MaterialComponents.Subtitle1" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/unlocalized_name"
@@ -50,7 +49,7 @@
         app:layout_constraintStart_toStartOf="@id/name"
         app:layout_constraintEnd_toStartOf="@id/btn_menu"
         app:layout_constraintHorizontal_bias="0"
-        style="@style/TextAppearance.MaterialComponents.Caption"/>
+        style="@style/TextAppearance.MaterialComponents.Caption" />
 
     <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_menu"
@@ -62,6 +61,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/TextAppearance.MaterialComponents.Caption"/>
+        style="@style/TextAppearance.MaterialComponents.Caption" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -89,7 +89,7 @@ class RecipeSelectionAdapter(
 
         override fun bindNotNull(model: RecipeViewDegreeNode) {
             super.bindNotNull(model)
-            with (elementListAdapter) {
+            with(elementListAdapter) {
                 submitConnectionList(model, model.connectionList)
                 setIconVisible(isIconVisible)
                 setShowConnection(showConnection)

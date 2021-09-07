@@ -71,7 +71,8 @@ class ByproductsAdapter(
         for (element in recipe.getOutput()) {
             val connections = process.getConnectionStatus(recipe, element)
             if (connections.size == 1 &&
-                connections[0].status == Process.ConnectionStatus.UNCONNECTED) {
+                connections[0].status == Process.ConnectionStatus.UNCONNECTED
+            ) {
                 list.add(element)
             }
         }

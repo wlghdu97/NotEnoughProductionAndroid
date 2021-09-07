@@ -18,10 +18,12 @@ abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(item
     protected abstract val isIconVisible: Boolean
 
     override fun bindNotNull(model: Element) {
-        super.bindNotNull(when (model) {
-            is ElementConnection -> model.element
-            else -> model
-        })
+        super.bindNotNull(
+            when (model) {
+                is ElementConnection -> model.element
+                else -> model
+            }
+        )
 
         connectionStatus = when (model is ElementConnection) {
             true -> model.connections[min(adapterPosition, model.connections.size - 1)]

@@ -23,8 +23,8 @@ import kotlin.math.min
 
 typealias RecipeRatio = Pair<Recipe, Double>
 
-class ProcessingOrderAdapter
-    : RecyclerView.Adapter<ProcessingOrderAdapter.ProcessingOrderViewHolder>() {
+class ProcessingOrderAdapter :
+    RecyclerView.Adapter<ProcessingOrderAdapter.ProcessingOrderViewHolder>() {
 
     private val recipeList = arrayListOf<RecipeRatio>()
     private var degreeMap = hashMapOf<Recipe, Int>()
@@ -61,8 +61,8 @@ class ProcessingOrderAdapter
         }
     }
 
-    inner class ProcessingOrderViewHolder(itemView: View)
-        : BindableViewHolder<RecipeRatio>(itemView) {
+    inner class ProcessingOrderViewHolder(itemView: View) :
+        BindableViewHolder<RecipeRatio>(itemView) {
         private val label: ImageView = itemView.findViewById(R.id.degree_label)
         private val machineName: TextView = itemView.findViewById(R.id.machine_name)
         private val caption: TextView = itemView.findViewById(R.id.caption)

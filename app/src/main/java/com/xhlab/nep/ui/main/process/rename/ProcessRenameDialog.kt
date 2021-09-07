@@ -44,7 +44,7 @@ class ProcessRenameDialog : DaggerDialogFragment(), ViewInit {
     }
 
     override fun initView() {
-        with (binding.nameEdit) {
+        with(binding.nameEdit) {
             addTextChangedListener { viewModel.changeName(it.toString()) }
             requestFocus()
         }

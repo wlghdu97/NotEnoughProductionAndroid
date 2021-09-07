@@ -62,8 +62,8 @@ class ProcessEditViewModel @Inject constructor(
         )
     }
 
-    private fun requireProcessId()
-            = process.value?.id ?: throw NullPointerException("process id is null.")
+    private fun requireProcessId() =
+        process.value?.id ?: throw NullPointerException("process id is null.")
 
     override fun onDisconnect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         if (generalPreference.getShowDisconnectionAlert()) {
@@ -74,11 +74,27 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     override fun onConnectToParent(recipe: Recipe, element: ElementView, degree: Int) {
-        _connectRecipe.postValue(ConnectionConstraint(requireProcessId(), true, recipe, element, degree))
+        _connectRecipe.postValue(
+            ConnectionConstraint(
+                processId = requireProcessId(),
+                connectToParent = true,
+                recipe = recipe,
+                element = element,
+                degree = degree
+            )
+        )
     }
 
     override fun onConnectToChild(recipe: Recipe, element: ElementView, degree: Int) {
-        _connectRecipe.postValue(ConnectionConstraint(requireProcessId(), false, recipe, element, degree))
+        _connectRecipe.postValue(
+            ConnectionConstraint(
+                processId = requireProcessId(),
+                connectToParent = false,
+                recipe = recipe,
+                element = element,
+                degree = degree
+            )
+        )
     }
 
     override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
@@ -89,7 +105,7 @@ class ProcessEditViewModel @Inject constructor(
 
     private fun disconnect(payload: DisconnectionPayload) {
         launchSuspendFunction(_modificationResult) {
-            with (payload) {
+            with(payload) {
                 processRepo.disconnectRecipe(requireProcessId(), from, to, element, reversed)
             }
         }

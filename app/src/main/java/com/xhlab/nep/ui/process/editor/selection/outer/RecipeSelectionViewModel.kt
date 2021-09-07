@@ -21,8 +21,7 @@ class RecipeSelectionViewModel @Inject constructor(
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     RecipeSelectionListener,
-    OreDictRecipeSelectionListener
-{
+    OreDictRecipeSelectionListener {
     private val _constraint = MutableLiveData<ProcessEditViewModel.ConnectionConstraint>()
     val constraint: LiveData<ProcessEditViewModel.ConnectionConstraint>
         get() = _constraint
@@ -36,8 +35,8 @@ class RecipeSelectionViewModel @Inject constructor(
         _constraint.postValue(constraint)
     }
 
-    private fun requireProcessId()
-            = constraint.value?.processId ?: throw NullPointerException("process id is null.")
+    private fun requireProcessId() =
+        constraint.value?.processId ?: throw NullPointerException("process id is null.")
 
     override fun onSelect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         launchSuspendFunction(_connectionResult) {

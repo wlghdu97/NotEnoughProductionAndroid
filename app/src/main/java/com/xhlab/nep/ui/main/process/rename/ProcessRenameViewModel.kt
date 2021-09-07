@@ -44,8 +44,8 @@ class ProcessRenameViewModel @Inject constructor(
         }
     }
 
-    private fun requireProcessId()
-            = processId.value ?: throw NullPointerException("process id is null.")
+    private fun requireProcessId() =
+        processId.value ?: throw NullPointerException("process id is null.")
 
     fun changeName(name: String) {
         this._name.postValue(name)

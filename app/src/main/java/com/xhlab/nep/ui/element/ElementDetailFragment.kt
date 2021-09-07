@@ -87,13 +87,15 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
 
         val firstTab = binding.tabLayout.getTabAt(0)
         if (firstTab != null) {
-            firstTab.text = getString(when (elementType) {
-                ElementEntity.ORE_CHAIN -> R.string.tab_replacements
-                else -> R.string.tab_recipes
-            })
+            firstTab.text = getString(
+                when (elementType) {
+                    ElementEntity.ORE_CHAIN -> R.string.tab_replacements
+                    else -> R.string.tab_recipes
+                }
+            )
         }
 
-        with (binding.viewPager) {
+        with(binding.viewPager) {
             viewPagerAdapter = when (elementType) {
                 ElementEntity.ORE_CHAIN -> ReplacementListPagerAdapter(childFragmentManager)
                 else -> RecipeListPagerAdapter(childFragmentManager)

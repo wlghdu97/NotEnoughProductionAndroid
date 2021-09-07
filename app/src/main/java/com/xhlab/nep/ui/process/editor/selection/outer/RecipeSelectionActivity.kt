@@ -90,7 +90,8 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
     private fun showReplacementListFragment(elementKey: String) {
         val replacementListFragment = ReplacementListFragment().apply {
-            arguments = Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
+            arguments =
+                Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
         }
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)

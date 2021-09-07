@@ -70,11 +70,16 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
 
     private fun switchToReplacementList(elementKey: String) {
         val replacementListFragment = ReplacementListFragment().apply {
-            arguments = Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
+            arguments =
+                Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
         }
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
-            .replace(R.id.container, replacementListFragment, RecipeSelectionActivity.REPLACEMENT_LIST_TAG)
+            .replace(
+                R.id.container,
+                replacementListFragment,
+                RecipeSelectionActivity.REPLACEMENT_LIST_TAG
+            )
             .addToBackStack(null)
             .commit()
     }

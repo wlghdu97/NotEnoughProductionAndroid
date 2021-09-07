@@ -26,7 +26,7 @@ class PlainElementAdapter : ProcessElementAdapter() {
             get() = this@PlainElementAdapter.showConnection
 
         init {
-            with (itemView) {
+            with(itemView) {
                 background = null
                 isClickable = false
                 isFocusable = false
