@@ -22,8 +22,8 @@ class ElementAdapter(
         return ElementViewHolder(itemView)
     }
 
-    inner class ElementViewHolder(itemView: View)
-        : ProcessElementViewHolder(itemView), PopupMenu.OnMenuItemClickListener {
+    inner class ElementViewHolder(itemView: View) : ProcessElementViewHolder(itemView),
+        PopupMenu.OnMenuItemClickListener {
         private val menuButton: ImageButton = itemView.findViewById(R.id.btn_menu)
 
         private val popupMenu = PopupMenu(context, menuButton)
@@ -38,7 +38,7 @@ class ElementAdapter(
             get() = this@ElementAdapter.showConnection
 
         init {
-            with (popupMenu) {
+            with(popupMenu) {
                 setOnMenuItemClickListener(this@ElementViewHolder)
                 inflate(R.menu.process_element_edit)
                 disconnect = menu.findItem(R.id.menu_disconnect)
@@ -61,13 +61,16 @@ class ElementAdapter(
                 val degree = recipeNode?.degree ?: 0
                 menuButton.isGone = (it == FINAL_OUTPUT)
                 disconnect.isVisible = (it == CONNECTED_TO_PARENT || it == CONNECTED_TO_CHILD)
-                connectToParent.isVisible = (degree != 0 && (it != FINAL_OUTPUT || it != NOT_CONSUMED))
+                connectToParent.isVisible =
+                    (degree != 0 && (it != FINAL_OUTPUT || it != NOT_CONSUMED))
                 connectToChild.isVisible = (it != FINAL_OUTPUT && it != NOT_CONSUMED)
                 markNotConsumed.isVisible = (it == UNCONNECTED || it == NOT_CONSUMED)
-                markNotConsumed.setTitle(when (it == UNCONNECTED) {
-                    true -> R.string.menu_mark_not_consumed
-                    false -> R.string.menu_mark_consumed
-                })
+                markNotConsumed.setTitle(
+                    when (it == UNCONNECTED) {
+                        true -> R.string.menu_mark_not_consumed
+                        false -> R.string.menu_mark_consumed
+                    }
+                )
             }
         }
 

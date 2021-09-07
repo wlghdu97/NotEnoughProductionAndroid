@@ -22,8 +22,7 @@ class ItemBrowserViewModel @Inject constructor(
     generalPreference: GeneralPreference
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    ElementListener
-{
+    ElementListener {
     private val _elementSearchResult = elementSearchUseCase.observeOnly(Resource.Status.SUCCESS)
     val elementSearchResult = Transformations.map(_elementSearchResult) {
         if (isDBLoaded.value == true) it else null

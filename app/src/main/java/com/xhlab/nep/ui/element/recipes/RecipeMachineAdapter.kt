@@ -11,15 +11,21 @@ import com.xhlab.nep.model.recipes.view.RecipeMachineView
 import com.xhlab.nep.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 
-class RecipeMachineAdapter (
+class RecipeMachineAdapter(
     private val listener: MachineListener? = null
 ) : PagedListAdapter<RecipeMachineView, RecipeMachineAdapter.RecipeMachineViewHolder>(
     object : DiffUtil.ItemCallback<RecipeMachineView>() {
-        override fun areItemsTheSame(oldItem: RecipeMachineView, newItem: RecipeMachineView): Boolean {
+        override fun areItemsTheSame(
+            oldItem: RecipeMachineView,
+            newItem: RecipeMachineView
+        ): Boolean {
             return oldItem.machineId == newItem.machineId
         }
 
-        override fun areContentsTheSame(oldItem: RecipeMachineView, newItem: RecipeMachineView): Boolean {
+        override fun areContentsTheSame(
+            oldItem: RecipeMachineView,
+            newItem: RecipeMachineView
+        ): Boolean {
             return oldItem == newItem
         }
     }
@@ -34,8 +40,8 @@ class RecipeMachineAdapter (
         holder.bind(getItem(position))
     }
 
-    inner class RecipeMachineViewHolder(itemView: View)
-        : BindableViewHolder<RecipeMachineView>(itemView) {
+    inner class RecipeMachineViewHolder(itemView: View) :
+        BindableViewHolder<RecipeMachineView>(itemView) {
 
         private val machineName: TextView = itemView.findViewById(R.id.machine_name)
         private val modName: TextView = itemView.findViewById(R.id.mod_name)

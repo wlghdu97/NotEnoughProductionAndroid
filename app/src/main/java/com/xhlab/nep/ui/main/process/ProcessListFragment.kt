@@ -76,7 +76,11 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
             if (it.isSuccessful()) {
                 showExportStringDialog(it.data!!)
             } else if (it.throwable != null) {
-                Snackbar.make(binding.root, R.string.error_failed_to_export_string, Snackbar.LENGTH_LONG).show()
+                Snackbar.make(
+                    binding.root,
+                    R.string.error_failed_to_export_string,
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
 

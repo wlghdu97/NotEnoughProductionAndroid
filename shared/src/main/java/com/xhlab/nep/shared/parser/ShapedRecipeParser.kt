@@ -37,7 +37,7 @@ class ShapedRecipeParser @Inject constructor(
         var outputItem: Item? = null
 
         reader.beginObject()
-        while(reader.hasNext()) {
+        while (reader.hasNext()) {
             when (reader.nextName()) {
                 "iI" -> inputItems = vanillaItemParser.parseElements(reader).filterNotNull()
                 "o" -> outputItem = vanillaItemParser.parseElement(reader)

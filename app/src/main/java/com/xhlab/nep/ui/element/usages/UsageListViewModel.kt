@@ -18,8 +18,7 @@ class UsageListViewModel @Inject constructor(
     generalPreference: GeneralPreference
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    ElementListener
-{
+    ElementListener {
     val usageList = loadUsageListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded

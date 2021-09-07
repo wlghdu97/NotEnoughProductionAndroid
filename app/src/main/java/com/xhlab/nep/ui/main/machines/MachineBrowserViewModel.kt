@@ -17,8 +17,7 @@ class MachineBrowserViewModel @Inject constructor(
     private val machineResultNavigationUseCase: MachineResultNavigationUseCase
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    MachineListener
-{
+    MachineListener {
     val machineList = loadMachineListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isDBLoaded = generalPreference.isDBLoaded

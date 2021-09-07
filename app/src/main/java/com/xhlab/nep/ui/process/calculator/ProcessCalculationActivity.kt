@@ -41,7 +41,7 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
         supportActionBar?.setTitle(R.string.title_calculation_result)
 
         pagerAdapter = ProcessCalculationViewPagerAdapter(supportFragmentManager)
-        with (binding.viewPager) {
+        with(binding.viewPager) {
             offscreenPageLimit = 2
             adapter = pagerAdapter
         }

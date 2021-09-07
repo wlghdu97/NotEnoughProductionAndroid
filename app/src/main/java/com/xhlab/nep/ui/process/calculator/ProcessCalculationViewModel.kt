@@ -24,7 +24,8 @@ class ProcessCalculationViewModel @Inject constructor(
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _calculationResult = MediatorLiveData<Resource<ResourceRateCalculationUseCase.Result>>()
+    private val _calculationResult =
+        MediatorLiveData<Resource<ResourceRateCalculationUseCase.Result>>()
     val calculationResult: LiveData<Resource<ResourceRateCalculationUseCase.Result>>
         get() = _calculationResult
 

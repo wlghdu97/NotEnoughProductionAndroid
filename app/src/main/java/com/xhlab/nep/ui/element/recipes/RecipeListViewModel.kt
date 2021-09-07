@@ -17,8 +17,7 @@ class RecipeListViewModel @Inject constructor(
     private val machineRecipeListNavigationUseCase: MachineRecipeListNavigationUseCase
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    MachineListener
-{
+    MachineListener {
     private val elementId = MutableLiveData<Long>()
 
     val recipeList = loadRecipeMachineListUseCase.observeOnly(Resource.Status.SUCCESS)
@@ -42,8 +41,8 @@ class RecipeListViewModel @Inject constructor(
         )
     }
 
-    private fun requireElementId()
-            = elementId.value ?: throw NullPointerException("element id is null")
+    private fun requireElementId() =
+        elementId.value ?: throw NullPointerException("element id is null")
 
     override fun onClick(machineId: Int) {
         _navigateToRecipeList.postValue(

@@ -103,13 +103,14 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.recipe_search, menu)
         val searchMenu = menu.findItem(R.id.menu_search)
-        with (searchMenu.actionView as SearchView) {
+        with(searchMenu.actionView as SearchView) {
             queryHint = getString(R.string.hint_search_ingredient)
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     viewModel.searchIngredients(query ?: "")
                     return true
                 }
+
                 override fun onQueryTextChange(newText: String?) = false
             })
         }

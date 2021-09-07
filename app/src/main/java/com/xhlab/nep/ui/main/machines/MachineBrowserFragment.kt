@@ -55,7 +55,7 @@ class MachineBrowserFragment : DaggerFragment(), ViewInit {
         viewModel.navigateToMachineResult.observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
-                with (childFragmentManager) {
+                with(childFragmentManager) {
                     popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)

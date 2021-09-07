@@ -17,13 +17,18 @@ open class RecipeDetailAdapter(
 
     protected var isIconVisible = false
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeDetailViewHolder {
+    final override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecipeDetailViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(when (viewType) {
-                0 -> getRecipeLayoutId()
-                1 -> getMachineRecipeLayoutId()
-                else -> throw IllegalArgumentException("invalid view type.")
-            }, parent, false)
+            .inflate(
+                when (viewType) {
+                    0 -> getRecipeLayoutId()
+                    1 -> getMachineRecipeLayoutId()
+                    else -> throw IllegalArgumentException("invalid view type.")
+                }, parent, false
+            )
         return createViewHolder(view)
     }
 

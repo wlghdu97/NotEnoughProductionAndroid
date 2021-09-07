@@ -1,4 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+import io.gitlab.arturbosch.detekt.Detekt
 
 buildscript {
     ext {
@@ -37,6 +38,7 @@ buildscript {
         test_rules_version = "1.2.0"
         test_orchestrator_version = "1.2.0"
 
+        detekt_version = "1.17.1"
         jacoco_version = "0.8.1"
         jacocoEnabled = System.getProperty("jacocoEnabled") ?: "false"
 
@@ -57,6 +59,7 @@ buildscript {
         classpath "com.google.firebase:firebase-crashlytics-gradle:$crashlytics_gradle_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
     }
 }
 
@@ -65,6 +68,34 @@ allprojects {
         google()
         mavenCentral()
     }
+}
+
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+tasks.register("detektAll", Detekt) {
+    description = "Runs detekt for all modules."
+    setSource(file(projectDir))
+
+    buildUponDefaultConfig = true
+    allRules = false
+    autoCorrect = true
+    config.setFrom(files("$rootDir/detekt-config.yml"))
+    reports {
+        html.enabled = true
+        xml.enabled = false
+        txt.enabled = false
+    }
+
+    include '**/*.kt'
+    include '**/*.kts'
+    exclude 'resources/'
+    exclude 'build/'
+}
+
+tasks.detekt.jvmTarget = "1.8"
+
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$detekt_version"
 }
 
 apply plugin: 'jacoco'

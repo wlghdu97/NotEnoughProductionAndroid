@@ -21,8 +21,7 @@ class ProcessListViewModel @Inject constructor(
     generalPreference: GeneralPreference
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    ProcessListener
-{
+    ProcessListener {
     val processList = loadProcessListUseCase.observeOnly(Resource.Status.SUCCESS)
 
     val isIconLoaded = generalPreference.isIconLoaded

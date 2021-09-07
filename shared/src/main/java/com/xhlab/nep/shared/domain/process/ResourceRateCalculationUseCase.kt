@@ -11,8 +11,8 @@ import org.apache.commons.math3.optim.linear.*
 import org.apache.commons.math3.optim.nonlinear.scalar.GoalType
 import javax.inject.Inject
 
-class ResourceRateCalculationUseCase @Inject constructor()
-    : UseCase<ResourceRateCalculationUseCase.Parameter, ResourceRateCalculationUseCase.Result>() {
+class ResourceRateCalculationUseCase @Inject constructor() :
+    UseCase<ResourceRateCalculationUseCase.Parameter, ResourceRateCalculationUseCase.Result>() {
 
     override suspend fun execute(params: Parameter) = withContext(Dispatchers.IO) {
         val process = params.process

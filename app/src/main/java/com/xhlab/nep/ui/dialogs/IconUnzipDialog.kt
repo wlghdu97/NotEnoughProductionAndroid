@@ -45,17 +45,19 @@ class IconUnzipDialog : ServiceBoundDialog<IconUnzipService>(), ViewInit {
             isTaskDone = it.status != Resource.Status.LOADING
             binding.log.text = it.data?.message
             binding.progressBar.progress = it.data?.progress ?: 0
-            negativeButton?.setText(when (isTaskDone) {
-                true -> R.string.btn_close
-                false -> R.string.btn_abort
-            })
+            negativeButton?.setText(
+                when (isTaskDone) {
+                    true -> R.string.btn_close
+                    false -> R.string.btn_abort
+                }
+            )
         }
     }
 
     override fun initView() {
         val dialog = requireDialog()
 
-        with (dialog) {
+        with(dialog) {
             setCanceledOnTouchOutside(false)
             setOnShowListener {
                 val alertDialog = dialog as AlertDialog
@@ -72,12 +74,12 @@ class IconUnzipDialog : ServiceBoundDialog<IconUnzipService>(), ViewInit {
             }
         }
 
-        with (binding.progressBar) {
+        with(binding.progressBar) {
             isIndeterminate = false
             max = 100
         }
 
-        with (binding.log) {
+        with(binding.log) {
             ellipsize = TextUtils.TruncateAt.END
             maxLines = 1
         }

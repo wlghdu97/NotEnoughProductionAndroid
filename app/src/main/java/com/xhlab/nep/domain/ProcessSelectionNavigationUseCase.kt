@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import com.xhlab.nep.shared.domain.UseCase
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
 import com.xhlab.nep.ui.process.editor.selection.subprocess.ProcessSelectionActivity
 import javax.inject.Inject
 

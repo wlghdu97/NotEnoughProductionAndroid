@@ -108,7 +108,7 @@ class ProcessExportImportTest {
         )
     }
 
-    private fun checkProcessSame(newProcess: Process): Boolean{
+    private fun checkProcessSame(newProcess: Process): Boolean {
         val process = ProcessData.processPE
         return (process.id == newProcess.id &&
                 process.name == newProcess.name &&

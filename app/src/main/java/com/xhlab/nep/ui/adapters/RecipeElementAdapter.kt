@@ -24,11 +24,13 @@ open class RecipeElementAdapter(
 
     final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(when (viewType) {
-                0 -> R.layout.holder_element
-                1 -> R.layout.holder_element_ore_chain
-                else -> throw IllegalArgumentException("invalid view type.")
-            }, parent, false)
+            .inflate(
+                when (viewType) {
+                    0 -> R.layout.holder_element
+                    1 -> R.layout.holder_element_ore_chain
+                    else -> throw IllegalArgumentException("invalid view type.")
+                }, parent, false
+            )
         return createViewHolder(view)
     }
 

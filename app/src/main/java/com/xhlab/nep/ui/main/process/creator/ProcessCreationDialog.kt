@@ -52,7 +52,7 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
     }
 
     override fun initView() {
-        with (binding.nameEdit) {
+        with(binding.nameEdit) {
             addTextChangedListener { viewModel.changeProcessName(it.toString()) }
             requestFocus()
         }

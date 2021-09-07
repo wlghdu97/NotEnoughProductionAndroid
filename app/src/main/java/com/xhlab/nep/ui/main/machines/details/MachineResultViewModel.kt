@@ -4,8 +4,8 @@ import androidx.lifecycle.*
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.Machine
-import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
 import com.xhlab.nep.shared.domain.machine.LoadMachineUseCase
+import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.shared.util.isSuccessful
@@ -40,8 +40,7 @@ class MachineResultViewModel @Inject constructor(
     // to prevent DiffUtil's index out of bound
     private var searchDebounceJob: Job? = null
 
-    private fun requireMachineId()
-            = machine.value?.id ?: throw MachineIdNullPointerException()
+    private fun requireMachineId() = machine.value?.id ?: throw MachineIdNullPointerException()
 
     fun init(machineId: Int?) {
         if (machineId == null || machineId == -1) {

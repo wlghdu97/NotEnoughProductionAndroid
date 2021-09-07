@@ -48,17 +48,19 @@ class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
                 Resource.Status.LOADING -> false
                 else -> true
             }
-            with (binding.progressBar) {
+            with(binding.progressBar) {
                 isIndeterminate = !isTaskDone
-                negativeButton?.setText(when (isTaskDone) {
-                    true -> {
-                        progress = 100
-                        R.string.btn_close
+                negativeButton?.setText(
+                    when (isTaskDone) {
+                        true -> {
+                            progress = 100
+                            R.string.btn_close
+                        }
+                        false -> {
+                            R.string.btn_abort
+                        }
                     }
-                    false -> {
-                        R.string.btn_abort
-                    }
-                })
+                )
             }
         }
     }
@@ -66,7 +68,7 @@ class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
     private fun initView() {
         val dialog = requireDialog()
 
-        with (dialog) {
+        with(dialog) {
             setCanceledOnTouchOutside(false)
             setOnShowListener {
                 val alertDialog = dialog as AlertDialog

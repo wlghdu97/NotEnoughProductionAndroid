@@ -41,8 +41,8 @@ class ProcessSelectionViewModel @Inject constructor(
         )
     }
 
-    private fun requireConstraint()
-            = constraint.value ?: throw NullPointerException("constraint is null.")
+    private fun requireConstraint() =
+        constraint.value ?: throw NullPointerException("constraint is null.")
 
     override fun onClick(id: String, name: String) {
         launchSuspendFunction(_connectionResult) {

@@ -54,7 +54,7 @@ fun Context.getIconsFile(fileName: String): File {
 
 fun Context.getIcon(unlocalizedName: String): Drawable? {
     val encodedName = Base64.encodeToString(unlocalizedName.toByteArray(), Base64.NO_WRAP)
-    return Drawable.createFromPath(getIconsFile("${encodedName}.png").path)
+    return Drawable.createFromPath(getIconsFile("$encodedName.png").path)
 }
 
 fun Context.getCardBackgroundColor(): Int {
@@ -75,7 +75,9 @@ inline fun <reified T> LiveData<T?>.observeNotNull(
     lifecycleOwner: LifecycleOwner,
     crossinline block: (T) -> Unit
 ) = observe(lifecycleOwner) {
-    if (it != null) { block(it) }
+    if (it != null) {
+        block(it)
+    }
 }
 
 fun Fragment.longToast(@StringRes stringId: Int) {

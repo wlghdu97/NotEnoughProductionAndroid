@@ -12,8 +12,7 @@ class SettingsViewModel @Inject constructor(
     themeDelegate: ThemeDelegate
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
-    ThemeDelegate by themeDelegate
-{
+    ThemeDelegate by themeDelegate {
     val isFirstDBLoad = generalPreference.isFirstDBLoad
     val isDBLoaded = generalPreference.isDBLoaded
     val isIconLoaded = generalPreference.isIconLoaded

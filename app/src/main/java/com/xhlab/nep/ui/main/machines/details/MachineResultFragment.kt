@@ -88,7 +88,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
             }
         }
 
-        with (binding.searchView) {
+        with(binding.searchView) {
             setIconifiedByDefault(false)
             queryHint = getString(R.string.hint_search_element)
 

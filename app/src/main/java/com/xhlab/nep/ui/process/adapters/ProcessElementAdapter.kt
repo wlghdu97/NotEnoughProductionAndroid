@@ -47,10 +47,12 @@ abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (isHeaderPosition(position)) {
             val context = holder.itemView.context
-            (holder as HeaderViewHolder).bind(when (position == 0) {
-                true -> context.getString(R.string.txt_output)
-                false -> context.getString(R.string.txt_input)
-            })
+            (holder as HeaderViewHolder).bind(
+                when (position == 0) {
+                    true -> context.getString(R.string.txt_output)
+                    false -> context.getString(R.string.txt_input)
+                }
+            )
         } else {
             val elementPosition = getElementPosition(position)
             when (holder) {
@@ -101,14 +103,13 @@ abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
         notifyDataSetChanged()
     }
 
-    private fun isHeaderPosition(position: Int)
-            = (position == 0 || position == outputListSize + 1)
+    private fun isHeaderPosition(position: Int) = (position == 0 || position == outputListSize + 1)
 
-    private fun getElementPosition(position: Int)
-            = position - 1 - if (position > outputListSize) 1 else 0
+    private fun getElementPosition(position: Int) =
+        position - 1 - if (position > outputListSize) 1 else 0
 
-    inner class ProcessElementMultiConnectionViewHolder(itemView: View)
-        : BindableViewHolder<ElementConnection>(itemView) {
+    inner class ProcessElementMultiConnectionViewHolder(itemView: View) :
+        BindableViewHolder<ElementConnection>(itemView) {
         private val connectionList: RecyclerView = itemView.findViewById(R.id.connection_list)
         private val adapter = MultiConnectionAdapter()
 
@@ -120,8 +121,8 @@ abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
             adapter.notifyDataSetChanged()
         }
 
-        private inner class MultiConnectionAdapter
-            : RecyclerView.Adapter<ProcessElementViewHolder>() {
+        private inner class MultiConnectionAdapter :
+            RecyclerView.Adapter<ProcessElementViewHolder>() {
 
             override fun onCreateViewHolder(
                 parent: ViewGroup,

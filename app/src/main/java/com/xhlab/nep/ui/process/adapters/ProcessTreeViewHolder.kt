@@ -18,8 +18,8 @@ import com.xhlab.nep.util.formatString
 import java.text.NumberFormat
 import kotlin.math.min
 
-abstract class ProcessTreeViewHolder(itemView: View)
-    : BindableViewHolder<RecipeViewDegreeNode>(itemView) {
+abstract class ProcessTreeViewHolder(itemView: View) :
+    BindableViewHolder<RecipeViewDegreeNode>(itemView) {
 
     private val label: ImageView = itemView.findViewById(R.id.degree_label)
     private val machineName: TextView = itemView.findViewById(R.id.machine_name)

@@ -51,14 +51,15 @@ class ProcessImportDialog : DaggerDialogFragment(), ViewInit {
             val clipboardManager = requireContext()
                 .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             if (clipboardManager.hasPrimaryClip() &&
-                clipboardManager.primaryClipDescription?.hasMimeType(MIMETYPE_TEXT_PLAIN) == true) {
+                clipboardManager.primaryClipDescription?.hasMimeType(MIMETYPE_TEXT_PLAIN) == true
+            ) {
                 val text = clipboardManager.primaryClip!!.getItemAt(0)
                 binding.importEdit.setText(text.text)
                 longToast(R.string.txt_copied_from_clipboard)
             }
         }
 
-        with (binding.importEdit) {
+        with(binding.importEdit) {
             addTextChangedListener { viewModel.notifyTextChanged() }
             requestFocus()
         }

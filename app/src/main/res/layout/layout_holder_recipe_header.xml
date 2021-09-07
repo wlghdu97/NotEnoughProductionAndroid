@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_recipe_header"
@@ -18,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/element_name"/>
+        app:layout_constraintEnd_toStartOf="@id/element_name" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/element_name"
@@ -29,7 +28,7 @@
         app:layout_constraintBottom_toTopOf="@id/machine_name"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/TextAppearance.MaterialComponents.Headline6"/>
+        style="@style/TextAppearance.MaterialComponents.Headline6" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/machine_name"
@@ -41,6 +40,6 @@
         app:layout_constraintStart_toStartOf="@id/element_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        style="@style/TextAppearance.MaterialComponents.Caption"/>
+        style="@style/TextAppearance.MaterialComponents.Caption" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

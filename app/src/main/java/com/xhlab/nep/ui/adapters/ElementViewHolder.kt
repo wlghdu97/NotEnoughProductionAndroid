@@ -14,10 +14,9 @@ import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
 import java.text.NumberFormat
-import java.util.*
+import java.util.Locale
 
-open class ElementViewHolder(itemView: View)
-    : BindableViewHolder<Element>(itemView) {
+open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemView) {
 
     private val integerFormat = NumberFormat.getIntegerInstance(Locale.getDefault())
 
@@ -38,11 +37,13 @@ open class ElementViewHolder(itemView: View)
 
     override fun bindNotNull(model: Element) {
         if (model is ElementView) {
-            type?.setText(when (model.type) {
-                ElementEntity.ITEM -> R.string.txt_item
-                ElementEntity.FLUID -> R.string.txt_fluid
-                else -> R.string.txt_unknown
-            })
+            type?.setText(
+                when (model.type) {
+                    ElementEntity.ITEM -> R.string.txt_item
+                    ElementEntity.FLUID -> R.string.txt_fluid
+                    else -> R.string.txt_unknown
+                }
+            )
         }
         val nameText = getNameText(model)
         name.text = when (model.amount == 0) {
@@ -53,7 +54,7 @@ open class ElementViewHolder(itemView: View)
                 nameText
             )
         }
-        with (unlocalizedName) {
+        with(unlocalizedName) {
             maxLines = when (model is ElementView && model.type == ElementEntity.ORE_CHAIN) {
                 true -> 2
                 false -> 1
