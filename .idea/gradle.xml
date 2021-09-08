@@ -14,7 +14,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/model" />
             <option value="$PROJECT_DIR$/shared" />
-            <option value="$PROJECT_DIR$/test_shared" />
+            <option value="$PROJECT_DIR$/test-shared" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

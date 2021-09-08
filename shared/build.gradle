@@ -94,7 +94,7 @@ dependencies {
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator_version"
 
     testImplementation project(path: ':model')
-    testImplementation project(path: ':test_shared')
-    stagingImplementation project(path: ':test_shared')
-    androidTestImplementation project(path: ':test_shared')
+    testImplementation project(path: ':test-shared')
+    stagingImplementation project(path: ':test-shared')
+    androidTestImplementation project(path: ':test-shared')
 }

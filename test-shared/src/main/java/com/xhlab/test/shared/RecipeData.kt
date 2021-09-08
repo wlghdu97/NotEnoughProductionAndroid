@@ -1,15 +1,11 @@
-package com.xhlab.test_shared
+package com.xhlab.test.shared
 
 import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.model.oredict.Replacement
-import com.xhlab.nep.model.recipes.MachineRecipe
-import com.xhlab.nep.model.recipes.ShapedOreDictRecipe
-import com.xhlab.nep.model.recipes.ShapedRecipe
-import com.xhlab.nep.model.recipes.ShapelessOreDictRecipe
-import com.xhlab.nep.model.recipes.ShapelessRecipe
+import com.xhlab.nep.model.recipes.*
 
 @Suppress("MagicNumber", "MaxLineLength")
 object RecipeData {
@@ -37,9 +33,21 @@ object RecipeData {
         Item(1, "item.netherquartz", "Nether Quartz"),
         Item(1, "gt.metaitem.01.8516", "Certus Quartz"),
         Item(1, "gt.metaitem.01.8523", "Quartzite"),
-        Item(1, "item.appliedenergistics2.ItemMaterial.PurifiedCertusQuartzCrystal", "Pure Certus Quartz Crystal"),
-        Item(1, "item.appliedenergistics2.ItemMaterial.CertusQuartzCrystalCharged", "Charged Certus Quartz Crystal"),
-        Item(1, "item.appliedenergistics2.ItemMaterial.PurifiedNetherQuartzCrystal", "Pure Nether Quartz Crystal"),
+        Item(
+            1,
+            "item.appliedenergistics2.ItemMaterial.PurifiedCertusQuartzCrystal",
+            "Pure Certus Quartz Crystal"
+        ),
+        Item(
+            1,
+            "item.appliedenergistics2.ItemMaterial.CertusQuartzCrystalCharged",
+            "Charged Certus Quartz Crystal"
+        ),
+        Item(
+            1,
+            "item.appliedenergistics2.ItemMaterial.PurifiedNetherQuartzCrystal",
+            "Pure Nether Quartz Crystal"
+        ),
         Item(1, "item.appliedenergistics2.ItemMaterial.FluixCrystal", "Fluix Crystal"),
         Item(1, "gt.blockmachines.wire.steel.02", "2x Steel Wire"),
         Item(2, "gt.blockmachines.wire.steel.01", "1x Steel Wire")
@@ -53,7 +61,18 @@ object RecipeData {
         Replacement("gemQuartz", listOf(itemList[19])),
         Replacement("crystalQuartz", listOf(itemList[19])),
         Replacement("gemNetherQuartz", listOf(itemList[19])),
-        Replacement("craftingQuartz", listOf(itemList[20], itemList[21], itemList[22], itemList[19], itemList[23], itemList[24], itemList[25])),
+        Replacement(
+            "craftingQuartz",
+            listOf(
+                itemList[20],
+                itemList[21],
+                itemList[22],
+                itemList[19],
+                itemList[23],
+                itemList[24],
+                itemList[25]
+            )
+        ),
         Replacement("itemNetherQuartz", listOf(itemList[19], itemList[24])),
         Replacement("crystalNetherQuartz", listOf(itemList[19])),
         Replacement("wireGt02Steel", listOf(itemList[26]))

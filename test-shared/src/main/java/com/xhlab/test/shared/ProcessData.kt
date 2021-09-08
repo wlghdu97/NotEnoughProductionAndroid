@@ -1,4 +1,4 @@
-package com.xhlab.test_shared
+package com.xhlab.test.shared
 
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.process.Process
@@ -87,30 +87,234 @@ object ProcessData {
     )
 
     val recipeList = listOf(
-        MachineRecipeViewImpl(0, true, 10, EU.type, 16, 0, machineList[0].name, listOf(itemList[0]), listOf(itemList[2])),
-        MachineRecipeViewImpl(1, true, 10, EU.type, 16, 0, machineList[0].name, listOf(itemList[2]), listOf(itemList[1])),
-        MachineRecipeViewImpl(2, true, 0, NONE.type, 0, 3, machineList[3].name, listOf(itemList[3]), listOf(itemList[4])),
-        MachineRecipeViewImpl(3, true, 200, EU.type, 8, 1, machineList[1].name, listOf(itemList[1]), listOf(itemList[5])),
-        MachineRecipeViewImpl(4, true, 400, EU.type, 2, 1, machineList[1].name, listOf(itemList[4]), listOf(itemList[7])),
-        MachineRecipeViewImpl(5, true, 0, NONE.type, 0, 3, machineList[3].name, listOf(itemList[5], itemList[6]), listOf(itemList[8])),
-        MachineRecipeViewImpl(6, true, 200, EU.type, 16, 2, machineList[2].name, listOf(itemList[8]), listOf(itemList[9])),
+        MachineRecipeViewImpl(
+            0,
+            true,
+            10,
+            EU.type,
+            16,
+            0,
+            machineList[0].name,
+            listOf(itemList[0]),
+            listOf(itemList[2])
+        ),
+        MachineRecipeViewImpl(
+            1,
+            true,
+            10,
+            EU.type,
+            16,
+            0,
+            machineList[0].name,
+            listOf(itemList[2]),
+            listOf(itemList[1])
+        ),
+        MachineRecipeViewImpl(
+            2,
+            true,
+            0,
+            NONE.type,
+            0,
+            3,
+            machineList[3].name,
+            listOf(itemList[3]),
+            listOf(itemList[4])
+        ),
+        MachineRecipeViewImpl(
+            3,
+            true,
+            200,
+            EU.type,
+            8,
+            1,
+            machineList[1].name,
+            listOf(itemList[1]),
+            listOf(itemList[5])
+        ),
+        MachineRecipeViewImpl(
+            4,
+            true,
+            400,
+            EU.type,
+            2,
+            1,
+            machineList[1].name,
+            listOf(itemList[4]),
+            listOf(itemList[7])
+        ),
+        MachineRecipeViewImpl(
+            5,
+            true,
+            0,
+            NONE.type,
+            0,
+            3,
+            machineList[3].name,
+            listOf(itemList[5], itemList[6]),
+            listOf(itemList[8])
+        ),
+        MachineRecipeViewImpl(
+            6,
+            true,
+            200,
+            EU.type,
+            16,
+            2,
+            machineList[2].name,
+            listOf(itemList[8]),
+            listOf(itemList[9])
+        ),
 
-        MachineRecipeViewImpl(7, true, 1120, EU.type, 30, 4, machineList[4].name, listOf(itemList[10], itemList[17], fluidList[1]), listOf(itemList[16], fluidList[0])),
-        MachineRecipeViewImpl(8, true, 1200, EU.type, 120, 4, machineList[4].name, listOf(itemList[11], itemList[17], fluidList[6]), listOf(itemList[10], fluidList[3])),
-        MachineRecipeViewImpl(9, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[16], fluidList[8]), listOf(itemList[11])),
-        MachineRecipeViewImpl(10, true, 16, EU.type, 24, 6, machineList[6].name, listOf(itemList[17], fluidList[10]), listOf(fluidList[9])),
-        MachineRecipeViewImpl(11, true, 800, EU.type, 3, 7, machineList[7].name, listOf(itemList[12], fluidList[12]), listOf(fluidList[11])),
-        MachineRecipeViewImpl(12, true, 30, EU.type, 30, 6, machineList[6].name, listOf(itemList[17], fluidList[4]), listOf(fluidList[7])),
-        MachineRecipeViewImpl(13, true, 60, EU.type, 30, 4, machineList[4].name, listOf(itemList[13], fluidList[12]), listOf(itemList[16], fluidList[5])),
-        MachineRecipeViewImpl(14, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[16], fluidList[14]), listOf(itemList[13])),
-        MachineRecipeViewImpl(15, true, 60, EU.type, 8, 4, machineList[4].name, listOf(itemList[14], itemList[17], fluidList[15]), listOf(fluidList[14])),
-        MachineRecipeViewImpl(16, true, 16, EU.type, 1, 5, machineList[5].name, listOf(itemList[15]), listOf(itemList[16], fluidList[16])),
-        MachineRecipeViewImpl(17, true, 2000, EU.type, 30, 8, machineList[8].name, listOf(itemList[16], itemList[18], fluidList[13]), listOf(itemList[15], fluidList[2])),
+        MachineRecipeViewImpl(
+            7,
+            true,
+            1120,
+            EU.type,
+            30,
+            4,
+            machineList[4].name,
+            listOf(itemList[10], itemList[17], fluidList[1]),
+            listOf(itemList[16], fluidList[0])
+        ),
+        MachineRecipeViewImpl(
+            8,
+            true,
+            1200,
+            EU.type,
+            120,
+            4,
+            machineList[4].name,
+            listOf(itemList[11], itemList[17], fluidList[6]),
+            listOf(itemList[10], fluidList[3])
+        ),
+        MachineRecipeViewImpl(
+            9,
+            true,
+            16,
+            EU.type,
+            1,
+            5,
+            machineList[5].name,
+            listOf(itemList[16], fluidList[8]),
+            listOf(itemList[11])
+        ),
+        MachineRecipeViewImpl(
+            10,
+            true,
+            16,
+            EU.type,
+            24,
+            6,
+            machineList[6].name,
+            listOf(itemList[17], fluidList[10]),
+            listOf(fluidList[9])
+        ),
+        MachineRecipeViewImpl(
+            11,
+            true,
+            800,
+            EU.type,
+            3,
+            7,
+            machineList[7].name,
+            listOf(itemList[12], fluidList[12]),
+            listOf(fluidList[11])
+        ),
+        MachineRecipeViewImpl(
+            12,
+            true,
+            30,
+            EU.type,
+            30,
+            6,
+            machineList[6].name,
+            listOf(itemList[17], fluidList[4]),
+            listOf(fluidList[7])
+        ),
+        MachineRecipeViewImpl(
+            13,
+            true,
+            60,
+            EU.type,
+            30,
+            4,
+            machineList[4].name,
+            listOf(itemList[13], fluidList[12]),
+            listOf(itemList[16], fluidList[5])
+        ),
+        MachineRecipeViewImpl(
+            14,
+            true,
+            16,
+            EU.type,
+            1,
+            5,
+            machineList[5].name,
+            listOf(itemList[16], fluidList[14]),
+            listOf(itemList[13])
+        ),
+        MachineRecipeViewImpl(
+            15,
+            true,
+            60,
+            EU.type,
+            8,
+            4,
+            machineList[4].name,
+            listOf(itemList[14], itemList[17], fluidList[15]),
+            listOf(fluidList[14])
+        ),
+        MachineRecipeViewImpl(
+            16,
+            true,
+            16,
+            EU.type,
+            1,
+            5,
+            machineList[5].name,
+            listOf(itemList[15]),
+            listOf(itemList[16], fluidList[16])
+        ),
+        MachineRecipeViewImpl(
+            17,
+            true,
+            2000,
+            EU.type,
+            30,
+            8,
+            machineList[8].name,
+            listOf(itemList[16], itemList[18], fluidList[13]),
+            listOf(itemList[15], fluidList[2])
+        ),
 
-        CraftingRecipeViewImpl(18, listOf(itemList[4], itemList[20], itemList[21]), listOf(itemList[19])),
-        MachineRecipeViewImpl(19, true, 400, EU.type, 7, 9, machineList[9].name, listOf(itemList[22], fluidList[17]), listOf(itemList[23])),
+        CraftingRecipeViewImpl(
+            18,
+            listOf(itemList[4], itemList[20], itemList[21]),
+            listOf(itemList[19])
+        ),
+        MachineRecipeViewImpl(
+            19,
+            true,
+            400,
+            EU.type,
+            7,
+            9,
+            machineList[9].name,
+            listOf(itemList[22], fluidList[17]),
+            listOf(itemList[23])
+        ),
 
-        MachineRecipeViewImpl(20, true, 40, EU.type, 7, 10, machineList[10].name, listOf(itemList[25], fluidList[18]), listOf(itemList[24]))
+        MachineRecipeViewImpl(
+            20,
+            true,
+            40,
+            EU.type,
+            7,
+            10,
+            machineList[10].name,
+            listOf(itemList[25], fluidList[18]),
+            listOf(itemList[24])
+        )
     )
 
     val supplierRecipeList = listOf(
@@ -169,7 +373,12 @@ object ProcessData {
         }
 
     val processPlasticSheet: Process
-        get() = Process("process04", "Polyethylene sheet process", recipeList[20], itemList[24]).apply {
+        get() = Process(
+            "process04",
+            "Polyethylene sheet process",
+            recipeList[20],
+            itemList[24]
+        ).apply {
             markNotConsumed(recipeList[20], itemList[25])
             connectProcess(processPE, recipeList[20], fluidList[18])
         }

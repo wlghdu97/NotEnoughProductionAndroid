@@ -14,7 +14,7 @@ import com.xhlab.nep.shared.parser.process.ProcessSerializer
 import com.xhlab.nep.shared.util.LiveDataTestUtil
 import com.xhlab.nep.shared.util.MainCoroutineRule
 import com.xhlab.nep.shared.util.Resource
-import com.xhlab.test_shared.ProcessData
+import com.xhlab.test.shared.ProcessData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals

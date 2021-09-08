@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.xhlab.nep.shared.domain.process.ResourceRateCalculationUseCase
 import com.xhlab.nep.shared.tests.util.MainCoroutineRule
 import com.xhlab.nep.shared.util.Resource
-import com.xhlab.test_shared.ProcessData
+import com.xhlab.test.shared.ProcessData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Before

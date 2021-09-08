@@ -7,14 +7,14 @@ import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.oredict.Replacement
 import com.xhlab.nep.model.recipes.*
+import com.xhlab.nep.model.recipes.view.RecipeElementView
+import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepo
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
-import com.xhlab.nep.model.recipes.view.RecipeElementView
-import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.parser.*
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
@@ -25,7 +25,7 @@ import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.tests.util.LiveDataTestUtil
 import com.xhlab.nep.shared.tests.util.MainCoroutineRule
 import com.xhlab.nep.shared.util.Resource
-import com.xhlab.test_shared.RecipeData
+import com.xhlab.test.shared.RecipeData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.awaitility.Awaitility.await
@@ -131,14 +131,18 @@ class ParseRecipeUseCaseTest {
     private class FakeRecipeRepo : RecipeRepo {
         override suspend fun insertRecipes(recipes: List<Recipe>) {
             for (recipe in recipes) {
-                assertTrue(when (recipe) {
-                    is MachineRecipe -> RecipeData.machineRecipeList.contains(recipe)
-                    is ShapedRecipe -> RecipeData.shapedRecipeList.contains(recipe)
-                    is ShapelessRecipe -> RecipeData.shapelessRecipeList.contains(recipe)
-                    is ShapedOreDictRecipe -> RecipeData.shapedOreRecipeList.contains(recipe)
-                    is ShapelessOreDictRecipe -> RecipeData.shapelessOreRecipeList.contains(recipe)
-                    else -> false
-                })
+                assertTrue(
+                    when (recipe) {
+                        is MachineRecipe -> RecipeData.machineRecipeList.contains(recipe)
+                        is ShapedRecipe -> RecipeData.shapedRecipeList.contains(recipe)
+                        is ShapelessRecipe -> RecipeData.shapelessRecipeList.contains(recipe)
+                        is ShapedOreDictRecipe -> RecipeData.shapedOreRecipeList.contains(recipe)
+                        is ShapelessOreDictRecipe -> RecipeData.shapelessOreRecipeList.contains(
+                            recipe
+                        )
+                        else -> false
+                    }
+                )
             }
         }
 
