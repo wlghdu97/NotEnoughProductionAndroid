@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
-    </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="Not_Enough_Production.app" target="11" />
-      <module name="Not_Enough_Production.model" target="1.8" />
       <module name="Not_Enough_Production.shared" target="11" />
-      <module name="Not_Enough_Production.test-shared" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
