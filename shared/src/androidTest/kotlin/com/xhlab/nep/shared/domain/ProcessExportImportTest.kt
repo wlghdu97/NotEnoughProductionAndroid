@@ -11,8 +11,8 @@ import com.xhlab.nep.shared.domain.process.ExportProcessStringUseCase
 import com.xhlab.nep.shared.domain.process.ImportProcessStringUseCase
 import com.xhlab.nep.shared.parser.process.ProcessDeserializer
 import com.xhlab.nep.shared.parser.process.ProcessSerializer
-import com.xhlab.nep.shared.util.LiveDataTestUtil
-import com.xhlab.nep.shared.util.MainCoroutineRule
+import com.xhlab.nep.shared.tests.util.LiveDataTestUtil
+import com.xhlab.nep.shared.tests.util.MainCoroutineRule
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.test.shared.ProcessData
 import kotlinx.coroutines.ExperimentalCoroutinesApi

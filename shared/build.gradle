@@ -1,12 +1,82 @@
-apply plugin: 'com.android.library'
-
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
-apply plugin: 'io.gitlab.arturbosch.detekt'
+plugins {
+    id "org.jetbrains.kotlin.multiplatform"
+    id "kotlin-kapt"
+    id "com.android.library"
+    id "io.gitlab.arturbosch.detekt"
+}
 
 if (jacocoEnabled.toBoolean()) {
     apply from: rootProject.file("jacoco.gradle")
+}
+
+android {
+    configurations {
+        androidTestApi {}
+        androidTestDebugApi {}
+        androidTestReleaseApi {}
+        androidTestStagingApi {}
+        testApi {}
+        testDebugApi {}
+        testReleaseApi {}
+        testStagingApi {}
+    }
+}
+
+kotlin {
+    android()
+
+    // Block from https://github.com/cashapp/sqldelight/issues/2044#issuecomment-721299517.
+    def onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
+    if (onPhone) {
+        iosArm64("ios")
+    } else {
+        iosX64("ios")
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation project(path: ':model')
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+        }
+        androidMain.dependencies {
+            implementation 'androidx.appcompat:appcompat:1.1.0'
+            implementation 'androidx.core:core-ktx:1.1.0'
+            implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+            implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+            implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+            implementation "androidx.paging:paging-runtime:$paging_version"
+            implementation "androidx.preference:preference:$preference_version"
+
+            implementation "androidx.room:room-runtime:$room_version"
+            implementation "androidx.room:room-ktx:$room_version"
+
+            implementation "com.jakewharton.timber:timber:$timber_version"
+
+            implementation "com.google.dagger:dagger:$dagger_version"
+            implementation "com.google.dagger:dagger-android-support:$dagger_version"
+
+            implementation "com.google.code.gson:gson:$gson_version"
+            implementation "org.apache.commons:commons-math3:$math_version"
+        }
+        androidTest.dependencies {
+            implementation "junit:junit:$junit_version"
+            implementation "android.arch.core:core-testing:$core_testing_version"
+            implementation "org.mockito:mockito-core:$mockito_version"
+            implementation "org.awaitility:awaitility:$awaitibility_version"
+            implementation "org.awaitility:awaitility-kotlin:$awaitibility_version"
+            implementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_test_version"
+
+            implementation project(path: ':model')
+            implementation project(path: ':test-shared')
+        }
+        androidStagingTest.dependencies {
+            implementation project(path: ':test-shared')
+        }
+        iosMain.dependencies {
+
+        }
+    }
 }
 
 android {
@@ -40,46 +110,40 @@ android {
     }
 
     sourceSets {
-        debug.java.srcDir 'src/debugRelease/java'
-        release.java.srcDir 'src/debugRelease/java'
+        main {
+            manifest.srcFile("src/androidMain/AndroidManifest.xml")
+            java.srcDirs("src/androidMain/kotlin")
+            res.srcDirs("src/androidMain/res")
+        }
+        test {
+            java.srcDirs("src/androidTest/kotlin")
+            res.srcDirs("src/androidTest/res")
+        }
+        debug {
+            java.srcDirs("src/androidDebugRelease/kotlin")
+            res.srcDirs("src/androidDebugRelease/res")
+        }
+        release {
+            java.srcDirs("src/androidDebugRelease/kotlin")
+            res.srcDirs("src/androidDebugRelease/res")
+        }
+        staging {
+            java.srcDirs("src/androidStaging/kotlin")
+            res.srcDirs("src/androidStaging/res")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':model')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
-    implementation "androidx.paging:paging-runtime:$paging_version"
-    implementation "androidx.preference:preference:$preference_version"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_compiler_version"
 
-    implementation "com.jakewharton.timber:timber:$timber_version"
-
-    implementation "com.google.dagger:dagger:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
-
-    implementation "com.google.code.gson:gson:$gson_version"
-    implementation "org.apache.commons:commons-math3:$math_version"
-
-    testImplementation "junit:junit:$junit_version"
-    testImplementation "android.arch.core:core-testing:$core_testing_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.awaitility:awaitility:$awaitibility_version"
-    testImplementation "org.awaitility:awaitility-kotlin:$awaitibility_version"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_test_version"
 
     androidTestImplementation "org.mockito:mockito-android:$mockito_version"
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
@@ -93,8 +157,5 @@ dependencies {
 
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator_version"
 
-    testImplementation project(path: ':model')
-    testImplementation project(path: ':test-shared')
-    stagingImplementation project(path: ':test-shared')
     androidTestImplementation project(path: ':test-shared')
 }
