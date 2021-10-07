@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 app/jacoco.exec
+shared/swiftpackage
