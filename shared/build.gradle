@@ -2,6 +2,7 @@ plugins {
     id "org.jetbrains.kotlin.multiplatform"
     id "kotlin-kapt"
     id "com.android.library"
+    id "dev.icerock.mobile.multiplatform-resources"
     id "com.chromaticnoise.multiplatform-swiftpackage" version "2.0.3"
     id "io.gitlab.arturbosch.detekt"
 }
@@ -32,13 +33,22 @@ kotlin {
         iosArm64("ios") {
             binaries.framework {
                 baseName = "Shared"
+                isStatic = true
             }
         }
     } else {
         iosX64("ios") {
             binaries.framework {
                 baseName = "Shared"
+                isStatic = true
             }
+        }
+    }
+
+    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget).all {
+        binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework).all {
+            export "dev.icerock.moko:resources:$resources_version"
+            transitiveExport = true
         }
     }
 
@@ -46,6 +56,7 @@ kotlin {
         commonMain.dependencies {
             implementation project(path: ':model')
             implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+            api "dev.icerock.moko:resources:$resources_version"
         }
         androidMain.dependencies {
             implementation 'androidx.appcompat:appcompat:1.1.0'
@@ -167,6 +178,11 @@ dependencies {
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator_version"
 
     androidTestImplementation project(path: ':test-shared')
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.xhlab.nep"
+    disableStaticFrameworkWarning = true
 }
 
 multiplatformSwiftPackage {

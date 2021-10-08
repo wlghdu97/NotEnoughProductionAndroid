@@ -10,7 +10,7 @@ import Shared
 
 struct ContentView: View {
     var body: some View {
-        Text(Greet().greet())
+        Text(MR.strings().app_name.desc().localized())
             .padding()
     }
 }

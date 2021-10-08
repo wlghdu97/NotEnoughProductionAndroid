@@ -24,6 +24,7 @@
 		C47C0A9B270D835A009A6A4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C47C0AA5270D9E60009A6A4F /* Shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Shared.xcframework; path = ../../shared/swiftpackage/Shared.xcframework; sourceTree = "<group>"; };
+		C49D93EB270EF9F40057BB63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C6FC1DA07691A09C62C2FCC1 /* Pods-NotEnoughProduction.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotEnoughProduction.debug.xcconfig"; path = "Target Support Files/Pods-NotEnoughProduction/Pods-NotEnoughProduction.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +63,7 @@
 		C47C0A96270D8358009A6A4F /* NotEnoughProduction */ = {
 			isa = PBXGroup;
 			children = (
+				C49D93EB270EF9F40057BB63 /* Info.plist */,
 				C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */,
 				C47C0A99270D8358009A6A4F /* ContentView.swift */,
 				C47C0A9B270D835A009A6A4F /* Assets.xcassets */,
@@ -105,6 +107,7 @@
 				0A7F0474FE11FF558BC113B4 /* [CP] Check Pods Manifest.lock */,
 				C47C0A90270D8358009A6A4F /* Sources */,
 				C47C0A91270D8358009A6A4F /* Frameworks */,
+				C49D93ED270EFA200057BB63 /* Copy Resources */,
 				C47C0A92270D8358009A6A4F /* Resources */,
 				C47C0AAC270DA508009A6A4F /* Lint */,
 			);
@@ -202,6 +205,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >\"${PODS_ROOT}/SwiftLint/swiftlint\"; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+		C49D93ED270EFA200057BB63 /* Copy Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$SRCROOT/../../gradlew\" -p \"$SRCROOT/../../\" :shared:copyFrameworkResourcesToApp \\\n    -Pmoko.resources.PLATFORM_NAME=$PLATFORM_NAME \\\n    -Pmoko.resources.CONFIGURATION=$CONFIGURATION \\\n    -Pmoko.resources.BUILT_PRODUCTS_DIR=$BUILT_PRODUCTS_DIR \\\n    -Pmoko.resources.CONTENTS_FOLDER_PATH=$CONTENTS_FOLDER_PATH\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -347,12 +368,15 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../shared/swiftpackage";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotEnoughProduction/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				"KOTLIN_TARGET[sdk=iphoneos*]" = ios_arm64;
+				"KOTLIN_TARGET[sdk=iphonesimulator*]" = ios_x64;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -379,12 +403,15 @@
 				ENABLE_PREVIEWS = YES;
 				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../shared/swiftpackage";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotEnoughProduction/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				"KOTLIN_TARGET[sdk=iphoneos*]" = ios_arm64;
+				"KOTLIN_TARGET[sdk=iphonesimulator*]" = ios_x64;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

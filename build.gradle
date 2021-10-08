@@ -38,6 +38,8 @@ buildscript {
         test_rules_version = "1.2.0"
         test_orchestrator_version = "1.2.0"
 
+        resources_version = "0.17.2"
+
         detekt_version = "1.17.1"
         jacoco_version = "0.8.1"
         jacocoEnabled = System.getProperty("jacocoEnabled") ?: "false"
@@ -49,6 +51,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 
     dependencies {
@@ -59,6 +62,7 @@ buildscript {
         classpath "com.google.firebase:firebase-crashlytics-gradle:$crashlytics_gradle_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath "dev.icerock.moko:resources-generator:$resources_version"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
     }
 }
