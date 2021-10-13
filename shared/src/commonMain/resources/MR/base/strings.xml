@@ -112,30 +112,17 @@
     <string name="txt_process_reference">Process Reference</string>
     <string name="txt_unknown_recipe">Unknown recipe</string>
 
-    <string name="txt_db_not_loaded">
-        DB is not loaded.
-        \nPlease import your recEx json file.
+    <string name="txt_db_not_loaded">DB is not loaded.\nPlease import your recEx json file.</string>
+    <string name="txt_parse_json">Previous DB data will be erased.\nThis job may take longer than 4
+        minutes.
     </string>
-    <string name="txt_parse_json">
-        Previous DB data will be erased.
-        \nThis job may take longer than 4 minutes.
+    <string name="txt_unzip_icon">Previous icons will be erased.\nThis job may take longer than 4
+        minutes.
     </string>
-    <string name="txt_unzip_icon">
-        Previous icons will be erased.
-        \nThis job may take longer than 4 minutes.
-    </string>
-    <string name="txt_load_new_db">
-        Parsing new json will replace existing DB.
-    </string>
-    <string name="txt_load_new_icons">
-        Loading new icons will replace existing icon files.
-    </string>
-    <string name="txt_replacement_list_info">
-        Press back to go back to ore dictionary list.
-    </string>
-    <string name="txt_disconnect_recipe">
-        This will automatically remove unused recipes.
-    </string>
+    <string name="txt_load_new_db">Parsing new json will replace existing DB.</string>
+    <string name="txt_load_new_icons">Loading new icons will replace existing icon files.</string>
+    <string name="txt_replacement_list_info">Press back to go back to ore dictionary list.</string>
+    <string name="txt_disconnect_recipe">This will automatically remove unused recipes.</string>
     <string name="txt_do_not_show_again">Do not show again</string>
     <string name="txt_invalid_uri">Invalid file uri.</string>
     <string name="txt_name_empty">Name must not be empty.</string>
