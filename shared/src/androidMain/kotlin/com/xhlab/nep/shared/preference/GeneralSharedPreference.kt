@@ -2,14 +2,13 @@ package com.xhlab.nep.shared.preference
 
 import android.app.Application
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
-import com.xhlab.nep.shared.R
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class GeneralSharedPreference @Inject constructor(
-    private val app: Application
+    app: Application
 ) : GeneralPreference, SharedPreferences.OnSharedPreferenceChangeListener {
 
     private val preference = PreferenceManager
@@ -17,80 +16,81 @@ class GeneralSharedPreference @Inject constructor(
             registerOnSharedPreferenceChangeListener(this@GeneralSharedPreference)
         }
 
-    private val _isFirstDBLoad = MutableLiveData<Boolean>(getFirstDBLoad())
-    override val isFirstDBLoad: LiveData<Boolean>
+    private val _isFirstDBLoad = MutableStateFlow(getFirstDBLoad())
+    override val isFirstDBLoad: StateFlow<Boolean>
         get() = _isFirstDBLoad
 
-    private val _isDBLoaded = MutableLiveData<Boolean>(getDBLoaded())
-    override val isDBLoaded: LiveData<Boolean>
+    private val _isDBLoaded = MutableStateFlow(getDBLoaded())
+    override val isDBLoaded: StateFlow<Boolean>
         get() = _isDBLoaded
 
-    private val _isIconLoaded = MutableLiveData<Boolean>(getIconLoaded())
-    override val isIconLoaded: LiveData<Boolean>
+    private val _isIconLoaded = MutableStateFlow(getIconLoaded())
+    override val isIconLoaded: StateFlow<Boolean>
         get() = _isIconLoaded
 
-    private val _isDarkTheme = MutableLiveData<Boolean?>(getDarkTheme())
-    override val isDarkTheme: LiveData<Boolean?>
+    private val _isDarkTheme = MutableStateFlow(getDarkTheme())
+    override val isDarkTheme: StateFlow<Boolean?>
         get() = _isDarkTheme
 
-    private val _showDisconnectionAlert = MutableLiveData<Boolean>(getShowDisconnectionAlert())
-    override val showDisconnectionAlert: LiveData<Boolean>
+    private val _showDisconnectionAlert = MutableStateFlow(getShowDisconnectionAlert())
+    override val showDisconnectionAlert: StateFlow<Boolean>
         get() = _showDisconnectionAlert
 
     override fun getFirstDBLoad(): Boolean {
-        return preference.getBoolean(app.getString(R.string.key_db_first_load), true)
+        return preference.getBoolean(GeneralPreference.KEY_DB_FIRST_LOAD, true)
     }
 
     override fun getDBLoaded(): Boolean {
-        return preference.getBoolean(app.getString(R.string.key_db_status), false)
+        return preference.getBoolean(GeneralPreference.KEY_DB_STATUS, false)
     }
 
     override fun getIconLoaded(): Boolean {
-        return preference.getBoolean(app.getString(R.string.key_icon_status), false)
+        return preference.getBoolean(GeneralPreference.KEY_ICON_STATUS, false)
     }
 
     override fun getDarkTheme(): Boolean {
-        return preference.getBoolean(app.getString(R.string.key_theme), false)
+        return preference.getBoolean(GeneralPreference.KEY_THEME, false)
     }
 
     override fun getShowDisconnectionAlert(): Boolean {
-        return preference.getBoolean(app.getString(R.string.key_show_disconnection_alert), true)
+        return preference.getBoolean(GeneralPreference.KEY_SHOW_DISCONNECTION_ALERT, true)
     }
 
     override fun setDBLoaded(value: Boolean) {
         preference.edit()
-            .putBoolean(app.getString(R.string.key_db_status), value)
-            .putBoolean(app.getString(R.string.key_db_first_load), false)
+            .putBoolean(GeneralPreference.KEY_DB_STATUS, value)
+            .putBoolean(GeneralPreference.KEY_DB_FIRST_LOAD, false)
             .apply()
-        _isDBLoaded.postValue(value)
+        _isDBLoaded.value = value
     }
 
     override fun setIconLoaded(value: Boolean) {
-        preference.edit().putBoolean(app.getString(R.string.key_icon_status), value).apply()
-        _isIconLoaded.postValue(value)
+        preference.edit().putBoolean(GeneralPreference.KEY_ICON_STATUS, value).apply()
+        _isIconLoaded.value = value
     }
 
     override fun setDarkTheme(value: Boolean) {
-        preference.edit().putBoolean(app.getString(R.string.key_theme), value).apply()
-        _isDarkTheme.postValue(value)
+        preference.edit().putBoolean(GeneralPreference.KEY_THEME, value).apply()
+        _isDarkTheme.value = value
     }
 
     override fun setShowDisconnectionAlert(value: Boolean) {
-        preference.edit().putBoolean(app.getString(R.string.key_show_disconnection_alert), value).apply()
-        _showDisconnectionAlert.postValue(value)
+        preference.edit().putBoolean(GeneralPreference.KEY_SHOW_DISCONNECTION_ALERT, value)
+            .apply()
+        _showDisconnectionAlert.value = value
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         when (key) {
-            app.getString(R.string.key_db_first_load) ->
+            GeneralPreference.KEY_DB_FIRST_LOAD ->
                 _isFirstDBLoad.value = getFirstDBLoad()
-            app.getString(R.string.key_db_status) ->
+            GeneralPreference.KEY_DB_STATUS ->
                 _isDBLoaded.value = getDBLoaded()
-            app.getString(R.string.key_icon_status) ->
+            GeneralPreference.KEY_ICON_STATUS ->
                 _isIconLoaded.value = getIconLoaded()
-            app.getString(R.string.key_theme) ->
+            GeneralPreference.KEY_THEME ->
                 _isDarkTheme.value = getDarkTheme()
-            app.getString(R.string.key_show_disconnection_alert) ->
+            GeneralPreference.KEY_SHOW_DISCONNECTION_ALERT ->
                 _showDisconnectionAlert.value = getShowDisconnectionAlert()
         }
     }

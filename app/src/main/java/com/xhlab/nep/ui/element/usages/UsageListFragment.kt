@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
@@ -64,7 +65,7 @@ class UsageListFragment : DaggerFragment(), ViewInit {
             usageAdapter.submitList(it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             usageAdapter.setIconVisibility(isLoaded)
         }
 

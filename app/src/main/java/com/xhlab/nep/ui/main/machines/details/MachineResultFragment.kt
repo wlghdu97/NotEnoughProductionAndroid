@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineResultBinding
@@ -58,7 +59,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
             adapter.submitList(it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             adapter.setIconVisibility(isLoaded)
         }
 

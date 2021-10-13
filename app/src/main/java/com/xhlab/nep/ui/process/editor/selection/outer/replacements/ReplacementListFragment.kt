@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentReplacementListSelectionBinding
@@ -58,7 +59,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
             elementAdapter.submitList(it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             elementAdapter.setIconVisibility(isLoaded)
         }
 

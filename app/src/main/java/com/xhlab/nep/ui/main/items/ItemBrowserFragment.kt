@@ -8,6 +8,7 @@ import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import androidx.paging.PagedList
 import com.xhlab.nep.R
@@ -59,7 +60,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             this.listener = viewModel
         }
 
-        viewModel.isDBLoaded.observe(this) {
+        viewModel.isDBLoaded.asLiveData().observe(this) {
             with(binding) {
                 elementList.isGone = !it
                 totalText.isGone = !it
@@ -79,7 +80,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             viewModel.searchElements("")
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             elementAdapter.setIconVisibility(isLoaded)
         }
 

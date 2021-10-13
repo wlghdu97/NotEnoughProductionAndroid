@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -58,11 +59,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
             updateGlobalTheme(it)
         }
 
-        viewModel.isFirstDBLoad.observe(this) {
+        viewModel.isFirstDBLoad.asLiveData().observe(this) {
             isFirstDBLoad = it
         }
 
-        viewModel.isDBLoaded.observe(this) { isLoaded ->
+        viewModel.isDBLoaded.asLiveData().observe(this) { isLoaded ->
             dbLoaded?.isChecked = isLoaded
             dbLoaded?.setSummaryProvider {
                 getString(
@@ -74,7 +75,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             iconLoaded?.isChecked = isLoaded
             iconLoaded?.setSummaryProvider {
                 getString(

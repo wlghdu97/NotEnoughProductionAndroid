@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
@@ -52,7 +53,7 @@ class BaseIngredientsFragment : DaggerFragment(), ViewInit {
         calculationViewModel = requireActivity().viewModelProvider(viewModelFactory)
         viewModel = viewModelProvider(viewModelFactory)
 
-        calculationViewModel.isIconLoaded.observe(this) {
+        calculationViewModel.isIconLoaded.asLiveData().observe(this) {
             adapter.setIconVisibility(it)
         }
 

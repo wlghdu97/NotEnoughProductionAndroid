@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
@@ -76,7 +77,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             binding.emptyText.isGone = it?.isEmpty() != true
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             recipeAdapter.setIconVisibility(isLoaded)
         }
     }

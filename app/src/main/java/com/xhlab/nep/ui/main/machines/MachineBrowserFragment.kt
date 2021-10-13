@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineBrowserBinding
@@ -43,7 +44,7 @@ class MachineBrowserFragment : DaggerFragment(), ViewInit {
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
 
-        viewModel.isDBLoaded.observe(this) {
+        viewModel.isDBLoaded.asLiveData().observe(this) {
             binding.machineList.isGone = !it
             binding.dbNotLoadedText.isGone = it
         }

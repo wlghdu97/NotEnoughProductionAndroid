@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.main.process.creator.browser.details
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
@@ -63,7 +64,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             recipeAdapter.submitList(it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             recipeAdapter.setIconVisibility(isLoaded)
         }
     }

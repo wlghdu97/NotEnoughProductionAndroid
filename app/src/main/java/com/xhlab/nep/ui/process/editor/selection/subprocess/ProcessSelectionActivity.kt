@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.process.editor.selection.subprocess
 
 import android.os.Bundle
 import androidx.core.view.isGone
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
@@ -50,7 +51,7 @@ class ProcessSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             binding.emptyText.isGone = it?.isEmpty() != true
         }
 
-        viewModel.isIconLoaded.observe(this) {
+        viewModel.isIconLoaded.asLiveData().observe(this) {
             processAdapter.setIconVisibility(it)
         }
 

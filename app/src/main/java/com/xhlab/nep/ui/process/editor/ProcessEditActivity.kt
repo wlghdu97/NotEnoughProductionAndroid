@@ -6,6 +6,7 @@ import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.CheckBox
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -76,7 +77,7 @@ class ProcessEditActivity :
             processTreeAdapter.submitProcess(it)
         }
 
-        viewModel.isIconLoaded.observe(this) {
+        viewModel.isIconLoaded.asLiveData().observe(this) {
             processTreeAdapter.setIconVisible(it)
         }
 

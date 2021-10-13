@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -60,7 +61,7 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
 
-        viewModel.isIconLoaded.observe(this) {
+        viewModel.isIconLoaded.asLiveData().observe(this) {
             processAdapter.setIconVisibility(it)
         }
 

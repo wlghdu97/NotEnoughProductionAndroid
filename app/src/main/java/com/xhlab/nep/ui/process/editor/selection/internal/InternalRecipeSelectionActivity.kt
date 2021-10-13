@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isGone
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
@@ -55,7 +56,7 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             processTreeAdapter.setConnectionConstraint(it)
         }
 
-        viewModel.isIconLoaded.observe(this) {
+        viewModel.isIconLoaded.asLiveData().observe(this) {
             processTreeAdapter.setIconVisible(it)
         }
 
