@@ -1,0 +1,12 @@
+CREATE TABLE replacement (
+    name TEXT NOT NULL,
+    element_id INTEGER NOT NULL,
+    PRIMARY KEY (name, element_id),
+    FOREIGN KEY (element_id) REFERENCES element (id) ON UPDATE NO ACTION ON DELETE CASCADE
+);
+
+CREATE INDEX index_replacement_element_id ON replacement (element_id);
+
+insert:
+INSERT OR IGNORE INTO replacement
+VALUES (?, ?);

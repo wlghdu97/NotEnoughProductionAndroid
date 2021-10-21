@@ -2,6 +2,7 @@ plugins {
     id "org.jetbrains.kotlin.multiplatform"
     id "kotlin-kapt"
     id "com.android.library"
+    id "com.squareup.sqldelight"
     id "dev.icerock.mobile.multiplatform-resources"
     id "com.chromaticnoise.multiplatform-swiftpackage" version "2.0.3"
     id "io.gitlab.arturbosch.detekt"
@@ -70,6 +71,8 @@ kotlin {
             implementation "androidx.room:room-runtime:$room_version"
             implementation "androidx.room:room-ktx:$room_version"
 
+            implementation "com.squareup.sqldelight:android-driver:$sqldelight_version"
+
             implementation "com.jakewharton.timber:timber:$timber_version"
 
             implementation "com.google.dagger:dagger:$dagger_version"
@@ -94,7 +97,7 @@ kotlin {
             implementation project(path: ':test-shared')
         }
         iosMain.dependencies {
-
+            implementation "com.squareup.sqldelight:native-driver:$sqldelight_version"
         }
     }
 }
@@ -178,6 +181,19 @@ dependencies {
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator_version"
 
     androidTestImplementation project(path: ':test-shared')
+}
+
+sqldelight {
+    Nep {
+        packageName = "com.xhlab.nep.shared.db"
+        sourceFolders = ["db/nep"]
+        linkSqlite = false
+    }
+    NepProcess {
+        packageName = "com.xhlab.nep.shared.db"
+        sourceFolders = ["db/process"]
+        linkSqlite = false
+    }
 }
 
 multiplatformResources {

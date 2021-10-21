@@ -1,0 +1,17 @@
+CREATE TABLE ore_dict_chain (
+    chain_element_id INTEGER NOT NULL,
+    element_id INTEGER NOT NULL,
+    PRIMARY KEY (chain_element_id, element_id),
+    FOREIGN KEY (element_id) REFERENCES element (id) ON UPDATE NO ACTION ON DELETE CASCADE
+);
+
+CREATE INDEX index_ore_dict_chain_element_id ON ore_dict_chain (element_id);
+
+getOreDictChainId:
+SELECT chain_element_id FROM ore_dict_chain
+INNER JOIN element ON element.unlocalized_name IN (:unlocalizedNameList)
+WHERE element_id = element.id;
+
+insert:
+INSERT OR IGNORE INTO ore_dict_chain
+VALUES (?, ?);

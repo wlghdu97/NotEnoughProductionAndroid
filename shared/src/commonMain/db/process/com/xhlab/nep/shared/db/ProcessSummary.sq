@@ -1,0 +1,27 @@
+CREATE VIEW process_summary AS
+SELECT
+process.process_id,
+process.name,
+process.unlocalized_name,
+process.localized_name,
+process.amount,
+process.node_count
+FROM process;
+
+getProcesses:
+SELECT * FROM process_summary
+ORDER BY process_summary.name ASC
+LIMIT :limit OFFSET :offset;
+
+getProcessCount:
+SELECT COUNT(*) FROM process_summary;
+
+getProcessesByTarget:
+SELECT * FROM process_summary
+WHERE process_summary.unlocalized_name = :targetElementKey
+ORDER BY process_summary.name ASC
+LIMIT :limit OFFSET :offset;
+
+getProcessCountByTarget:
+SELECT COUNT(*) FROM process_summary
+WHERE process_summary.unlocalized_name = :targetElementKey;

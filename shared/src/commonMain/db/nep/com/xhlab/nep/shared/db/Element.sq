@@ -1,0 +1,109 @@
+CREATE TABLE element (
+    id INTEGER NOT NULL PRIMARY KEY,
+    unlocalized_name TEXT NOT NULL,
+    localized_name TEXT NOT NULL,
+    type INTEGER AS Int NOT NULL
+);
+
+CREATE UNIQUE INDEX index_element_unlocalized_name_localized_name ON element (unlocalized_name, localized_name);
+
+getRecipeMachinesByElement:
+SELECT
+machines.id AS machineId,
+machines.name AS machineName,
+machines.mod_name AS modName,
+machines.recipeCount AS recipeCount
+FROM (
+    SELECT machine.id, machine.name, machine.mod_name,
+    COUNT(DISTINCT machine_recipe.recipe_id) AS recipeCount FROM machine_recipe
+    INNER JOIN machine ON machine.id = machine_recipe.machine_id
+    INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+    WHERE machine_recipe.recipe_id = recipe_result.recipe_id
+    GROUP BY machine.id
+    UNION ALL
+    SELECT -1 AS id, "Crafting Table" AS name, "minecraft" AS mod_name,
+    COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
+    INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+    WHERE recipe.recipe_id = recipe_result.recipe_id
+	GROUP BY NULL
+) AS machines
+LIMIT :limit OFFSET :offset;
+
+getRecipeMachineCountByElement:
+SELECT COUNT(*)
+FROM (
+    SELECT machine.id, machine.name, machine.mod_name,
+    COUNT(DISTINCT machine_recipe.recipe_id) AS recipeCount FROM machine_recipe
+    INNER JOIN machine ON machine.id = machine_recipe.machine_id
+    INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+    WHERE machine_recipe.recipe_id = recipe_result.recipe_id
+    GROUP BY machine.id
+    UNION ALL
+    SELECT -1 AS id, "Crafting Table" AS name, "minecraft" AS mod_name,
+    COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
+    INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+    WHERE recipe.recipe_id = recipe_result.recipe_id
+	GROUP BY NULL
+) AS machines;
+
+getUsageMachinesByElement:
+SELECT
+machines.id AS machineId,
+machines.name AS machineName,
+machines.mod_name AS modName,
+machines.recipeCount AS recipeCount
+FROM (
+    SELECT machine.id, machine.name, machine.mod_name,
+    COUNT(DISTINCT machine_recipe.recipe_id) AS recipeCount FROM machine_recipe
+    INNER JOIN machine ON machine.id = machine_recipe.machine_id
+    WHERE machine_recipe.target_item_id = :elementId
+    GROUP BY machine.id
+    UNION ALL
+    SELECT -1 AS id, "Crafting Table" AS name, "minecraft" AS mod_name,
+    COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
+    WHERE recipe.target_item_id = :elementId
+	GROUP BY NULL
+) AS machines
+LIMIT :limit OFFSET :offset;
+
+getUsageMachineCountByElement:
+SELECT COUNT(*)
+FROM (
+    SELECT machine.id, machine.name, machine.mod_name,
+    COUNT(DISTINCT machine_recipe.recipe_id) AS recipeCount FROM machine_recipe
+    INNER JOIN machine ON machine.id = machine_recipe.machine_id
+    WHERE machine_recipe.target_item_id = :elementId
+    GROUP BY machine.id
+    UNION ALL
+    SELECT -1 AS id, "Crafting Table" AS name, "minecraft" AS mod_name,
+    COUNT(DISTINCT recipe.recipe_id) AS recipeCount FROM recipe
+    WHERE recipe.target_item_id = :elementId
+	GROUP BY NULL
+) AS machines;
+
+getOreDictsByElement:
+SELECT element.unlocalized_name AS ore_dict_name FROM element
+INNER JOIN ore_dict_chain ON ore_dict_chain.chain_element_id = :elementId
+WHERE element.id = ore_dict_chain.element_id
+LIMIT :limit OFFSET :offset;
+
+getOreDictCountByElement:
+SELECT COUNT(element.unlocalized_name) FROM element
+INNER JOIN ore_dict_chain ON ore_dict_chain.chain_element_id = :elementId
+WHERE element.id = ore_dict_chain.element_id;
+
+getIds:
+SELECT element.id FROM element
+WHERE element.unlocalized_name = :unlocalizedName;
+
+getOreDictChainIds:
+SELECT chain_element_id FROM ore_dict_chain
+INNER JOIN element ON element.unlocalized_name IN ?
+WHERE element_id = element.id;
+
+insert:
+INSERT OR IGNORE INTO element
+VALUES ?;
+
+deleteAll:
+DELETE FROM element;
