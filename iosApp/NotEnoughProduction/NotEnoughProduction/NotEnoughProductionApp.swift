@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
+import Shared
 
 @main
 struct NotEnoughProductionApp: App {
+
+    init() {
+        LoggerInitializer().initialize()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

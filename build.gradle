@@ -41,6 +41,7 @@ buildscript {
         resources_version = "0.17.2"
         mobile_infrastructure_version = "0.5.0"
         sqldelight_version = "1.5.2"
+        kermit_version = "1.0.0-rc4"
 
         detekt_version = "1.17.1"
         jacoco_version = "0.8.1"
