@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
@@ -16,6 +18,7 @@ import com.xhlab.nep.ui.recipe.MachineRecipeListFragment
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -52,16 +55,10 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         viewModel.init(arguments?.getLong(ELEMENT_ID))
 
         // update parent tab item title
-        viewModel.recipeList.observe(this) {
-            val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
-            tabLayout?.getTabAt(0)?.text = requireContext().formatString(
-                R.string.form_tab_recipes,
-                it?.size ?: 0
-            )
-        }
-
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
         viewModel.navigateToRecipeList.observe(this) {
@@ -80,5 +77,15 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         binding.recipeList.adapter = recipeAdapter
+
+        recipeAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
+                tabLayout?.getTabAt(0)?.text = requireContext().formatString(
+                    R.string.form_tab_recipes,
+                    recipeAdapter.itemCount
+                )
+            }
+        }
     }
 }

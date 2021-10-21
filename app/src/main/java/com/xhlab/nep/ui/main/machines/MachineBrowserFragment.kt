@@ -15,6 +15,7 @@ import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.machines.details.MachineResultFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class MachineBrowserFragment : DaggerFragment(), ViewInit {
@@ -49,8 +50,10 @@ class MachineBrowserFragment : DaggerFragment(), ViewInit {
             binding.dbNotLoadedText.isGone = it
         }
 
-        viewModel.machineList.observe(this) {
-            machineAdapter.submitList(it)
+        viewModel.machineList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            machineAdapter.submitData(lifecycle, it)
         }
 
         viewModel.navigateToMachineResult.observe(this) {

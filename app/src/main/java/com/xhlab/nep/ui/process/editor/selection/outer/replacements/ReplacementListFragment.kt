@@ -17,6 +17,7 @@ import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class ReplacementListFragment : DaggerFragment(), ViewInit {
@@ -55,8 +56,10 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
             (activity as? AppCompatActivity)?.supportActionBar?.subtitle = unlocalizedName
         }
 
-        viewModel.replacementList.observe(this) {
-            elementAdapter.submitList(it)
+        viewModel.replacementList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            elementAdapter.submitData(lifecycle, it)
         }
 
         viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->

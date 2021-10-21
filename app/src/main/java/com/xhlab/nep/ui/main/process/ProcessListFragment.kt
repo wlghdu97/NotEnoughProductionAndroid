@@ -23,6 +23,7 @@ import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCES
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCESS_NAME
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class ProcessListFragment : DaggerFragment(), ViewInit {
@@ -65,8 +66,10 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
             processAdapter.setIconVisibility(it)
         }
 
-        viewModel.processList.observe(this) {
-            processAdapter.submitList(it)
+        viewModel.processList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            processAdapter.submitData(lifecycle, it)
         }
 
         viewModel.renameProcess.observe(this) { (processId, name) ->

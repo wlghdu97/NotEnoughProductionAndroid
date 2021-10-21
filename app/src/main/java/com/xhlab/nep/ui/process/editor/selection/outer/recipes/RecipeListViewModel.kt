@@ -15,6 +15,9 @@ import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RecipeListViewModel @Inject constructor(
@@ -37,8 +40,8 @@ class RecipeListViewModel @Inject constructor(
         if (it.isSuccessful()) it.data else null
     }
 
-    val recipeList = loadRecipeMachineListUseCase.observeOnly(Resource.Status.SUCCESS)
-    val usageList = loadUsageMachineListUseCase.observeOnly(Resource.Status.SUCCESS)
+    val recipeList = loadRecipeMachineListUseCase.observeOnlySuccess()
+    val usageList = loadUsageMachineListUseCase.observeOnlySuccess()
 
     private val _navigateToDetails = LiveEvent<Triple<Long, Int, Boolean>>()
     val navigateToDetails: LiveData<Triple<Long, Int, Boolean>>
@@ -56,19 +59,21 @@ class RecipeListViewModel @Inject constructor(
             }
         }
         _element.addSource(element) {
-            if (it != null) {
-                when (constraint.value?.connectToParent == true) {
-                    true -> {
-                        invokeMediatorUseCase(
-                            useCase = loadUsageMachineListUseCase,
-                            params = LoadUsageMachineListUseCase.Parameter(it.id)
-                        )
-                    }
-                    false -> {
-                        invokeMediatorUseCase(
-                            useCase = loadRecipeMachineListUseCase,
-                            params = LoadRecipeMachineListUseCase.Parameter(it.id)
-                        )
+            viewModelScope.launch {
+                if (it != null) {
+                    when (constraint.value?.connectToParent == true) {
+                        true -> {
+                            invokeMediatorUseCase(
+                                useCase = loadUsageMachineListUseCase,
+                                params = LoadUsageMachineListUseCase.Parameter(it.id)
+                            )
+                        }
+                        false -> {
+                            invokeMediatorUseCase(
+                                useCase = loadRecipeMachineListUseCase,
+                                params = LoadRecipeMachineListUseCase.Parameter(it.id)
+                            )
+                        }
                     }
                 }
             }

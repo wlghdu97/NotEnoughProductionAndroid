@@ -2,19 +2,18 @@ package com.xhlab.nep.shared.data
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.oredict.OreDictElement
-import com.xhlab.nep.shared.db.AppDatabase
+import com.xhlab.nep.shared.db.Nep
 import java.util.*
 
 internal fun generateLongUUID() = UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
 
-internal suspend fun Element.getId(db: AppDatabase): Long {
+internal fun Element.getId(db: Nep): Long {
     return when (this) {
         is OreDictElement -> {
-            db.getElementDao().getOreDictChainId(oreDictNameList)
+            db.elementQueries.getOreDictChainIds(oreDictNameList).executeAsList().first()
         }
         else -> {
-            val unlocalizedName = unlocalizedName
-            db.getElementDao().getId(unlocalizedName)
+            db.elementQueries.getIds(unlocalizedName).executeAsList().first()
         }
     }
 }

@@ -10,16 +10,15 @@ import androidx.core.view.isGone
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
-import androidx.paging.PagedList
+import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class ItemBrowserFragment : DaggerFragment, ViewInit {
@@ -84,8 +83,10 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             elementAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.elementSearchResult.observeNotNull(this) {
-            submitSearchResultList(it)
+        viewModel.elementSearchResult.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            elementAdapter.submitData(lifecycle, it)
         }
 
         viewModel.navigateToDetail.observe(this) {
@@ -121,17 +122,18 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
 
         binding.elementList.adapter = elementAdapter
 
+        elementAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.totalText.text =
+                    String.format(getString(R.string.form_matched_total), elementAdapter.itemCount)
+            }
+        }
+
         if (resources.getBoolean(R.bool.isTablet)) {
             val fragmentManager = childFragmentManager
             fragmentManager.addOnBackStackChangedListener {
                 binding.stackEmptyText?.isGone = fragmentManager.backStackEntryCount != 0
             }
         }
-    }
-
-    private fun submitSearchResultList(list: PagedList<ElementView>?) {
-        binding.totalText.text =
-            String.format(getString(R.string.form_matched_total), list?.size ?: 0)
-        elementAdapter.submitList(list)
     }
 }

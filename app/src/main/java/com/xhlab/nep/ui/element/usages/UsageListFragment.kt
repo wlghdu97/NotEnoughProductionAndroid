@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentUsageListBinding
@@ -17,6 +18,7 @@ import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class UsageListFragment : DaggerFragment(), ViewInit {
@@ -52,17 +54,10 @@ class UsageListFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(arguments?.getLong(ElementDetailFragment.ELEMENT_ID))
 
-        // update parent tab item title
-        viewModel.usageList.observe(this) {
-            val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
-            tabLayout?.getTabAt(1)?.text = requireContext().formatString(
-                R.string.form_tab_usages,
-                it?.size ?: 0
-            )
-        }
-
-        viewModel.usageList.observe(this) {
-            usageAdapter.submitList(it)
+        viewModel.usageList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            usageAdapter.submitData(lifecycle, it)
         }
 
         viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
@@ -85,5 +80,15 @@ class UsageListFragment : DaggerFragment(), ViewInit {
 
     override fun initView() {
         binding.usageList.adapter = usageAdapter
+
+        usageAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
+                tabLayout?.getTabAt(1)?.text = requireContext().formatString(
+                    R.string.form_tab_usages,
+                    usageAdapter.itemCount
+                )
+            }
+        }
     }
 }

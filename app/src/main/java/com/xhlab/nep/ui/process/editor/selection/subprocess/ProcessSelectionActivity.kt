@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.core.view.isGone
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityProcessSelectionBinding
@@ -13,6 +14,7 @@ import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class ProcessSelectionActivity : DaggerAppCompatActivity(), ViewInit {
@@ -35,7 +37,14 @@ class ProcessSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbarLayout.toolbar)
         supportActionBar?.setTitle(R.string.title_select_process_to_connect)
+
         binding.processList.adapter = processAdapter
+
+        processAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.emptyText.isGone = processAdapter.itemCount > 0
+            }
+        }
     }
 
     override fun initViewModel() {
@@ -46,9 +55,10 @@ class ProcessSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             supportActionBar?.subtitle = it.element.localizedName
         }
 
-        viewModel.processList.observe(this) {
-            processAdapter.submitList(it)
-            binding.emptyText.isGone = it?.isEmpty() != true
+        viewModel.processList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            processAdapter.submitData(lifecycle, it)
         }
 
         viewModel.isIconLoaded.asLiveData().observe(this) {

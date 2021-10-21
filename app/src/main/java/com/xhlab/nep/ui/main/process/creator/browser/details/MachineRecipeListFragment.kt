@@ -14,6 +14,7 @@ import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class MachineRecipeListFragment : DaggerFragment(), ViewInit {
@@ -60,8 +61,10 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         val machineId = arguments?.getInt(MACHINE_ID)
         viewModel.init(elementId, machineId)
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
         viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->

@@ -6,9 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.domain.recipe.LoadUsageRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -24,8 +25,8 @@ class MachineRecipeListViewModel @Inject constructor(
     private val machineId = MutableLiveData<Int>()
     private val connectToParent = MutableLiveData<Boolean>()
 
-    val recipeList = loadRecipeListUseCase.observeOnly(Resource.Status.SUCCESS)
-    val usageList = loadUsageRecipeListUseCase.observeOnly(Resource.Status.SUCCESS)
+    val recipeList = loadRecipeListUseCase.observeOnlySuccess()
+    val usageList = loadUsageRecipeListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
@@ -39,18 +40,20 @@ class MachineRecipeListViewModel @Inject constructor(
         this.elementId.value = elementId
         this.machineId.value = machineId
         this.connectToParent.value = connectToParent
-        when (connectToParent) {
-            true -> {
-                invokeMediatorUseCase(
-                    useCase = loadUsageRecipeListUseCase,
-                    params = LoadUsageRecipeListUseCase.Parameters(elementId, machineId)
-                )
-            }
-            false -> {
-                invokeMediatorUseCase(
-                    useCase = loadRecipeListUseCase,
-                    params = LoadRecipeListUseCase.Parameters(elementId, machineId)
-                )
+        viewModelScope.launch {
+            when (connectToParent) {
+                true -> {
+                    invokeMediatorUseCase(
+                        useCase = loadUsageRecipeListUseCase,
+                        params = LoadUsageRecipeListUseCase.Parameters(elementId, machineId)
+                    )
+                }
+                false -> {
+                    invokeMediatorUseCase(
+                        useCase = loadRecipeListUseCase,
+                        params = LoadRecipeListUseCase.Parameters(elementId, machineId)
+                    )
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentReplacementListBinding
 import com.xhlab.nep.di.ViewModelFactory
@@ -16,6 +17,7 @@ import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class ReplacementListFragment : DaggerFragment(), ViewInit {
@@ -54,13 +56,10 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         oreDictName = arguments?.getString(ORE_DICT_NAME) ?: getString(R.string.txt_unknown)
         viewModel.init(oreDictName)
 
-        viewModel.replacementList.observe(this) {
-            elementAdapter.submitList(it)
-            binding.oreDictName.text = requireContext().formatString(
-                R.string.form_ore_dict_name,
-                oreDictName,
-                it?.size ?: 0
-            )
+        viewModel.replacementList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            elementAdapter.submitData(lifecycle, it)
         }
 
         viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
@@ -84,6 +83,16 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     override fun initView() {
         binding.oreDictName.text = oreDictName
         binding.replacementList.adapter = elementAdapter
+
+        elementAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.oreDictName.text = requireContext().formatString(
+                    R.string.form_ore_dict_name,
+                    oreDictName,
+                    elementAdapter.itemCount
+                )
+            }
+        }
     }
 
     companion object {

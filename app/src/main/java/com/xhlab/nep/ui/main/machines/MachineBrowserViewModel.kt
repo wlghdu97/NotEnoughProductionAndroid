@@ -2,13 +2,16 @@ package com.xhlab.nep.ui.main.machines
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.MachineResultNavigationUseCase
 import com.xhlab.nep.shared.domain.machine.LoadMachineListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MachineBrowserViewModel @Inject constructor(
@@ -18,7 +21,8 @@ class MachineBrowserViewModel @Inject constructor(
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     MachineListener {
-    val machineList = loadMachineListUseCase.observeOnly(Resource.Status.SUCCESS)
+
+    val machineList = loadMachineListUseCase.observeOnlySuccess()
 
     val isDBLoaded = generalPreference.isDBLoaded
 
@@ -27,10 +31,12 @@ class MachineBrowserViewModel @Inject constructor(
         get() = _navigateToMachineResult
 
     init {
-        invokeMediatorUseCase(
-            useCase = loadMachineListUseCase,
-            params = Unit
-        )
+        viewModelScope.launch {
+            invokeMediatorUseCase(
+                useCase = loadMachineListUseCase,
+                params = Unit
+            )
+        }
     }
 
     override fun onClick(machineId: Int) {

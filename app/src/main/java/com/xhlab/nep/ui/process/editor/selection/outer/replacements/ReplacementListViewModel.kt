@@ -1,25 +1,28 @@
 package com.xhlab.nep.ui.process.editor.selection.outer.replacements
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.hadilq.liveevent.LiveEvent
+import com.xhlab.nep.shared.domain.item.CheckReplacementListCountUseCase
 import com.xhlab.nep.shared.domain.item.LoadReplacementListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.main.items.ElementListener
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ReplacementListViewModel @Inject constructor(
     private val loadReplacementListUseCase: LoadReplacementListUseCase,
+    private val checkReplacementListCountUseCase: CheckReplacementListCountUseCase,
     generalPreference: GeneralPreference
 ) : ViewModel(), BaseViewModel by BasicViewModel(), ElementListener {
 
     private val oreDictName = MutableLiveData<String>()
 
-    val replacementList = loadReplacementListUseCase.observeOnly(Resource.Status.SUCCESS)
+    val replacementList = loadReplacementListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
@@ -32,15 +35,25 @@ class ReplacementListViewModel @Inject constructor(
         get() = _navigateToRecipeListWithKey
 
     init {
-        loadReplacementListUseCase.observe().addSource(oreDictName) {
-            invokeMediatorUseCase(
-                useCase = loadReplacementListUseCase,
-                params = it
-            )
+        viewModelScope.launch {
+            oreDictName.asFlow().collectLatest {
+                invokeMediatorUseCase(
+                    useCase = loadReplacementListUseCase,
+                    params = it
+                )
+            }
         }
-        _navigateToRecipeList.addSource(replacementList) {
-            if (it != null && it.isEmpty()) {
-                _navigateToRecipeListWithKey.postValue(oreDictName.value)
+        viewModelScope.launch {
+            replacementList.collectLatest {
+                val name = oreDictName.value
+                if (name != null) {
+                    val count = checkReplacementListCountUseCase.invokeInstant(
+                        CheckReplacementListCountUseCase.Parameter(name)
+                    ).data ?: 0
+                    if (count < 1) {
+                        _navigateToRecipeListWithKey.postValue(oreDictName.value)
+                    }
+                }
             }
         }
     }
@@ -50,7 +63,7 @@ class ReplacementListViewModel @Inject constructor(
             "ore dict name not provided."
         }
         // ignore if recipe list is already loaded
-        if (replacementList.value != null) {
+        if (loadReplacementListUseCase.observe().value.data != null) {
             return
         }
         this.oreDictName.value = oreDictName

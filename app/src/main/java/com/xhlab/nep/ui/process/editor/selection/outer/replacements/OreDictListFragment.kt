@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentOreDictListBinding
@@ -15,6 +16,7 @@ import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class OreDictListFragment : DaggerFragment(), ViewInit {
@@ -59,8 +61,10 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
             viewModel.init(it.element.id)
         }
 
-        viewModel.oreDictNameList.observe(this) {
-            oreDictAdapter.submitList(it)
+        viewModel.oreDictNameList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            oreDictAdapter.submitData(lifecycle, it)
         }
 
         viewModel.navigateToReplacementList.observe(this) {

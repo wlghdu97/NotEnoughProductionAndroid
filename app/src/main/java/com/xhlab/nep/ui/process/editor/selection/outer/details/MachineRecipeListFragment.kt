@@ -6,6 +6,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
@@ -15,6 +16,7 @@ import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class MachineRecipeListFragment : DaggerFragment(), ViewInit {
@@ -53,6 +55,12 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             adapter = recipeAdapter
             addItemDecoration(LinearItemSpacingDecorator(context.dip(4)))
         }
+
+        recipeAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.emptyText.isGone = recipeAdapter.itemCount > 0
+            }
+        }
     }
 
     override fun initViewModel() {
@@ -67,14 +75,16 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             recipeAdapter.setConnectionConstraint(it)
         }
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
-            binding.emptyText.isGone = it?.isEmpty() != true
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.usageList.observe(this) {
-            recipeAdapter.submitList(it)
-            binding.emptyText.isGone = it?.isEmpty() != true
+        viewModel.usageList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
         viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->

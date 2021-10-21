@@ -12,6 +12,8 @@ import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.main.items.ElementListener
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -29,7 +31,7 @@ class MachineResultViewModel @Inject constructor(
         if (it.isSuccessful()) it.data else null
     }
 
-    val resultList = machineResultSearchUseCase.observeOnly(Resource.Status.SUCCESS)
+    val resultList = machineResultSearchUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
@@ -51,10 +53,12 @@ class MachineResultViewModel @Inject constructor(
             params = LoadMachineUseCase.Parameter(machineId),
             resultData = _machine
         )
-        invokeMediatorUseCase(
-            useCase = machineResultSearchUseCase,
-            params = MachineResultSearchUseCase.Parameters(machineId)
-        )
+        viewModelScope.launch {
+            invokeMediatorUseCase(
+                useCase = machineResultSearchUseCase,
+                params = MachineResultSearchUseCase.Parameters(machineId)
+            )
+        }
     }
 
     fun searchResults(term: String) {

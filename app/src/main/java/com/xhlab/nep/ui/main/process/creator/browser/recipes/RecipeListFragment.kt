@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
@@ -12,6 +13,7 @@ import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
 import com.xhlab.nep.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -49,8 +51,10 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(arguments?.getLong(ELEMENT_ID))
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
     }
 

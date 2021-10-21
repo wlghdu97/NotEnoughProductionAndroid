@@ -6,8 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isGone
-import androidx.paging.PagedList
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.ElementView
@@ -18,7 +17,7 @@ import com.xhlab.nep.util.setIcon
 
 class ElementDetailAdapter(
     private val listener: ElementListener? = null
-) : PagedListAdapter<ElementView, ElementDetailAdapter.RecipeElementViewHolder>(DiffCallback) {
+) : PagingDataAdapter<ElementView, ElementDetailAdapter.RecipeElementViewHolder>(DiffCallback) {
 
     private var isIconVisible = false
 
@@ -30,11 +29,6 @@ class ElementDetailAdapter(
 
     override fun onBindViewHolder(holder: RecipeElementViewHolder, position: Int) {
         holder.bind(getItem(position))
-    }
-
-    override fun submitList(pagedList: PagedList<ElementView>?) {
-        super.submitList(pagedList)
-        notifyDataSetChanged()
     }
 
     fun setIconVisibility(isVisible: Boolean) {

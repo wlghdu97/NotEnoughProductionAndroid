@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.core.view.isGone
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.process.ProcessSummary
@@ -22,7 +22,7 @@ import com.xhlab.nep.util.setIcon
 
 open class ProcessAdapter(
     private val listener: ProcessListener? = null
-) : PagedListAdapter<ProcessSummary, ProcessAdapter.ProcessViewHolder>(Differ) {
+) : PagingDataAdapter<ProcessSummary, ProcessAdapter.ProcessViewHolder>(Differ) {
 
     private var isIconVisible = false
 

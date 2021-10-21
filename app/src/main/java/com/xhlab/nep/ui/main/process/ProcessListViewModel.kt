@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.main.process
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ProcessEditNavigationUseCase
 import com.xhlab.nep.shared.data.process.ProcessRepo
@@ -11,6 +12,9 @@ import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProcessListViewModel @Inject constructor(
@@ -22,7 +26,8 @@ class ProcessListViewModel @Inject constructor(
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     ProcessListener {
-    val processList = loadProcessListUseCase.observeOnly(Resource.Status.SUCCESS)
+
+    val processList = loadProcessListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
@@ -39,10 +44,12 @@ class ProcessListViewModel @Inject constructor(
         get() = _deleteProcess
 
     init {
-        invokeMediatorUseCase(
-            useCase = loadProcessListUseCase,
-            params = LoadProcessListUseCase.Parameter()
-        )
+        viewModelScope.launch {
+            invokeMediatorUseCase(
+                useCase = loadProcessListUseCase,
+                params = LoadProcessListUseCase.Parameter()
+            )
+        }
     }
 
     override fun onClick(id: String, name: String) {

@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
@@ -21,6 +23,7 @@ import com.xhlab.nep.util.longToast
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -52,6 +55,12 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     override fun initView() {
         setHasOptionsMenu(true)
         binding.recipeList.adapter = recipeAdapter
+
+        recipeAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.emptyText.isGone = recipeAdapter.itemCount > 0
+            }
+        }
     }
 
     override fun initViewModel() {
@@ -80,14 +89,16 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
             (activity as? AppCompatActivity)?.supportActionBar?.subtitle = subtitle
         }
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
-            binding.emptyText.isGone = it?.isEmpty() != true
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.usageList.observe(this) {
-            recipeAdapter.submitList(it)
-            binding.emptyText.isGone = it?.isEmpty() != true
+        viewModel.usageList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
         viewModel.navigateToDetails.observe(this) { (elementId, machineId, connectToParent) ->

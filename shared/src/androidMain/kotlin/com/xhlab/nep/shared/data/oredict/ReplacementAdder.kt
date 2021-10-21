@@ -1,21 +1,17 @@
 package com.xhlab.nep.shared.data.oredict
 
-import androidx.room.withTransaction
 import com.xhlab.nep.model.oredict.Replacement
-import com.xhlab.nep.shared.data.element.RoomElementMapper
+import com.xhlab.nep.shared.data.element.SqlDelightElementMapper
 import com.xhlab.nep.shared.data.getId
-import com.xhlab.nep.shared.db.AppDatabase
-import com.xhlab.nep.shared.db.entity.ReplacementEntity
+import com.xhlab.nep.shared.db.Nep
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ReplacementAdder @Inject constructor(
-    private val db: AppDatabase,
-    private val mapper: RoomElementMapper
-) {
+class ReplacementAdder constructor(private val db: Nep) {
+
+    private val mapper = SqlDelightElementMapper()
     private val io = Dispatchers.IO
 
     suspend fun insertReplacements(list: List<Replacement>) = withContext(io) {
@@ -23,32 +19,38 @@ class ReplacementAdder @Inject constructor(
         insertReplacementsInternal(list)
     }
 
-    private suspend fun insertItemsFromReplacements(list: List<Replacement>) = db.withTransaction {
+    private fun insertItemsFromReplacements(list: List<Replacement>) {
+        db.elementQueries.transaction {
 
-        suspend fun insertItemsFromReplacement(replacement: Replacement) {
-            val itemList = replacement.elementList.distinct()
-            val entityList = itemList.map { mapper.map(it)[0] }
-            db.getElementDao().insert(entityList)
-        }
+            fun insertItemsFromReplacement(replacement: Replacement) {
+                val itemList = replacement.elementList.distinct()
+                val entityList = itemList.map { mapper.map(it)[0] }
+                for (entity in entityList) {
+                    db.elementQueries.insert(entity)
+                }
+            }
 
-        for (replacement in list) {
-            insertItemsFromReplacement(replacement)
-        }
-    }
-
-    private suspend fun insertReplacementsInternal(list: List<Replacement>) = db.withTransaction {
-        for (replacement in list) {
-            insertReplacement(replacement)
+            for (replacement in list) {
+                insertItemsFromReplacement(replacement)
+            }
         }
     }
 
-    private suspend fun insertReplacement(replacement: Replacement) {
-        val entityList = replacement.elementList.map {
-            ReplacementEntity(
-                oreDictName = replacement.oreDictName,
-                elementId = it.getId(db)
-            )
+    private fun insertReplacementsInternal(list: List<Replacement>) {
+        db.replacementQueries.transaction {
+
+            fun insertReplacement(replacement: Replacement) {
+                val entityList = replacement.elementList.map {
+                    replacement.oreDictName to it.getId(db)
+                }
+                for ((oreDictName, elementId) in entityList) {
+                    db.replacementQueries.insert(oreDictName, elementId)
+                }
+            }
+
+            for (replacement in list) {
+                insertReplacement(replacement)
+            }
         }
-        db.getReplacementDao().insert(entityList)
     }
 }

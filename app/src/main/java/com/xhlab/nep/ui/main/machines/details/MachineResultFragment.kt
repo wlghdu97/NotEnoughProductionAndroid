@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineResultBinding
 import com.xhlab.nep.di.ViewModelFactory
@@ -20,6 +21,7 @@ import com.xhlab.nep.ui.main.items.ElementDetailAdapter
 import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class MachineResultFragment : DaggerFragment(), ViewInit {
@@ -54,9 +56,10 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
             (activity as? AppCompatActivity)?.supportActionBar?.subtitle = it.name
         }
 
-        viewModel.resultList.observe(this) {
-            binding.totalText.text = String.format(getString(R.string.form_total), it?.size ?: 0)
-            adapter.submitList(it)
+        viewModel.resultList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            adapter.submitData(lifecycle, it)
         }
 
         viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
@@ -103,6 +106,13 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
         }
 
         binding.resultList.adapter = adapter
+
+        adapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.totalText.text =
+                    String.format(getString(R.string.form_total), adapter.itemCount)
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

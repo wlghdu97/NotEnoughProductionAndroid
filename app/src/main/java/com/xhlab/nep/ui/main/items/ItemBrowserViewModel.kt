@@ -1,18 +1,19 @@
 package com.xhlab.nep.ui.main.items
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.shared.domain.item.ElementSearchUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,9 +24,12 @@ class ItemBrowserViewModel @Inject constructor(
 ) : ViewModel(),
     BaseViewModel by BasicViewModel(),
     ElementListener {
-    private val _elementSearchResult = elementSearchUseCase.observeOnly(Resource.Status.SUCCESS)
-    val elementSearchResult = Transformations.map(_elementSearchResult) {
-        if (isDBLoaded.value) it else null
+
+    private val _elementSearchResult = elementSearchUseCase.observeOnlySuccess()
+    val elementSearchResult = _elementSearchResult.transform {
+        if (isDBLoaded.value) {
+            emit(it)
+        }
     }
 
     val isDBLoaded = generalPreference.isDBLoaded

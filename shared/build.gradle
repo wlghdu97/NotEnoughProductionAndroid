@@ -57,6 +57,16 @@ kotlin {
         commonMain.dependencies {
             implementation project(path: ':model')
             implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+            implementation "com.xhlab.mobile:infrastructure:$mobile_infrastructure_version"
+            implementation "com.xhlab.mobile:infrastructure-paging:$mobile_infrastructure_version"
+            implementation "com.xhlab.mobile:infrastructure-annotation:$mobile_infrastructure_version"
+            configurations {
+                kapt {
+                    dependencies {
+                        kapt "com.xhlab.mobile:infrastructure-processor:$mobile_infrastructure_version"
+                    }
+                }
+            }
             api "dev.icerock.moko:resources:$resources_version"
         }
         androidMain.dependencies {
@@ -181,6 +191,13 @@ dependencies {
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator_version"
 
     androidTestImplementation project(path: ':test-shared')
+}
+
+kapt {
+    correctErrorTypes true
+    arguments {
+        arg("modulePackage", "com.xhlab.nep.shared.di")
+    }
 }
 
 sqldelight {

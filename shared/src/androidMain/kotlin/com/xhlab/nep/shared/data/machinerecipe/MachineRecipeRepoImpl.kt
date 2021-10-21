@@ -1,56 +1,183 @@
 package com.xhlab.nep.shared.data.machinerecipe
 
-import androidx.paging.DataSource
+import com.xhlab.multiplatform.paging.Pager
+import com.xhlab.multiplatform.paging.PagingConfig
+import com.xhlab.nep.model.recipes.view.MachineRecipeView
+import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.model.recipes.view.RecipeView
-import com.xhlab.nep.shared.db.AppDatabase
+import com.xhlab.nep.shared.data.pagerScope
+import com.xhlab.nep.shared.data.recipe.RecipeElementViewImpl
+import com.xhlab.nep.shared.db.Nep
+import com.xhlab.nep.shared.db.createOffsetLimitPager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
-internal class MachineRecipeRepoImpl @Inject constructor(
-    private val db: AppDatabase
-) : MachineRecipeRepo {
+internal class MachineRecipeRepoImpl constructor(private val db: Nep) : MachineRecipeRepo {
 
     private val io = Dispatchers.IO
 
     override suspend fun getElementListByRecipe(recipeId: Long) = withContext(io) {
-        db.getMachineRecipeDao().getElementListOfRecipe(recipeId)
+        db.machineRecipeQueries.getElementListOfRecipe(recipeId, recipeElementViewMapper)
+            .executeAsList()
     }
 
-    override fun searchRecipeByElement(
+    override suspend fun searchRecipeByElement(
         elementId: Long,
         machineId: Int,
         term: String
-    ): DataSource.Factory<Int, RecipeView> {
-        return when (term.isEmpty()) {
-            true -> db.getMachineRecipeDao().searchRecipeIdByElement(elementId, machineId)
-            false -> db.getMachineRecipeDao().searchRecipeIdByElement(elementId, machineId, "*$term*")
-        }.map {
-            runBlocking {
-                it.also {
-                    it.itemList.addAll(db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId))
-                    it.resultItemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
-                } as RecipeView
+    ): Pager<Int, RecipeView> {
+        return with(db.machineRecipeQueries) {
+            val searchTerm = "*$term*"
+            createOffsetLimitPager(
+                clientScope = pagerScope,
+                ioDispatcher = io,
+                config = pagingConfig,
+                queryProvider = { limit, offset ->
+                    if (term.isEmpty()) {
+                        searchRecipeIdByElement(
+                            elementId = elementId,
+                            machineId = machineId,
+                            limit = limit,
+                            offset = offset,
+                            mapper = machineRecipeViewMapper
+                        )
+                    } else {
+                        searchRecipeIdByElementFts(
+                            elementId = elementId,
+                            machineId = machineId,
+                            term = searchTerm,
+                            limit = limit,
+                            offset = offset,
+                            mapper = machineRecipeViewMapper
+                        )
+                    }
+                },
+                countQuery = if (term.isEmpty()) {
+                    searchRecipeIdCountByElement(elementId, machineId)
+                } else {
+                    searchRecipeIdCountByElementFts(elementId, machineId, searchTerm)
+                },
+                transactor = this
+            ).map {
+                it.copy(
+                    itemList = getElementListOfRecipe(
+                        recipeId = it.recipeId,
+                        mapper = recipeElementViewMapper
+                    ).executeAsList(),
+                    resultItemList = db.recipeResultQueries.getElementsOfResult(
+                        recipeId = it.recipeId,
+                        mapper = recipeElementViewMapper
+                    ).executeAsList()
+                )
             }
         }
     }
 
-    override fun searchUsageRecipeByElement(
+    override suspend fun searchUsageRecipeByElement(
         elementId: Long,
         machineId: Int,
         term: String
-    ): DataSource.Factory<Int, RecipeView> {
-        return when (term.isEmpty()) {
-            true -> db.getMachineRecipeDao().searchUsageRecipeIdByElement(elementId, machineId)
-            false -> db.getMachineRecipeDao().searchUsageRecipeIdByElement(elementId, machineId, "*$term*")
-        }.map {
-            runBlocking {
-                it.also {
-                    it.itemList.addAll(db.getRecipeResultDao().getElementListOfResult(it.recipeId))
-                    it.resultItemList.addAll(db.getMachineRecipeDao().getElementListOfRecipe(it.recipeId))
-                } as RecipeView
+    ): Pager<Int, RecipeView> {
+        return with(db.machineRecipeQueries) {
+            val searchTerm = "*$term*"
+            createOffsetLimitPager(
+                clientScope = pagerScope,
+                ioDispatcher = io,
+                config = pagingConfig,
+                queryProvider = { limit, offset ->
+                    if (term.isEmpty()) {
+                        searchUsageRecipeIdByElement(
+                            machineId = machineId,
+                            elementId = elementId,
+                            limit = limit,
+                            offset = offset,
+                            mapper = machineRecipeViewMapper
+                        )
+                    } else {
+                        searchUsageRecipeIdByElementFts(
+                            machineId = machineId,
+                            elementId = elementId,
+                            term = searchTerm,
+                            limit = limit,
+                            offset = offset,
+                            mapper = machineRecipeViewMapper
+                        )
+                    }
+                },
+                countQuery = if (term.isEmpty()) {
+                    searchUsageRecipeIdCountByElement(machineId, elementId)
+                } else {
+                    searchUsageRecipeIdCountByElementFts(machineId, elementId, searchTerm)
+                },
+                transactor = this
+            ).map {
+                it.copy(
+                    itemList = db.recipeResultQueries.getElementsOfResult(
+                        recipeId = it.recipeId,
+                        mapper = recipeElementViewMapper
+                    ).executeAsList(),
+                    resultItemList = getElementListOfRecipe(
+                        recipeId = it.recipeId,
+                        mapper = recipeElementViewMapper
+                    ).executeAsList()
+                )
             }
         }
+    }
+
+    private val pagingConfig: PagingConfig
+        get() = PagingConfig(PAGE_SIZE)
+
+    private val recipeElementViewMapper = { id: Long,
+                                            localized_name: String,
+                                            unlocalized_name: String,
+                                            type: Int,
+                                            amount: Int,
+                                            meta_data: String? ->
+        RecipeElementViewImpl(
+            id = id,
+            localizedName = localized_name,
+            unlocalizedName = unlocalized_name,
+            type = type,
+            metaData = meta_data,
+            amount = amount
+        )
+    }
+
+    private val machineRecipeViewMapper = { recipe_id: Long,
+                                            enabled: Boolean,
+                                            duration: Int,
+                                            power_type: Int,
+                                            ept: Int,
+                                            _: String?,
+                                            machine_id: Int,
+                                            machine_name: String ->
+        MachineRecipeViewImpl(
+            recipeId = recipe_id,
+            itemList = emptyList(),
+            resultItemList = emptyList(),
+            isEnabled = enabled,
+            duration = duration,
+            powerType = power_type,
+            ept = ept,
+            machineId = machine_id,
+            machineName = machine_name
+        )
+    }
+
+    data class MachineRecipeViewImpl(
+        override val recipeId: Long,
+        override val itemList: List<RecipeElementView>,
+        override val resultItemList: List<RecipeElementView>,
+        override val isEnabled: Boolean,
+        override val duration: Int,
+        override val powerType: Int,
+        override val ept: Int,
+        override val machineId: Int,
+        override val machineName: String
+    ) : MachineRecipeView()
+
+    companion object {
+        private const val PAGE_SIZE = 10
     }
 }

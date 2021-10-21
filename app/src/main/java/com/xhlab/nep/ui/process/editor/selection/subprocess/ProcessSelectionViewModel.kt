@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.process.editor.selection.subprocess
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hadilq.liveevent.LiveEvent
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessListUseCase
@@ -12,6 +13,9 @@ import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
 import com.xhlab.nep.ui.main.process.ProcessListener
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProcessSelectionViewModel @Inject constructor(
@@ -24,7 +28,7 @@ class ProcessSelectionViewModel @Inject constructor(
     val constraint: LiveData<ProcessEditViewModel.ConnectionConstraint>
         get() = _constraint
 
-    val processList = loadProcessListUseCase.observeOnly(Resource.Status.SUCCESS)
+    val processList = loadProcessListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
@@ -34,11 +38,13 @@ class ProcessSelectionViewModel @Inject constructor(
 
     fun init(constraint: ProcessEditViewModel.ConnectionConstraint?) {
         requireNotNull(constraint)
-        _constraint.value = constraint
-        invokeMediatorUseCase(
-            useCase = loadProcessListUseCase,
-            params = LoadProcessListUseCase.Parameter(constraint.element.unlocalizedName)
-        )
+        viewModelScope.launch {
+            _constraint.value = constraint
+            invokeMediatorUseCase(
+                useCase = loadProcessListUseCase,
+                params = LoadProcessListUseCase.Parameter(constraint.element.unlocalizedName)
+            )
+        }
     }
 
     private fun requireConstraint() =

@@ -17,14 +17,14 @@ import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.data.recipe.RecipeAdder
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepoImpl
-import com.xhlab.nep.shared.db.AppDatabase
+import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.preference.GeneralSharedPreference
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
-@Module(includes = [RoomModule::class])
+@Module(includes = [SqlDelightModule::class])
 @Suppress("unused")
 class SharedModule {
     @Provides
@@ -37,7 +37,11 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideElementRepo(db: AppDatabase): ElementRepo = ElementRepoImpl(db)
+    internal fun provideElementRepo(db: Nep): ElementRepo = ElementRepoImpl(db)
+
+    @Provides
+    @Singleton
+    internal fun provideReplacementAdder(db: Nep) = ReplacementAdder(db)
 
     @Provides
     @Singleton
@@ -45,15 +49,21 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideMachineRepo(db: AppDatabase): MachineRepo = MachineRepoImpl(db)
+    internal fun provideMachineRepo(db: Nep): MachineRepo = MachineRepoImpl(db)
 
     @Provides
     @Singleton
-    internal fun provideRecipeRepo(db: AppDatabase, adder: RecipeAdder): RecipeRepo = RecipeRepoImpl(db, adder)
+    internal fun provideRecipeAdder(db: Nep) = RecipeAdder(db)
 
     @Provides
     @Singleton
-    internal fun provideMachineRecipeRepo(db: AppDatabase): MachineRecipeRepo = MachineRecipeRepoImpl(db)
+    internal fun provideRecipeRepo(db: Nep, adder: RecipeAdder): RecipeRepo =
+        RecipeRepoImpl(db, adder)
+
+    @Provides
+    @Singleton
+    internal fun provideMachineRecipeRepo(db: Nep): MachineRecipeRepo =
+        MachineRecipeRepoImpl(db)
 
     @Provides
     @Singleton

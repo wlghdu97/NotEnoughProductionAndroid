@@ -5,9 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.BaseViewModel
 import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.ui.util.invokeMediatorUseCase
+import com.xhlab.nep.ui.util.observeOnlySuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class MachineRecipeListViewModel @Inject constructor(
     private val elementId = MutableLiveData<Long>()
     private val machineId = MutableLiveData<Int>()
 
-    val recipeList = loadRecipeListUseCase.observeOnly(Resource.Status.SUCCESS)
+    val recipeList = loadRecipeListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
@@ -34,10 +35,12 @@ class MachineRecipeListViewModel @Inject constructor(
         }
         this.elementId.value = elementId
         this.machineId.value = machineId
-        invokeMediatorUseCase(
-            useCase = loadRecipeListUseCase,
-            params = LoadRecipeListUseCase.Parameters(elementId, machineId)
-        )
+        viewModelScope.launch {
+            invokeMediatorUseCase(
+                useCase = loadRecipeListUseCase,
+                params = LoadRecipeListUseCase.Parameters(elementId, machineId)
+            )
+        }
     }
 
     private fun requireElementId() =

@@ -3,10 +3,10 @@ package com.xhlab.nep.shared.data.process
 import com.google.gson.Gson
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.Mapper
-import com.xhlab.nep.shared.db.entity.ProcessEntity
 import javax.inject.Inject
+import com.xhlab.nep.shared.db.Process as ProcessEntity
 
-class RoomProcessMapper @Inject constructor(
+class SqlDelightProcessMapper @Inject constructor(
     private val gson: Gson
 ) : Mapper<Process, ProcessEntity> {
 
