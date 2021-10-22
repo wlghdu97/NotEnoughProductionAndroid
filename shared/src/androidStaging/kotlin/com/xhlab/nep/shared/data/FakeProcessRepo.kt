@@ -1,49 +1,63 @@
 package com.xhlab.nep.shared.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.paging.DataSource
+import com.xhlab.multiplatform.paging.Pager
+import com.xhlab.multiplatform.paging.PagingConfig
+import com.xhlab.multiplatform.paging.PagingResult
+import com.xhlab.multiplatform.paging.createPager
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.shared.data.process.ProcessRepo
-import com.xhlab.nep.shared.util.ListDataSource
-import com.xhlab.test_shared.ProcessData
+import com.xhlab.test.shared.ProcessData
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 class FakeProcessRepo @Inject constructor() : ProcessRepo {
 
-    private val processGlass = MutableLiveData(ProcessData.processGlass)
-    private val processPE = MutableLiveData(ProcessData.processPE)
-    private val processChest = MutableLiveData(ProcessData.processChest)
-    private val processPlasticSheet = MutableLiveData(ProcessData.processPlasticSheet)
+    private val processGlass = MutableStateFlow(ProcessData.processGlass)
+    private val processPE = MutableStateFlow(ProcessData.processPE)
+    private val processChest = MutableStateFlow(ProcessData.processChest)
+    private val processPlasticSheet = MutableStateFlow(ProcessData.processPlasticSheet)
 
     override suspend fun getProcess(processId: String): Process? {
         return when (processId) {
-            processGlass.value?.id -> ProcessData.processGlass
-            processPE.value?.id -> ProcessData.processPE
-            processChest.value?.id -> ProcessData.processChest
-            processPlasticSheet.value?.id -> ProcessData.processPlasticSheet
+            processGlass.value.id -> ProcessData.processGlass
+            processPE.value.id -> ProcessData.processPE
+            processChest.value.id -> ProcessData.processChest
+            processPlasticSheet.value.id -> ProcessData.processPlasticSheet
             else -> null
         }
     }
 
-    override suspend fun getProcessFlow(processId: String): LiveData<Process?> {
+    override suspend fun getProcessFlow(processId: String): Flow<Process?> {
         return when (processId) {
-            processGlass.value?.id -> processGlass
-            processPE.value?.id -> processPE
-            processChest.value?.id -> processChest
-            processPlasticSheet.value?.id -> processPlasticSheet
-            else -> MutableLiveData(null)
+            processGlass.value.id -> processGlass
+            processPE.value.id -> processPE
+            processChest.value.id -> processChest
+            processPlasticSheet.value.id -> processPlasticSheet
+            else -> MutableStateFlow(null)
         }
     }
 
-    override fun getProcesses(): DataSource.Factory<Int, ProcessSummary> {
-        return ListDataSource(ProcessData.processSummaryList)
+    override fun getProcesses(): Pager<Int, ProcessSummary> {
+        return createPager(
+            clientScope = pagerScope,
+            config = PagingConfig(5),
+            initialKey = 0,
+            getItems = { key, _ ->
+                PagingResult(
+                    items = ProcessData.processSummaryList,
+                    currentKey = key,
+                    prevKey = { null },
+                    nextKey = { null }
+                )
+            }
+        )
     }
 
-    override fun getProcessesByTarget(targetElementKey: String): DataSource.Factory<Int, ProcessSummary> {
+    override fun getProcessesByTarget(targetElementKey: String): Pager<Int, ProcessSummary> {
         TODO("not implemented")
     }
 
@@ -91,7 +105,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         process?.value?.let {
             val result = it.connectRecipe(from, to, element, reversed)
             if (result) {
-                process.postValue(it)
+                process.value = it
             } else {
                 throw RuntimeException("failed to connect recipe")
             }
@@ -109,7 +123,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         process?.value?.let {
             val result = it.disconnectRecipe(from, to, element, reversed)
             if (result) {
-                process.postValue(it)
+                process.value = it
             }
         }
     }
@@ -124,14 +138,17 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         process?.value?.let {
             val result = it.markNotConsumed(recipe, element, consumed)
             if (result) {
-                process.postValue(it)
+                process.value = it
             }
         }
     }
 
-    private fun getProcessMutable(processId: String): MutableLiveData<Process>? = when (processId) {
-        processGlass.value?.id -> processGlass
-        processPE.value?.id -> processPE
-        else -> null
-    }
+    private fun getProcessMutable(processId: String): MutableStateFlow<Process>? =
+        when (processId) {
+            processGlass.value.id -> processGlass
+            processPE.value.id -> processPE
+            processChest.value.id -> processChest
+            processPlasticSheet.value.id -> processPlasticSheet
+            else -> null
+        }
 }
