@@ -5,7 +5,6 @@ import com.xhlab.nep.model.Fluid
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.shared.data.Mapper
 import com.xhlab.nep.shared.data.generateLongUUID
-import com.xhlab.nep.shared.db.entity.ElementType
 import com.xhlab.nep.shared.db.Element as ElementEntity
 
 class SqlDelightElementMapper : Mapper<Element, List<ElementEntity>> {
@@ -17,7 +16,7 @@ class SqlDelightElementMapper : Mapper<Element, List<ElementEntity>> {
                     id = generateLongUUID(),
                     unlocalized_name = it,
                     localized_name = "",
-                    type = ElementType.ORE_CHAIN.index
+                    type = Element.ORE_CHAIN
                 )
             }
             else -> listOf(
@@ -26,9 +25,9 @@ class SqlDelightElementMapper : Mapper<Element, List<ElementEntity>> {
                     unlocalized_name = element.unlocalizedName,
                     localized_name = element.localizedName,
                     type = if (element is Fluid) {
-                        ElementType.FLUID.index
+                        Element.FLUID
                     } else {
-                        ElementType.ITEM.index
+                        Element.ITEM
                     }
                 )
             )

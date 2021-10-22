@@ -10,11 +10,10 @@ import android.widget.TextView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
 import java.text.NumberFormat
-import java.util.Locale
+import java.util.*
 
 open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemView) {
 
@@ -39,8 +38,8 @@ open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemV
         if (model is ElementView) {
             type?.setText(
                 when (model.type) {
-                    ElementEntity.ITEM -> R.string.txt_item
-                    ElementEntity.FLUID -> R.string.txt_fluid
+                    Element.ITEM -> R.string.txt_item
+                    Element.FLUID -> R.string.txt_fluid
                     else -> R.string.txt_unknown
                 }
             )
@@ -55,7 +54,7 @@ open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemV
             )
         }
         with(unlocalizedName) {
-            maxLines = when (model is ElementView && model.type == ElementEntity.ORE_CHAIN) {
+            maxLines = when (model is ElementView && model.type == Element.ORE_CHAIN) {
                 true -> 2
                 false -> 1
             }

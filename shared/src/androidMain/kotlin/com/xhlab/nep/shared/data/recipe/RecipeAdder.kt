@@ -11,7 +11,6 @@ import com.xhlab.nep.shared.data.getId
 import com.xhlab.nep.shared.db.Machine_recipe
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.Recipe_result
-import com.xhlab.nep.shared.db.entity.ElementType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Singleton
@@ -69,7 +68,7 @@ class RecipeAdder constructor(private val db: Nep) {
                         id = chainId,
                         unlocalized_name = chainId.toString(),
                         localized_name = "",
-                        type = ElementType.ORE_CHAIN.index
+                        type = Element.ORE_CHAIN
                     )
                 )
                 it.oreDictNameList.map { name ->

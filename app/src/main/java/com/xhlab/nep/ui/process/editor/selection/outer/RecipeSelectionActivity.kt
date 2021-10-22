@@ -7,7 +7,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityRecipeSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
+import com.xhlab.nep.model.Element
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
@@ -45,7 +45,7 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel.constraint.asLiveData().observe(this) {
             val elementKey = it.element.unlocalizedName
             when (it.element.type) {
-                ORE_CHAIN -> {
+                Element.ORE_CHAIN -> {
                     val replacements = it.element.unlocalizedName.split(',')
                     if (replacements.size > 1) {
                         showOreDictListFragment()

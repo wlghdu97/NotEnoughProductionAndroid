@@ -13,7 +13,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentElementDetailBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
-import com.xhlab.nep.shared.db.entity.ElementEntity
+import com.xhlab.nep.model.Element
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeListFragment
 import com.xhlab.nep.ui.element.replacements.ReplacementContainerFragment
@@ -89,7 +89,7 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
         if (firstTab != null) {
             firstTab.text = getString(
                 when (elementType) {
-                    ElementEntity.ORE_CHAIN -> R.string.tab_replacements
+                    Element.ORE_CHAIN -> R.string.tab_replacements
                     else -> R.string.tab_recipes
                 }
             )
@@ -97,7 +97,7 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
 
         with(binding.viewPager) {
             viewPagerAdapter = when (elementType) {
-                ElementEntity.ORE_CHAIN -> ReplacementListPagerAdapter(childFragmentManager)
+                Element.ORE_CHAIN -> ReplacementListPagerAdapter(childFragmentManager)
                 else -> RecipeListPagerAdapter(childFragmentManager)
             }
             adapter = viewPagerAdapter

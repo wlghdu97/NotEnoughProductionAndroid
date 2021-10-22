@@ -4,7 +4,6 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
-import com.xhlab.nep.shared.db.entity.ElementEntity
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.OreDictRecipeSelectionListener
 
@@ -35,7 +34,7 @@ fun ProcessEditViewModel.ConnectionConstraint.select(
     if (keyElement != null) {
         if (oreDictListener != null &&
             recipe !is OreChainRecipe &&
-            element.type == ElementEntity.ORE_CHAIN
+            element.type == Element.ORE_CHAIN
         ) {
             val ingredient = (to.getInputs() + to.getOutput()).find {
                 (it as? ElementView)?.id == targetElementId

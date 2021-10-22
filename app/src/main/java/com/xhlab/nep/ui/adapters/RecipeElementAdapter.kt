@@ -10,7 +10,6 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.DiffCallback
 import com.xhlab.nep.util.setIcon
@@ -44,7 +43,7 @@ open class RecipeElementAdapter(
 
     final override fun getItemViewType(position: Int): Int {
         return when (elementList[position].type) {
-            ORE_CHAIN -> 1
+            Element.ORE_CHAIN -> 1
             else -> 0
         }
     }

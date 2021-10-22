@@ -9,9 +9,8 @@ import androidx.core.view.isGone
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
+import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.FLUID
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ITEM
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 
@@ -65,8 +64,8 @@ class ElementDetailAdapter(
             }
             type.setText(
                 when (model.type) {
-                    ITEM -> R.string.txt_item
-                    FLUID -> R.string.txt_fluid
+                    Element.ITEM -> R.string.txt_item
+                    Element.FLUID -> R.string.txt_fluid
                     else -> R.string.txt_unknown
                 }
             )
