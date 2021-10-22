@@ -1,37 +1,45 @@
 package com.xhlab.nep.ui.main.process.rename
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.hadilq.liveevent.LiveEvent
+import co.touchlab.kermit.Logger
+import com.xhlab.multiplatform.util.EventFlow
+import com.xhlab.nep.MR
 import com.xhlab.nep.shared.data.process.ProcessRepo
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.util.StringResolver
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProcessRenameViewModel @Inject constructor(
-    private val processRepo: ProcessRepo
-) : ViewModel(), BaseViewModel by BasicViewModel() {
+    private val processRepo: ProcessRepo,
+    private val stringResolver: StringResolver
+) : ViewModel() {
 
-    private val processId = MutableLiveData<String>()
+    private val processId = MutableStateFlow<String?>(null)
 
-    private val _name = MutableLiveData<String?>()
-    val name: LiveData<String?>
-        get() = _name
+    private val _name = MutableStateFlow<String?>(null)
+    val name = _name.mapNotNull { it }
 
-    private val _isNameValid = MediatorLiveData<Boolean?>()
-    val isNameValid: LiveData<Boolean?>
-        get() = _isNameValid
+    private val _isNameValid = MutableStateFlow<Boolean?>(null)
+    val isNameValid = _isNameValid.mapNotNull { it }
 
-    private val _renameResult = LiveEvent<Resource<Unit>>()
-    val renameResult: LiveData<Resource<Unit>>
-        get() = _renameResult
+    private val _renameErrorMessage = EventFlow<String>()
+    val renameErrorMessage: Flow<String>
+        get() = _renameErrorMessage.flow
+
+    private val _dismiss = EventFlow<Unit>()
+    val dismiss: Flow<Unit>
+        get() = _dismiss.flow
 
     init {
-        _isNameValid.addSource(name) {
-            _isNameValid.postValue(it?.isNotEmpty())
+        scope.launch {
+            name.collect {
+                _isNameValid.value = it.isNotEmpty()
+            }
         }
     }
 
@@ -48,21 +56,32 @@ class ProcessRenameViewModel @Inject constructor(
         processId.value ?: throw NullPointerException("process id is null.")
 
     fun changeName(name: String) {
-        this._name.postValue(name)
+        _name.value = name
     }
 
     fun renameProcess() {
-        when (isNameValid.value) {
+        when (_isNameValid.value) {
             true -> {
-                val name = name.value.toString()
-                launchSuspendFunction(_renameResult) {
+                val handler = CoroutineExceptionHandler { _, throwable ->
+                    Logger.e("Failed to rename process", throwable)
+                    emitRenameErrorMessage()
+                }
+                scope.launch(handler) {
+                    val name = _name.value.toString()
                     processRepo.renameProcess(requireProcessId(), name)
+                    _dismiss.emit(Unit)
                 }
             }
             null ->
-                _isNameValid.postValue(false)
+                _isNameValid.value = false
             else ->
-                _renameResult.postValue(Resource.error(RuntimeException()))
+                emitRenameErrorMessage()
+        }
+    }
+
+    private fun emitRenameErrorMessage() {
+        scope.launch {
+            _renameErrorMessage.emit(stringResolver.getString(MR.strings.error_failed_to_rename_process))
         }
     }
 }

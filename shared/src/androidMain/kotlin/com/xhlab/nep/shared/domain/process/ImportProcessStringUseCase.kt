@@ -4,7 +4,7 @@ import android.util.Base64
 import com.google.gson.Gson
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.process.ProcessRepo
-import com.xhlab.nep.shared.domain.UseCase
+import com.xhlab.nep.shared.domain.BaseUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -14,7 +14,7 @@ import javax.inject.Inject
 class ImportProcessStringUseCase @Inject constructor(
     private val gson: Gson,
     private val processRepo: ProcessRepo
-) : UseCase<ImportProcessStringUseCase.Parameter, Unit>() {
+) : BaseUseCase<ImportProcessStringUseCase.Parameter, Unit>() {
 
     override suspend fun execute(params: Parameter) = withContext(Dispatchers.IO) {
         if (params.string.isEmpty()) {

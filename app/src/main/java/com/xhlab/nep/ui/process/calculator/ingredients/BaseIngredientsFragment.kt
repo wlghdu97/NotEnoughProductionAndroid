@@ -11,11 +11,9 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentBaseIngredientsBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.calculator.ElementNavigatorViewModel
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationViewModel
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -57,13 +55,11 @@ class BaseIngredientsFragment : DaggerFragment(), ViewInit {
             adapter.setIconVisibility(it)
         }
 
-        calculationViewModel.calculationResult.observe(this) {
-            if (it.isSuccessful()) {
-                adapter.submitList(it.data!!.suppliers)
-            }
+        calculationViewModel.calculationResult.asLiveData().observe(this) {
+            adapter.submitList(it.suppliers)
         }
 
-        viewModel.elements.observeNotNull(this) {
+        viewModel.elements.asLiveData().observe(this) {
             showElementSelectionDialog(it)
         }
     }

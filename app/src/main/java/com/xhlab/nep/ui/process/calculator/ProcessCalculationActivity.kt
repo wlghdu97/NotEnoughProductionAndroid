@@ -5,6 +5,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import androidx.viewpager.widget.ViewPager
 import com.xhlab.nep.R
@@ -14,7 +15,6 @@ import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.calculator.byproducts.ByproductsFragment
 import com.xhlab.nep.ui.process.calculator.cycles.ProcessingOrderFragment
 import com.xhlab.nep.ui.process.calculator.ingredients.BaseIngredientsFragment
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -75,13 +75,13 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(intent?.getStringExtra(PROCESS_ID))
 
-        viewModel.process.observeNotNull(this) {
+        viewModel.process.asLiveData().observe(this) {
             binding.toolbarLayout.toolbar.subtitle = it.name
         }
 
-        viewModel.calculationResult.observe(this) {
+        viewModel.isResultValid.asLiveData().observe(this) {
             with(binding.message) {
-                isGone = it.throwable == null
+                isGone = it
                 if (!isGone) {
                     text = getString(R.string.error_failed_to_find_solution)
                 }

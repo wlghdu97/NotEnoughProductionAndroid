@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
@@ -71,17 +72,12 @@ fun ImageView.setIcon(unlocalizedName: String) {
         .into(this)
 }
 
-inline fun <reified T> LiveData<T?>.observeNotNull(
-    lifecycleOwner: LifecycleOwner,
-    crossinline block: (T) -> Unit
-) = observe(lifecycleOwner) {
-    if (it != null) {
-        block(it)
-    }
-}
-
 fun Fragment.longToast(@StringRes stringId: Int) {
     Toast.makeText(context, stringId, Toast.LENGTH_LONG).show()
+}
+
+fun Fragment.longToast(message: String) {
+    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
 }
 
 fun Context.dip(dp: Int): Int {

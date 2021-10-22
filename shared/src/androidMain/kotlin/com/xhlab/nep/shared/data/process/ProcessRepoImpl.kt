@@ -1,7 +1,8 @@
 package com.xhlab.nep.shared.data.process
 
 import android.util.LruCache
-import androidx.lifecycle.MutableLiveData
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.paging.PagingConfig
 import com.xhlab.nep.model.Element
@@ -25,7 +26,7 @@ internal class ProcessRepoImpl @Inject constructor(
 ) : ProcessRepo {
 
     private val io = Dispatchers.IO
-    private val cache = LruCache<String, MutableLiveData<Process?>>(10)
+    private val cache = LruCache<String, Process>(10)
 
     override suspend fun getProcess(processId: String): Process? = withContext(io) {
         val process = db.processQueries.getProcess(processId).executeAsOneOrNull()
@@ -34,8 +35,8 @@ internal class ProcessRepoImpl @Inject constructor(
         } else null
     }
 
-    override suspend fun getProcessLiveData(processId: String) = withContext(io) {
-        getProcessInternal(processId)
+    override suspend fun getProcessFlow(processId: String) = withContext(io) {
+        db.processQueries.getProcess(processId, processCacheMapper).asFlow().mapToOneOrNull()
     }
 
     override fun getProcesses(): Pager<Int, ProcessSummary> {
@@ -84,11 +85,9 @@ internal class ProcessRepoImpl @Inject constructor(
     }
 
     override suspend fun renameProcess(processId: String, name: String) = withContext(io) {
-        val liveData = getProcessInternal(processId)
-        val process = liveData.value
+        val process = getProcessInternal(processId)
         if (process != null) {
             process.name = name.trim()
-            liveData.postValue(process)
             db.processQueries.upsert(roomMapper.map(process))
         } else {
             throw ProcessNotFoundException()
@@ -109,12 +108,10 @@ internal class ProcessRepoImpl @Inject constructor(
         to: Recipe?,
         element: Element
     ) {
-        val liveData = getProcessInternal(processId)
-        val process = liveData.value
+        val process = getProcessInternal(processId)
         val subProcess = getProcess(fromProcessId)
         if (process != null && subProcess != null) {
             process.connectProcess(subProcess, to, element)
-            liveData.postValue(process)
             db.processQueries.upsert(roomMapper.map(process))
         } else {
             throw ProcessNotFoundException()
@@ -128,11 +125,9 @@ internal class ProcessRepoImpl @Inject constructor(
         element: Element,
         reversed: Boolean
     ) = withContext(io) {
-        val liveData = getProcessInternal(processId)
-        val process = liveData.value
+        val process = getProcessInternal(processId)
         if (process != null) {
             process.connectRecipe(from, to, element, reversed)
-            liveData.postValue(process)
             db.processQueries.upsert(roomMapper.map(process))
         } else {
             throw ProcessNotFoundException()
@@ -146,11 +141,9 @@ internal class ProcessRepoImpl @Inject constructor(
         element: Element,
         reversed: Boolean
     ) = withContext(io) {
-        val liveData = getProcessInternal(processId)
-        val process = liveData.value
+        val process = getProcessInternal(processId)
         if (process != null) {
             process.disconnectRecipe(from, to, element, reversed)
-            liveData.postValue(process)
             db.processQueries.upsert(roomMapper.map(process))
         } else {
             throw ProcessNotFoundException()
@@ -163,11 +156,9 @@ internal class ProcessRepoImpl @Inject constructor(
         element: Element,
         consumed: Boolean
     ) = withContext(io) {
-        val liveData = getProcessInternal(processId)
-        val process = liveData.value
+        val process = getProcessInternal(processId)
         if (process != null) {
             process.markNotConsumed(recipe, element, consumed)
-            liveData.postValue(process)
             db.processQueries.upsert(roomMapper.map(process))
         } else {
             throw ProcessNotFoundException()
@@ -176,20 +167,9 @@ internal class ProcessRepoImpl @Inject constructor(
 
     private suspend fun getProcessInternal(
         processId: String
-    ): MutableLiveData<Process?> = withContext(io) {
-        val cached = cache.get(processId)
-        if (cached != null) {
-            cached
-        } else {
-            val process = db.processQueries.getProcess(processId).executeAsOneOrNull()
-            if (process != null) {
-                val liveData = MutableLiveData(mapper.map(process))
-                cache.put(processId, liveData)
-                liveData
-            } else {
-                MutableLiveData<Process?>(null)
-            }
-        }
+    ): Process? = withContext(io) {
+        cache.get(processId) ?: db.processQueries.getProcess(processId, processCacheMapper)
+            .executeAsOneOrNull()
     }
 
     private fun ProcessQueries.upsert(process: ProcessEntity) = with(process) {
@@ -198,6 +178,28 @@ internal class ProcessRepoImpl @Inject constructor(
 
     private val pagingConfig: PagingConfig
         get() = PagingConfig(PAGE_SIZE)
+
+    private val processCacheMapper = { process_id: String,
+                                       name: String,
+                                       unlocalized_name: String,
+                                       localized_name: String,
+                                       amount: Int,
+                                       node_count: Int,
+                                       json: String ->
+        val process = mapper.map(
+            ProcessEntity(
+                process_id = process_id,
+                name = name,
+                unlocalized_name = unlocalized_name,
+                localized_name = localized_name,
+                amount = amount,
+                node_count = node_count,
+                json = json
+            )
+        )
+        cache.put(process_id, process)
+        process
+    }
 
     private val processSummaryMapper = { process_id: String,
                                          name: String,

@@ -9,7 +9,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityProcessSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.util.viewModelProvider
@@ -51,7 +50,7 @@ class ProcessSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(intent?.getSerializableExtra(CONSTRAINT) as? ProcessEditViewModel.ConnectionConstraint)
 
-        viewModel.constraint.observe(this) {
+        viewModel.constraint.asLiveData().observe(this) {
             supportActionBar?.subtitle = it.element.localizedName
         }
 
@@ -65,16 +64,12 @@ class ProcessSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             processAdapter.setIconVisibility(it)
         }
 
-        viewModel.connectionResult.observe(this) {
-            if (it.isSuccessful()) {
-                finish()
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_connect_recipe_failed,
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+        viewModel.connectionErrorMessage.asLiveData().observe(this) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+        }
+
+        viewModel.finish.asLiveData().observe(this) {
+            finish()
         }
     }
 

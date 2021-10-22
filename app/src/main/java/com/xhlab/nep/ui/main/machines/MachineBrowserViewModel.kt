@@ -1,16 +1,14 @@
 package com.xhlab.nep.ui.main.machines
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
+import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.domain.MachineResultNavigationUseCase
 import com.xhlab.nep.shared.domain.machine.LoadMachineListUseCase
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import com.xhlab.nep.shared.ui.invokeUseCase
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,20 +16,18 @@ class MachineBrowserViewModel @Inject constructor(
     loadMachineListUseCase: LoadMachineListUseCase,
     generalPreference: GeneralPreference,
     private val machineResultNavigationUseCase: MachineResultNavigationUseCase
-) : ViewModel(),
-    BaseViewModel by BasicViewModel(),
-    MachineListener {
+) : ViewModel(), MachineListener {
 
     val machineList = loadMachineListUseCase.observeOnlySuccess()
 
     val isDBLoaded = generalPreference.isDBLoaded
 
-    private val _navigateToMachineResult = LiveEvent<MachineResultNavigationUseCase.Parameter>()
-    val navigateToMachineResult: LiveData<MachineResultNavigationUseCase.Parameter>
-        get() = _navigateToMachineResult
+    private val _navigateToMachineResult = EventFlow<MachineResultNavigationUseCase.Parameter>()
+    val navigateToMachineResult: Flow<MachineResultNavigationUseCase.Parameter>
+        get() = _navigateToMachineResult.flow
 
     init {
-        viewModelScope.launch {
+        scope.launch {
             invokeMediatorUseCase(
                 useCase = loadMachineListUseCase,
                 params = Unit
@@ -40,9 +36,11 @@ class MachineBrowserViewModel @Inject constructor(
     }
 
     override fun onClick(machineId: Int) {
-        _navigateToMachineResult.postValue(
-            MachineResultNavigationUseCase.Parameter(machineId)
-        )
+        scope.launch {
+            _navigateToMachineResult.emit(
+                MachineResultNavigationUseCase.Parameter(machineId)
+            )
+        }
     }
 
     fun navigateToMachineResult(params: MachineResultNavigationUseCase.Parameter) {

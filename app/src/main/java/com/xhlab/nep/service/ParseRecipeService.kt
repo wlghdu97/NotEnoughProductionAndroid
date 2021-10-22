@@ -10,12 +10,13 @@ import android.os.Binder
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.Observer
+import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.main.MainActivity
 import dagger.android.AndroidInjection
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 class ParseRecipeService @Inject constructor() : Service() {
@@ -25,6 +26,7 @@ class ParseRecipeService @Inject constructor() : Service() {
     @Inject
     lateinit var parseRecipeUseCase: ParseRecipeUseCase
 
+    private var parseRecipeJob: Job? = null
     private var isTaskDone = false
 
     val parseLog by lazy { parseRecipeUseCase.observe() }
@@ -36,32 +38,6 @@ class ParseRecipeService @Inject constructor() : Service() {
             Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-    }
-
-    private val logObserver = Observer<Resource<String>> {
-        isTaskDone = it.status != Resource.Status.LOADING
-
-        if (isTaskDone) {
-            stopSelf()
-        }
-
-        NotificationManagerCompat.from(this).apply {
-            val builder = getNotificationBuilder().apply {
-                setProgress(100, 100, !isTaskDone)
-                setContentTitle(
-                    getString(
-                        when (isTaskDone) {
-                            true -> R.string.title_parsing_result
-                            false -> R.string.title_parsing_notification
-                        }
-                    )
-                )
-                setContentText(it.data)
-                setContentIntent(pendingIntent)
-                setOngoing(!isTaskDone)
-            }
-            notify(NOTIFICATION_ID, builder.build())
-        }
     }
 
     override fun onCreate() {
@@ -82,18 +58,25 @@ class ParseRecipeService @Inject constructor() : Service() {
     override fun onDestroy() {
         super.onDestroy()
         if (!isTaskDone) {
-            parseRecipeUseCase.cancel()
+            parseRecipeJob?.cancel()
         }
-        parseLog.removeObserver(logObserver)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        parseLog.observeForever(logObserver)
         val fileUri = intent.getParcelableExtra<Uri>(JSON_URI)
         if (fileUri != null) {
             val inputStream = contentResolver.openInputStream(fileUri)
             if (inputStream != null) {
-                parseRecipeUseCase.execute(inputStream)
+                CoroutineScope(SupervisorJob()).launch {
+                    val job = parseRecipeUseCase.execute(Dispatchers.Default, inputStream).apply {
+                        parseRecipeJob = this
+                    }
+                    withContext(job) {
+                        parseLog.collectLatest {
+                            updateProgress(it)
+                        }
+                    }
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId)
@@ -105,6 +88,34 @@ class ParseRecipeService @Inject constructor() : Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID)
         stopSelf()
+    }
+
+    private suspend fun updateProgress(
+        progress: Resource<String>
+    ) = withContext(Dispatchers.Main) {
+        isTaskDone = progress.status != Resource.Status.LOADING
+
+        if (isTaskDone) {
+            stopSelf()
+        }
+
+        NotificationManagerCompat.from(this@ParseRecipeService).apply {
+            val builder = getNotificationBuilder().apply {
+                setProgress(100, 100, !isTaskDone)
+                setContentTitle(
+                    getString(
+                        when (isTaskDone) {
+                            true -> R.string.title_parsing_result
+                            false -> R.string.title_parsing_notification
+                        }
+                    )
+                )
+                setContentText(progress.data)
+                setContentIntent(pendingIntent)
+                setOngoing(!isTaskDone)
+            }
+            notify(NOTIFICATION_ID, builder.build())
+        }
     }
 
     private fun getNotificationBuilder(): NotificationCompat.Builder {

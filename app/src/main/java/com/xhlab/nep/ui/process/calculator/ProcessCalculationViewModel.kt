@@ -1,33 +1,37 @@
 package com.xhlab.nep.ui.process.calculator
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.domain.process.ResourceRateCalculationUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProcessCalculationViewModel @Inject constructor(
     private val loadProcessUseCase: LoadProcessUseCase,
     private val calculationUseCase: ResourceRateCalculationUseCase,
     generalPreference: GeneralPreference
-) : ViewModel(), BaseViewModel by BasicViewModel() {
+) : ViewModel() {
 
-    private val processId = MutableLiveData<String>()
+    private val processId = MutableStateFlow<String?>(null)
 
-    val process = loadProcessUseCase.observeOnly(Resource.Status.SUCCESS)
+    val process = loadProcessUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _calculationResult =
-        MediatorLiveData<Resource<ResourceRateCalculationUseCase.Result>>()
-    val calculationResult: LiveData<Resource<ResourceRateCalculationUseCase.Result>>
-        get() = _calculationResult
+    private val _isResultValid = MutableStateFlow<Boolean?>(null)
+    val isResultValid: Flow<Boolean> = _isResultValid.mapNotNull { it }
+
+    private val _calculationResult = MutableStateFlow<ResourceRateCalculationUseCase.Result?>(null)
+    val calculationResult: Flow<ResourceRateCalculationUseCase.Result> =
+        _calculationResult.mapNotNull { it }
 
     fun init(processId: String?) {
         if (processId == null) {
@@ -40,19 +44,23 @@ class ProcessCalculationViewModel @Inject constructor(
     }
 
     init {
-        loadProcessUseCase.observe().addSource(processId) {
-            invokeMediatorUseCase(
-                useCase = loadProcessUseCase,
-                params = LoadProcessUseCase.Parameter(it)
-            )
+        scope.launch {
+            processId.collect {
+                if (it != null) {
+                    invokeMediatorUseCase(
+                        useCase = loadProcessUseCase,
+                        params = LoadProcessUseCase.Parameter(it)
+                    )
+                }
+            }
         }
-        loadProcessUseCase.observe().addSource(process) {
-            if (it != null) {
-                invokeUseCase(
-                    resultData = _calculationResult,
-                    useCase = calculationUseCase,
-                    params = ResourceRateCalculationUseCase.Parameter(it)
-                )
+
+        scope.launch {
+            process.collect {
+                val params = ResourceRateCalculationUseCase.Parameter(it)
+                val result = calculationUseCase.invokeInstant(params)
+                _isResultValid.value = result.isSuccessful()
+                _calculationResult.value = result.data
             }
         }
     }

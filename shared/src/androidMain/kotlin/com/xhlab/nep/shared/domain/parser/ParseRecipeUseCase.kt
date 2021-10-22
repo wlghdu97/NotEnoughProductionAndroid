@@ -1,23 +1,21 @@
 package com.xhlab.nep.shared.domain.parser
 
-import androidx.lifecycle.LiveDataScope
-import androidx.lifecycle.liveData
 import com.google.gson.stream.JsonReader
+import com.xhlab.multiplatform.domain.Cancellable
+import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.machine.MachineRepo
-import com.xhlab.nep.shared.domain.Cancelable
-import com.xhlab.nep.shared.domain.MediatorUseCase
+import com.xhlab.nep.shared.domain.BaseMediatorUseCase
 import com.xhlab.nep.shared.parser.*
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 import java.io.InputStream
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class ParseRecipeUseCase @Inject constructor(
     private val machineRecipeParser: MachineRecipeParser,
@@ -30,15 +28,10 @@ class ParseRecipeUseCase @Inject constructor(
     private val elementRepo: ElementRepo,
     private val machineRepo: MachineRepo,
     private val generalPreference: GeneralPreference
-) : MediatorUseCase<InputStream, String>(), Cancelable {
+) : BaseMediatorUseCase<InputStream, String>(), Cancellable {
 
-    private var job: Job? = null
-
-    @ExperimentalCoroutinesApi
-    override fun executeInternal(params: InputStream) = liveData<Resource<String>>(Dispatchers.IO) {
-        // save job to support cancellation
-        job = coroutineContext[Job]
-
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun executeInternal(params: InputStream) = flow {
         // mark db is dirty
         generalPreference.setDBLoaded(false)
 
@@ -78,18 +71,15 @@ class ParseRecipeUseCase @Inject constructor(
 
         val elapsedTime = System.currentTimeMillis() - startTime
         emitLog("done! elapsed time : ${elapsedTime / 1000} sec", Resource.Status.SUCCESS)
-    }
+    }.flowOn(Dispatchers.IO)
 
-    override fun cancel() {
-        job?.cancel()
-
+    override fun onCancellation() {
         val message = "job canceled."
         Timber.i(message)
         result.value = Resource.success(message)
     }
 
-    @ExperimentalCoroutinesApi
-    private suspend fun LiveDataScope<Resource<String>>.parse(type: String, reader: JsonReader) {
+    private suspend fun FlowCollector<Resource<String>>.parse(type: String, reader: JsonReader) {
         when (type) {
             "shaped" -> shapedRecipeParser.parse(type, reader)
             "shapeless" -> shapelessRecipeParser.parse(type, reader)
@@ -99,11 +89,11 @@ class ParseRecipeUseCase @Inject constructor(
             "furnace" -> furnaceRecipeParser.parse(type, reader)
             else -> machineRecipeParser.parse(type, reader)
         }.apply {
-            consumeEach { emitLog(it) }
+            collect { emitLog(it) }
         }
     }
 
-    private suspend fun LiveDataScope<Resource<String>>.emitLog(
+    private suspend fun FlowCollector<Resource<String>>.emitLog(
         log: String,
         status: Resource.Status = Resource.Status.LOADING
     ) {

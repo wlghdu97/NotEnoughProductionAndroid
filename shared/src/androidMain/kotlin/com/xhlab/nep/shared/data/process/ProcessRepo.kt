@@ -1,17 +1,17 @@
 package com.xhlab.nep.shared.data.process
 
-import androidx.lifecycle.LiveData
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.ProcessSummary
+import kotlinx.coroutines.flow.Flow
 
 interface ProcessRepo {
     fun getProcesses(): Pager<Int, ProcessSummary>
     fun getProcessesByTarget(targetElementKey: String): Pager<Int, ProcessSummary>
     suspend fun getProcess(processId: String): Process?
-    suspend fun getProcessLiveData(processId: String): LiveData<Process?>
+    suspend fun getProcessFlow(processId: String): Flow<Process?>
     suspend fun createProcess(name: String, targetRecipe: Recipe, keyElement: Element): Boolean
     suspend fun insertProcess(process: Process)
     suspend fun renameProcess(processId: String, name: String)

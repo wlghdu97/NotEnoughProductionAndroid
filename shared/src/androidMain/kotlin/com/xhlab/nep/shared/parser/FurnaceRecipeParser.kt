@@ -7,10 +7,8 @@ import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.ItemParser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class FurnaceRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
@@ -20,14 +18,15 @@ class FurnaceRecipeParser @Inject constructor(
 
     private var machineId: Int = -1
 
-    override suspend fun parse(type: String, reader: JsonReader) = CoroutineScope(coroutineContext).produce {
-        send("parsing furnace recipes")
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun parse(type: String, reader: JsonReader) = flow {
+        emit("parsing furnace recipes")
         registerFurnace()
         while (reader.hasNext()) {
             if (reader.peek() == JsonToken.BEGIN_ARRAY) {
                 val recipeList = parseElements(reader)
                 // insert recipes into db
-                send("inserting ${recipeList.size} furnace recipes")
+                emit("inserting ${recipeList.size} furnace recipes")
                 recipeRepo.insertRecipes(recipeList)
             } else {
                 reader.skipValue()
@@ -35,6 +34,7 @@ class FurnaceRecipeParser @Inject constructor(
         }
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parseElement(reader: JsonReader): MachineRecipe {
         var input: Item? = null
         var output: Item? = null

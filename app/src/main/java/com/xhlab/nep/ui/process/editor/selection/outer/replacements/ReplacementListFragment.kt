@@ -50,7 +50,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         recipeSelectionViewModel = requireActivity().viewModelProvider(viewModelFactory)
         viewModel = viewModelProvider(viewModelFactory)
 
-        recipeSelectionViewModel.constraint.observe(this) {
+        recipeSelectionViewModel.constraint.asLiveData().observe(this) {
             val unlocalizedName = arguments?.getString(ELEMENT_KEY)
             viewModel.init(unlocalizedName)
             (activity as? AppCompatActivity)?.supportActionBar?.subtitle = unlocalizedName
@@ -66,11 +66,11 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
             elementAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToRecipeList.observe(this) { elementId ->
+        viewModel.navigateToRecipeList.asLiveData().observe(this) { elementId ->
             showRecipeListFragment(elementId)
         }
 
-        viewModel.navigateToRecipeListWithKey.observe(this) { elementKey ->
+        viewModel.navigateToRecipeListWithKey.asLiveData().observe(this) { elementKey ->
             showRecipeListFragment(elementKey)
         }
     }

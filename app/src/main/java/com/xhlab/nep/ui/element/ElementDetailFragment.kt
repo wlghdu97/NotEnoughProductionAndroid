@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.asLiveData
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
@@ -18,7 +19,6 @@ import com.xhlab.nep.ui.element.recipes.RecipeListFragment
 import com.xhlab.nep.ui.element.replacements.ReplacementContainerFragment
 import com.xhlab.nep.ui.element.usages.UsageListFragment
 import com.xhlab.nep.util.getCardBackgroundColor
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -63,7 +63,7 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(elementId)
 
-        viewModel.element.observeNotNull(this) { element ->
+        viewModel.element.asLiveData().observe(this) { element ->
             (activity as? AppCompatActivity)?.let { activity ->
                 activity.setSupportActionBar(binding.toolbar)
                 activity.supportActionBar?.let {

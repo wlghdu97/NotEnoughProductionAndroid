@@ -1,13 +1,13 @@
 package com.xhlab.nep.ui.process.editor.selection.outer
 
 import android.os.Bundle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityRecipeSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
@@ -42,7 +42,7 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(intent?.getSerializableExtra(CONSTRAINT) as? ProcessEditViewModel.ConnectionConstraint)
 
-        viewModel.constraint.observe(this) {
+        viewModel.constraint.asLiveData().observe(this) {
             val elementKey = it.element.unlocalizedName
             when (it.element.type) {
                 ORE_CHAIN -> {
@@ -57,16 +57,12 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             }
         }
 
-        viewModel.connectionResult.observe(this) {
-            if (it.isSuccessful()) {
-                finish()
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_connect_recipe_failed,
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+        viewModel.connectionErrorMessage.asLiveData().observe(this) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+        }
+
+        viewModel.finish.asLiveData().observe(this) {
+            finish()
         }
     }
 

@@ -2,14 +2,14 @@ package com.xhlab.nep.shared.domain.machine
 
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.data.machine.MachineRepo
-import com.xhlab.nep.shared.domain.UseCase
+import com.xhlab.nep.shared.domain.BaseUseCase
 import javax.inject.Inject
 
 class LoadMachineUseCase @Inject constructor(
     private val machineRepo: MachineRepo
-) : UseCase<LoadMachineUseCase.Parameter, Machine?>() {
+) : BaseUseCase<LoadMachineUseCase.Parameter, Machine?>() {
 
-    override suspend fun execute(params: Parameter): Machine? {
+    override suspend fun execute(params: Parameter): Machine {
         return machineRepo.getMachine(params.machineId)
             ?: throw NullPointerException("machine not found.")
     }

@@ -56,7 +56,7 @@ class MachineBrowserFragment : DaggerFragment(), ViewInit {
             machineAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToMachineResult.observe(this) {
+        viewModel.navigateToMachineResult.asLiveData().observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
                 with(childFragmentManager) {

@@ -1,36 +1,32 @@
 package com.xhlab.nep.ui.process.calculator
 
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import com.xhlab.multiplatform.util.Resource
+import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.domain.item.LoadElementDetailWithKeyUseCase
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.shared.util.isSuccessful
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeUseCase
 import com.xhlab.nep.ui.process.calculator.ingredients.ElementKeyListener
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class ElementNavigatorViewModel @Inject constructor(
     private val loadElementDetailWithKeyUseCase: LoadElementDetailWithKeyUseCase,
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
-) : ViewModel(), BaseViewModel by BasicViewModel(),
-    ElementKeyListener {
+) : ViewModel(), ElementKeyListener {
 
-    private val _elements = MediatorLiveData<Resource<List<ElementView>>>()
-    val elements = Transformations.map(_elements) {
-        if (it.isSuccessful()) {
-            if (it.data!!.size == 1) {
-                val element = it.data!![0]
+    private val _elements = MutableStateFlow<Resource<List<ElementView>>?>(null)
+    val elements = _elements.transform {
+        if (it?.isSuccessful() == true) {
+            val data = it.data!!
+            if (data.size == 1) {
+                val element = data[0]
                 navigateToDetails(element.id, element.type)
-                null
             } else {
-                it.data
+                emit(data)
             }
-        } else {
-            null
         }
     }
 

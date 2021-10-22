@@ -1,21 +1,23 @@
 package com.xhlab.nep.ui.main.machines.details
 
-import androidx.lifecycle.*
-import com.hadilq.liveevent.LiveEvent
+import com.xhlab.multiplatform.util.EventFlow
+import com.xhlab.multiplatform.util.Resource
+import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.domain.machine.LoadMachineUseCase
 import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.shared.util.isSuccessful
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import com.xhlab.nep.shared.ui.invokeUseCase
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,25 +26,28 @@ class MachineResultViewModel @Inject constructor(
     private val machineResultSearchUseCase: MachineResultSearchUseCase,
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase,
     generalPreference: GeneralPreference
-) : ViewModel(), BaseViewModel by BasicViewModel(), ElementListener {
+) : ViewModel(), ElementListener {
 
-    private val _machine = MediatorLiveData<Resource<Machine?>>()
-    val machine = Transformations.map(_machine) {
-        if (it.isSuccessful()) it.data else null
+    private val _machine = MutableStateFlow<Resource<Machine?>?>(null)
+    val machine = _machine.transform {
+        if (it?.isSuccessful() == true) {
+            emit(it.data!!)
+        }
     }
 
     val resultList = machineResultSearchUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _navigateToDetail = LiveEvent<ElementDetailNavigationUseCase.Parameters>()
-    val navigateToDetail: LiveData<ElementDetailNavigationUseCase.Parameters>
-        get() = _navigateToDetail
+    private val _navigateToDetail = EventFlow<ElementDetailNavigationUseCase.Parameters>()
+    val navigateToDetail: Flow<ElementDetailNavigationUseCase.Parameters>
+        get() = _navigateToDetail.flow
 
     // to prevent DiffUtil's index out of bound
     private var searchDebounceJob: Job? = null
 
-    private fun requireMachineId() = machine.value?.id ?: throw MachineIdNullPointerException()
+    private fun requireMachineId() =
+        _machine.value?.data?.id ?: throw MachineIdNullPointerException()
 
     fun init(machineId: Int?) {
         if (machineId == null || machineId == -1) {
@@ -53,7 +58,7 @@ class MachineResultViewModel @Inject constructor(
             params = LoadMachineUseCase.Parameter(machineId),
             resultData = _machine
         )
-        viewModelScope.launch {
+        scope.launch {
             invokeMediatorUseCase(
                 useCase = machineResultSearchUseCase,
                 params = MachineResultSearchUseCase.Parameters(machineId)
@@ -63,7 +68,7 @@ class MachineResultViewModel @Inject constructor(
 
     fun searchResults(term: String) {
         searchDebounceJob?.cancel()
-        searchDebounceJob = viewModelScope.launch {
+        searchDebounceJob = scope.launch {
             delay(50)
             invokeMediatorUseCase(
                 useCase = machineResultSearchUseCase,
@@ -76,9 +81,11 @@ class MachineResultViewModel @Inject constructor(
     }
 
     override fun onClick(elementId: Long, elementType: Int) {
-        _navigateToDetail.postValue(
-            ElementDetailNavigationUseCase.Parameters(elementId, elementType)
-        )
+        scope.launch {
+            _navigateToDetail.emit(
+                ElementDetailNavigationUseCase.Parameters(elementId, elementType)
+            )
+        }
     }
 
     fun navigateToElementDetail(params: ElementDetailNavigationUseCase.Parameters) {

@@ -3,7 +3,7 @@ package com.xhlab.nep.shared.domain.process
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.shared.domain.UseCase
+import com.xhlab.nep.shared.domain.BaseUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.apache.commons.math3.linear.MatrixUtils
@@ -12,7 +12,7 @@ import org.apache.commons.math3.optim.nonlinear.scalar.GoalType
 import javax.inject.Inject
 
 class ResourceRateCalculationUseCase @Inject constructor() :
-    UseCase<ResourceRateCalculationUseCase.Parameter, ResourceRateCalculationUseCase.Result>() {
+    BaseUseCase<ResourceRateCalculationUseCase.Parameter, ResourceRateCalculationUseCase.Result>() {
 
     override suspend fun execute(params: Parameter) = withContext(Dispatchers.IO) {
         val process = params.process

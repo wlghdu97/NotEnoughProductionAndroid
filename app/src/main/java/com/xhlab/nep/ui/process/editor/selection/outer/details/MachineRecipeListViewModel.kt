@@ -1,17 +1,14 @@
 package com.xhlab.nep.ui.process.editor.selection.outer.details
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.domain.recipe.LoadUsageRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,11 +16,11 @@ class MachineRecipeListViewModel @Inject constructor(
     private val loadRecipeListUseCase: LoadRecipeListUseCase,
     private val loadUsageRecipeListUseCase: LoadUsageRecipeListUseCase,
     generalPreference: GeneralPreference
-) : ViewModel(), BaseViewModel by BasicViewModel() {
+) : ViewModel() {
 
-    private val elementId = MutableLiveData<Long>()
-    private val machineId = MutableLiveData<Int>()
-    private val connectToParent = MutableLiveData<Boolean>()
+    private val elementId = MutableStateFlow<Long?>(null)
+    private val machineId = MutableStateFlow<Int?>(null)
+    private val connectToParent = MutableStateFlow<Boolean?>(null)
 
     val recipeList = loadRecipeListUseCase.observeOnlySuccess()
     val usageList = loadUsageRecipeListUseCase.observeOnlySuccess()
@@ -40,7 +37,7 @@ class MachineRecipeListViewModel @Inject constructor(
         this.elementId.value = elementId
         this.machineId.value = machineId
         this.connectToParent.value = connectToParent
-        viewModelScope.launch {
+        scope.launch {
             when (connectToParent) {
                 true -> {
                     invokeMediatorUseCase(
@@ -66,7 +63,7 @@ class MachineRecipeListViewModel @Inject constructor(
 
     fun searchIngredients(term: String) {
         searchDebounceJob?.cancel()
-        searchDebounceJob = viewModelScope.launch {
+        searchDebounceJob = scope.launch {
             delay(50)
             if (connectToParent.value == true) {
                 invokeMediatorUseCase(

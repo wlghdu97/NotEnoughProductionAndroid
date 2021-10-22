@@ -11,7 +11,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentProcessListBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.adapters.ProcessAdapter
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog
@@ -72,23 +71,23 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
             processAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.renameProcess.observe(this) { (processId, name) ->
+        viewModel.renameProcess.asLiveData().observe(this) { (processId, name) ->
             showProcessRenameDialog(processId, name)
         }
 
-        viewModel.exportProcess.observe(this) {
-            if (it.isSuccessful()) {
-                showExportStringDialog(it.data!!)
-            } else if (it.throwable != null) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_failed_to_export_string,
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+        viewModel.showExportStringDialog.asLiveData().observe(this) {
+            showExportStringDialog(it)
         }
 
-        viewModel.deleteProcess.observe(this) { (processId, name) ->
+        viewModel.showExportFailedMessage.asLiveData().observe(this) {
+            Snackbar.make(
+                binding.root,
+                R.string.error_failed_to_export_string,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+
+        viewModel.deleteProcess.asLiveData().observe(this) { (processId, name) ->
             showProcessRemovalDialog(processId, name)
         }
     }

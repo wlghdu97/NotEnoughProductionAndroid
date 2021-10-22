@@ -12,7 +12,6 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.MACHINE_RECIPE_LIST_TAG
@@ -20,7 +19,6 @@ import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.details.MachineRecipeListFragment
 import com.xhlab.nep.ui.process.editor.selection.outer.details.MachineRecipeListFragment.Companion.MACHINE_ID
 import com.xhlab.nep.util.longToast
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.flow.flatMapLatest
@@ -67,7 +65,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         recipeSelectionViewModel = requireActivity().viewModelProvider(viewModelFactory)
         viewModel = viewModelProvider(viewModelFactory)
 
-        recipeSelectionViewModel.constraint.observe(this) {
+        recipeSelectionViewModel.constraint.asLiveData().observe(this) {
             val elementKey = arguments?.getString(ELEMENT_KEY)
             val elementId = arguments?.getLong(ELEMENT_ID)
             if (elementKey != null) {
@@ -77,11 +75,11 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
             }
         }
 
-        viewModel.elements.observeNotNull(this) {
+        viewModel.elements.asLiveData().observe(this) {
             showElementSelectionDialog(it)
         }
 
-        viewModel.element.observeNotNull(this) {
+        viewModel.element.asLiveData().observe(this) {
             val subtitle = when (it.localizedName.isEmpty()) {
                 true -> it.unlocalizedName
                 false -> it.localizedName
@@ -101,16 +99,17 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
             recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToDetails.observe(this) { (elementId, machineId, connectToParent) ->
-            navigateToDetails(elementId, machineId, connectToParent)
+        viewModel.navigateToDetails.asLiveData()
+            .observe(this) { (elementId, machineId, connectToParent) ->
+                navigateToDetails(elementId, machineId, connectToParent)
+            }
+
+        viewModel.modificationErrorMessage.asLiveData().observe(this) {
+            longToast(it)
         }
 
-        viewModel.modificationResult.observe(this) {
-            if (it.isSuccessful()) {
-                activity?.finish()
-            } else if (it.throwable != null) {
-                longToast(R.string.error_failed_to_modify_process)
-            }
+        viewModel.finish.asLiveData().observe(this) {
+            activity?.finish()
         }
     }
 

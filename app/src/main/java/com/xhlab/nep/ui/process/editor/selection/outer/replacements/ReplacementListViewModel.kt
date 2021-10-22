@@ -1,15 +1,15 @@
 package com.xhlab.nep.ui.process.editor.selection.outer.replacements
 
-import androidx.lifecycle.*
-import com.hadilq.liveevent.LiveEvent
+import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.shared.domain.item.CheckReplacementListCountUseCase
 import com.xhlab.nep.shared.domain.item.LoadReplacementListUseCase
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,32 +18,35 @@ class ReplacementListViewModel @Inject constructor(
     private val loadReplacementListUseCase: LoadReplacementListUseCase,
     private val checkReplacementListCountUseCase: CheckReplacementListCountUseCase,
     generalPreference: GeneralPreference
-) : ViewModel(), BaseViewModel by BasicViewModel(), ElementListener {
+) : ViewModel(), ElementListener {
 
-    private val oreDictName = MutableLiveData<String>()
+    private val oreDictName = MutableStateFlow<String?>(null)
 
     val replacementList = loadReplacementListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _navigateToRecipeList = LiveEvent<Long>()
-    val navigateToRecipeList: LiveData<Long>
-        get() = _navigateToRecipeList
+    private val _navigateToRecipeList = EventFlow<Long>()
+    val navigateToRecipeList: Flow<Long>
+        get() = _navigateToRecipeList.flow
 
-    private val _navigateToRecipeListWithKey = LiveEvent<String>()
-    val navigateToRecipeListWithKey: LiveData<String>
-        get() = _navigateToRecipeListWithKey
+    private val _navigateToRecipeListWithKey = EventFlow<String>()
+    val navigateToRecipeListWithKey: Flow<String>
+        get() = _navigateToRecipeListWithKey.flow
 
     init {
-        viewModelScope.launch {
-            oreDictName.asFlow().collectLatest {
-                invokeMediatorUseCase(
-                    useCase = loadReplacementListUseCase,
-                    params = it
-                )
+        scope.launch {
+            oreDictName.collectLatest {
+                if (it != null) {
+                    invokeMediatorUseCase(
+                        useCase = loadReplacementListUseCase,
+                        params = it
+                    )
+                }
             }
         }
-        viewModelScope.launch {
+
+        scope.launch {
             replacementList.collectLatest {
                 val name = oreDictName.value
                 if (name != null) {
@@ -51,7 +54,7 @@ class ReplacementListViewModel @Inject constructor(
                         CheckReplacementListCountUseCase.Parameter(name)
                     ).data ?: 0
                     if (count < 1) {
-                        _navigateToRecipeListWithKey.postValue(oreDictName.value)
+                        _navigateToRecipeListWithKey.emit(name)
                     }
                 }
             }
@@ -70,6 +73,8 @@ class ReplacementListViewModel @Inject constructor(
     }
 
     override fun onClick(elementId: Long, elementType: Int) {
-        _navigateToRecipeList.postValue(elementId)
+        scope.launch {
+            _navigateToRecipeList.emit(elementId)
+        }
     }
 }

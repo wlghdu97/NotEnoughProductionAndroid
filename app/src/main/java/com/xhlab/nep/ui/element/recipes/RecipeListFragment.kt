@@ -61,7 +61,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
             recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToRecipeList.observe(this) {
+        viewModel.navigateToRecipeList.asLiveData().observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment().requireParentFragment()
                 parent.childFragmentManager.beginTransaction()

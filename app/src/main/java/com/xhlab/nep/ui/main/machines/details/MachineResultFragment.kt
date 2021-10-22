@@ -18,7 +18,6 @@ import com.xhlab.nep.domain.MachineResultNavigationUseCase
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.main.items.ElementDetailAdapter
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.flow.flatMapLatest
@@ -52,7 +51,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(arguments?.getInt(MACHINE_ID) ?: -1)
 
-        viewModel.machine.observeNotNull(this) {
+        viewModel.machine.asLiveData().observe(this) {
             (activity as? AppCompatActivity)?.supportActionBar?.subtitle = it.name
         }
 
@@ -66,7 +65,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
             adapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
                 requireParentFragment().childFragmentManager.beginTransaction()

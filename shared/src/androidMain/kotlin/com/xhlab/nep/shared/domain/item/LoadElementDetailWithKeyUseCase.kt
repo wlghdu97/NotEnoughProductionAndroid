@@ -2,12 +2,12 @@ package com.xhlab.nep.shared.domain.item
 
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.data.element.ElementRepo
-import com.xhlab.nep.shared.domain.UseCase
+import com.xhlab.nep.shared.domain.BaseUseCase
 import javax.inject.Inject
 
 class LoadElementDetailWithKeyUseCase @Inject constructor(
     private val elementRepo: ElementRepo
-) : UseCase<LoadElementDetailWithKeyUseCase.Parameter, List<ElementView>>() {
+) : BaseUseCase<LoadElementDetailWithKeyUseCase.Parameter, List<ElementView>>() {
 
     override suspend fun execute(params: Parameter): List<ElementView> {
         val ids = elementRepo.getIdsByKey(params.key)

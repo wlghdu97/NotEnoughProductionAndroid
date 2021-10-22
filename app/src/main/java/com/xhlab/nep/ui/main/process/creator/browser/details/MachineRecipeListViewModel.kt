@@ -1,26 +1,23 @@
 package com.xhlab.nep.ui.main.process.creator.browser.details
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MachineRecipeListViewModel @Inject constructor(
     private val loadRecipeListUseCase: LoadRecipeListUseCase,
     generalPreference: GeneralPreference
-) : ViewModel(), BaseViewModel by BasicViewModel() {
+) : ViewModel() {
 
-    private val elementId = MutableLiveData<Long>()
-    private val machineId = MutableLiveData<Int>()
+    private val elementId = MutableStateFlow<Long?>(null)
+    private val machineId = MutableStateFlow<Int?>(null)
 
     val recipeList = loadRecipeListUseCase.observeOnlySuccess()
 
@@ -35,7 +32,7 @@ class MachineRecipeListViewModel @Inject constructor(
         }
         this.elementId.value = elementId
         this.machineId.value = machineId
-        viewModelScope.launch {
+        scope.launch {
             invokeMediatorUseCase(
                 useCase = loadRecipeListUseCase,
                 params = LoadRecipeListUseCase.Parameters(elementId, machineId)
@@ -51,7 +48,7 @@ class MachineRecipeListViewModel @Inject constructor(
 
     fun searchIngredients(term: String) {
         searchDebounceJob?.cancel()
-        searchDebounceJob = viewModelScope.launch {
+        searchDebounceJob = scope.launch {
             delay(50)
             invokeMediatorUseCase(
                 useCase = loadRecipeListUseCase,

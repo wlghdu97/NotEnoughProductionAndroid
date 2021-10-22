@@ -89,7 +89,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             elementAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToDetail.observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
                 with(childFragmentManager) {

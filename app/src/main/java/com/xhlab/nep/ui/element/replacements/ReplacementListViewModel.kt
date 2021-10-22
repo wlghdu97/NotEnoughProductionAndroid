@@ -1,17 +1,15 @@
 package com.xhlab.nep.ui.element.replacements
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
+import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.shared.domain.item.LoadReplacementListUseCase
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import com.xhlab.nep.shared.ui.invokeUseCase
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,17 +17,15 @@ class ReplacementListViewModel @Inject constructor(
     private val loadReplacementListUseCase: LoadReplacementListUseCase,
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase,
     generalPreference: GeneralPreference
-) : ViewModel(),
-    BaseViewModel by BasicViewModel(),
-    ElementListener {
+) : ViewModel(), ElementListener {
 
     val replacementList = loadReplacementListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _navigateToDetail = LiveEvent<ElementDetailNavigationUseCase.Parameters>()
-    val navigateToDetail: LiveData<ElementDetailNavigationUseCase.Parameters>
-        get() = _navigateToDetail
+    private val _navigateToDetail = EventFlow<ElementDetailNavigationUseCase.Parameters>()
+    val navigateToDetail: Flow<ElementDetailNavigationUseCase.Parameters>
+        get() = _navigateToDetail.flow
 
     fun init(oreDictName: String?) {
         requireNotNull(oreDictName) {
@@ -39,7 +35,7 @@ class ReplacementListViewModel @Inject constructor(
         if (loadReplacementListUseCase.observe().value.data != null) {
             return
         }
-        viewModelScope.launch {
+        scope.launch {
             invokeMediatorUseCase(
                 useCase = loadReplacementListUseCase,
                 params = oreDictName
@@ -48,9 +44,11 @@ class ReplacementListViewModel @Inject constructor(
     }
 
     override fun onClick(elementId: Long, elementType: Int) {
-        _navigateToDetail.postValue(
-            ElementDetailNavigationUseCase.Parameters(elementId, elementType)
-        )
+        scope.launch {
+            _navigateToDetail.emit(
+                ElementDetailNavigationUseCase.Parameters(elementId, elementType)
+            )
+        }
     }
 
     fun navigateToElementDetail(params: ElementDetailNavigationUseCase.Parameters) {

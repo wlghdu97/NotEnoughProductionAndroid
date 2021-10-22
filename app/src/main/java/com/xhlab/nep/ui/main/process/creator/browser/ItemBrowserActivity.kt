@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.main.process.creator.browser
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityItemBrowserBinding
@@ -46,15 +47,15 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
 
-        viewModel.navigateToMachineList.observe(this) {
+        viewModel.navigateToMachineList.asLiveData().observe(this) {
             navigateToRecipeList(it)
         }
 
-        viewModel.navigateToRecipeDetails.observe(this) { (elementId, machineId) ->
+        viewModel.navigateToRecipeDetails.asLiveData().observe(this) { (elementId, machineId) ->
             navigateToRecipeDetail(elementId, machineId)
         }
 
-        viewModel.returnResult.observe(this) { (targetRecipe, keyElement) ->
+        viewModel.returnResult.asLiveData().observe(this) { (targetRecipe, keyElement) ->
             val intent = Intent().apply {
                 putExtra(TARGET_RECIPE, targetRecipe)
                 putExtra(KEY_ELEMENT, keyElement)

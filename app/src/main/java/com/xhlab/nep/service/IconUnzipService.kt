@@ -10,12 +10,13 @@ import android.os.Binder
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.Observer
+import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.icon.IconUnzipUseCase
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.main.MainActivity
 import dagger.android.AndroidInjection
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 class IconUnzipService : Service() {
@@ -25,6 +26,7 @@ class IconUnzipService : Service() {
     @Inject
     lateinit var iconUnzipUseCase: IconUnzipUseCase
 
+    private var iconUnzipJob: Job? = null
     private var isTaskDone = false
 
     val unzipLog by lazy { iconUnzipUseCase.observe() }
@@ -36,32 +38,6 @@ class IconUnzipService : Service() {
             Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-    }
-
-    private val logObserver = Observer<Resource<IconUnzipUseCase.Progress>> {
-        isTaskDone = it.status != Resource.Status.LOADING
-
-        if (isTaskDone) {
-            stopSelf()
-        }
-
-        NotificationManagerCompat.from(this).apply {
-            val builder = getNotificationBuilder().apply {
-                setProgress(100, it.data?.progress ?: 0, false)
-                setContentTitle(
-                    getString(
-                        when (isTaskDone) {
-                            true -> R.string.title_unzip_result
-                            false -> R.string.title_unzip_notification
-                        }
-                    )
-                )
-                setContentText(it.data?.message)
-                setContentIntent(pendingIntent)
-                setOngoing(!isTaskDone)
-            }
-            notify(NOTIFICATION_ID, builder.build())
-        }
     }
 
     override fun onCreate() {
@@ -82,16 +58,23 @@ class IconUnzipService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         if (!isTaskDone) {
-            iconUnzipUseCase.cancel()
+            iconUnzipJob?.cancel()
         }
-        unzipLog.removeObserver(logObserver)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        unzipLog.observeForever(logObserver)
         val fileUri = intent.getParcelableExtra<Uri>(ZIP_URI)
         if (fileUri != null) {
-            iconUnzipUseCase.execute(fileUri)
+            CoroutineScope(SupervisorJob()).launch {
+                val job = iconUnzipUseCase.execute(Dispatchers.Default, fileUri).apply {
+                    iconUnzipJob = this
+                }
+                withContext(job) {
+                    unzipLog.collectLatest {
+                        updateProgress(it)
+                    }
+                }
+            }
         }
         return super.onStartCommand(intent, flags, startId)
     }
@@ -102,6 +85,34 @@ class IconUnzipService : Service() {
     override fun onTaskRemoved(rootIntent: Intent?) {
         NotificationManagerCompat.from(this).cancel(NOTIFICATION_ID)
         stopSelf()
+    }
+
+    private suspend fun updateProgress(
+        progress: Resource<IconUnzipUseCase.Progress>
+    ) = withContext(Dispatchers.Main) {
+        isTaskDone = progress.status != Resource.Status.LOADING
+
+        if (isTaskDone) {
+            stopSelf()
+        }
+
+        NotificationManagerCompat.from(this@IconUnzipService).apply {
+            val builder = getNotificationBuilder().apply {
+                setProgress(100, progress.data?.progress ?: 0, false)
+                setContentTitle(
+                    getString(
+                        when (isTaskDone) {
+                            true -> R.string.title_unzip_result
+                            false -> R.string.title_unzip_notification
+                        }
+                    )
+                )
+                setContentText(progress.data?.message)
+                setContentIntent(pendingIntent)
+                setOngoing(!isTaskDone)
+            }
+            notify(NOTIFICATION_ID, builder.build())
+        }
     }
 
     private fun getNotificationBuilder(): NotificationCompat.Builder {

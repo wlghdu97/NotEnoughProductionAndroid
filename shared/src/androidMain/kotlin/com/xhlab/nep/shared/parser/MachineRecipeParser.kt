@@ -9,12 +9,9 @@ import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.ProducerScope
-import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class MachineRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
@@ -23,33 +20,28 @@ class MachineRecipeParser @Inject constructor(
     private val recipeRepo: RecipeRepo
 ) : RecipeParser<MachineRecipe>() {
 
-    @ExperimentalCoroutinesApi
-    override suspend fun parse(
-        type: String,
-        reader: JsonReader
-    ) = CoroutineScope(coroutineContext).produce<String> {
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun parse(type: String, reader: JsonReader) = flow {
         while (reader.hasNext()) {
             reader.nextName()
-            parseMachineList(this, reader, type)
+            parseMachineList(reader, type)
         }
     }
 
-    @ExperimentalCoroutinesApi
-    private suspend fun parseMachineList(
-        producer: ProducerScope<String>,
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private suspend fun FlowCollector<String>.parseMachineList(
         reader: JsonReader,
         modName: String
     ) {
         reader.beginArray()
         while (reader.hasNext()) {
-            parseMachine(producer, reader, modName)
+            parseMachine(reader, modName)
         }
         reader.endArray()
     }
 
-    @ExperimentalCoroutinesApi
-    private suspend fun parseMachine(
-        producer: ProducerScope<String>,
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private suspend fun FlowCollector<String>.parseMachine(
         reader: JsonReader,
         modName: String
     ) {
@@ -66,7 +58,7 @@ class MachineRecipeParser @Inject constructor(
             }
         }
 
-        producer.send("$name (${recipes.size} recipes)")
+        emit("$name (${recipes.size} recipes)")
         reader.endObject()
 
         // map machine name to recipes
@@ -80,6 +72,7 @@ class MachineRecipeParser @Inject constructor(
         recipeRepo.insertRecipes(mappedRecipes)
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parseElement(reader: JsonReader): MachineRecipe {
         var isEnabled = false
         var duration = 0

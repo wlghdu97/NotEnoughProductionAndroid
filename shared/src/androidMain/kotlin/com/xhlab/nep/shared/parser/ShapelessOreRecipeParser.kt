@@ -6,25 +6,22 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.recipes.ShapelessOreDictRecipe
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.oredict.OreDictItemParser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class ShapelessOreRecipeParser @Inject constructor(
     private val oreDictItemParser: OreDictItemParser,
     private val recipeRepo: RecipeRepo
 ) : RecipeParser<ShapelessOreDictRecipe>() {
 
-    @ExperimentalCoroutinesApi
-    override suspend fun parse(type: String, reader: JsonReader) = CoroutineScope(coroutineContext).produce {
-        send("parsing shapeless ore recipes")
+    @Suppress("BlockingMethodInNonBlockingContext")
+    override suspend fun parse(type: String, reader: JsonReader) = flow {
+        emit("parsing shapeless ore recipes")
         while (reader.hasNext()) {
             if (reader.peek() == JsonToken.BEGIN_ARRAY) {
                 val recipeList = parseElements(reader)
                 // insert recipes into db
-                send("inserting ${recipeList.size} shapeless ore recipes")
+                emit("inserting ${recipeList.size} shapeless ore recipes")
                 recipeRepo.insertRecipes(recipeList)
             } else {
                 reader.skipValue()
@@ -32,6 +29,7 @@ class ShapelessOreRecipeParser @Inject constructor(
         }
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parseElement(reader: JsonReader): ShapelessOreDictRecipe {
         var inputItems = emptyList<Element>()
         var outputItem: Element? = null

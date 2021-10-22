@@ -1,50 +1,56 @@
 package com.xhlab.nep.ui.main.process.creator.browser
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.hadilq.liveevent.LiveEvent
+import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.ui.main.items.ElementListener
 import com.xhlab.nep.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.main.process.creator.browser.details.RootRecipeSelectionListener
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ProcessItemBrowserViewModel @Inject constructor() : ViewModel(),
-    BaseViewModel by BasicViewModel(),
+class ProcessItemBrowserViewModel @Inject constructor() :
+    ViewModel(),
     ElementListener,
     MachineListener,
     RootRecipeSelectionListener {
-    private val elementId = MutableLiveData<Long>()
 
-    private val _navigateToMachineList = LiveEvent<Long>()
-    val navigateToMachineList: LiveData<Long>
-        get() = _navigateToMachineList
+    private val elementId = MutableStateFlow<Long?>(null)
 
-    private val _navigateToRecipeDetails = LiveEvent<Pair<Long, Int>>()
-    val navigateToRecipeDetails: LiveData<Pair<Long, Int>>
-        get() = _navigateToRecipeDetails
+    private val _navigateToMachineList = EventFlow<Long>()
+    val navigateToMachineList: Flow<Long>
+        get() = _navigateToMachineList.flow
 
-    private val _returnResult = LiveEvent<Pair<Recipe, Element>>()
-    val returnResult: LiveData<Pair<Recipe, Element>>
-        get() = _returnResult
+    private val _navigateToRecipeDetails = EventFlow<Pair<Long, Int>>()
+    val navigateToRecipeDetails: Flow<Pair<Long, Int>>
+        get() = _navigateToRecipeDetails.flow
+
+    private val _returnResult = EventFlow<Pair<Recipe, Element>>()
+    val returnResult: Flow<Pair<Recipe, Element>>
+        get() = _returnResult.flow
 
     private fun requireElementId() =
         elementId.value ?: throw NullPointerException("element id is null.")
 
     override fun onClick(elementId: Long, elementType: Int) {
-        this.elementId.postValue(elementId)
-        _navigateToMachineList.postValue(elementId)
+        this.elementId.value = elementId
+        scope.launch {
+            _navigateToMachineList.emit(elementId)
+        }
     }
 
     override fun onClick(machineId: Int) {
-        _navigateToRecipeDetails.postValue(requireElementId() to machineId)
+        scope.launch {
+            _navigateToRecipeDetails.emit(requireElementId() to machineId)
+        }
     }
 
     override fun onSelect(targetRecipe: Recipe, keyElement: Element) {
-        _returnResult.postValue(targetRecipe to keyElement)
+        scope.launch {
+            _returnResult.emit(targetRecipe to keyElement)
+        }
     }
 }

@@ -10,10 +10,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityRecipeSelectionExistingBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -47,12 +45,12 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(intent?.getSerializableExtra(CONSTRAINT) as? ProcessEditViewModel.ConnectionConstraint)
 
-        viewModel.process.observeNotNull(this) {
+        viewModel.process.asLiveData().observe(this) {
             processTreeAdapter.submitProcess(it)
             binding.emptyText.isGone = processTreeAdapter.itemCount != 0
         }
 
-        viewModel.constraint.observe(this) {
+        viewModel.constraint.asLiveData().observe(this) {
             processTreeAdapter.setConnectionConstraint(it)
         }
 
@@ -60,20 +58,16 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             processTreeAdapter.setIconVisible(it)
         }
 
-        viewModel.iconMode.observe(this) {
+        viewModel.iconMode.asLiveData().observe(this) {
             processTreeAdapter.setShowConnection(it)
         }
 
-        viewModel.connectionResult.observe(this) {
-            if (it.isSuccessful()) {
-                finish()
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_connect_recipe_failed,
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+        viewModel.connectionErrorMessage.asLiveData().observe(this) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+        }
+
+        viewModel.finish.asLiveData().observe(this) {
+            finish()
         }
     }
 

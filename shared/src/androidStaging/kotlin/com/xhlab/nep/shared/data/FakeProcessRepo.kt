@@ -29,7 +29,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         }
     }
 
-    override suspend fun getProcessLiveData(processId: String): LiveData<Process?> {
+    override suspend fun getProcessFlow(processId: String): LiveData<Process?> {
         return when (processId) {
             processGlass.value?.id -> processGlass
             processPE.value?.id -> processPE

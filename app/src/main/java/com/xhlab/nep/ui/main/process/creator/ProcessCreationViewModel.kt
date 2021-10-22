@@ -1,66 +1,80 @@
 package com.xhlab.nep.ui.main.process.creator
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.hadilq.liveevent.LiveEvent
+import co.touchlab.kermit.Logger
+import com.xhlab.multiplatform.util.EventFlow
+import com.xhlab.nep.MR
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.util.StringResolver
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProcessCreationViewModel @Inject constructor(
-    private val processRepo: ProcessRepo
-) : ViewModel(), BaseViewModel by BasicViewModel() {
+    private val processRepo: ProcessRepo,
+    private val stringResolver: StringResolver
+) : ViewModel() {
 
-    private val _processName = MutableLiveData<String?>(null)
-    val processName: LiveData<String?>
-        get() = _processName
+    private val _processName = MutableStateFlow<String?>(null)
+    val processName = _processName.mapNotNull { it }
 
-    private val _recipePair = MutableLiveData<Pair<Recipe, Element>>()
-    val recipePair: LiveData<Pair<Recipe, Element>>
-        get() = _recipePair
+    private val _recipePair = MutableStateFlow<Pair<Recipe, Element>?>(null)
+    val recipePair = _recipePair.mapNotNull { it }
 
-    private val _isNameValid = MediatorLiveData<Boolean?>()
-    val isNameValid: LiveData<Boolean?>
-        get() = _isNameValid
+    private val _isNameValid = MutableStateFlow<Boolean?>(null)
+    val isNameValid = _isNameValid.mapNotNull { it }
 
-    private val _creationResult = LiveEvent<Resource<Unit>>()
-    val creationResult: LiveData<Resource<Unit>>
-        get() = _creationResult
+    private val _creationErrorMessage = EventFlow<String>()
+    val creationErrorMessage: Flow<String>
+        get() = _creationErrorMessage.flow
+
+    private val _dismiss = EventFlow<Unit>()
+    val dismiss: Flow<Unit>
+        get() = _dismiss.flow
 
     init {
-        _isNameValid.addSource(processName) {
-            _isNameValid.postValue(it?.isNotEmpty())
+        scope.launch {
+            processName.collect {
+                _isNameValid.value = it?.isNotEmpty()
+            }
         }
     }
 
     fun changeProcessName(newName: String) {
-        _processName.postValue(newName)
+        _processName.value = newName
     }
 
     fun submitRecipe(recipe: Recipe, keyElement: Element) {
-        _recipePair.postValue(recipe to keyElement)
+        _recipePair.value = recipe to keyElement
     }
 
     fun createProcess() {
-        val isNameValid = isNameValid.value
-        val recipePair = recipePair.value
+        val isNameValid = _isNameValid.value
+        val recipePair = _recipePair.value
         if (isNameValid == true && recipePair != null) {
-            val name = processName.value.toString().trim()
-            launchSuspendFunction(_creationResult) {
+            val handler = CoroutineExceptionHandler { _, throwable ->
+                Logger.e("Failed to create process", throwable)
+                scope.launch {
+                    _creationErrorMessage.emit(stringResolver.getString(MR.strings.error_failed_to_create_process))
+                }
+            }
+            scope.launch(handler) {
+                val name = _processName.value.toString().trim()
                 processRepo.createProcess(name, recipePair.first, recipePair.second)
+                _dismiss.emit(Unit)
             }
         } else if (isNameValid == null) {
-            _isNameValid.postValue(false)
+            _isNameValid.value = false
         } else {
-            _creationResult.postValue(Resource.error(EmptyTargetRecipeException()))
+            scope.launch {
+                _creationErrorMessage.emit(stringResolver.getString(MR.strings.error_empty_target_recipe))
+            }
         }
     }
-
-    class EmptyTargetRecipeException : IllegalArgumentException()
 }

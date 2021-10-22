@@ -2,13 +2,13 @@ package com.xhlab.nep.shared.domain.process
 
 import android.util.Base64
 import com.xhlab.nep.shared.data.process.ProcessRepo
-import com.xhlab.nep.shared.domain.UseCase
+import com.xhlab.nep.shared.domain.BaseUseCase
 import java.util.zip.Deflater
 import javax.inject.Inject
 
 class ExportProcessStringUseCase @Inject constructor(
     private val processRepo: ProcessRepo
-) : UseCase<ExportProcessStringUseCase.Parameter, String>() {
+) : BaseUseCase<ExportProcessStringUseCase.Parameter, String>() {
 
     override suspend fun execute(params: Parameter): String {
         val json = processRepo.exportProcessString(params.processId)

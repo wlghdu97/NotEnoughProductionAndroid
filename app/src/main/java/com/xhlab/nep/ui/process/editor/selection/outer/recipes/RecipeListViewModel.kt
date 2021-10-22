@@ -1,22 +1,29 @@
 package com.xhlab.nep.ui.process.editor.selection.outer.recipes
 
-import androidx.lifecycle.*
-import com.hadilq.liveevent.LiveEvent
+import co.touchlab.kermit.Logger
+import com.xhlab.multiplatform.util.EventFlow
+import com.xhlab.multiplatform.util.Resource
+import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
+import com.xhlab.nep.MR
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
 import com.xhlab.nep.shared.domain.item.LoadElementDetailWithKeyUseCase
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeMachineListUseCase
 import com.xhlab.nep.shared.domain.recipe.LoadUsageMachineListUseCase
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.shared.util.isSuccessful
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import com.xhlab.nep.shared.ui.invokeUseCase
+import com.xhlab.nep.shared.util.StringResolver
 import com.xhlab.nep.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,55 +32,72 @@ class RecipeListViewModel @Inject constructor(
     private val loadElementDetailUseCase: LoadElementDetailUseCase,
     private val loadElementDetailWithKeyUseCase: LoadElementDetailWithKeyUseCase,
     private val loadRecipeMachineListUseCase: LoadRecipeMachineListUseCase,
-    private val loadUsageMachineListUseCase: LoadUsageMachineListUseCase
-) : ViewModel(), BaseViewModel by BasicViewModel(), MachineListener {
+    private val loadUsageMachineListUseCase: LoadUsageMachineListUseCase,
+    private val stringResolver: StringResolver
+) : ViewModel(), MachineListener {
 
-    private val constraint = MutableLiveData<ProcessEditViewModel.ConnectionConstraint>()
+    private val constraint = MutableStateFlow<ProcessEditViewModel.ConnectionConstraint?>(null)
 
-    private val _elements = MediatorLiveData<Resource<List<ElementView>>>()
-    val elements = Transformations.map(_elements) {
-        if (it.isSuccessful() && it?.data!!.size > 1) it.data else null
+    private val _elements = MutableStateFlow<Resource<List<ElementView>>?>(null)
+    val elements = _elements.transform {
+        if (it?.isSuccessful() == true && it.data!!.size > 1) {
+            emit(it.data!!)
+        }
     }
 
-    private val _element = MediatorLiveData<Resource<ElementView>>()
-    val element = Transformations.map(_element) {
-        if (it.isSuccessful()) it.data else null
+    private val _element = MutableStateFlow<Resource<ElementView>?>(null)
+    val element = _element.transform {
+        if (it?.isSuccessful() == true) {
+            emit(it.data!!)
+        }
     }
 
     val recipeList = loadRecipeMachineListUseCase.observeOnlySuccess()
     val usageList = loadUsageMachineListUseCase.observeOnlySuccess()
 
-    private val _navigateToDetails = LiveEvent<Triple<Long, Int, Boolean>>()
-    val navigateToDetails: LiveData<Triple<Long, Int, Boolean>>
-        get() = _navigateToDetails
+    private val _navigateToDetails = EventFlow<Triple<Long, Int, Boolean>>()
+    val navigateToDetails: Flow<Triple<Long, Int, Boolean>>
+        get() = _navigateToDetails.flow
 
-    private val _modificationResult = LiveEvent<Resource<Unit>>()
-    val modificationResult: LiveData<Resource<Unit>>
-        get() = _modificationResult
+    private val _modificationErrorMessage = EventFlow<String>()
+    val modificationErrorMessage: Flow<String>
+        get() = _modificationErrorMessage.flow
+
+    private val _finish = EventFlow<Unit>()
+    val finish: Flow<Unit>
+        get() = _finish.flow
+
+    private val modificationExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Logger.e("Failed to connect recipe to process", throwable)
+        scope.launch {
+            _modificationErrorMessage.emit(stringResolver.getString(MR.strings.error_failed_to_modify_process))
+        }
+    }
 
     init {
-        _element.addSource(_elements) {
-            val elements = it?.data
-            if (elements?.size == 1) {
-                _element.postValue(Resource.success(elements[0]))
+        scope.launch {
+            _elements.collect {
+                val data = it?.data
+                if (data?.size == 1) {
+                    _element.value = Resource.success(data[0])
+                }
             }
         }
-        _element.addSource(element) {
-            viewModelScope.launch {
-                if (it != null) {
-                    when (constraint.value?.connectToParent == true) {
-                        true -> {
-                            invokeMediatorUseCase(
-                                useCase = loadUsageMachineListUseCase,
-                                params = LoadUsageMachineListUseCase.Parameter(it.id)
-                            )
-                        }
-                        false -> {
-                            invokeMediatorUseCase(
-                                useCase = loadRecipeMachineListUseCase,
-                                params = LoadRecipeMachineListUseCase.Parameter(it.id)
-                            )
-                        }
+
+        scope.launch {
+            element.collect {
+                when (constraint.value?.connectToParent == true) {
+                    true -> {
+                        invokeMediatorUseCase(
+                            useCase = loadUsageMachineListUseCase,
+                            params = LoadUsageMachineListUseCase.Parameter(it.id)
+                        )
+                    }
+                    false -> {
+                        invokeMediatorUseCase(
+                            useCase = loadRecipeMachineListUseCase,
+                            params = LoadRecipeMachineListUseCase.Parameter(it.id)
+                        )
                     }
                 }
             }
@@ -103,27 +127,30 @@ class RecipeListViewModel @Inject constructor(
     }
 
     private fun requireElementId() =
-        element.value?.id ?: throw NullPointerException("element id is null.")
+        _element.value?.data?.id ?: throw NullPointerException("element id is null.")
 
     fun submitElement(element: ElementView) {
-        _element.postValue(Resource.success(element))
+        _element.value = Resource.success(element)
     }
 
     fun attachOreDictAsSupplier() {
-        launchSuspendFunction(_modificationResult) {
+        scope.launch(modificationExceptionHandler) {
             val constraint = constraint.value
-            val ingredient = element.value
+            val ingredient = _element.value
             if (constraint != null && ingredient is ElementView) {
                 val recipe = constraint.recipe
                 val target = constraint.element
                 val chainRecipe = OreChainRecipe(target, ingredient)
                 processRepo.connectRecipe(constraint.processId, chainRecipe, recipe, target, false)
+                _finish.emit(Unit)
             }
         }
     }
 
     override fun onClick(machineId: Int) {
-        val connectToParent = constraint.value?.connectToParent == true
-        _navigateToDetails.postValue(Triple(requireElementId(), machineId, connectToParent))
+        scope.launch {
+            val connectToParent = constraint.value?.connectToParent == true
+            _navigateToDetails.emit(Triple(requireElementId(), machineId, connectToParent))
+        }
     }
 }

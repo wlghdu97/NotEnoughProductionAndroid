@@ -57,7 +57,7 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
         recipeSelectionViewModel = requireActivity().viewModelProvider(viewModelFactory)
         viewModel = viewModelProvider(viewModelFactory)
 
-        recipeSelectionViewModel.constraint.observe(this) {
+        recipeSelectionViewModel.constraint.asLiveData().observe(this) {
             viewModel.init(it.element.id)
         }
 
@@ -67,7 +67,7 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
             oreDictAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToReplacementList.observe(this) {
+        viewModel.navigateToReplacementList.asLiveData().observe(this) {
             switchToReplacementList(it)
         }
     }

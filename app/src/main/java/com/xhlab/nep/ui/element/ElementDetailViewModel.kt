@@ -1,23 +1,24 @@
 package com.xhlab.nep.ui.element
 
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import com.xhlab.multiplatform.util.Resource
+import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.shared.util.isSuccessful
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 class ElementDetailViewModel @Inject constructor(
     private val loadElementDetailUseCase: LoadElementDetailUseCase
-) : ViewModel(), BaseViewModel by BasicViewModel() {
+) : ViewModel() {
 
-    private val _element = MediatorLiveData<Resource<ElementView>>()
-    val element = Transformations.map(_element) {
-        if (it.isSuccessful()) it.data else null
+    private val _element = MutableStateFlow<Resource<ElementView>?>(null)
+    val element = _element.transform {
+        if (it?.isSuccessful() == true) {
+            emit(it.data!!)
+        }
     }
 
     fun init(elementId: Long) {

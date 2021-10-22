@@ -66,7 +66,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
             elementAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment().requireParentFragment()
                 parent.childFragmentManager.beginTransaction()

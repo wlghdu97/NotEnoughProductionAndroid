@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
@@ -16,12 +17,10 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.process.creator.browser.ItemBrowserActivity
 import com.xhlab.nep.util.getIcon
 import com.xhlab.nep.util.longToast
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerDialogFragment
 import javax.inject.Inject
@@ -72,13 +71,13 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
 
-        viewModel.processName.observeNotNull(this) {
+        viewModel.processName.asLiveData().observe(this) {
             if (binding.nameEdit.text.toString() != it) {
                 binding.nameEdit.setText(it)
             }
         }
 
-        viewModel.recipePair.observe(this) { (targetRecipe, keyElement) ->
+        viewModel.recipePair.asLiveData().observe(this) { (targetRecipe, keyElement) ->
             val machineName = when (targetRecipe) {
                 is MachineRecipeView -> targetRecipe.machineName
                 is CraftingRecipeView -> getString(R.string.txt_crafting_table)
@@ -93,22 +92,19 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
             )
         }
 
-        viewModel.isNameValid.observeNotNull(this) {
+        viewModel.isNameValid.asLiveData().observe(this) {
             binding.nameInputLayout.helperText = when (it) {
                 true -> ""
                 false -> getString(R.string.txt_name_empty)
             }
         }
 
-        viewModel.creationResult.observe(this) {
-            when {
-                it.isSuccessful() ->
-                    dismiss()
-                it.throwable is ProcessCreationViewModel.EmptyTargetRecipeException ->
-                    longToast(R.string.error_empty_target_recipe)
-                else ->
-                    longToast(R.string.error_failed_to_create_process)
-            }
+        viewModel.creationErrorMessage.asLiveData().observe(this) {
+            longToast(it)
+        }
+
+        viewModel.dismiss.asLiveData().observe(this) {
+            dismiss()
         }
     }
 

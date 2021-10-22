@@ -20,6 +20,7 @@ import com.xhlab.nep.shared.data.recipe.RecipeRepoImpl
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.preference.GeneralSharedPreference
+import com.xhlab.nep.shared.util.StringResolver
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -27,6 +28,10 @@ import javax.inject.Singleton
 @Module(includes = [SqlDelightModule::class])
 @Suppress("unused")
 class SharedModule {
+    @Provides
+    @Singleton
+    fun provideStringResolver(app: Application) = StringResolver(app)
+    
     @Provides
     @Singleton
     fun provideGson(): Gson = GsonBuilder().create()

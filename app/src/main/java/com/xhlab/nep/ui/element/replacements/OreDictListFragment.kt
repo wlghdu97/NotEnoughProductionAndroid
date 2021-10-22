@@ -56,7 +56,7 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
             oreDictAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToReplacementList.observe(this) {
+        viewModel.navigateToReplacementList.asLiveData().observe(this) {
             switchToReplacementList(it)
         }
     }

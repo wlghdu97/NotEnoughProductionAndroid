@@ -1,20 +1,18 @@
 package com.xhlab.nep.ui.recipe
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
+import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import com.xhlab.nep.shared.ui.invokeUseCase
 import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,19 +20,18 @@ class MachineRecipeListViewModel @Inject constructor(
     private val loadRecipeListUseCase: LoadRecipeListUseCase,
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase,
     generalPreference: GeneralPreference
-) : ViewModel(),
-    BaseViewModel by BasicViewModel(),
-    ElementListener {
-    private val elementId = MutableLiveData<Long>()
-    private val machineId = MutableLiveData<Int>()
+) : ViewModel(), ElementListener {
+
+    private val elementId = MutableStateFlow<Long?>(null)
+    private val machineId = MutableStateFlow<Int?>(null)
 
     val recipeList = loadRecipeListUseCase.observeOnlySuccess()
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _navigateToDetail = LiveEvent<ElementDetailNavigationUseCase.Parameters>()
-    val navigateToDetail: LiveData<ElementDetailNavigationUseCase.Parameters>
-        get() = _navigateToDetail
+    private val _navigateToDetail = EventFlow<ElementDetailNavigationUseCase.Parameters>()
+    val navigateToDetail: Flow<ElementDetailNavigationUseCase.Parameters>
+        get() = _navigateToDetail.flow
 
     // to prevent DiffUtil's index out of bound
     private var searchDebounceJob: Job? = null
@@ -46,7 +43,7 @@ class MachineRecipeListViewModel @Inject constructor(
         }
         this.elementId.value = elementId
         this.machineId.value = machineId
-        viewModelScope.launch {
+        scope.launch {
             invokeMediatorUseCase(
                 useCase = loadRecipeListUseCase,
                 params = LoadRecipeListUseCase.Parameters(elementId, machineId)
@@ -62,7 +59,7 @@ class MachineRecipeListViewModel @Inject constructor(
 
     fun searchIngredients(term: String) {
         searchDebounceJob?.cancel()
-        searchDebounceJob = viewModelScope.launch {
+        searchDebounceJob = scope.launch {
             delay(50)
             invokeMediatorUseCase(
                 useCase = loadRecipeListUseCase,
@@ -76,9 +73,11 @@ class MachineRecipeListViewModel @Inject constructor(
     }
 
     override fun onClick(elementId: Long, elementType: Int) {
-        _navigateToDetail.postValue(
-            ElementDetailNavigationUseCase.Parameters(elementId, elementType)
-        )
+        scope.launch {
+            _navigateToDetail.emit(
+                ElementDetailNavigationUseCase.Parameters(elementId, elementType)
+            )
+        }
     }
 
     fun navigateToElementDetail(params: ElementDetailNavigationUseCase.Parameters) {

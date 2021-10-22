@@ -71,7 +71,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             recipeAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) {
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment()
                 parent.childFragmentManager.beginTransaction()

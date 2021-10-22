@@ -2,35 +2,30 @@ package com.xhlab.nep.shared.domain.icon
 
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.LiveDataScope
-import androidx.lifecycle.liveData
+import co.touchlab.kermit.Logger
+import com.xhlab.multiplatform.domain.Cancellable
+import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.shared.R
-import com.xhlab.nep.shared.domain.Cancelable
-import com.xhlab.nep.shared.domain.MediatorUseCase
+import com.xhlab.nep.shared.domain.BaseMediatorUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import timber.log.Timber
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.zip.ZipInputStream
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class IconUnzipUseCase @Inject constructor(
     private val context: Context,
     private val generalPreference: GeneralPreference
-) : MediatorUseCase<Uri, IconUnzipUseCase.Progress>(), Cancelable {
+) : BaseMediatorUseCase<Uri, IconUnzipUseCase.Progress>(), Cancellable {
 
-    private var job: Job? = null
     private val outputDir = context.getExternalFilesDir("icons")
 
-    override fun executeInternal(params: Uri) = liveData<Resource<Progress>>(Dispatchers.IO) {
-        // save job to support cancellation
-        job = coroutineContext[Job]
-
+    override suspend fun executeInternal(params: Uri) = flow {
         // mark icon status is dirty
         generalPreference.setIconLoaded(false)
 
@@ -75,7 +70,10 @@ class IconUnzipUseCase @Inject constructor(
 
                 entryCount += 1
                 val progress = ((entryCount.toFloat() / totalEntrySize.toFloat()) * 100).toInt()
-                emitProgress(String.format(context.getString(R.string.form_unzip_file), file.name), progress)
+                emitProgress(
+                    String.format(context.getString(R.string.form_unzip_file), file.name),
+                    progress
+                )
                 entry = zis.nextEntry
             }
         }
@@ -89,14 +87,12 @@ class IconUnzipUseCase @Inject constructor(
             progress = 100,
             status = Resource.Status.SUCCESS
         )
-    }
+    }.flowOn(Dispatchers.IO)
 
-    override fun cancel() {
-        job?.cancel()
-
+    override fun onCancellation() {
         val message = context.getString(R.string.txt_job_canceled)
-        Timber.i(message)
-        result.postValue(Resource.success(Progress(0, message)))
+        Logger.i(message)
+        result.value = Resource.success(Progress(0, message))
     }
 
     private fun deleteFiles(dir: File?) {
@@ -110,12 +106,12 @@ class IconUnzipUseCase @Inject constructor(
         }
     }
 
-    private suspend fun LiveDataScope<Resource<Progress>>.emitProgress(
+    private suspend fun FlowCollector<Resource<Progress>>.emitProgress(
         log: String,
         progress: Int = 0,
         status: Resource.Status = Resource.Status.LOADING
     ) {
-        Timber.i(log)
+        Logger.i(log)
         emit(Resource(status, Progress(progress, log), null))
     }
 

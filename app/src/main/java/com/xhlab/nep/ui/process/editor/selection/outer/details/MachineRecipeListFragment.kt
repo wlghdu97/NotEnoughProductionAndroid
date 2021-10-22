@@ -71,7 +71,7 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         val connectToParent = arguments?.getBoolean(CONNECT_TO_PARENT)
         viewModel.init(elementId, machineId, connectToParent)
 
-        recipeSelectionViewModel.constraint.observe(this) {
+        recipeSelectionViewModel.constraint.asLiveData().observe(this) {
             recipeAdapter.setConnectionConstraint(it)
         }
 

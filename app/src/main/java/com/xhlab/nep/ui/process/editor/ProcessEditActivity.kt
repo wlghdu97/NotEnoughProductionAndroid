@@ -17,7 +17,6 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityProcessEditBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -72,7 +71,7 @@ class ProcessEditActivity :
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(intent?.getStringExtra(PROCESS_ID))
 
-        viewModel.process.observeNotNull(this) {
+        viewModel.process.asLiveData().observe(this) {
             supportActionBar?.subtitle = it.name
             processTreeAdapter.submitProcess(it)
         }
@@ -81,26 +80,20 @@ class ProcessEditActivity :
             processTreeAdapter.setIconVisible(it)
         }
 
-        viewModel.iconMode.observe(this) {
+        viewModel.iconMode.asLiveData().observe(this) {
             processTreeAdapter.setShowConnection(it)
         }
 
-        viewModel.showDisconnectionAlert.observe(this) {
+        viewModel.showDisconnectionAlert.asLiveData().observe(this) {
             showDisconnectionAlert(it)
         }
 
-        viewModel.connectRecipe.observe(this) {
+        viewModel.connectRecipe.asLiveData().observe(this) {
             showConnectionSelectionAlert(it)
         }
 
-        viewModel.modificationResult.observe(this) {
-            if (it.throwable != null) {
-                Snackbar.make(
-                    binding.root,
-                    R.string.error_failed_to_modify_process,
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+        viewModel.modificationErrorMessage.asLiveData().observe(this) {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
         }
     }
 

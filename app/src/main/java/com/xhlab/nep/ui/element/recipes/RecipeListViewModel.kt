@@ -1,33 +1,30 @@
 package com.xhlab.nep.ui.element.recipes
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.hadilq.liveevent.LiveEvent
+import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.domain.MachineRecipeListNavigationUseCase
+import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeMachineListUseCase
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import com.xhlab.nep.shared.ui.invokeUseCase
 import com.xhlab.nep.ui.main.machines.MachineListener
-import com.xhlab.nep.ui.util.invokeMediatorUseCase
-import com.xhlab.nep.ui.util.observeOnlySuccess
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RecipeListViewModel @Inject constructor(
     private val loadRecipeMachineListUseCase: LoadRecipeMachineListUseCase,
     private val machineRecipeListNavigationUseCase: MachineRecipeListNavigationUseCase
-) : ViewModel(),
-    BaseViewModel by BasicViewModel(),
-    MachineListener {
-    private val elementId = MutableLiveData<Long>()
+) : ViewModel(), MachineListener {
+
+    private val elementId = MutableStateFlow<Long?>(null)
 
     val recipeList = loadRecipeMachineListUseCase.observeOnlySuccess()
 
-    private val _navigateToRecipeList = LiveEvent<MachineRecipeListNavigationUseCase.Parameters>()
-    val navigateToRecipeList: LiveData<MachineRecipeListNavigationUseCase.Parameters>
-        get() = _navigateToRecipeList
+    private val _navigateToRecipeList = EventFlow<MachineRecipeListNavigationUseCase.Parameters>()
+    val navigateToRecipeList: Flow<MachineRecipeListNavigationUseCase.Parameters>
+        get() = _navigateToRecipeList.flow
 
     fun init(elementId: Long?) {
         requireNotNull(elementId) {
@@ -38,7 +35,7 @@ class RecipeListViewModel @Inject constructor(
             return
         }
         this.elementId.value = elementId
-        viewModelScope.launch {
+        scope.launch {
             invokeMediatorUseCase(
                 useCase = loadRecipeMachineListUseCase,
                 params = LoadRecipeMachineListUseCase.Parameter(elementId)
@@ -50,9 +47,11 @@ class RecipeListViewModel @Inject constructor(
         elementId.value ?: throw NullPointerException("element id is null")
 
     override fun onClick(machineId: Int) {
-        _navigateToRecipeList.postValue(
-            MachineRecipeListNavigationUseCase.Parameters(requireElementId(), machineId)
-        )
+        scope.launch {
+            _navigateToRecipeList.emit(
+                MachineRecipeListNavigationUseCase.Parameters(requireElementId(), machineId)
+            )
+        }
     }
 
     fun navigateToRecipeList(params: MachineRecipeListNavigationUseCase.Parameters) {

@@ -1,10 +1,9 @@
 package com.xhlab.nep.ui.process.editor
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.hadilq.liveevent.LiveEvent
+import co.touchlab.kermit.Logger
+import com.xhlab.multiplatform.util.EventFlow
+import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
+import com.xhlab.nep.MR
 import com.xhlab.nep.domain.InternalRecipeSelectionNavigationUseCase
 import com.xhlab.nep.domain.ProcessCalculationNavigationUseCase
 import com.xhlab.nep.domain.ProcessSelectionNavigationUseCase
@@ -16,9 +15,15 @@ import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
-import com.xhlab.nep.shared.util.Resource
-import com.xhlab.nep.ui.BaseViewModel
-import com.xhlab.nep.ui.BasicViewModel
+import com.xhlab.nep.shared.ui.ViewModel
+import com.xhlab.nep.shared.ui.invokeMediatorUseCase
+import com.xhlab.nep.shared.ui.invokeUseCase
+import com.xhlab.nep.shared.util.StringResolver
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.transform
+import kotlinx.coroutines.launch
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -29,28 +34,41 @@ class ProcessEditViewModel @Inject constructor(
     private val recipeSelectionNavigationUseCase: RecipeSelectionNavigationUseCase,
     private val processSelectionNavigationUseCase: ProcessSelectionNavigationUseCase,
     private val calculationNavigationUseCase: ProcessCalculationNavigationUseCase,
-    private val generalPreference: GeneralPreference
-) : ViewModel(), BaseViewModel by BasicViewModel(), ProcessEditListener {
+    private val generalPreference: GeneralPreference,
+    private val stringResolver: StringResolver
+) : ViewModel(), ProcessEditListener {
 
-    val process = loadProcessUseCase.observeOnly(Resource.Status.SUCCESS)
+    private val _process = loadProcessUseCase.observe()
+    val process = _process.transform {
+        if (it.isSuccessful()) {
+            emit(it.data!!)
+        }
+    }
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _iconMode = MutableLiveData(true)
-    val iconMode: LiveData<Boolean>
+    private val _iconMode = MutableStateFlow(true)
+    val iconMode: Flow<Boolean>
         get() = _iconMode
 
-    private val _showDisconnectionAlert = LiveEvent<DisconnectionPayload>()
-    val showDisconnectionAlert: LiveData<DisconnectionPayload>
-        get() = _showDisconnectionAlert
+    private val _showDisconnectionAlert = EventFlow<DisconnectionPayload>()
+    val showDisconnectionAlert: Flow<DisconnectionPayload>
+        get() = _showDisconnectionAlert.flow
 
-    private val _connectRecipe = LiveEvent<ConnectionConstraint>()
-    val connectRecipe: LiveData<ConnectionConstraint>
-        get() = _connectRecipe
+    private val _connectRecipe = EventFlow<ConnectionConstraint>()
+    val connectRecipe: Flow<ConnectionConstraint>
+        get() = _connectRecipe.flow
 
-    private val _modificationResult = MediatorLiveData<Resource<Unit>>()
-    val modificationResult: LiveData<Resource<Unit>>
-        get() = _modificationResult
+    private val _modificationErrorMessage = EventFlow<String>()
+    val modificationErrorMessage: Flow<String>
+        get() = _modificationErrorMessage.flow
+
+    private val modificationExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        Logger.e("Failed to modify process", throwable)
+        scope.launch {
+            _modificationErrorMessage.emit(stringResolver.getString(MR.strings.error_failed_to_modify_process))
+        }
+    }
 
     fun init(processId: String?) {
         if (processId == null) {
@@ -63,48 +81,54 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     private fun requireProcessId() =
-        process.value?.id ?: throw NullPointerException("process id is null.")
+        _process.value.data?.id ?: throw NullPointerException("process id is null.")
 
     override fun onDisconnect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
         if (generalPreference.getShowDisconnectionAlert()) {
-            _showDisconnectionAlert.postValue(DisconnectionPayload(from, to, element, reversed))
+            scope.launch {
+                _showDisconnectionAlert.emit(DisconnectionPayload(from, to, element, reversed))
+            }
         } else {
             disconnect(DisconnectionPayload(from, to, element, reversed))
         }
     }
 
     override fun onConnectToParent(recipe: Recipe, element: ElementView, degree: Int) {
-        _connectRecipe.postValue(
-            ConnectionConstraint(
-                processId = requireProcessId(),
-                connectToParent = true,
-                recipe = recipe,
-                element = element,
-                degree = degree
+        scope.launch {
+            _connectRecipe.emit(
+                ConnectionConstraint(
+                    processId = requireProcessId(),
+                    connectToParent = true,
+                    recipe = recipe,
+                    element = element,
+                    degree = degree
+                )
             )
-        )
+        }
     }
 
     override fun onConnectToChild(recipe: Recipe, element: ElementView, degree: Int) {
-        _connectRecipe.postValue(
-            ConnectionConstraint(
-                processId = requireProcessId(),
-                connectToParent = false,
-                recipe = recipe,
-                element = element,
-                degree = degree
+        scope.launch {
+            _connectRecipe.emit(
+                ConnectionConstraint(
+                    processId = requireProcessId(),
+                    connectToParent = false,
+                    recipe = recipe,
+                    element = element,
+                    degree = degree
+                )
             )
-        )
+        }
     }
 
     override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
-        launchSuspendFunction(_modificationResult) {
+        scope.launch(modificationExceptionHandler) {
             processRepo.markNotConsumed(requireProcessId(), recipe, element, consumed)
         }
     }
 
     private fun disconnect(payload: DisconnectionPayload) {
-        launchSuspendFunction(_modificationResult) {
+        scope.launch(modificationExceptionHandler) {
             with(payload) {
                 processRepo.disconnectRecipe(requireProcessId(), from, to, element, reversed)
             }
@@ -119,7 +143,7 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     fun attachSupplier(recipe: Recipe, keyElement: String) {
-        launchSuspendFunction(_modificationResult) {
+        scope.launch(modificationExceptionHandler) {
             val element = recipe.getInputs().find { it.unlocalizedName == keyElement }
             if (element is ElementView) {
                 val supplier = SupplierRecipe(element)
@@ -129,7 +153,7 @@ class ProcessEditViewModel @Inject constructor(
     }
 
     fun toggleIconMode() {
-        _iconMode.postValue(_iconMode.value != true)
+        _iconMode.value = _iconMode.value != true
     }
 
     fun navigateToInternalRecipeSelection(constraint: ConnectionConstraint) {

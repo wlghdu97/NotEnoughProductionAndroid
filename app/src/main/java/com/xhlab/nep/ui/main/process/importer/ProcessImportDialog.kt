@@ -8,15 +8,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.DialogProcessImportBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.util.longToast
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerDialogFragment
 import javax.inject.Inject
@@ -75,18 +74,16 @@ class ProcessImportDialog : DaggerDialogFragment(), ViewInit {
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
 
-        viewModel.isStringValid.observeNotNull(this) {
+        viewModel.isStringValid.asLiveData().observe(this) {
             binding.importInputLayout.helperText = when (it) {
                 true -> ""
                 false -> getString(R.string.txt_invalid_process_string)
             }
         }
 
-        viewModel.importResult.observe(this) {
-            if (it.isSuccessful()) {
-                longToast(R.string.txt_import_successful)
-                dismiss()
-            }
+        viewModel.dismiss.asLiveData().observe(this) {
+            longToast(R.string.txt_import_successful)
+            dismiss()
         }
     }
 }
