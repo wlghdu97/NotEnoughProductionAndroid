@@ -74,9 +74,6 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     implementation "androidx.preference:preference:$preference_version"
 
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-
     implementation "com.github.hadilq.liveevent:liveevent:$live_event_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "me.zhanghai.android.materialprogressbar:library:$material_progress_bar_version"
