@@ -1,6 +1,7 @@
 plugins {
     id "org.jetbrains.kotlin.multiplatform"
     id "kotlin-kapt"
+    id "kotlinx-serialization"
     id "com.android.library"
     id "com.squareup.sqldelight"
     id "dev.icerock.mobile.multiplatform-resources"
@@ -57,6 +58,7 @@ kotlin {
         commonMain.dependencies {
             implementation project(path: ':model')
             implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+            implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
             implementation "com.xhlab.mobile:infrastructure:$mobile_infrastructure_version"
             implementation "com.xhlab.mobile:infrastructure-paging:$mobile_infrastructure_version"
             implementation "com.xhlab.mobile:infrastructure-annotation:$mobile_infrastructure_version"

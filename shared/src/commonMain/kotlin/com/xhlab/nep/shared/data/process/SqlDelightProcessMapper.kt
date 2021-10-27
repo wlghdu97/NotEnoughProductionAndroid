@@ -1,14 +1,12 @@
 package com.xhlab.nep.shared.data.process
 
-import com.google.gson.Gson
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.Mapper
-import javax.inject.Inject
+import com.xhlab.nep.shared.parser.process.ProcessSerializer
+import kotlinx.serialization.json.Json
 import com.xhlab.nep.shared.db.Process as ProcessEntity
 
-class SqlDelightProcessMapper @Inject constructor(
-    private val gson: Gson
-) : Mapper<Process, ProcessEntity> {
+class SqlDelightProcessMapper : Mapper<Process, ProcessEntity> {
 
     override fun map(element: Process): ProcessEntity {
         return ProcessEntity(
@@ -18,7 +16,7 @@ class SqlDelightProcessMapper @Inject constructor(
             element.targetOutput.localizedName,
             element.targetOutput.amount,
             element.getRecipeNodeCount(),
-            gson.toJson(element)
+            Json.encodeToString(ProcessSerializer, element)
         )
     }
 }

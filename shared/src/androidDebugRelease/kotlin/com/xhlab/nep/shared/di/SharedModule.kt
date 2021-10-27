@@ -1,9 +1,6 @@
 package com.xhlab.nep.shared.di
 
 import android.app.Application
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.element.ElementRepoImpl
 import com.xhlab.nep.shared.data.machine.MachineRepo
@@ -13,17 +10,13 @@ import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepoImpl
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
 import com.xhlab.nep.shared.data.oredict.OreDictRepoImpl
 import com.xhlab.nep.shared.data.oredict.ReplacementAdder
-import com.xhlab.nep.shared.data.process.ProcessMapper
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.data.process.ProcessRepoImpl
-import com.xhlab.nep.shared.data.process.SqlDelightProcessMapper
 import com.xhlab.nep.shared.data.recipe.RecipeAdder
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepoImpl
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.NepProcess
-import com.xhlab.nep.shared.parser.process.ProcessDeserializer
-import com.xhlab.nep.shared.parser.process.ProcessSerializer
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.preference.GeneralSharedPreference
 import com.xhlab.nep.shared.util.StringResolver
@@ -40,10 +33,6 @@ class SharedModule {
 
     @Provides
     @Singleton
-    fun provideGson(): Gson = GsonBuilder()
-        .registerTypeAdapter(Process::class.java, ProcessSerializer())
-        .registerTypeAdapter(Process::class.java, ProcessDeserializer())
-        .create()
 
     @Provides
     @Singleton
@@ -81,9 +70,6 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideProcessRepo(
-        db: NepProcess,
-        mapper: ProcessMapper,
-        roomMapper: SqlDelightProcessMapper
-    ): ProcessRepo = ProcessRepoImpl(db, mapper, roomMapper)
+    internal fun provideProcessRepo(db: NepProcess): ProcessRepo =
+        ProcessRepoImpl(db)
 }

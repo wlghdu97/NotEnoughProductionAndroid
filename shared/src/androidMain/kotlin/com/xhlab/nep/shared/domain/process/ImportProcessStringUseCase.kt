@@ -1,18 +1,17 @@
 package com.xhlab.nep.shared.domain.process
 
 import android.util.Base64
-import com.google.gson.Gson
-import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
+import com.xhlab.nep.shared.parser.process.ProcessSerializer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import java.io.ByteArrayOutputStream
 import java.util.zip.Inflater
 import javax.inject.Inject
 
 class ImportProcessStringUseCase @Inject constructor(
-    private val gson: Gson,
     private val processRepo: ProcessRepo
 ) : BaseUseCase<ImportProcessStringUseCase.Parameter, Unit>() {
 
@@ -37,12 +36,8 @@ class ImportProcessStringUseCase @Inject constructor(
         val returnValues = baos.toByteArray()
         baos.close()
         val string = returnValues.toString(Charsets.UTF_8)
-        val process = gson.fromJson(string, Process::class.java)
-        if (process != null) {
-            processRepo.insertProcess(process)
-        } else {
-            throw NullPointerException()
-        }
+        val process = Json.decodeFromString(ProcessSerializer, string)
+        processRepo.insertProcess(process)
     }
 
     data class Parameter(val string: String)

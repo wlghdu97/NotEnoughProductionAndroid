@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.parser.process.ProcessDeserializer
-import com.xhlab.nep.shared.parser.process.ProcessSerializer
 import com.xhlab.test.shared.ProcessData
 import org.junit.Before
 import org.junit.Test

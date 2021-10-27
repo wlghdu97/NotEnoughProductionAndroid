@@ -1,8 +1,6 @@
 package com.xhlab.nep.shared.di
 
 import android.app.Application
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.xhlab.nep.shared.data.FakeProcessRepo
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.element.ElementRepoImpl
@@ -31,10 +29,6 @@ class SharedModule {
     @Provides
     @Singleton
     fun provideStringResolver(app: Application) = StringResolver(app)
-    
-    @Provides
-    @Singleton
-    fun provideGson(): Gson = GsonBuilder().create()
 
     @Provides
     @Singleton
