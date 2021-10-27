@@ -4,15 +4,14 @@ import com.xhlab.nep.model.oredict.Replacement
 import com.xhlab.nep.shared.data.element.SqlDelightElementMapper
 import com.xhlab.nep.shared.data.getId
 import com.xhlab.nep.shared.db.Nep
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Singleton
 
-@Singleton
-class ReplacementAdder constructor(private val db: Nep) {
-
+class ReplacementAdder constructor(
+    private val db: Nep,
+    private val io: CoroutineDispatcher
+) {
     private val mapper = SqlDelightElementMapper()
-    private val io = Dispatchers.IO
 
     suspend fun insertReplacements(list: List<Replacement>) = withContext(io) {
         insertItemsFromReplacements(list)

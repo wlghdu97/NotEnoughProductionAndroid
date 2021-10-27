@@ -9,12 +9,13 @@ import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.data.recipe.RecipeElementViewImpl
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.createOffsetLimitPager
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-internal class MachineRecipeRepoImpl constructor(private val db: Nep) : MachineRecipeRepo {
-
-    private val io = Dispatchers.IO
+internal class MachineRecipeRepoImpl constructor(
+    private val db: Nep,
+    private val io: CoroutineDispatcher
+) : MachineRecipeRepo {
 
     override suspend fun getElementListByRecipe(recipeId: Long) = withContext(io) {
         db.machineRecipeQueries.getElementListOfRecipe(recipeId, recipeElementViewMapper)

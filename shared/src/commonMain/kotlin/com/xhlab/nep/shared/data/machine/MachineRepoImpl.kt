@@ -1,17 +1,18 @@
 package com.xhlab.nep.shared.data.machine
 
-import androidx.paging.PagingConfig
 import com.xhlab.multiplatform.paging.Pager
+import com.xhlab.multiplatform.paging.PagingConfig
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.createOffsetLimitPager
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class MachineRepoImpl constructor(private val db: Nep) : MachineRepo {
-
-    private val io = Dispatchers.IO
+class MachineRepoImpl constructor(
+    private val db: Nep,
+    private val io: CoroutineDispatcher
+) : MachineRepo {
 
     override suspend fun getMachine(machineId: Int) = withContext(io) {
         db.machineQueries.getMachines(machineId, machineMapper).executeAsOneOrNull()

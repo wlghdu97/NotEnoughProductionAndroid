@@ -7,12 +7,13 @@ import com.xhlab.nep.model.recipes.view.RecipeMachineView
 import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.createOffsetLimitPager
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-internal class ElementRepoImpl constructor(private val db: Nep) : ElementRepo {
-
-    private val io = Dispatchers.IO
+internal class ElementRepoImpl constructor(
+    private val db: Nep,
+    private val io: CoroutineDispatcher
+) : ElementRepo {
 
     override suspend fun getIdsByKey(unlocalizedName: String) = withContext(io) {
         db.elementQueries.getIds(unlocalizedName).executeAsList()

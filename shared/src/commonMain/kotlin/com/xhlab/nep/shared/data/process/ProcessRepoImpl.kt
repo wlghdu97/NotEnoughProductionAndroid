@@ -13,19 +13,19 @@ import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.db.NepProcess
 import com.xhlab.nep.shared.db.ProcessQueries
 import com.xhlab.nep.shared.db.createOffsetLimitPager
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.util.*
-import javax.inject.Inject
 import com.xhlab.nep.shared.db.Process as ProcessEntity
 
-internal class ProcessRepoImpl @Inject constructor(
+internal class ProcessRepoImpl constructor(
     private val db: NepProcess,
-    private val mapper: ProcessMapper,
-    private val roomMapper: SqlDelightProcessMapper
+    private val io: CoroutineDispatcher
 ) : ProcessRepo {
 
-    private val io = Dispatchers.IO
+    private val mapper = ProcessMapper()
+    private val roomMapper = SqlDelightProcessMapper()
+
     private val cache = LruCache<String, Process>(10)
 
     override suspend fun getProcess(processId: String): Process? = withContext(io) {

@@ -21,11 +21,17 @@ import com.xhlab.nep.shared.preference.GeneralSharedPreference
 import com.xhlab.nep.shared.util.StringResolver
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module(includes = [SqlDelightModule::class])
 @Suppress("unused")
 class SharedModule {
+
+    private val io: CoroutineDispatcher
+        get() = Dispatchers.IO
+
     @Provides
     @Singleton
     fun provideStringResolver(app: Application) = StringResolver(app)
@@ -36,11 +42,11 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideElementRepo(db: Nep): ElementRepo = ElementRepoImpl(db)
+    internal fun provideElementRepo(db: Nep): ElementRepo = ElementRepoImpl(db, io)
 
     @Provides
     @Singleton
-    internal fun provideReplacementAdder(db: Nep) = ReplacementAdder(db)
+    internal fun provideReplacementAdder(db: Nep) = ReplacementAdder(db, io)
 
     @Provides
     @Singleton
@@ -48,21 +54,21 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideMachineRepo(db: Nep): MachineRepo = MachineRepoImpl(db)
+    internal fun provideMachineRepo(db: Nep): MachineRepo = MachineRepoImpl(db, io)
 
     @Provides
     @Singleton
-    internal fun provideRecipeAdder(db: Nep) = RecipeAdder(db)
+    internal fun provideRecipeAdder(db: Nep) = RecipeAdder(db, io)
 
     @Provides
     @Singleton
     internal fun provideRecipeRepo(db: Nep, adder: RecipeAdder): RecipeRepo =
-        RecipeRepoImpl(db, adder)
+        RecipeRepoImpl(db, io, adder)
 
     @Provides
     @Singleton
     internal fun provideMachineRecipeRepo(db: Nep): MachineRecipeRepo =
-        MachineRecipeRepoImpl(db)
+        MachineRecipeRepoImpl(db, io)
 
     @Provides
     @Singleton

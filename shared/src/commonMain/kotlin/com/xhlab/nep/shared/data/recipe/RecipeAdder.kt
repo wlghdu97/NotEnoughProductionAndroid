@@ -6,22 +6,21 @@ import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.oredict.OreDictElement
 import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.shared.data.element.SqlDelightElementMapper
-import com.xhlab.nep.shared.data.generateLongUUID
 import com.xhlab.nep.shared.data.getId
 import com.xhlab.nep.shared.db.Machine_recipe
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.Recipe_result
-import kotlinx.coroutines.Dispatchers
+import com.xhlab.nep.shared.util.UUID
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import javax.inject.Singleton
 import com.xhlab.nep.shared.db.Element as ElementEntity
 import com.xhlab.nep.shared.db.Recipe as RecipeEntity
 
-@Singleton
-class RecipeAdder constructor(private val db: Nep) {
-
+class RecipeAdder constructor(
+    private val db: Nep,
+    private val io: CoroutineDispatcher
+) {
     private val mapper = SqlDelightElementMapper()
-    private val io = Dispatchers.IO
 
     suspend fun insertRecipes(recipes: List<Recipe>) = withContext(io) {
         insertItemsFromRecipes(recipes)
@@ -51,7 +50,7 @@ class RecipeAdder constructor(private val db: Nep) {
         db.elementQueries.transaction {
             val oreDictElementList = recipes.asSequence()
                 .flatMap { it.getDistinctItemList().asSequence() }
-                .filterIsInstance(OreDictElement::class.java)
+                .filterIsInstance<OreDictElement>()
                 .toSet()
 
             val idByName = oreDictElementList
@@ -62,7 +61,7 @@ class RecipeAdder constructor(private val db: Nep) {
 
             val elementEntities = ArrayList<ElementEntity>()
             val chainEntities = oreDictElementList.flatMap {
-                val chainId = generateLongUUID()
+                val chainId = UUID.generateLongUUID()
                 elementEntities.add(
                     ElementEntity(
                         id = chainId,
@@ -106,7 +105,7 @@ class RecipeAdder constructor(private val db: Nep) {
         val outputPair = recipe.getOutput().toItemAmountPair()
 
         // insert recipes
-        val recipeId = generateLongUUID()
+        val recipeId = UUID.generateLongUUID()
         val inputIdList = inputPair.map { it.first.getId(db) }
         val outputIdList = outputPair.map { it.first.getId(db) }
 
