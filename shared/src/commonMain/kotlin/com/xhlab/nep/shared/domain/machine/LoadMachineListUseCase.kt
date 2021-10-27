@@ -1,5 +1,6 @@
 package com.xhlab.nep.shared.domain.machine
 
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.Machine
@@ -7,9 +8,9 @@ import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.domain.BaseMediatorUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
-class LoadMachineListUseCase @Inject constructor(
+@ProvideWithDagger("MachineDomain")
+class LoadMachineListUseCase constructor(
     private val machineRepo: MachineRepo
 ) : BaseMediatorUseCase<Unit, Pager<Int, Machine>>() {
 

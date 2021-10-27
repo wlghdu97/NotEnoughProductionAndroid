@@ -1,11 +1,12 @@
 package com.xhlab.nep.shared.domain.item
 
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
-import javax.inject.Inject
 
-class LoadElementDetailWithKeyUseCase @Inject constructor(
+@ProvideWithDagger("ItemDomain")
+class LoadElementDetailWithKeyUseCase constructor(
     private val elementRepo: ElementRepo
 ) : BaseUseCase<LoadElementDetailWithKeyUseCase.Parameter, List<ElementView>>() {
 

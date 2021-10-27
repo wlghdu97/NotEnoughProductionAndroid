@@ -1,5 +1,6 @@
 package com.xhlab.nep.shared.domain.recipe
 
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.recipes.view.RecipeMachineView
@@ -7,9 +8,9 @@ import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.domain.BaseMediatorUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import javax.inject.Inject
 
-class LoadRecipeMachineListUseCase @Inject constructor(
+@ProvideWithDagger("RecipeDomain")
+class LoadRecipeMachineListUseCase constructor(
     private val elementRepo: ElementRepo
 ) : BaseMediatorUseCase<LoadRecipeMachineListUseCase.Parameter, Pager<Int, RecipeMachineView>>() {
 

@@ -1,11 +1,12 @@
 package com.xhlab.nep.shared.domain.machine
 
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
-import javax.inject.Inject
 
-class LoadMachineUseCase @Inject constructor(
+@ProvideWithDagger("MachineDomain")
+class LoadMachineUseCase constructor(
     private val machineRepo: MachineRepo
 ) : BaseUseCase<LoadMachineUseCase.Parameter, Machine?>() {
 
