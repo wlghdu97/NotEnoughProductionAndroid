@@ -4,9 +4,9 @@ import android.util.Base64
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
 import com.xhlab.nep.shared.parser.process.ProcessSerializer
+import com.xhlab.nep.shared.parser.process.processJson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import java.io.ByteArrayOutputStream
 import java.util.zip.Inflater
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class ImportProcessStringUseCase @Inject constructor(
         val returnValues = baos.toByteArray()
         baos.close()
         val string = returnValues.toString(Charsets.UTF_8)
-        val process = Json.decodeFromString(ProcessSerializer, string)
+        val process = processJson.decodeFromString(ProcessSerializer, string)
         processRepo.insertProcess(process)
     }
 
