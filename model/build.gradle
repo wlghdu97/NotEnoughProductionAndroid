@@ -10,6 +10,7 @@ repositories {
 
 kotlin {
     jvm()
+    ios()
 }
 
 java {

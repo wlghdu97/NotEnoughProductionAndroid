@@ -4,7 +4,6 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
-import java.util.*
 
 open class Process(
     val id: String,
@@ -12,8 +11,8 @@ open class Process(
     val rootRecipe: Recipe,
     val targetOutput: Element
 ) {
-    private val vertices = LinkedList<Recipe>()
-    private val edges = LinkedList<ArrayList<Edge>>()
+    private val vertices = ArrayDeque<Recipe>()
+    private val edges = ArrayDeque<ArrayList<Edge>>()
 
     init {
         connectRecipe(rootRecipe, null, targetOutput)
@@ -40,7 +39,12 @@ open class Process(
         return connectRecipe(process.rootRecipe, target, element)
     }
 
-    fun connectRecipe(from: Recipe, to: Recipe?, element: Element, reversed: Boolean = false): Boolean {
+    fun connectRecipe(
+        from: Recipe,
+        to: Recipe?,
+        element: Element,
+        reversed: Boolean = false
+    ): Boolean {
 
         fun addRecipeNode(recipe: Recipe) {
             if (vertices.indexOf(recipe) == -1) {
@@ -76,14 +80,19 @@ open class Process(
         }
     }
 
-    fun disconnectRecipe(from: Recipe, to: Recipe, element: Element, reversed: Boolean = false): Boolean {
+    fun disconnectRecipe(
+        from: Recipe,
+        to: Recipe,
+        element: Element,
+        reversed: Boolean = false
+    ): Boolean {
         val edgeIndex = vertices.indexOf(if (reversed) to else from)
         val targetIndex = vertices.indexOf(if (reversed) from else to)
         return if (edgeIndex != -1 && targetIndex != -1) {
             val edge = edges[targetIndex].find {
                 it.index == edgeIndex &&
-                it.key == element.unlocalizedName &&
-                it.reversed == reversed
+                        it.key == element.unlocalizedName &&
+                        it.reversed == reversed
             }
             when {
                 edge == null ->
@@ -200,14 +209,16 @@ open class Process(
             }
         }
         for (edge in edges) {
-            connections.add(when {
-                edge.index == index ->
-                    Connection(NOT_CONSUMED, recipe)
-                edge.reversed ->
-                    Connection(CONNECTED_TO_PARENT, vertices[edge.index], true)
-                else ->
-                    Connection(CONNECTED_TO_CHILD, vertices[edge.index])
-            })
+            connections.add(
+                when {
+                    edge.index == index ->
+                        Connection(NOT_CONSUMED, recipe)
+                    edge.reversed ->
+                        Connection(CONNECTED_TO_PARENT, vertices[edge.index], true)
+                    else ->
+                        Connection(CONNECTED_TO_CHILD, vertices[edge.index])
+                }
+            )
         }
         if (connections.isEmpty()) {
             connections.add(Connection(UNCONNECTED))
@@ -309,7 +320,7 @@ open class Process(
     }
 
     fun getEdgesCount(): Int {
-        return edges.sumBy { it.size }
+        return edges.sumOf { it.size }
     }
 
     fun getVertices(): List<Recipe> {

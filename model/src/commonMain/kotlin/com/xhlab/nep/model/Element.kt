@@ -1,9 +1,7 @@
 package com.xhlab.nep.model
 
-import java.io.Serializable
-
-abstract class Element : Serializable {
-    abstract val amount: Int
+abstract class Element {
+    abstract val amount: Int // TODO: Remove this
     abstract val unlocalizedName: String
     abstract val localizedName: String
 
