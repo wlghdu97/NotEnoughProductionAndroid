@@ -11,6 +11,7 @@ import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.NONE
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeElementView
+import kotlinx.serialization.Serializable
 
 @Suppress("MagicNumber", "MaxLineLength")
 object ProcessData {
@@ -493,6 +494,7 @@ object ProcessData {
         )
     )
 
+    @Serializable
     data class MachineRecipeViewImpl(
         override val recipeId: Long,
         override val isEnabled: Boolean,
@@ -501,16 +503,17 @@ object ProcessData {
         override val ept: Int,
         override val machineId: Int,
         override val machineName: String,
-        override val itemList: List<RecipeElementView>,
-        override val resultItemList: List<RecipeElementView>
+        override val itemList: List<RecipeElementViewImpl>,
+        override val resultItemList: List<RecipeElementViewImpl>
     ) : MachineRecipeView()
 
     data class CraftingRecipeViewImpl(
         override val recipeId: Long,
-        override val itemList: List<RecipeElementView>,
-        override val resultItemList: List<RecipeElementView>
+        override val itemList: List<RecipeElementViewImpl>,
+        override val resultItemList: List<RecipeElementViewImpl>
     ) : CraftingRecipeView()
 
+    @Serializable
     data class RecipeElementViewImpl(
         override val id: Long,
         override val amount: Int,

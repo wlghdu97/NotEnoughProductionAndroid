@@ -1,5 +1,6 @@
 plugins {
     id "org.jetbrains.kotlin.multiplatform"
+    id "kotlinx-serialization"
     id "java-library"
     id "io.gitlab.arturbosch.detekt"
 }
@@ -12,10 +13,11 @@ kotlin {
     jvm()
 
     sourceSets {
-        jvmMain.dependencies {
+        commonMain.dependencies {
             implementation project(path: ':model')
+            implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
         }
-        jvmTest.dependencies {
+        commonTest.dependencies {
             implementation "junit:junit:$junit_version"
             implementation "org.mockito:mockito-core:$mockito_version"
             implementation "org.awaitility:awaitility:$awaitibility_version"

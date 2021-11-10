@@ -2,20 +2,16 @@ package com.xhlab.nep.shared.domain
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.*
+import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.ExportProcessStringUseCase
 import com.xhlab.nep.shared.domain.process.ImportProcessStringUseCase
-import com.xhlab.nep.shared.parser.process.ProcessDeserializer
-import com.xhlab.nep.shared.tests.util.LiveDataTestUtil
-import com.xhlab.nep.shared.tests.util.MainCoroutineRule
-import com.xhlab.nep.shared.util.Resource
+import com.xhlab.nep.shared.parser.process.ProcessSerializer
+import com.xhlab.nep.shared.parser.process.processJson
+import com.xhlab.nep.shared.util.runBlockingTest
 import com.xhlab.test.shared.ProcessData
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -30,12 +26,6 @@ class ProcessExportImportTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    @ExperimentalCoroutinesApi
-    val mainCoroutineRule = MainCoroutineRule()
-
-    private lateinit var gson: Gson
-
     private lateinit var processCaptor: ArgumentCaptor<Process>
     private lateinit var processRepo: ProcessRepo
 
@@ -46,65 +36,48 @@ class ProcessExportImportTest {
 
     @Before
     fun prepare() {
-        gson = GsonBuilder()
-            .registerTypeAdapter(Process::class.java, ProcessSerializer())
-            .registerTypeAdapter(Process::class.java, ProcessDeserializer())
-            .create()
-
         processCaptor = ArgumentCaptor.forClass(Process::class.java)
 
         processRepo = mock {
             onBlocking { exportProcessString(ProcessData.processPE.id) }
-                .doReturn(gson.toJson(ProcessData.processPE))
+                .doReturn(processJson.encodeToString(ProcessSerializer, ProcessData.processPE))
             onBlocking { insertProcess(any()) }
                 .doReturn(Unit)
         }
 
         exportUseCase = ExportProcessStringUseCase(processRepo)
-        importUseCase = ImportProcessStringUseCase(gson, processRepo)
+        importUseCase = ImportProcessStringUseCase(processRepo)
     }
 
     @Test
-    fun exportThenImport() {
-        val exportResult = exportUseCase.invoke(ExportProcessStringUseCase.Parameter(processId))
-        assertEquals(
-            Resource.Status.SUCCESS,
-            LiveDataTestUtil.getValue(exportResult)?.status
-        )
+    fun exportThenImport() = runBlockingTest {
+        val exportResult =
+            exportUseCase.invokeInstant(ExportProcessStringUseCase.Parameter(processId))
+        assertEquals(Resource.Status.SUCCESS, exportResult.status)
 
-        val json = exportResult.value?.data
+        val json = exportResult.data
         assertNotNull(json)
-        val importResult = importUseCase.invoke(ImportProcessStringUseCase.Parameter(json!!))
-        assertEquals(
-            Resource.Status.SUCCESS,
-            LiveDataTestUtil.getValue(importResult)?.status
-        )
+        val importResult =
+            importUseCase.invokeInstant(ImportProcessStringUseCase.Parameter(json!!))
+        assertEquals(Resource.Status.SUCCESS, importResult.status)
 
-        runBlocking {
-            verify(processRepo, times(1)).exportProcessString(processId)
-            verify(processRepo, times(1)).insertProcess(capture(processCaptor))
-        }
+        verify(processRepo, times(1)).exportProcessString(processId)
+        verify(processRepo, times(1)).insertProcess(capture(processCaptor))
 
         val processes = processCaptor.allValues
         assert(checkProcessSame(processes[0]))
     }
 
     @Test
-    fun importWithEmptyText() {
-        val result = importUseCase.invoke(ImportProcessStringUseCase.Parameter(""))
-        assertEquals(
-            Resource.Status.ERROR,
-            LiveDataTestUtil.getValue(result)?.status
-        )
+    fun importWithEmptyText() = runBlockingTest {
+        val result = importUseCase.invokeInstant(ImportProcessStringUseCase.Parameter(""))
+        assertEquals(Resource.Status.ERROR, result.status)
     }
 
     @Test
-    fun importWithShortText() {
-        val result = importUseCase.invoke(ImportProcessStringUseCase.Parameter("aaaa"))
-        assertEquals(
-            Resource.Status.ERROR,
-            LiveDataTestUtil.getValue(result)?.status
-        )
+    fun importWithShortText() = runBlockingTest {
+        val result = importUseCase.invokeInstant(ImportProcessStringUseCase.Parameter("aaaa"))
+        assertEquals(Resource.Status.ERROR, result.status)
     }
 
     private fun checkProcessSame(newProcess: Process): Boolean {
