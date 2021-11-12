@@ -2,8 +2,8 @@ package com.xhlab.nep.shared.parser
 
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
-import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.recipes.ShapedRecipe
+import com.xhlab.nep.model.form.ItemForm
+import com.xhlab.nep.model.form.recipes.ShapedRecipeForm
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.VanillaItemParser
 import kotlinx.coroutines.flow.flow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ShapedRecipeParser @Inject constructor(
     private val vanillaItemParser: VanillaItemParser,
     private val recipeRepo: RecipeRepo
-) : RecipeParser<ShapedRecipe>() {
+) : RecipeParser<ShapedRecipeForm>() {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parse(type: String, reader: JsonReader) = flow {
@@ -30,9 +30,9 @@ class ShapedRecipeParser @Inject constructor(
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun parseElement(reader: JsonReader): ShapedRecipe {
-        var inputItems = emptyList<Item>()
-        var outputItem: Item? = null
+    override suspend fun parseElement(reader: JsonReader): ShapedRecipeForm {
+        var inputItems = emptyList<ItemForm>()
+        var outputItem: ItemForm? = null
 
         reader.beginObject()
         while (reader.hasNext()) {
@@ -47,7 +47,7 @@ class ShapedRecipeParser @Inject constructor(
             throw NullPointerException("output item is null.")
         }
 
-        return ShapedRecipe(
+        return ShapedRecipeForm(
             input = inputItems,
             output = outputItem
         )

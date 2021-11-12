@@ -2,7 +2,7 @@ package com.xhlab.nep.shared.data.recipe
 
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.paging.PagingConfig
-import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.form.recipes.RecipeForm
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.data.pagerScope
@@ -96,7 +96,7 @@ internal class RecipeRepoImpl constructor(
         }
     }
 
-    override suspend fun insertRecipes(recipes: List<Recipe>) = withContext(io) {
+    override suspend fun insertRecipes(recipes: List<RecipeForm>) = withContext(io) {
         recipeAdder.insertRecipes(recipes)
     }
 

@@ -6,10 +6,10 @@ import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
-import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.EU
-import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType.NONE
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
+import com.xhlab.nep.model.recipes.view.MachineRecipeView.Companion.PowerType.EU
+import com.xhlab.nep.model.recipes.view.MachineRecipeView.Companion.PowerType.NONE
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import kotlinx.serialization.Serializable
 

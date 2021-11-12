@@ -1,11 +1,12 @@
 package com.xhlab.nep.shared.data.recipe
 
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.oredict.OreDictElement
-import com.xhlab.nep.model.recipes.MachineRecipe
-import com.xhlab.nep.shared.data.element.SqlDelightElementMapper
+import com.xhlab.nep.model.form.ElementForm
+import com.xhlab.nep.model.form.ItemForm
+import com.xhlab.nep.model.form.OreDictForm
+import com.xhlab.nep.model.form.recipes.MachineRecipeForm
+import com.xhlab.nep.model.form.recipes.RecipeForm
+import com.xhlab.nep.shared.data.element.SqlDelightParserElementMapper
 import com.xhlab.nep.shared.data.getId
 import com.xhlab.nep.shared.db.Machine_recipe
 import com.xhlab.nep.shared.db.Nep
@@ -20,18 +21,18 @@ class RecipeAdder constructor(
     private val db: Nep,
     private val io: CoroutineDispatcher
 ) {
-    private val mapper = SqlDelightElementMapper()
+    private val mapper = SqlDelightParserElementMapper()
 
-    suspend fun insertRecipes(recipes: List<Recipe>) = withContext(io) {
+    suspend fun insertRecipes(recipes: List<RecipeForm>) = withContext(io) {
         insertItemsFromRecipes(recipes)
         insertOreDictChains(recipes)
         insertRecipesInternal(recipes)
     }
 
-    private fun insertItemsFromRecipes(recipes: List<Recipe>) {
+    private fun insertItemsFromRecipes(recipes: List<RecipeForm>) {
         db.elementQueries.transaction {
 
-            fun getItemsFromRecipe(recipe: Recipe): List<ElementEntity> {
+            fun getItemsFromRecipe(recipe: RecipeForm): List<ElementEntity> {
                 val bothItemList = recipe.getDistinctItemList()
                 return bothItemList.flatMap { mapper.map(it) }
             }
@@ -46,11 +47,11 @@ class RecipeAdder constructor(
         }
     }
 
-    private fun insertOreDictChains(recipes: List<Recipe>) {
+    private fun insertOreDictChains(recipes: List<RecipeForm>) {
         db.elementQueries.transaction {
             val oreDictElementList = recipes.asSequence()
                 .flatMap { it.getDistinctItemList().asSequence() }
-                .filterIsInstance<OreDictElement>()
+                .filterIsInstance<OreDictForm>()
                 .toSet()
 
             val idByName = oreDictElementList
@@ -85,7 +86,7 @@ class RecipeAdder constructor(
         }
     }
 
-    private fun insertRecipesInternal(recipes: List<Recipe>) {
+    private fun insertRecipesInternal(recipes: List<RecipeForm>) {
         db.elementQueries.transaction {
             for (recipe in recipes) {
                 insertRecipe(recipe)
@@ -93,9 +94,9 @@ class RecipeAdder constructor(
         }
     }
 
-    private fun insertRecipe(recipe: Recipe) {
+    private fun insertRecipe(recipe: RecipeForm) {
 
-        fun List<Element>.toItemAmountPair(): List<Pair<Element, Int>> {
+        fun List<ElementForm>.toItemAmountPair(): List<Pair<ElementForm, Int>> {
             return this.groupBy { it.unlocalizedName }
                 .map { it.value[0] to it.value.size }
                 .toList()
@@ -110,11 +111,11 @@ class RecipeAdder constructor(
         val outputIdList = outputPair.map { it.first.getId(db) }
 
         when (recipe) {
-            is MachineRecipe -> {
+            is MachineRecipeForm -> {
                 val recipeList = ArrayList<Machine_recipe>()
                 for ((index, pair) in inputPair.withIndex()) {
-                    val metaData = if (pair.first is Item) {
-                        (pair.first as Item).metaData
+                    val metaData = if (pair.first is ItemForm) {
+                        (pair.first as ItemForm).metaData
                     } else null
                     recipeList.add(
                         Machine_recipe(
@@ -155,8 +156,8 @@ class RecipeAdder constructor(
 
         val resultList = ArrayList<Recipe_result>()
         for ((index, pair) in outputPair.withIndex()) {
-            val metaData = if (pair.first is Item) {
-                (pair.first as Item).metaData
+            val metaData = if (pair.first is ItemForm) {
+                (pair.first as ItemForm).metaData
             } else null
             resultList.add(
                 Recipe_result(
@@ -173,7 +174,7 @@ class RecipeAdder constructor(
         }
     }
 
-    private fun Recipe.getDistinctItemList(): List<Element> {
+    private fun RecipeForm.getDistinctItemList(): List<ElementForm> {
         return (getInputs() + getOutput()).distinct()
     }
 }

@@ -2,8 +2,8 @@ package com.xhlab.nep.shared.parser
 
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.recipes.ShapedOreDictRecipe
+import com.xhlab.nep.model.form.ElementForm
+import com.xhlab.nep.model.form.recipes.ShapedOreDictRecipeForm
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.oredict.OreDictItemParser
 import kotlinx.coroutines.flow.flow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class ShapedOreRecipeParser @Inject constructor(
     private val oreDictItemParser: OreDictItemParser,
     private val recipeRepo: RecipeRepo
-) : RecipeParser<ShapedOreDictRecipe>() {
+) : RecipeParser<ShapedOreDictRecipeForm>() {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parse(type: String, reader: JsonReader) = flow {
@@ -30,9 +30,9 @@ class ShapedOreRecipeParser @Inject constructor(
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun parseElement(reader: JsonReader): ShapedOreDictRecipe {
-        var inputItems = emptyList<Element>()
-        var outputItem: Element? = null
+    override suspend fun parseElement(reader: JsonReader): ShapedOreDictRecipeForm {
+        var inputItems = emptyList<ElementForm>()
+        var outputItem: ElementForm? = null
 
         reader.beginObject()
         while (reader.hasNext()) {
@@ -47,7 +47,7 @@ class ShapedOreRecipeParser @Inject constructor(
             throw NullPointerException("output item is null.")
         }
 
-        return ShapedOreDictRecipe(
+        return ShapedOreDictRecipeForm(
             input = inputItems,
             output = outputItem
         )

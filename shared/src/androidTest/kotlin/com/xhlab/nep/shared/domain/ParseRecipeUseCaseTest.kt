@@ -5,9 +5,8 @@ import com.nhaarman.mockitokotlin2.*
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.Machine
-import com.xhlab.nep.model.Recipe
-import com.xhlab.nep.model.oredict.Replacement
-import com.xhlab.nep.model.recipes.*
+import com.xhlab.nep.model.form.ReplacementForm
+import com.xhlab.nep.model.form.recipes.*
 import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.data.element.ElementRepo
@@ -122,15 +121,15 @@ class ParseRecipeUseCaseTest {
 //    }
 
     private class FakeRecipeRepo : RecipeRepo {
-        override suspend fun insertRecipes(recipes: List<Recipe>) {
+        override suspend fun insertRecipes(recipes: List<RecipeForm>) {
             for (recipe in recipes) {
                 assertTrue(
                     when (recipe) {
-                        is MachineRecipe -> RecipeData.machineRecipeList.contains(recipe)
-                        is ShapedRecipe -> RecipeData.shapedRecipeList.contains(recipe)
-                        is ShapelessRecipe -> RecipeData.shapelessRecipeList.contains(recipe)
-                        is ShapedOreDictRecipe -> RecipeData.shapedOreRecipeList.contains(recipe)
-                        is ShapelessOreDictRecipe -> RecipeData.shapelessOreRecipeList.contains(
+                        is MachineRecipeForm -> RecipeData.machineRecipeList.contains(recipe)
+                        is ShapedRecipeForm -> RecipeData.shapedRecipeList.contains(recipe)
+                        is ShapelessRecipeForm -> RecipeData.shapelessRecipeList.contains(recipe)
+                        is ShapedOreDictRecipeForm -> RecipeData.shapedOreRecipeList.contains(recipe)
+                        is ShapelessOreDictRecipeForm -> RecipeData.shapelessOreRecipeList.contains(
                             recipe
                         )
                         else -> false
@@ -201,7 +200,7 @@ class ParseRecipeUseCaseTest {
     }
 
     private class FakeOreDictRepo : OreDictRepo {
-        override suspend fun insertReplacements(list: List<Replacement>) {
+        override suspend fun insertReplacements(list: List<ReplacementForm>) {
             for (replacement in list) {
                 assertTrue(RecipeData.replacementList.contains(replacement))
             }

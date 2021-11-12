@@ -1,12 +1,12 @@
 package com.xhlab.nep.shared.data
 
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.oredict.OreDictElement
+import com.xhlab.nep.model.form.ElementForm
+import com.xhlab.nep.model.form.OreDictForm
 import com.xhlab.nep.shared.db.Nep
 
-internal fun Element.getId(db: Nep): Long {
+internal fun ElementForm.getId(db: Nep): Long {
     return when (this) {
-        is OreDictElement -> {
+        is OreDictForm -> {
             db.elementQueries.getOreDictChainIds(oreDictNameList).executeAsList().first()
         }
         else -> {

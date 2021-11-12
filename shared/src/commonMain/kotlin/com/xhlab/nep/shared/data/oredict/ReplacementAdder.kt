@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.data.oredict
 
-import com.xhlab.nep.model.oredict.Replacement
-import com.xhlab.nep.shared.data.element.SqlDelightElementMapper
+import com.xhlab.nep.model.form.ReplacementForm
+import com.xhlab.nep.shared.data.element.SqlDelightParserElementMapper
 import com.xhlab.nep.shared.data.getId
 import com.xhlab.nep.shared.db.Nep
 import kotlinx.coroutines.CoroutineDispatcher
@@ -11,17 +11,17 @@ class ReplacementAdder constructor(
     private val db: Nep,
     private val io: CoroutineDispatcher
 ) {
-    private val mapper = SqlDelightElementMapper()
+    private val mapper = SqlDelightParserElementMapper()
 
-    suspend fun insertReplacements(list: List<Replacement>) = withContext(io) {
+    suspend fun insertReplacements(list: List<ReplacementForm>) = withContext(io) {
         insertItemsFromReplacements(list)
         insertReplacementsInternal(list)
     }
 
-    private fun insertItemsFromReplacements(list: List<Replacement>) {
+    private fun insertItemsFromReplacements(list: List<ReplacementForm>) {
         db.elementQueries.transaction {
 
-            fun insertItemsFromReplacement(replacement: Replacement) {
+            fun insertItemsFromReplacement(replacement: ReplacementForm) {
                 val itemList = replacement.elementList.distinct()
                 val entityList = itemList.map { mapper.map(it)[0] }
                 for (entity in entityList) {
@@ -35,10 +35,10 @@ class ReplacementAdder constructor(
         }
     }
 
-    private fun insertReplacementsInternal(list: List<Replacement>) {
+    private fun insertReplacementsInternal(list: List<ReplacementForm>) {
         db.replacementQueries.transaction {
 
-            fun insertReplacement(replacement: Replacement) {
+            fun insertReplacement(replacement: ReplacementForm) {
                 val entityList = replacement.elementList.map {
                     replacement.oreDictName to it.getId(db)
                 }

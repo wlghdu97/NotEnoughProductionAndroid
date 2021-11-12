@@ -2,8 +2,9 @@ package com.xhlab.nep.shared.parser
 
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
-import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.recipes.MachineRecipe
+import com.xhlab.nep.model.form.ItemForm
+import com.xhlab.nep.model.form.recipes.MachineRecipeForm
+import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.ItemParser
@@ -14,7 +15,7 @@ class FurnaceRecipeParser @Inject constructor(
     private val itemParser: ItemParser,
     private val machineRepo: MachineRepo,
     private val recipeRepo: RecipeRepo
-) : RecipeParser<MachineRecipe>() {
+) : RecipeParser<MachineRecipeForm>() {
 
     private var machineId: Int = -1
 
@@ -35,9 +36,9 @@ class FurnaceRecipeParser @Inject constructor(
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun parseElement(reader: JsonReader): MachineRecipe {
-        var input: Item? = null
-        var output: Item? = null
+    override suspend fun parseElement(reader: JsonReader): MachineRecipeForm {
+        var input: ItemForm? = null
+        var output: ItemForm? = null
 
         reader.beginObject()
         while (reader.hasNext()) {
@@ -51,11 +52,11 @@ class FurnaceRecipeParser @Inject constructor(
         requireNotNull(input)
         requireNotNull(output)
 
-        return MachineRecipe(
+        return MachineRecipeForm(
             isEnabled = true,
             duration = 200,
             ept = 1,
-            powerType = MachineRecipe.Companion.PowerType.FUEL.type,
+            powerType = MachineRecipeView.Companion.PowerType.FUEL.type,
             machineId = machineId,
             itemInputs = listOf(input),
             itemOutputs = listOf(output),

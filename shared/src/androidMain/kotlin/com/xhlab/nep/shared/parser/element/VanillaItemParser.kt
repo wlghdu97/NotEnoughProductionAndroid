@@ -2,13 +2,13 @@ package com.xhlab.nep.shared.parser.element
 
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
-import com.xhlab.nep.model.Item
+import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.shared.parser.Parser
 import javax.inject.Inject
 
-class VanillaItemParser @Inject constructor() : Parser<Item?> {
+class VanillaItemParser @Inject constructor() : Parser<ItemForm?> {
 
-    override suspend fun parseElement(reader: JsonReader): Item? {
+    override suspend fun parseElement(reader: JsonReader): ItemForm? {
         if (reader.peek() == JsonToken.NULL) {
             reader.skipValue()
             return null
@@ -28,7 +28,7 @@ class VanillaItemParser @Inject constructor() : Parser<Item?> {
         }
         reader.endObject()
 
-        return Item(
+        return ItemForm(
             amount = amount,
             unlocalizedName = unlocalizedName,
             localizedName = localizedName

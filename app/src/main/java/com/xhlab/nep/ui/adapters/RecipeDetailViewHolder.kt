@@ -8,7 +8,6 @@ import androidx.constraintlayout.widget.Group
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
-import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeView
@@ -74,9 +73,15 @@ abstract class RecipeDetailViewHolder(itemView: View) : BindableViewHolder<Recip
         when (model) {
             is MachineRecipeView -> {
                 val unit = when (model.powerType) {
-                    MachineRecipe.Companion.PowerType.EU.type -> context.getString(R.string.txt_eu)
-                    MachineRecipe.Companion.PowerType.RF.type -> context.getString(R.string.txt_rf)
-                    MachineRecipe.Companion.PowerType.FUEL.type -> context.getString(R.string.txt_fuel)
+                    MachineRecipeView.Companion.PowerType.EU.type -> context.getString(
+                        R.string.txt_eu
+                    )
+                    MachineRecipeView.Companion.PowerType.RF.type -> context.getString(
+                        R.string.txt_rf
+                    )
+                    MachineRecipeView.Companion.PowerType.FUEL.type -> context.getString(
+                        R.string.txt_fuel
+                    )
                     else -> context.getString(R.string.txt_unknown)
                 }
                 val unitTick = "$unit${context.getString(R.string.txt_per_tick)}"

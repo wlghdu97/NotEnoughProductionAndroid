@@ -10,4 +10,10 @@ abstract class MachineRecipeView : RecipeView() {
     abstract val ept: Int
     abstract val machineId: Int
     abstract val machineName: String
+
+    companion object {
+        enum class PowerType(val type: Int) {
+            NONE(-1), EU(0), RF(1), FUEL(2)
+        }
+    }
 }

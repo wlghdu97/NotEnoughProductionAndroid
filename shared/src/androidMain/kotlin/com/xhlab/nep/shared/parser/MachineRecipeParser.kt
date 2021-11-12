@@ -1,10 +1,10 @@
 package com.xhlab.nep.shared.parser
 
 import com.google.gson.stream.JsonReader
-import com.xhlab.nep.model.Fluid
-import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.recipes.MachineRecipe
-import com.xhlab.nep.model.recipes.MachineRecipe.Companion.PowerType
+import com.xhlab.nep.model.form.FluidForm
+import com.xhlab.nep.model.form.ItemForm
+import com.xhlab.nep.model.form.recipes.MachineRecipeForm
+import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
@@ -18,7 +18,7 @@ class MachineRecipeParser @Inject constructor(
     private val fluidParser: FluidParser,
     private val machineRepo: MachineRepo,
     private val recipeRepo: RecipeRepo
-) : RecipeParser<MachineRecipe>() {
+) : RecipeParser<MachineRecipeForm>() {
 
     @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parse(type: String, reader: JsonReader) = flow {
@@ -48,7 +48,7 @@ class MachineRecipeParser @Inject constructor(
         reader.beginObject()
 
         var name = ""
-        var recipes = emptyList<MachineRecipe>()
+        var recipes = emptyList<MachineRecipeForm>()
 
         while (reader.hasNext()) {
             if (reader.nextName() == "n") {
@@ -73,15 +73,15 @@ class MachineRecipeParser @Inject constructor(
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun parseElement(reader: JsonReader): MachineRecipe {
+    override suspend fun parseElement(reader: JsonReader): MachineRecipeForm {
         var isEnabled = false
         var duration = 0
-        var powerType = PowerType.NONE
+        var powerType = MachineRecipeView.Companion.PowerType.NONE
         var ept = 0
-        var inputItems = emptyList<Item>()
-        var outputItems = emptyList<Item>()
-        var inputFluids = emptyList<Fluid>()
-        var outputFluids = emptyList<Fluid>()
+        var inputItems = emptyList<ItemForm>()
+        var outputItems = emptyList<ItemForm>()
+        var inputFluids = emptyList<FluidForm>()
+        var outputFluids = emptyList<FluidForm>()
 
         reader.beginObject()
 
@@ -94,18 +94,18 @@ class MachineRecipeParser @Inject constructor(
                 "fI" -> inputFluids = fluidParser.parseElements(reader)
                 "fO" -> outputFluids = fluidParser.parseElements(reader)
                 "eut" -> {
-                    powerType = PowerType.EU
+                    powerType = MachineRecipeView.Companion.PowerType.EU
                     ept = reader.nextInt()
                 }
                 "rft" -> {
-                    powerType = PowerType.RF
+                    powerType = MachineRecipeView.Companion.PowerType.RF
                     ept = reader.nextInt()
                 }
             }
         }
         reader.endObject()
 
-        return MachineRecipe(
+        return MachineRecipeForm(
             isEnabled = isEnabled,
             duration = duration,
             powerType = powerType.type,

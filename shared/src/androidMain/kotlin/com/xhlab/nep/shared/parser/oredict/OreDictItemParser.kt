@@ -2,15 +2,15 @@ package com.xhlab.nep.shared.parser.oredict
 
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.oredict.OreDictElement
+import com.xhlab.nep.model.form.ElementForm
+import com.xhlab.nep.model.form.ItemForm
+import com.xhlab.nep.model.form.OreDictForm
 import com.xhlab.nep.shared.parser.Parser
 import javax.inject.Inject
 
-class OreDictItemParser @Inject constructor() : Parser<Element> {
+class OreDictItemParser @Inject constructor() : Parser<ElementForm> {
 
-    override suspend fun parseElement(reader: JsonReader): Element {
+    override suspend fun parseElement(reader: JsonReader): ElementForm {
         return if (reader.peek() == JsonToken.BEGIN_ARRAY) {
             parseOreDictNameList(reader)
         } else {
@@ -18,7 +18,7 @@ class OreDictItemParser @Inject constructor() : Parser<Element> {
         }
     }
 
-    private fun parseItemInternal(reader: JsonReader): Item {
+    private fun parseItemInternal(reader: JsonReader): ItemForm {
         var amount = 0
         var unlocalizedName = ""
         var localizedName = ""
@@ -45,21 +45,21 @@ class OreDictItemParser @Inject constructor() : Parser<Element> {
         }
         reader.endObject()
 
-        return Item(
+        return ItemForm(
             amount = amount,
             unlocalizedName = unlocalizedName,
             localizedName = localizedName
         )
     }
 
-    private fun parseOreDictNameList(reader: JsonReader): OreDictElement {
+    private fun parseOreDictNameList(reader: JsonReader): OreDictForm {
         val nameList = ArrayList<String>()
         reader.beginArray()
         while (reader.hasNext()) {
             nameList.add(reader.nextString())
         }
         reader.endArray()
-        return OreDictElement(
+        return OreDictForm(
             amount = 1,
             oreDictNameList = nameList
         )
