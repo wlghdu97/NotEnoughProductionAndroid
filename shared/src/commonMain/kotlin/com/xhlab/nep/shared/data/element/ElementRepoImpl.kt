@@ -2,7 +2,8 @@ package com.xhlab.nep.shared.data.element
 
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.paging.PagingConfig
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.PlainRecipeElement
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.recipes.view.RecipeMachineView
 import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.db.Nep
@@ -31,7 +32,7 @@ internal class ElementRepoImpl constructor(
         db.elementQueries.deleteAll()
     }
 
-    override fun searchByName(term: String): Pager<Int, ElementView> {
+    override fun searchByName(term: String): Pager<Int, RecipeElement> {
         return with(db.elementViewQueries) {
             createOffsetLimitPager(
                 clientScope = pagerScope,
@@ -46,7 +47,7 @@ internal class ElementRepoImpl constructor(
         }
     }
 
-    override fun searchMachineResults(machineId: Int, term: String): Pager<Int, ElementView> {
+    override fun searchMachineResults(machineId: Int, term: String): Pager<Int, RecipeElement> {
         return with(db.elementViewQueries) {
             val id = machineId.toLong()
             createOffsetLimitPager(
@@ -62,7 +63,7 @@ internal class ElementRepoImpl constructor(
         }
     }
 
-    override fun searchMachineResultsFts(machineId: Int, term: String): Pager<Int, ElementView> {
+    override fun searchMachineResultsFts(machineId: Int, term: String): Pager<Int, RecipeElement> {
         return with(db.elementViewQueries) {
             val id = machineId.toLong()
             createOffsetLimitPager(
@@ -78,7 +79,7 @@ internal class ElementRepoImpl constructor(
         }
     }
 
-    override fun getElements(): Pager<Int, ElementView> {
+    override fun getElements(): Pager<Int, RecipeElement> {
         return with(db.elementViewQueries) {
             createOffsetLimitPager(
                 clientScope = pagerScope,
@@ -93,7 +94,7 @@ internal class ElementRepoImpl constructor(
         }
     }
 
-    override fun getResultsByMachine(machineId: Int): Pager<Int, ElementView> {
+    override fun getResultsByMachine(machineId: Int): Pager<Int, RecipeElement> {
         return with(db.elementViewQueries) {
             val id = machineId.toLong()
             createOffsetLimitPager(
@@ -139,7 +140,7 @@ internal class ElementRepoImpl constructor(
         }
     }
 
-    override fun getUsagesByElement(elementId: Long): Pager<Int, ElementView> {
+    override fun getUsagesByElement(elementId: Long): Pager<Int, RecipeElement> {
         return with(db.elementViewQueries) {
             createOffsetLimitPager(
                 clientScope = pagerScope,
@@ -169,7 +170,7 @@ internal class ElementRepoImpl constructor(
         }
     }
 
-    override fun getReplacementsByElement(oreDictName: String): Pager<Int, ElementView> {
+    override fun getReplacementsByElement(oreDictName: String): Pager<Int, RecipeElement> {
         return with(db.elementViewQueries) {
             createOffsetLimitPager(
                 clientScope = pagerScope,
@@ -191,12 +192,13 @@ internal class ElementRepoImpl constructor(
                                       localized_name: String,
                                       unlocalized_name: String,
                                       type: Int ->
-        ElementViewImpl(
+        PlainRecipeElement(
             id = id,
             localizedName = localized_name,
             unlocalizedName = unlocalized_name,
             type = type,
-            metaData = null
+            metaData = null,
+            amount = 1
         )
     }
 
@@ -210,16 +212,6 @@ internal class ElementRepoImpl constructor(
             modName = modName,
             recipeCount = recipeCount.toInt()
         )
-    }
-
-    class ElementViewImpl(
-        override val id: Long,
-        override val localizedName: String,
-        override val unlocalizedName: String,
-        override val type: Int,
-        override val metaData: String?
-    ) : ElementView() {
-        override val amount = 1
     }
 
     companion object {

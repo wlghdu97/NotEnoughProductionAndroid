@@ -1,14 +1,14 @@
 package com.xhlab.nep.ui.process.editor.selection.outer
 
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 
 interface OreDictRecipeSelectionListener {
     fun onSelectOreDict(
         from: Recipe,
         to: Recipe,
-        target: Element,
-        ingredient: Element,
+        target: RecipeElement,
+        ingredient: RecipeElement,
         reversed: Boolean
     )
 }

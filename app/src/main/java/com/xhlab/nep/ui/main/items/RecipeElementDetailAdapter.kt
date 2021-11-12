@@ -10,14 +10,15 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 
-class ElementDetailAdapter(
+class RecipeElementDetailAdapter(
     private val listener: ElementListener? = null
-) : PagingDataAdapter<ElementView, ElementDetailAdapter.RecipeElementViewHolder>(DiffCallback) {
-
+) : PagingDataAdapter<RecipeElement, RecipeElementDetailAdapter.RecipeElementViewHolder>(
+    DiffCallback
+) {
     private var isIconVisible = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeElementViewHolder {
@@ -36,7 +37,7 @@ class ElementDetailAdapter(
     }
 
     inner class RecipeElementViewHolder(itemView: View) :
-        BindableViewHolder<ElementView>(itemView) {
+        BindableViewHolder<RecipeElement>(itemView) {
 
         private val icon: ImageView = itemView.findViewById(R.id.icon)
         private val name: TextView = itemView.findViewById(R.id.name)
@@ -49,7 +50,7 @@ class ElementDetailAdapter(
             }
         }
 
-        override fun bindNotNull(model: ElementView) {
+        override fun bindNotNull(model: RecipeElement) {
             icon.isGone = !isIconVisible
             if (isIconVisible) {
                 icon.setIcon(model.unlocalizedName)
@@ -72,12 +73,12 @@ class ElementDetailAdapter(
         }
     }
 
-    private object DiffCallback : DiffUtil.ItemCallback<ElementView>() {
-        override fun areItemsTheSame(oldItem: ElementView, newItem: ElementView): Boolean {
+    private object DiffCallback : DiffUtil.ItemCallback<RecipeElement>() {
+        override fun areItemsTheSame(oldItem: RecipeElement, newItem: RecipeElement): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ElementView, newItem: ElementView): Boolean {
+        override fun areContentsTheSame(oldItem: RecipeElement, newItem: RecipeElement): Boolean {
             return (oldItem.id == newItem.id &&
                     oldItem.unlocalizedName == newItem.unlocalizedName &&
                     oldItem.localizedName == newItem.localizedName &&

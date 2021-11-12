@@ -6,8 +6,7 @@ import android.widget.ImageButton
 import android.widget.PopupMenu
 import androidx.core.view.isGone
 import com.xhlab.nep.R
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.ui.process.adapters.ElementConnection
@@ -51,7 +50,7 @@ class ElementAdapter(
             }
         }
 
-        override fun bindNotNull(model: Element) {
+        override fun bindNotNull(model: RecipeElement) {
             super.bindNotNull(model)
             if (recipeNode?.node?.recipe is SupplierRecipe) {
                 name.text = model.localizedName
@@ -92,7 +91,7 @@ class ElementAdapter(
                     R.id.menu_connect_to_parent -> {
                         val recipe = recipeNode?.node?.recipe
                         val degree = recipeNode?.degree
-                        val view = element as ElementView
+                        val view = element
                         if (recipe != null && degree != null) {
                             processEditListener?.onConnectToParent(recipe, view, degree)
                         }
@@ -100,7 +99,7 @@ class ElementAdapter(
                     R.id.menu_connect_to_child -> {
                         val recipe = recipeNode?.node?.recipe
                         val degree = recipeNode?.degree
-                        val view = element as ElementView
+                        val view = element
                         if (recipe != null && degree != null) {
                             processEditListener?.onConnectToChild(recipe, view, degree)
                         }

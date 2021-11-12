@@ -14,7 +14,7 @@ import com.xhlab.nep.databinding.FragmentUsageListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment
-import com.xhlab.nep.ui.main.items.ElementDetailAdapter
+import com.xhlab.nep.ui.main.items.RecipeElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -29,7 +29,7 @@ class UsageListFragment : DaggerFragment(), ViewInit {
     private lateinit var binding: FragmentUsageListBinding
     private lateinit var viewModel: UsageListViewModel
 
-    private val usageAdapter by lazy { ElementDetailAdapter(viewModel) }
+    private val usageAdapter by lazy { RecipeElementDetailAdapter(viewModel) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

@@ -9,13 +9,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.formatString
 import java.text.NumberFormat
 import java.util.*
 
-open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemView) {
+open class RecipeElementViewHolder(itemView: View) : BindableViewHolder<RecipeElement>(itemView) {
 
     private val integerFormat = NumberFormat.getIntegerInstance(Locale.getDefault())
 
@@ -34,16 +34,14 @@ open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemV
         }
     }
 
-    override fun bindNotNull(model: Element) {
-        if (model is ElementView) {
-            type?.setText(
-                when (model.type) {
-                    Element.ITEM -> R.string.txt_item
-                    Element.FLUID -> R.string.txt_fluid
-                    else -> R.string.txt_unknown
-                }
-            )
-        }
+    override fun bindNotNull(model: RecipeElement) {
+        type?.setText(
+            when (model.type) {
+                Element.ITEM -> R.string.txt_item
+                Element.FLUID -> R.string.txt_fluid
+                else -> R.string.txt_unknown
+            }
+        )
         val nameText = getNameText(model)
         name.text = when (model.amount == 0) {
             true -> nameText
@@ -54,7 +52,7 @@ open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemV
             )
         }
         with(unlocalizedName) {
-            maxLines = when (model is ElementView && model.type == Element.ORE_CHAIN) {
+            maxLines = when (model.type == Element.ORE_CHAIN) {
                 true -> 2
                 false -> 1
             }
@@ -65,13 +63,10 @@ open class ElementViewHolder(itemView: View) : BindableViewHolder<Element>(itemV
         }
     }
 
-    protected fun getNameText(element: Element): String {
-        var metaData = ""
-        if (element is ElementView) {
-            metaData = when (!element.metaData.isNullOrEmpty()) {
-                true -> " : ${element.metaData}"
-                false -> ""
-            }
+    protected fun getNameText(element: RecipeElement): String {
+        val metaData = when (!element.metaData.isNullOrEmpty()) {
+            true -> " : ${element.metaData}"
+            false -> ""
         }
         val localizedName = when (element.localizedName.isEmpty()) {
             true -> context.getString(R.string.txt_unnamed)

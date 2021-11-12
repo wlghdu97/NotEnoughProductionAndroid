@@ -5,7 +5,7 @@ import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.MR
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
@@ -38,14 +38,14 @@ class RecipeListViewModel @Inject constructor(
 
     private val constraint = MutableStateFlow<ProcessEditViewModel.ConnectionConstraint?>(null)
 
-    private val _elements = MutableStateFlow<Resource<List<ElementView>>?>(null)
+    private val _elements = MutableStateFlow<Resource<List<RecipeElement>>?>(null)
     val elements = _elements.transform {
         if (it?.isSuccessful() == true && it.data!!.size > 1) {
             emit(it.data!!)
         }
     }
 
-    private val _element = MutableStateFlow<Resource<ElementView>?>(null)
+    private val _element = MutableStateFlow<Resource<RecipeElement>?>(null)
     val element = _element.transform {
         if (it?.isSuccessful() == true) {
             emit(it.data!!)
@@ -129,15 +129,15 @@ class RecipeListViewModel @Inject constructor(
     private fun requireElementId() =
         _element.value?.data?.id ?: throw NullPointerException("element id is null.")
 
-    fun submitElement(element: ElementView) {
+    fun submitElement(element: RecipeElement) {
         _element.value = Resource.success(element)
     }
 
     fun attachOreDictAsSupplier() {
         scope.launch(modificationExceptionHandler) {
             val constraint = constraint.value
-            val ingredient = _element.value
-            if (constraint != null && ingredient is ElementView) {
+            val ingredient = _element.value?.data
+            if (constraint != null && ingredient != null) {
                 val recipe = constraint.recipe
                 val target = constraint.element
                 val chainRecipe = OreChainRecipe(target, ingredient)

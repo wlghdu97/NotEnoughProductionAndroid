@@ -2,17 +2,17 @@ package com.xhlab.nep.shared.parser.oredict
 
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.Item
-import com.xhlab.nep.model.oredict.Replacement
+import com.xhlab.nep.model.form.ElementForm
+import com.xhlab.nep.model.form.ItemForm
+import com.xhlab.nep.model.form.ReplacementForm
 import com.xhlab.nep.shared.parser.Parser
 import javax.inject.Inject
 
-class ReplacementParser @Inject constructor() : Parser<Replacement> {
+class ReplacementParser @Inject constructor() : Parser<ReplacementForm> {
 
-    override suspend fun parseElement(reader: JsonReader): Replacement {
+    override suspend fun parseElement(reader: JsonReader): ReplacementForm {
         var oreDictName = ""
-        var elementList: List<Element> = emptyList()
+        var elementList: List<ElementForm> = emptyList()
 
         reader.beginObject()
         while (reader.hasNext()) {
@@ -23,14 +23,14 @@ class ReplacementParser @Inject constructor() : Parser<Replacement> {
         }
         reader.endObject()
 
-        return Replacement(
+        return ReplacementForm(
             oreDictName = oreDictName,
             elementList = elementList
         )
     }
 
-    private fun parseElementList(reader: JsonReader): List<Element> {
-        val list = ArrayList<Element>()
+    private fun parseElementList(reader: JsonReader): List<ElementForm> {
+        val list = ArrayList<ElementForm>()
         reader.beginArray()
         while (reader.hasNext()) {
             list.add(parseItemInternal(reader))
@@ -39,7 +39,7 @@ class ReplacementParser @Inject constructor() : Parser<Replacement> {
         return list
     }
 
-    private fun parseItemInternal(reader: JsonReader): Item {
+    private fun parseItemInternal(reader: JsonReader): ItemForm {
         var amount = 0
         var unlocalizedName = ""
         var localizedName = ""
@@ -66,7 +66,7 @@ class ReplacementParser @Inject constructor() : Parser<Replacement> {
         }
         reader.endObject()
 
-        return Item(
+        return ItemForm(
             amount = amount,
             unlocalizedName = unlocalizedName,
             localizedName = localizedName

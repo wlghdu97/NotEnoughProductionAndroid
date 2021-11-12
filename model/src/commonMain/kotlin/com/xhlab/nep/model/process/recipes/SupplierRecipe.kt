@@ -1,23 +1,25 @@
 package com.xhlab.nep.model.process.recipes
 
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.PlainRecipeElement
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 
-class SupplierRecipe(element: ElementView) : Recipe {
-    private val innerElement: Element = ElementImpl(
+class SupplierRecipe(element: RecipeElement) : Recipe {
+
+    private val innerElement: RecipeElement = PlainRecipeElement(
         id = element.id,
         localizedName = element.localizedName,
         unlocalizedName = element.unlocalizedName,
         type = element.type,
-        metaData = element.metaData
+        metaData = element.metaData,
+        amount = element.amount
     )
 
-    override fun getInputs(): List<Element> {
+    override fun getInputs(): List<RecipeElement> {
         return emptyList()
     }
 
-    override fun getOutput(): List<Element> {
+    override fun getOutput(): List<RecipeElement> {
         return listOf(innerElement)
     }
 

@@ -3,7 +3,7 @@ package com.xhlab.nep.ui.process.calculator
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.domain.ElementDetailNavigationUseCase
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.domain.item.LoadElementDetailWithKeyUseCase
 import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.shared.ui.invokeUseCase
@@ -17,7 +17,7 @@ class ElementNavigatorViewModel @Inject constructor(
     private val elementDetailNavigationUseCase: ElementDetailNavigationUseCase
 ) : ViewModel(), ElementKeyListener {
 
-    private val _elements = MutableStateFlow<Resource<List<ElementView>>?>(null)
+    private val _elements = MutableStateFlow<Resource<List<RecipeElement>>?>(null)
     val elements = _elements.transform {
         if (it?.isSuccessful() == true) {
             val data = it.data!!
@@ -30,7 +30,7 @@ class ElementNavigatorViewModel @Inject constructor(
         }
     }
 
-    fun submitElement(element: ElementView) {
+    fun submitElement(element: RecipeElement) {
         navigateToDetails(element.id, element.type)
     }
 

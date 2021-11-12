@@ -1,67 +1,67 @@
 package com.xhlab.test.shared
 
-import com.xhlab.nep.model.Fluid
-import com.xhlab.nep.model.Item
 import com.xhlab.nep.model.Machine
-import com.xhlab.nep.model.oredict.OreDictElement
-import com.xhlab.nep.model.oredict.Replacement
-import com.xhlab.nep.model.recipes.*
+import com.xhlab.nep.model.form.FluidForm
+import com.xhlab.nep.model.form.ItemForm
+import com.xhlab.nep.model.form.OreDictForm
+import com.xhlab.nep.model.form.ReplacementForm
+import com.xhlab.nep.model.form.recipes.*
 
 @Suppress("MagicNumber", "MaxLineLength")
 object RecipeData {
 
     val itemList = listOf(
-        Item(1, "gt.bwMetaGeneratedcrushed.5", "Crushed Fluor-Buergerite Ore"),
-        Item(1, "gt.bwMetaGeneratedcrushedPurified.5", "Purified Fluor-Buergerite Ore"),
-        Item(1, "gt.metaitem.01.17", "Tiny Pile of Sodium Dust"),
-        Item(1, "gt.metaitem.01.2299", "Stone Dust"),
-        Item(1, "item.crushedAgarditeCd", "Crushed Agardite (Cd) Ore"),
-        Item(1, "item.crushedPurifiedAgarditeCd", "Purified Crushed Agardite (Cd) Ore"),
-        Item(1, "gt.metaitem.01.35", "Tiny Pile of Copper Dust"),
-        Item(1, "item.beeNugget", "Apatite Shard"),
-        Item(1, "gt.metaitem.01.2530", "Apatite Dust"),
-        Item(1, "gt.metaitem.01.833", "Tiny Pile of Phosphate Dust"),
-        Item(1, "block.cobblestone", "Cobblestone"),
-        Item(1, "block.furnace", "Furnace"),
-        Item(1, "item.coal", "Coal"),
-        Item(1, "item.stick", "Stick"),
-        Item(4, "item.torch", "Torch"),
-        Item(1, "item.projectred.core.part.conductive_plate", "Conductive Plate"),
-        Item(1, "item.projectred.core.part.cathode", "Cathode"),
-        Item(1, "item.projectred.core.part.plate", "Circuit Plate"),
-        Item(1, "item.projectred.integration.gate|26", "Comparator"),
-        Item(1, "item.netherquartz", "Nether Quartz"),
-        Item(1, "gt.metaitem.01.8516", "Certus Quartz"),
-        Item(1, "gt.metaitem.01.8523", "Quartzite"),
-        Item(
+        ItemForm(1, "gt.bwMetaGeneratedcrushed.5", "Crushed Fluor-Buergerite Ore"),
+        ItemForm(1, "gt.bwMetaGeneratedcrushedPurified.5", "Purified Fluor-Buergerite Ore"),
+        ItemForm(1, "gt.metaitem.01.17", "Tiny Pile of Sodium Dust"),
+        ItemForm(1, "gt.metaitem.01.2299", "Stone Dust"),
+        ItemForm(1, "item.crushedAgarditeCd", "Crushed Agardite (Cd) Ore"),
+        ItemForm(1, "item.crushedPurifiedAgarditeCd", "Purified Crushed Agardite (Cd) Ore"),
+        ItemForm(1, "gt.metaitem.01.35", "Tiny Pile of Copper Dust"),
+        ItemForm(1, "item.beeNugget", "Apatite Shard"),
+        ItemForm(1, "gt.metaitem.01.2530", "Apatite Dust"),
+        ItemForm(1, "gt.metaitem.01.833", "Tiny Pile of Phosphate Dust"),
+        ItemForm(1, "block.cobblestone", "Cobblestone"),
+        ItemForm(1, "block.furnace", "Furnace"),
+        ItemForm(1, "item.coal", "Coal"),
+        ItemForm(1, "item.stick", "Stick"),
+        ItemForm(4, "item.torch", "Torch"),
+        ItemForm(1, "item.projectred.core.part.conductive_plate", "Conductive Plate"),
+        ItemForm(1, "item.projectred.core.part.cathode", "Cathode"),
+        ItemForm(1, "item.projectred.core.part.plate", "Circuit Plate"),
+        ItemForm(1, "item.projectred.integration.gate|26", "Comparator"),
+        ItemForm(1, "item.netherquartz", "Nether Quartz"),
+        ItemForm(1, "gt.metaitem.01.8516", "Certus Quartz"),
+        ItemForm(1, "gt.metaitem.01.8523", "Quartzite"),
+        ItemForm(
             1,
             "item.appliedenergistics2.ItemMaterial.PurifiedCertusQuartzCrystal",
             "Pure Certus Quartz Crystal"
         ),
-        Item(
+        ItemForm(
             1,
             "item.appliedenergistics2.ItemMaterial.CertusQuartzCrystalCharged",
             "Charged Certus Quartz Crystal"
         ),
-        Item(
+        ItemForm(
             1,
             "item.appliedenergistics2.ItemMaterial.PurifiedNetherQuartzCrystal",
             "Pure Nether Quartz Crystal"
         ),
-        Item(1, "item.appliedenergistics2.ItemMaterial.FluixCrystal", "Fluix Crystal"),
-        Item(1, "gt.blockmachines.wire.steel.02", "2x Steel Wire"),
-        Item(2, "gt.blockmachines.wire.steel.01", "1x Steel Wire")
+        ItemForm(1, "item.appliedenergistics2.ItemMaterial.FluixCrystal", "Fluix Crystal"),
+        ItemForm(1, "gt.blockmachines.wire.steel.02", "2x Steel Wire"),
+        ItemForm(2, "gt.blockmachines.wire.steel.01", "1x Steel Wire")
     )
 
     val fluidList = listOf(
-        Fluid(1000, "fluid.tile.water", "Water")
+        FluidForm(1000, "fluid.tile.water", "Water")
     )
 
     val replacementList = listOf(
-        Replacement("gemQuartz", listOf(itemList[19])),
-        Replacement("crystalQuartz", listOf(itemList[19])),
-        Replacement("gemNetherQuartz", listOf(itemList[19])),
-        Replacement(
+        ReplacementForm("gemQuartz", listOf(itemList[19])),
+        ReplacementForm("crystalQuartz", listOf(itemList[19])),
+        ReplacementForm("gemNetherQuartz", listOf(itemList[19])),
+        ReplacementForm(
             "craftingQuartz",
             listOf(
                 itemList[20],
@@ -73,9 +73,9 @@ object RecipeData {
                 itemList[25]
             )
         ),
-        Replacement("itemNetherQuartz", listOf(itemList[19], itemList[24])),
-        Replacement("crystalNetherQuartz", listOf(itemList[19])),
-        Replacement("wireGt02Steel", listOf(itemList[26]))
+        ReplacementForm("itemNetherQuartz", listOf(itemList[19], itemList[24])),
+        ReplacementForm("crystalNetherQuartz", listOf(itemList[19])),
+        ReplacementForm("wireGt02Steel", listOf(itemList[26]))
     )
 
     val machineList = listOf(
@@ -84,21 +84,21 @@ object RecipeData {
     )
 
     val machineRecipeList = listOf(
-        MachineRecipe(
+        MachineRecipeForm(
             true, 500, 0, 16, 0,
             listOf(itemList[0]),
             listOf(itemList[1], itemList[2], itemList[3]),
             listOf(fluidList[0]),
             listOf()
         ),
-        MachineRecipe(
+        MachineRecipeForm(
             true, 500, 0, 16, 0,
             listOf(itemList[4]),
             listOf(itemList[5], itemList[6], itemList[3]),
             listOf(fluidList[0]),
             listOf()
         ),
-        MachineRecipe(
+        MachineRecipeForm(
             true, 500, 0, 48, 1,
             listOf(itemList[7]),
             listOf(itemList[8], itemList[9], itemList[3]),
@@ -108,7 +108,7 @@ object RecipeData {
     )
 
     val shapedRecipeList = listOf(
-        ShapedRecipe(
+        ShapedRecipeForm(
             listOf(
                 itemList[10], itemList[10], itemList[10],
                 itemList[10], /*null*/ itemList[10],
@@ -119,7 +119,7 @@ object RecipeData {
     )
 
     val shapelessRecipeList = listOf(
-        ShapelessRecipe(
+        ShapelessRecipeForm(
             listOf(
                 itemList[12], /*null*/ /*null*/
                 itemList[13] /*null*/ /*null*/
@@ -129,7 +129,7 @@ object RecipeData {
         )
     )
 
-    private val quartzList = OreDictElement(
+    private val quartzList = OreDictForm(
         amount = 1,
         oreDictNameList = listOf(
             replacementList[0].oreDictName,
@@ -142,7 +142,7 @@ object RecipeData {
     )
 
     val shapedOreRecipeList = listOf(
-        ShapedOreDictRecipe(
+        ShapedOreDictRecipeForm(
             listOf(
                 itemList[15], itemList[16], itemList[15],
                 quartzList, itemList[15], quartzList,
@@ -152,9 +152,9 @@ object RecipeData {
     )
 
     val shapelessOreRecipeList = listOf(
-        ShapelessOreDictRecipe(
+        ShapelessOreDictRecipeForm(
             listOf(
-                OreDictElement(1, listOf(replacementList[6].oreDictName))
+                OreDictForm(1, listOf(replacementList[6].oreDictName))
             ), itemList[27]
         )
     )

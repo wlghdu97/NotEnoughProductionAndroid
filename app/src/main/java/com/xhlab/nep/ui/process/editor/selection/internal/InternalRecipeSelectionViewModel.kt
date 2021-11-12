@@ -4,8 +4,8 @@ import co.touchlab.kermit.Logger
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.MR
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -72,7 +72,7 @@ class InternalRecipeSelectionViewModel @Inject constructor(
     private fun requireProcessId() =
         _process.value.data?.id ?: throw NullPointerException("process id is null.")
 
-    override fun onSelect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
+    override fun onSelect(from: Recipe, to: Recipe, element: RecipeElement, reversed: Boolean) {
         scope.launch(connectionExceptionHandler) {
             processRepo.connectRecipe(requireProcessId(), from, to, element, reversed)
             _finish.emit(Unit)

@@ -30,7 +30,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
     private lateinit var viewModel: ItemBrowserViewModel
 
     private var listener: ElementListener? = null
-    private val elementAdapter by lazy { ElementDetailAdapter(listener) }
+    private val elementAdapter by lazy { RecipeElementDetailAdapter(listener) }
 
     constructor() : super()
 

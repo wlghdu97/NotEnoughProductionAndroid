@@ -1,7 +1,6 @@
 package com.xhlab.nep.model
 
 abstract class Element {
-    abstract val amount: Int // TODO: Remove this
     abstract val unlocalizedName: String
     abstract val localizedName: String
 
