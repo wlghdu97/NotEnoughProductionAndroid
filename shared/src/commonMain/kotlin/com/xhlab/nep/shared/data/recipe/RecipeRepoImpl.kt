@@ -2,8 +2,9 @@ package com.xhlab.nep.shared.data.recipe
 
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.paging.PagingConfig
+import com.xhlab.nep.model.PlainRecipeElement
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.form.recipes.RecipeForm
-import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.db.Nep
@@ -108,7 +109,7 @@ internal class RecipeRepoImpl constructor(
                                             unlocalized_name: String,
                                             type: Int,
                                             amount: Int ->
-        RecipeElementViewImpl(
+        PlainRecipeElement(
             id = id,
             localizedName = localized_name,
             unlocalizedName = unlocalized_name,
@@ -124,7 +125,7 @@ internal class RecipeRepoImpl constructor(
                                                         type: Int,
                                                         amount: Int,
                                                         meta_data: String? ->
-        RecipeElementViewImpl(
+        PlainRecipeElement(
             id = id,
             localizedName = localized_name,
             unlocalizedName = unlocalized_name,
@@ -136,8 +137,8 @@ internal class RecipeRepoImpl constructor(
 
     data class RecipeViewImpl(
         override val recipeId: Long,
-        override val itemList: List<RecipeElementView>,
-        override val resultItemList: List<RecipeElementView>
+        override val itemList: List<RecipeElement>,
+        override val resultItemList: List<RecipeElement>
     ) : RecipeView()
 
     companion object {

@@ -5,8 +5,8 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.paging.PagingConfig
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.shared.data.pagerScope
@@ -72,7 +72,7 @@ internal class ProcessRepoImpl constructor(
     override suspend fun createProcess(
         name: String,
         targetRecipe: Recipe,
-        keyElement: Element
+        keyElement: RecipeElement
     ): Boolean {
         val processId = UUID.randomUUID().toString()
         val process = Process(processId, name, targetRecipe, keyElement)
@@ -106,7 +106,7 @@ internal class ProcessRepoImpl constructor(
         processId: String,
         fromProcessId: String,
         to: Recipe?,
-        element: Element
+        element: RecipeElement
     ) {
         val process = getProcessInternal(processId)
         val subProcess = getProcess(fromProcessId)
@@ -122,7 +122,7 @@ internal class ProcessRepoImpl constructor(
         processId: String,
         from: Recipe,
         to: Recipe?,
-        element: Element,
+        element: RecipeElement,
         reversed: Boolean
     ) = withContext(io) {
         val process = getProcessInternal(processId)
@@ -138,7 +138,7 @@ internal class ProcessRepoImpl constructor(
         processId: String,
         from: Recipe,
         to: Recipe,
-        element: Element,
+        element: RecipeElement,
         reversed: Boolean
     ) = withContext(io) {
         val process = getProcessInternal(processId)
@@ -153,7 +153,7 @@ internal class ProcessRepoImpl constructor(
     override suspend fun markNotConsumed(
         processId: String,
         recipe: Recipe,
-        element: Element,
+        element: RecipeElement,
         consumed: Boolean
     ) = withContext(io) {
         val process = getProcessInternal(processId)

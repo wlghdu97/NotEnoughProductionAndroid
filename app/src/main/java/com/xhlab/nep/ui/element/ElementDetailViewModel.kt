@@ -2,7 +2,7 @@ package com.xhlab.nep.ui.element
 
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
 import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.shared.ui.invokeUseCase
@@ -14,7 +14,7 @@ class ElementDetailViewModel @Inject constructor(
     private val loadElementDetailUseCase: LoadElementDetailUseCase
 ) : ViewModel() {
 
-    private val _element = MutableStateFlow<Resource<ElementView>?>(null)
+    private val _element = MutableStateFlow<Resource<RecipeElement>?>(null)
     val element = _element.transform {
         if (it?.isSuccessful() == true) {
             emit(it.data!!)

@@ -1,20 +1,18 @@
 package com.xhlab.nep.shared.parser.process
 
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.model.recipes.view.RecipeElementView
+import com.xhlab.nep.model.RecipeElement
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-object ProcessElementSerializer : KSerializer<Element> {
+object ProcessElementSerializer : KSerializer<RecipeElement> {
 
-    override val descriptor = RecipeElementViewImpl.serializer().descriptor
+    override val descriptor = RecipeElementImpl.serializer().descriptor
 
-    override fun serialize(encoder: Encoder, value: Element) {
-        val surrogate = with(value as ElementView) {
-            RecipeElementViewImpl(
+    override fun serialize(encoder: Encoder, value: RecipeElement) {
+        val surrogate = with(value) {
+            RecipeElementImpl(
                 id = id,
                 localizedName = localizedName,
                 unlocalizedName = unlocalizedName,
@@ -23,13 +21,13 @@ object ProcessElementSerializer : KSerializer<Element> {
                 amount = amount
             )
         }
-        encoder.encodeSerializableValue(RecipeElementViewImpl.serializer(), surrogate)
+        encoder.encodeSerializableValue(RecipeElementImpl.serializer(), surrogate)
     }
 
-    override fun deserialize(decoder: Decoder): Element {
-        val element = decoder.decodeSerializableValue(RecipeElementViewImpl.serializer())
+    override fun deserialize(decoder: Decoder): RecipeElement {
+        val element = decoder.decodeSerializableValue(RecipeElementImpl.serializer())
         return with(element) {
-            RecipeElementViewImpl(
+            RecipeElementImpl(
                 id = id,
                 localizedName = localizedName,
                 unlocalizedName = unlocalizedName,
@@ -41,16 +39,16 @@ object ProcessElementSerializer : KSerializer<Element> {
     }
 
     @Serializable
-    data class RecipeElementViewImpl(
+    data class RecipeElementImpl(
         override val id: Long,
         override val unlocalizedName: String,
         override val localizedName: String,
         override val amount: Int,
         override val type: Int,
         override val metaData: String? = null
-    ) : RecipeElementView()
+    ) : RecipeElement()
 
-    internal fun ElementView.toRecipeElementViewImpl() = RecipeElementViewImpl(
+    internal fun RecipeElement.toRecipeElementImpl() = RecipeElementImpl(
         id = id,
         localizedName = localizedName,
         unlocalizedName = unlocalizedName,

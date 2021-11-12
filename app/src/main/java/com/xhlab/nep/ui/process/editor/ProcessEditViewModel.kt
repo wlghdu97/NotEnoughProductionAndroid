@@ -8,9 +8,8 @@ import com.xhlab.nep.domain.InternalRecipeSelectionNavigationUseCase
 import com.xhlab.nep.domain.ProcessCalculationNavigationUseCase
 import com.xhlab.nep.domain.ProcessSelectionNavigationUseCase
 import com.xhlab.nep.domain.RecipeSelectionNavigationUseCase
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
@@ -83,7 +82,7 @@ class ProcessEditViewModel @Inject constructor(
     private fun requireProcessId() =
         _process.value.data?.id ?: throw NullPointerException("process id is null.")
 
-    override fun onDisconnect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
+    override fun onDisconnect(from: Recipe, to: Recipe, element: RecipeElement, reversed: Boolean) {
         if (generalPreference.getShowDisconnectionAlert()) {
             scope.launch {
                 _showDisconnectionAlert.emit(DisconnectionPayload(from, to, element, reversed))
@@ -93,7 +92,7 @@ class ProcessEditViewModel @Inject constructor(
         }
     }
 
-    override fun onConnectToParent(recipe: Recipe, element: ElementView, degree: Int) {
+    override fun onConnectToParent(recipe: Recipe, element: RecipeElement, degree: Int) {
         scope.launch {
             _connectRecipe.emit(
                 ConnectionConstraint(
@@ -107,7 +106,7 @@ class ProcessEditViewModel @Inject constructor(
         }
     }
 
-    override fun onConnectToChild(recipe: Recipe, element: ElementView, degree: Int) {
+    override fun onConnectToChild(recipe: Recipe, element: RecipeElement, degree: Int) {
         scope.launch {
             _connectRecipe.emit(
                 ConnectionConstraint(
@@ -121,7 +120,7 @@ class ProcessEditViewModel @Inject constructor(
         }
     }
 
-    override fun onMarkNotConsumed(recipe: Recipe, element: Element, consumed: Boolean) {
+    override fun onMarkNotConsumed(recipe: Recipe, element: RecipeElement, consumed: Boolean) {
         scope.launch(modificationExceptionHandler) {
             processRepo.markNotConsumed(requireProcessId(), recipe, element, consumed)
         }
@@ -145,7 +144,7 @@ class ProcessEditViewModel @Inject constructor(
     fun attachSupplier(recipe: Recipe, keyElement: String) {
         scope.launch(modificationExceptionHandler) {
             val element = recipe.getInputs().find { it.unlocalizedName == keyElement }
-            if (element is ElementView) {
+            if (element != null) {
                 val supplier = SupplierRecipe(element)
                 processRepo.connectRecipe(requireProcessId(), supplier, recipe, element, false)
             }
@@ -188,14 +187,14 @@ class ProcessEditViewModel @Inject constructor(
         val processId: String,
         val connectToParent: Boolean,
         val recipe: Recipe,
-        val element: ElementView,
+        val element: RecipeElement,
         val degree: Int
     ) : Serializable
 
     data class DisconnectionPayload(
         val from: Recipe,
         val to: Recipe,
-        val element: Element,
+        val element: RecipeElement,
         val reversed: Boolean
     )
 }

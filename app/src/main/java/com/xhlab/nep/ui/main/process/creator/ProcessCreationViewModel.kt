@@ -3,8 +3,8 @@ package com.xhlab.nep.ui.main.process.creator
 import co.touchlab.kermit.Logger
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.MR
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.shared.util.StringResolver
@@ -24,7 +24,7 @@ class ProcessCreationViewModel @Inject constructor(
     private val _processName = MutableStateFlow<String?>(null)
     val processName = _processName.mapNotNull { it }
 
-    private val _recipePair = MutableStateFlow<Pair<Recipe, Element>?>(null)
+    private val _recipePair = MutableStateFlow<Pair<Recipe, RecipeElement>?>(null)
     val recipePair = _recipePair.mapNotNull { it }
 
     private val _isNameValid = MutableStateFlow<Boolean?>(null)
@@ -50,7 +50,7 @@ class ProcessCreationViewModel @Inject constructor(
         _processName.value = newName
     }
 
-    fun submitRecipe(recipe: Recipe, keyElement: Element) {
+    fun submitRecipe(recipe: Recipe, keyElement: RecipeElement) {
         _recipePair.value = recipe to keyElement
     }
 

@@ -13,8 +13,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.DialogProcessCreationBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.ui.ViewInit
@@ -113,7 +113,7 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
         if (requestCode == REQUEST_RECIPE_ID_CODE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 val targetRecipe = data.getSerializableExtra(TARGET_RECIPE) as? Recipe
-                val keyElement = data.getSerializableExtra(KEY_ELEMENT) as? Element
+                val keyElement = data.getSerializableExtra(KEY_ELEMENT) as? RecipeElement
                 if (targetRecipe != null && keyElement != null) {
                     viewModel.submitRecipe(targetRecipe, keyElement)
                 }

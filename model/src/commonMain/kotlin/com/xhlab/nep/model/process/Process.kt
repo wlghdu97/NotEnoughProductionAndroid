@@ -2,6 +2,7 @@ package com.xhlab.nep.model.process
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
 
@@ -9,7 +10,7 @@ open class Process(
     val id: String,
     var name: String,
     val rootRecipe: Recipe,
-    val targetOutput: Element
+    val targetOutput: RecipeElement
 ) {
     private val vertices = ArrayDeque<Recipe>()
     private val edges = ArrayDeque<ArrayList<Edge>>()
@@ -18,7 +19,7 @@ open class Process(
         connectRecipe(rootRecipe, null, targetOutput)
     }
 
-    fun connectProcess(process: Process, target: Recipe?, element: Element): Boolean {
+    fun connectProcess(process: Process, target: Recipe?, element: RecipeElement): Boolean {
         if (vertices.size != edges.size) {
             throw RuntimeException("corrupted process")
         }
@@ -251,8 +252,8 @@ open class Process(
         return vertices.filterNot { it is SupplierRecipe }.toTypedArray()
     }
 
-    fun getElementMap(): Map<String, Element> {
-        val keyMap = mutableMapOf<String, Element>()
+    fun getElementMap(): Map<String, RecipeElement> {
+        val keyMap = mutableMapOf<String, RecipeElement>()
         for (vertex in vertices) {
             for (input in vertex.getInputs()) {
                 if (!keyMap.containsKey(input.unlocalizedName)) {

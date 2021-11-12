@@ -11,7 +11,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentReplacementListSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.main.items.ElementDetailAdapter
+import com.xhlab.nep.ui.main.items.RecipeElementDetailAdapter
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
@@ -29,7 +29,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     private lateinit var recipeSelectionViewModel: RecipeSelectionViewModel
     private lateinit var viewModel: ReplacementListViewModel
 
-    private val elementAdapter by lazy { ElementDetailAdapter(viewModel) }
+    private val elementAdapter by lazy { RecipeElementDetailAdapter(viewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

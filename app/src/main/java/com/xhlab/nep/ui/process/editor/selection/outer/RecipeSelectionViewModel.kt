@@ -3,9 +3,8 @@ package com.xhlab.nep.ui.process.editor.selection.outer
 import co.touchlab.kermit.Logger
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.MR
-import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.ui.ViewModel
@@ -50,7 +49,7 @@ class RecipeSelectionViewModel @Inject constructor(
     private fun requireProcessId() =
         _constraint.value?.processId ?: throw NullPointerException("process id is null.")
 
-    override fun onSelect(from: Recipe, to: Recipe, element: Element, reversed: Boolean) {
+    override fun onSelect(from: Recipe, to: Recipe, element: RecipeElement, reversed: Boolean) {
         scope.launch(connectionExceptionHandler) {
             processRepo.connectRecipe(requireProcessId(), from, to, element, reversed)
             _finish.emit(Unit)
@@ -60,18 +59,16 @@ class RecipeSelectionViewModel @Inject constructor(
     override fun onSelectOreDict(
         from: Recipe,
         to: Recipe,
-        target: Element,
-        ingredient: Element,
+        target: RecipeElement,
+        ingredient: RecipeElement,
         reversed: Boolean
     ) {
         scope.launch(connectionExceptionHandler) {
-            if (target is ElementView && ingredient is ElementView) {
-                val bridgeRecipe = OreChainRecipe(target, ingredient)
-                val processId = requireProcessId()
-                processRepo.connectRecipe(processId, bridgeRecipe, to, target, reversed)
-                processRepo.connectRecipe(processId, from, bridgeRecipe, ingredient, reversed)
-                _finish.emit(Unit)
-            }
+            val bridgeRecipe = OreChainRecipe(target, ingredient)
+            val processId = requireProcessId()
+            processRepo.connectRecipe(processId, bridgeRecipe, to, target, reversed)
+            processRepo.connectRecipe(processId, from, bridgeRecipe, ingredient, reversed)
+            _finish.emit(Unit)
         }
     }
 }

@@ -1,9 +1,11 @@
 package com.xhlab.nep.model.recipes.view
 
+import com.xhlab.nep.model.RecipeElement
+
 abstract class MachineRecipeView : RecipeView() {
     abstract override val recipeId: Long
-    abstract override val itemList: List<RecipeElementView>
-    abstract override val resultItemList: List<RecipeElementView>
+    abstract override val itemList: List<RecipeElement>
+    abstract override val resultItemList: List<RecipeElement>
     abstract val isEnabled: Boolean
     abstract val duration: Int
     abstract val powerType: Int

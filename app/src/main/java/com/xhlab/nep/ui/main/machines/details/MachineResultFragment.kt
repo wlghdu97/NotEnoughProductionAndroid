@@ -17,7 +17,7 @@ import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.domain.MachineResultNavigationUseCase
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment
-import com.xhlab.nep.ui.main.items.ElementDetailAdapter
+import com.xhlab.nep.ui.main.items.RecipeElementDetailAdapter
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.flow.flatMapLatest
@@ -30,7 +30,7 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
 
     private lateinit var binding: FragmentMachineResultBinding
     private lateinit var viewModel: MachineResultViewModel
-    private val adapter by lazy { ElementDetailAdapter(viewModel) }
+    private val adapter by lazy { RecipeElementDetailAdapter(viewModel) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

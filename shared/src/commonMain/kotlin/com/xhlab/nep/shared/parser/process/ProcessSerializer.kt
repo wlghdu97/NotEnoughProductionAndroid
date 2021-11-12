@@ -2,6 +2,7 @@ package com.xhlab.nep.shared.parser.process
 
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -86,7 +87,7 @@ object ProcessSerializer : KSerializer<Process> {
         @Serializable(with = ProcessRecipeSerializer::class)
         val rootRecipe: Recipe,
         @Serializable(with = ProcessElementSerializer::class)
-        val targetOutput: Element,
+        val targetOutput: RecipeElement,
         @Serializable(with = ProcessRecipeListSerializer::class)
         val vertices: List<Recipe>,
         val edges: List<EdgeSurrogate>

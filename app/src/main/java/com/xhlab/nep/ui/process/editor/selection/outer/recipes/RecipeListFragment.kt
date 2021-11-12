@@ -11,7 +11,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.MACHINE_RECIPE_LIST_TAG
@@ -127,7 +127,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showElementSelectionDialog(elementList: List<ElementView>) {
+    private fun showElementSelectionDialog(elementList: List<RecipeElement>) {
         val nameArray = elementList.map { it.localizedName }.toTypedArray()
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_select_element)

@@ -10,7 +10,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentBaseIngredientsBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.calculator.ElementNavigatorViewModel
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationViewModel
@@ -64,7 +64,7 @@ class BaseIngredientsFragment : DaggerFragment(), ViewInit {
         }
     }
 
-    private fun showElementSelectionDialog(elementList: List<ElementView>) {
+    private fun showElementSelectionDialog(elementList: List<RecipeElement>) {
         val nameArray = elementList.map { it.localizedName }.toTypedArray()
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.title_select_element)
