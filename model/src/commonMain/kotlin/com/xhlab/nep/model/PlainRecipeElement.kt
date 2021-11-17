@@ -1,6 +1,6 @@
 package com.xhlab.nep.model
 
-class PlainRecipeElement(
+data class PlainRecipeElement(
     override val id: Long,
     override val unlocalizedName: String,
     override val localizedName: String,
