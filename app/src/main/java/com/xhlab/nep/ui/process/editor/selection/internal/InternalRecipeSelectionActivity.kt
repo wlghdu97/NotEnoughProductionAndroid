@@ -12,12 +12,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityRecipeSelectionExistingBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.model.defaultJson
 import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.shared.ui.process.editor.selection.internal.InternalRecipeSelectionViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import javax.inject.Inject
 
 class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
@@ -47,7 +50,10 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-        viewModel.init(intent?.getSerializableExtra(CONSTRAINT) as? ProcessEditViewModel.ConnectionConstraint)
+        val constraint = intent?.getStringExtra(RecipeSelectionActivity.CONSTRAINT)?.let {
+            defaultJson.decodeFromString<ProcessEditViewModel.ConnectionConstraint>(it)
+        }
+        viewModel.init(constraint)
 
         viewModel.process.asLiveData().observe(this) {
             processTreeAdapter.submitProcess(it)
@@ -96,7 +102,7 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
             constraint: ProcessEditViewModel.ConnectionConstraint
         ) {
             startActivity(Intent(this, InternalRecipeSelectionActivity::class.java).apply {
-                putExtra(CONSTRAINT, constraint)
+                putExtra(CONSTRAINT, defaultJson.encodeToString(constraint))
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             })
         }

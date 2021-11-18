@@ -1,5 +1,8 @@
 package com.xhlab.nep.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 abstract class Element {
     abstract val unlocalizedName: String
     abstract val localizedName: String

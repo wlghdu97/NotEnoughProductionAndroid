@@ -1,6 +1,5 @@
 package com.xhlab.nep.shared.parser.process
 
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
@@ -60,7 +59,7 @@ object ProcessSerializer : KSerializer<Process> {
         }
     }
 
-    private fun Recipe.getElement(key: String): Element? {
+    private fun Recipe.getElement(key: String): RecipeElement? {
         return (getInputs() + getOutput()).find { it.unlocalizedName == key }
     }
 
@@ -84,11 +83,8 @@ object ProcessSerializer : KSerializer<Process> {
     data class ProcessSurrogate(
         val id: String,
         val name: String,
-        @Serializable(with = ProcessRecipeSerializer::class)
         val rootRecipe: Recipe,
-        @Serializable(with = ProcessElementSerializer::class)
         val targetOutput: RecipeElement,
-        @Serializable(with = ProcessRecipeListSerializer::class)
         val vertices: List<Recipe>,
         val edges: List<EdgeSurrogate>
     )

@@ -5,9 +5,9 @@ import com.nhaarman.mockitokotlin2.*
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.Machine
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.form.ReplacementForm
 import com.xhlab.nep.model.form.recipes.*
-import com.xhlab.nep.model.recipes.view.RecipeElementView
 import com.xhlab.nep.model.recipes.view.RecipeView
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.machine.MachineRepo
@@ -138,7 +138,7 @@ class ParseRecipeUseCaseTest {
             }
         }
 
-        override suspend fun getElementListByRecipe(recipeId: Long): List<RecipeElementView> {
+        override suspend fun getElementListByRecipe(recipeId: Long): List<RecipeElement> {
             TODO("not implemented")
         }
 
@@ -178,7 +178,7 @@ class ParseRecipeUseCaseTest {
     }
 
     private class FakeMachineRecipeRepo : MachineRecipeRepo {
-        override suspend fun getElementListByRecipe(recipeId: Long): List<RecipeElementView> {
+        override suspend fun getElementListByRecipe(recipeId: Long): List<RecipeElement> {
             TODO("not implemented")
         }
 

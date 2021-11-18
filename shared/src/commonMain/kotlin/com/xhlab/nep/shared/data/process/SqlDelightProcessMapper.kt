@@ -2,8 +2,8 @@ package com.xhlab.nep.shared.data.process
 
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.Mapper
+import com.xhlab.nep.shared.model.defaultJson
 import com.xhlab.nep.shared.parser.process.ProcessSerializer
-import com.xhlab.nep.shared.parser.process.processJson
 import com.xhlab.nep.shared.db.Process as ProcessEntity
 
 class SqlDelightProcessMapper : Mapper<Process, ProcessEntity> {
@@ -16,7 +16,7 @@ class SqlDelightProcessMapper : Mapper<Process, ProcessEntity> {
             element.targetOutput.localizedName,
             element.targetOutput.amount,
             element.getRecipeNodeCount(),
-            processJson.encodeToString(ProcessSerializer, element)
+            defaultJson.encodeToString(ProcessSerializer, element)
         )
     }
 }

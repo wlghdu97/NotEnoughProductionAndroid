@@ -1,5 +1,6 @@
 plugins {
     id "org.jetbrains.kotlin.multiplatform"
+    id "kotlinx-serialization"
     id "java-library"
     id "io.gitlab.arturbosch.detekt"
 }
@@ -11,6 +12,10 @@ repositories {
 kotlin {
     jvm()
     ios()
+
+    sourceSets.commonMain.dependencies {
+        implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
+    }
 }
 
 java {

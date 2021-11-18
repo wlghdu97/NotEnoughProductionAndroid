@@ -11,6 +11,7 @@ import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.createOffsetLimitPager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
 
 internal class MachineRecipeRepoImpl constructor(
     private val db: Nep,
@@ -166,6 +167,7 @@ internal class MachineRecipeRepoImpl constructor(
         )
     }
 
+    @Serializable
     data class MachineRecipeViewImpl(
         override val recipeId: Long,
         override val itemList: List<RecipeElement>,

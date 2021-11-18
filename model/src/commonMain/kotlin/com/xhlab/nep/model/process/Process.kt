@@ -1,10 +1,10 @@
 package com.xhlab.nep.model.process
 
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process.ConnectionStatus.*
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
+import kotlinx.serialization.Serializable
 
 open class Process(
     val id: String,
@@ -43,7 +43,7 @@ open class Process(
     fun connectRecipe(
         from: Recipe,
         to: Recipe?,
-        element: Element,
+        element: RecipeElement,
         reversed: Boolean = false
     ): Boolean {
 
@@ -84,7 +84,7 @@ open class Process(
     fun disconnectRecipe(
         from: Recipe,
         to: Recipe,
-        element: Element,
+        element: RecipeElement,
         reversed: Boolean = false
     ): Boolean {
         val edgeIndex = vertices.indexOf(if (reversed) to else from)
@@ -107,7 +107,11 @@ open class Process(
         }
     }
 
-    fun markNotConsumed(recipe: Recipe, element: Element, consumed: Boolean = false): Boolean {
+    fun markNotConsumed(
+        recipe: Recipe,
+        element: RecipeElement,
+        consumed: Boolean = false
+    ): Boolean {
         if (!vertices.contains(recipe)) {
             return false
         }
@@ -188,7 +192,7 @@ open class Process(
         return edges[vertices.indexOf(to)].contains(Edge(vertices.indexOf(from), key, reversed))
     }
 
-    fun getConnectionStatus(recipe: Recipe, key: Element): List<Connection> {
+    fun getConnectionStatus(recipe: Recipe, key: RecipeElement): List<Connection> {
         if (vertices.indexOf(recipe) == -1) {
             return emptyList()
         }
@@ -227,7 +231,7 @@ open class Process(
         return connections
     }
 
-    private fun findParentEdges(recipe: Recipe, key: Element): List<Pair<Int, Edge?>> {
+    private fun findParentEdges(recipe: Recipe, key: RecipeElement): List<Pair<Int, Edge?>> {
         val index = vertices.indexOf(recipe)
         val edgeList = arrayListOf<Pair<Int, Edge?>>()
         for ((edgeIndex, otherEdge) in edges.withIndex()) {
@@ -242,7 +246,7 @@ open class Process(
         return edgeList
     }
 
-    fun isElementNotConsumed(recipe: Recipe, key: Element): Boolean {
+    fun isElementNotConsumed(recipe: Recipe, key: RecipeElement): Boolean {
         val index = vertices.indexOf(recipe)
         val edge = edges[index].find { it.key == key.unlocalizedName }
         return edge?.index == index
@@ -332,12 +336,14 @@ open class Process(
         return edges.map { it.toList() }
     }
 
+    @Serializable
     data class Edge(
         val index: Int,
         val key: String,
         val reversed: Boolean = false
     )
 
+    @Serializable
     data class Connection(
         val status: ConnectionStatus,
         val connectedRecipe: Recipe? = null,

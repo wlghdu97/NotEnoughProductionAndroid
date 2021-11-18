@@ -1,7 +1,9 @@
 package com.xhlab.nep.model.oredict
 
 import com.xhlab.nep.model.RecipeElement
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class OreDictElement(
     override val id: Long,
     override val metaData: String?,
