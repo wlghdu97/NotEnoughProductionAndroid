@@ -13,9 +13,9 @@ import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.db.NepProcess
 import com.xhlab.nep.shared.db.ProcessQueries
 import com.xhlab.nep.shared.db.createOffsetLimitPager
+import com.xhlab.nep.shared.util.UUID
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.util.*
 import com.xhlab.nep.shared.db.Process as ProcessEntity
 
 internal class ProcessRepoImpl constructor(
@@ -74,7 +74,7 @@ internal class ProcessRepoImpl constructor(
         targetRecipe: Recipe,
         keyElement: RecipeElement
     ): Boolean {
-        val processId = UUID.randomUUID().toString()
+        val processId = UUID.generateLongUUID().toString()
         val process = Process(processId, name, targetRecipe, keyElement)
         db.processQueries.insert(roomMapper.map(process))
         return db.processQueries.getLastProcessId().executeAsOne() == processId
