@@ -1,6 +1,5 @@
 package com.xhlab.nep.shared.data.process
 
-import android.util.LruCache
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import com.xhlab.multiplatform.paging.Pager
@@ -26,7 +25,8 @@ internal class ProcessRepoImpl constructor(
     private val mapper = ProcessMapper()
     private val roomMapper = SqlDelightProcessMapper()
 
-    private val cache = LruCache<String, Process>(10)
+    // TODO: replace with LruCache
+    private val cache = mutableMapOf<String, Process>()
 
     override suspend fun getProcess(processId: String): Process? = withContext(io) {
         val process = db.processQueries.getProcess(processId).executeAsOneOrNull()
