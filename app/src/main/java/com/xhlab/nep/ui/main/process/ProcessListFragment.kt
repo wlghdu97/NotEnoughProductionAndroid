@@ -20,6 +20,7 @@ import com.xhlab.nep.ui.main.process.importer.ProcessImportDialog
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCESS_ID
 import com.xhlab.nep.ui.main.process.rename.ProcessRenameDialog.Companion.PROCESS_NAME
+import com.xhlab.nep.ui.process.editor.ProcessEditActivity.Companion.navigateToProcessEditActivity
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.flow.flatMapLatest
@@ -89,6 +90,10 @@ class ProcessListFragment : DaggerFragment(), ViewInit {
 
         viewModel.deleteProcess.asLiveData().observe(this) { (processId, name) ->
             showProcessRemovalDialog(processId, name)
+        }
+
+        viewModel.navigateToProcessEdit.asLiveData().observe(this) { processId ->
+            context?.navigateToProcessEditActivity(processId)
         }
     }
 

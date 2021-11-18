@@ -11,8 +11,9 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentBaseIngredientsBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.RecipeElement
+import com.xhlab.nep.shared.ui.process.calculator.ElementNavigatorViewModel
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.process.calculator.ElementNavigatorViewModel
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -61,6 +62,10 @@ class BaseIngredientsFragment : DaggerFragment(), ViewInit {
 
         viewModel.elements.asLiveData().observe(this) {
             showElementSelectionDialog(it)
+        }
+
+        viewModel.navigateElementToDetail.asLiveData().observe(this) { (elementId, elementType) ->
+            context?.navigateToElementDetailActivity(elementId, elementType)
         }
     }
 

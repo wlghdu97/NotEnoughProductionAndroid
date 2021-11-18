@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.element.usages
 
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
+import com.xhlab.nep.shared.ui.element.usages.UsageListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

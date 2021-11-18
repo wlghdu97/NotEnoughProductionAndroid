@@ -14,7 +14,10 @@ import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.main.items.ElementListener
+import com.xhlab.nep.shared.ui.main.items.ItemBrowserViewModel
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -89,19 +92,22 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             elementAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToDetail.asLiveData().observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) { (elementId, elementType) ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
                 with(childFragmentManager) {
                     popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                        .add(R.id.container, ElementDetailFragment.getFragment(it))
+                        .add(
+                            R.id.container,
+                            ElementDetailFragment.getFragment(elementId, elementType)
+                        )
                         .addToBackStack(null)
                         .commit()
                 }
             } else {
-                viewModel.navigateToElementDetail(it)
+                context?.navigateToElementDetailActivity(elementId, elementType)
             }
         }
     }

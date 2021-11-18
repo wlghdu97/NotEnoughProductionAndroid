@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.xhlab.nep.R
 import com.xhlab.nep.model.process.RecipeNode
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.RecipeSelectionListener
 import com.xhlab.nep.ui.process.adapters.ProcessTreeAdapter
 import com.xhlab.nep.ui.process.adapters.ProcessTreeViewHolder
 import com.xhlab.nep.ui.process.adapters.RecipeViewDegreeNode
 import com.xhlab.nep.ui.process.adapters.toDegreeNode
-import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
-import com.xhlab.nep.ui.process.editor.selection.RecipeSelectionListener
 import com.xhlab.nep.ui.process.editor.selection.getKeyElement
 import com.xhlab.nep.ui.process.editor.selection.isReversed
 import com.xhlab.nep.ui.process.editor.selection.select

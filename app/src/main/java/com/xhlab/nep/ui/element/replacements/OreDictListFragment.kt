@@ -10,6 +10,7 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentOreDictListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.element.replacements.OreDictListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
 import com.xhlab.nep.util.viewModelProvider

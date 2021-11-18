@@ -14,7 +14,6 @@ import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog.Companion.KEY
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog.Companion.TARGET_RECIPE
 import com.xhlab.nep.ui.main.process.creator.browser.details.MachineRecipeListFragment
 import com.xhlab.nep.ui.main.process.creator.browser.recipes.RecipeListFragment
-import com.xhlab.nep.ui.main.process.creator.browser.recipes.RecipeListFragment.Companion.ELEMENT_ID
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -48,11 +47,11 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
 
         viewModel.navigateToMachineList.asLiveData().observe(this) {
-            navigateToRecipeList(it)
+            switchToRecipeList(it)
         }
 
         viewModel.navigateToRecipeDetails.asLiveData().observe(this) { (elementId, machineId) ->
-            navigateToRecipeDetail(elementId, machineId)
+            switchToRecipeDetail(elementId, machineId)
         }
 
         viewModel.returnResult.asLiveData().observe(this) { (targetRecipe, keyElement) ->
@@ -65,10 +64,8 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
         }
     }
 
-    private fun navigateToRecipeList(elementId: Long) {
-        val fragment = RecipeListFragment().apply {
-            arguments = Bundle().apply { putLong(ELEMENT_ID, elementId) }
-        }
+    private fun switchToRecipeList(elementId: Long) {
+        val fragment = RecipeListFragment.getFragment(elementId)
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, RECIPE_LIST_TAG)
@@ -76,13 +73,8 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
             .commit()
     }
 
-    private fun navigateToRecipeDetail(elementId: Long, machineId: Int) {
-        val fragment = MachineRecipeListFragment().apply {
-            arguments = Bundle().apply {
-                putLong(MachineRecipeListFragment.ELEMENT_ID, elementId)
-                putInt(MachineRecipeListFragment.MACHINE_ID, machineId)
-            }
-        }
+    private fun switchToRecipeDetail(elementId: Long, machineId: Int) {
+        val fragment = MachineRecipeListFragment.getFragment(elementId, machineId)
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, MACHINE_RECIPE_LIST_TAG)

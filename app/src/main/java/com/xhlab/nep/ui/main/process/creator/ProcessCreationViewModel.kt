@@ -41,7 +41,7 @@ class ProcessCreationViewModel @Inject constructor(
     init {
         scope.launch {
             processName.collect {
-                _isNameValid.value = it?.isNotEmpty()
+                _isNameValid.value = it.isNotEmpty()
             }
         }
     }

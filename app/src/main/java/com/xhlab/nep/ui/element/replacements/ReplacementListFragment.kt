@@ -11,7 +11,9 @@ import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentReplacementListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.element.replacements.ReplacementListViewModel
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.main.items.RecipeElementDetailAdapter
 import com.xhlab.nep.util.formatString
@@ -66,16 +68,16 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
             elementAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.asLiveData().observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) { (elementId, elementType) ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment().requireParentFragment()
                 parent.childFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .add(R.id.container, ElementDetailFragment.getFragment(elementId, elementType))
                     .addToBackStack(null)
                     .commit()
             } else {
-                viewModel.navigateToElementDetail(it)
+                context?.navigateToElementDetailActivity(elementId, elementType)
             }
         }
     }

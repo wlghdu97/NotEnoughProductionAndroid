@@ -2,11 +2,11 @@ package com.xhlab.nep.ui.process.editor.selection.outer.details
 
 import android.view.View
 import com.xhlab.nep.R
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.RecipeSelectionListener
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.OreDictRecipeSelectionListener
 import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
 import com.xhlab.nep.ui.adapters.RecipeDetailViewHolder
-import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
-import com.xhlab.nep.ui.process.editor.selection.RecipeSelectionListener
-import com.xhlab.nep.ui.process.editor.selection.outer.OreDictRecipeSelectionListener
 import com.xhlab.nep.ui.process.editor.selection.select
 
 class RecipeSelectionAdapter(

@@ -12,8 +12,10 @@ import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.element.recipes.RecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.recipe.MachineRecipeListActivity.Companion.navigateToMachineRecipeListActivity
 import com.xhlab.nep.ui.recipe.MachineRecipeListFragment
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
@@ -61,16 +63,17 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
             recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToRecipeList.asLiveData().observe(this) {
+        viewModel.navigateToRecipeList.asLiveData().observe(this) { (elementId, machineId) ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment().requireParentFragment()
+                val fragment = MachineRecipeListFragment.getFragment(elementId, machineId)
                 parent.childFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.container, MachineRecipeListFragment.getFragment(it))
+                    .add(R.id.container, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {
-                viewModel.navigateToRecipeList(it)
+                context?.navigateToMachineRecipeListActivity(elementId, machineId)
             }
         }
     }

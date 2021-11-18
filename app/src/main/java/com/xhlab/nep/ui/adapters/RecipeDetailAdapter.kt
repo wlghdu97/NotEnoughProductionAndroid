@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.RecipeView
-import com.xhlab.nep.ui.main.items.ElementListener
+import com.xhlab.nep.shared.ui.main.items.ElementListener
 
 open class RecipeDetailAdapter(
     protected val targetElementId: Long? = null,

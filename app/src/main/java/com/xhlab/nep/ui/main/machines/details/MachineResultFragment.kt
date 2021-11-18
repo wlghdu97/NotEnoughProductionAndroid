@@ -14,8 +14,9 @@ import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineResultBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.domain.MachineResultNavigationUseCase
+import com.xhlab.nep.shared.ui.main.machines.details.MachineResultViewModel
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.main.items.RecipeElementDetailAdapter
 import com.xhlab.nep.util.viewModelProvider
@@ -65,16 +66,16 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
             adapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.asLiveData().observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) { (elementId, elementType) ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
                 requireParentFragment().childFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .add(R.id.container, ElementDetailFragment.getFragment(elementId, elementType))
                     .addToBackStack(null)
                     .commit()
             } else {
-                viewModel.navigateToElementDetail(it)
+                context?.navigateToElementDetailActivity(elementId, elementType)
             }
         }
     }
@@ -125,14 +126,12 @@ class MachineResultFragment : DaggerFragment(), ViewInit {
     companion object {
         const val MACHINE_ID = "machine_id"
 
-        fun getBundle(params: MachineResultNavigationUseCase.Parameter): Bundle {
-            return Bundle().apply {
-                putInt(MACHINE_ID, params.machineId)
+        fun getFragment(machineId: Int): Fragment {
+            return MachineResultFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(MACHINE_ID, machineId)
+                }
             }
-        }
-
-        fun getFragment(params: MachineResultNavigationUseCase.Parameter): Fragment {
-            return MachineResultFragment().apply { arguments = getBundle(params) }
         }
     }
 }

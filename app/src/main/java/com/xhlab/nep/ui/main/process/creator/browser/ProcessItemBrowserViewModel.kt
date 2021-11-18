@@ -1,11 +1,11 @@
 package com.xhlab.nep.ui.main.process.creator.browser
 
 import com.xhlab.multiplatform.util.EventFlow
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.ui.ViewModel
-import com.xhlab.nep.ui.main.items.ElementListener
-import com.xhlab.nep.ui.main.machines.MachineListener
+import com.xhlab.nep.shared.ui.main.items.ElementListener
+import com.xhlab.nep.shared.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.main.process.creator.browser.details.RootRecipeSelectionListener
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,8 +28,8 @@ class ProcessItemBrowserViewModel @Inject constructor() :
     val navigateToRecipeDetails: Flow<Pair<Long, Int>>
         get() = _navigateToRecipeDetails.flow
 
-    private val _returnResult = EventFlow<Pair<Recipe, Element>>()
-    val returnResult: Flow<Pair<Recipe, Element>>
+    private val _returnResult = EventFlow<Pair<Recipe, RecipeElement>>()
+    val returnResult: Flow<Pair<Recipe, RecipeElement>>
         get() = _returnResult.flow
 
     private fun requireElementId() =
@@ -48,7 +48,7 @@ class ProcessItemBrowserViewModel @Inject constructor() :
         }
     }
 
-    override fun onSelect(targetRecipe: Recipe, keyElement: Element) {
+    override fun onSelect(targetRecipe: Recipe, keyElement: RecipeElement) {
         scope.launch {
             _returnResult.emit(targetRecipe to keyElement)
         }

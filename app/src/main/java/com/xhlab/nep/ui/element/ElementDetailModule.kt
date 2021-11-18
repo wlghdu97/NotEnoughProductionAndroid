@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.element
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.FragmentScope
+import com.xhlab.nep.shared.ui.element.ElementDetailViewModel
 import com.xhlab.nep.ui.element.recipes.RecipeListFragment
 import com.xhlab.nep.ui.element.recipes.RecipeListModule
 import com.xhlab.nep.ui.element.replacements.ReplacementContainerFragment

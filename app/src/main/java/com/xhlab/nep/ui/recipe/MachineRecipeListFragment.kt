@@ -10,9 +10,10 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.domain.MachineRecipeListNavigationUseCase
+import com.xhlab.nep.shared.ui.recipe.MachineRecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
@@ -71,16 +72,16 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             recipeAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.asLiveData().observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) { (elementId, elementType) ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment()
                 parent.childFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .add(R.id.container, ElementDetailFragment.getFragment(elementId, elementType))
                     .addToBackStack(null)
                     .commit()
             } else {
-                viewModel.navigateToElementDetail(it)
+                context?.navigateToElementDetailActivity(elementId, elementType)
             }
         }
     }
@@ -133,15 +134,13 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
 
-        fun getBundle(params: MachineRecipeListNavigationUseCase.Parameters): Bundle {
-            return Bundle().apply {
-                putLong(ELEMENT_ID, params.elementId)
-                putInt(MACHINE_ID, params.machineId ?: -1)
+        fun getFragment(elementId: Long, machineId: Int): Fragment {
+            return MachineRecipeListFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ELEMENT_ID, elementId)
+                    putInt(MACHINE_ID, machineId)
+                }
             }
-        }
-
-        fun getFragment(params: MachineRecipeListNavigationUseCase.Parameters): Fragment {
-            return MachineRecipeListFragment().apply { arguments = getBundle(params) }
         }
     }
 }

@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
+import com.xhlab.nep.shared.ui.element.replacements.OreDictListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 
 class OreDictAdapter(

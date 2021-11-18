@@ -7,6 +7,7 @@ import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.RecipeElement
+import com.xhlab.nep.shared.ui.process.calculator.ingredients.ElementKeyListener
 import com.xhlab.nep.ui.adapters.RecipeElementViewHolder
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon

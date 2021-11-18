@@ -9,9 +9,9 @@ import com.xhlab.nep.R
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
+import com.xhlab.nep.shared.ui.process.calculator.ingredients.ElementKeyListener
 import com.xhlab.nep.ui.adapters.RecipeElementViewHolder
 import com.xhlab.nep.ui.process.calculator.cycles.RecipeRatio
-import com.xhlab.nep.ui.process.calculator.ingredients.ElementKeyListener
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import java.text.DecimalFormat

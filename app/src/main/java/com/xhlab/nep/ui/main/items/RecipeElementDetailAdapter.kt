@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.RecipeElement
+import com.xhlab.nep.shared.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 import com.xhlab.nep.util.setIcon
 

@@ -2,7 +2,6 @@ package com.xhlab.nep.ui.main.process
 
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.multiplatform.util.Resource
-import com.xhlab.nep.domain.ProcessEditNavigationUseCase
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.process.ExportProcessStringUseCase
@@ -10,7 +9,7 @@ import com.xhlab.nep.shared.domain.process.LoadProcessListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.shared.ui.invokeMediatorUseCase
-import com.xhlab.nep.shared.ui.invokeUseCase
+import com.xhlab.nep.shared.ui.main.process.ProcessListener
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,7 +18,6 @@ class ProcessListViewModel @Inject constructor(
     private val processRepo: ProcessRepo,
     loadProcessListUseCase: LoadProcessListUseCase,
     private val exportProcessStringUseCase: ExportProcessStringUseCase,
-    private val processEditNavigationUseCase: ProcessEditNavigationUseCase,
     generalPreference: GeneralPreference
 ) : ViewModel(), ProcessListener {
 
@@ -43,6 +41,11 @@ class ProcessListViewModel @Inject constructor(
     val deleteProcess: Flow<Pair<String, String>>
         get() = _deleteProcess.flow
 
+    // ProcessId
+    private val _navigateToProcessEdit = EventFlow<String>()
+    val navigateToProcessEdit: Flow<String>
+        get() = _navigateToProcessEdit.flow
+
     init {
         scope.launch {
             invokeMediatorUseCase(
@@ -53,10 +56,9 @@ class ProcessListViewModel @Inject constructor(
     }
 
     override fun onClick(id: String, name: String) {
-        invokeUseCase(
-            useCase = processEditNavigationUseCase,
-            params = ProcessEditNavigationUseCase.Parameter(id)
-        )
+        scope.launch {
+            _navigateToProcessEdit.emit(id)
+        }
     }
 
     override fun onRename(id: String, prevName: String) {

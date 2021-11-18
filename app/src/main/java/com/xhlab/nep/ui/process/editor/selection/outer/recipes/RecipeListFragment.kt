@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import androidx.paging.LoadState
@@ -12,12 +13,12 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.RecipeElement
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.RecipeSelectionViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.recipes.RecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.MACHINE_RECIPE_LIST_TAG
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.details.MachineRecipeListFragment
-import com.xhlab.nep.ui.process.editor.selection.outer.details.MachineRecipeListFragment.Companion.MACHINE_ID
 import com.xhlab.nep.util.longToast
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -138,13 +139,7 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
     }
 
     private fun navigateToDetails(elementId: Long, machineId: Int, connectToParent: Boolean) {
-        val fragment = MachineRecipeListFragment().apply {
-            arguments = Bundle().apply {
-                putLong(ELEMENT_ID, elementId)
-                putInt(MACHINE_ID, machineId)
-                putBoolean(CONNECT_TO_PARENT, connectToParent)
-            }
-        }
+        val fragment = MachineRecipeListFragment.getFragment(elementId, machineId, connectToParent)
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, MACHINE_RECIPE_LIST_TAG)
@@ -156,5 +151,17 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         const val ELEMENT_ID = "element_id"
         const val ELEMENT_KEY = "element_key"
         const val CONNECT_TO_PARENT = "connect_to_parent"
+
+        fun getFragment(elementId: Long): Fragment {
+            return RecipeListFragment().apply {
+                arguments = Bundle().apply { putLong(ELEMENT_ID, elementId) }
+            }
+        }
+
+        fun getFragment(elementKey: String): Fragment {
+            return RecipeListFragment().apply {
+                arguments = Bundle().apply { putString(ELEMENT_KEY, elementKey) }
+            }
+        }
     }
 }

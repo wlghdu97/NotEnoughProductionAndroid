@@ -11,7 +11,9 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.main.machines.MachineBrowserViewModel
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.main.machines.details.MachineResultActivity.Companion.navigateToMachineResultActivity
 import com.xhlab.nep.ui.main.machines.details.MachineResultFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -68,7 +70,7 @@ class MachineBrowserFragment : DaggerFragment(), ViewInit {
                         .commit()
                 }
             } else {
-                viewModel.navigateToMachineResult(it)
+                context?.navigateToMachineResultActivity(it)
             }
         }
     }

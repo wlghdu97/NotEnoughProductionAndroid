@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.main.process.creator.browser.details
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
@@ -91,5 +92,14 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     companion object {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
+
+        fun getFragment(elementId: Long, machineId: Int): Fragment {
+            return MachineRecipeListFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ELEMENT_ID, elementId)
+                    putInt(MACHINE_ID, machineId)
+                }
+            }
+        }
     }
 }

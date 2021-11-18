@@ -4,8 +4,9 @@ import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
-import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
-import com.xhlab.nep.ui.process.editor.selection.outer.OreDictRecipeSelectionListener
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.RecipeSelectionListener
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.OreDictRecipeSelectionListener
 
 fun ProcessEditViewModel.ConnectionConstraint.select(
     to: Recipe,

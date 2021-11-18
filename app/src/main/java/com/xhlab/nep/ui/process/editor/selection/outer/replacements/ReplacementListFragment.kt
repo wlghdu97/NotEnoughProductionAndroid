@@ -5,15 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentReplacementListSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.RecipeSelectionViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.replacements.ReplacementListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.RecipeElementDetailAdapter
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
@@ -67,11 +69,11 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         }
 
         viewModel.navigateToRecipeList.asLiveData().observe(this) { elementId ->
-            showRecipeListFragment(elementId)
+            switchToRecipeListFragment(elementId)
         }
 
         viewModel.navigateToRecipeListWithKey.asLiveData().observe(this) { elementKey ->
-            showRecipeListFragment(elementKey)
+            switchToRecipeListFragment(elementKey)
         }
     }
 
@@ -79,10 +81,8 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         binding.replacementList.adapter = elementAdapter
     }
 
-    private fun showRecipeListFragment(elementId: Long) {
-        val recipeListFragment = RecipeListFragment().apply {
-            arguments = Bundle().apply { putLong(RecipeListFragment.ELEMENT_ID, elementId) }
-        }
+    private fun switchToRecipeListFragment(elementId: Long) {
+        val recipeListFragment = RecipeListFragment.getFragment(elementId)
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, recipeListFragment, RecipeSelectionActivity.RECIPE_LIST_TAG)
@@ -90,10 +90,8 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
             .commit()
     }
 
-    private fun showRecipeListFragment(elementKey: String) {
-        val recipeListFragment = RecipeListFragment().apply {
-            arguments = Bundle().apply { putString(RecipeListFragment.ELEMENT_KEY, elementKey) }
-        }
+    private fun switchToRecipeListFragment(elementKey: String) {
+        val recipeListFragment = RecipeListFragment.getFragment(elementKey)
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, recipeListFragment, RecipeSelectionActivity.RECIPE_LIST_TAG)
@@ -103,5 +101,11 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
 
     companion object {
         const val ELEMENT_KEY = "element_key"
+
+        fun getFragment(elementKey: String): Fragment {
+            return ReplacementListFragment().apply {
+                arguments = Bundle().apply { putString(ELEMENT_KEY, elementKey) }
+            }
+        }
     }
 }

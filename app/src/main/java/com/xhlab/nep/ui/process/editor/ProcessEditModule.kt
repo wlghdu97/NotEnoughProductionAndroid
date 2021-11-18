@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.process.editor
 
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

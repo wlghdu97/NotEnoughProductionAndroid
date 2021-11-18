@@ -8,6 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Machine
+import com.xhlab.nep.shared.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 
 class MachineAdapter(

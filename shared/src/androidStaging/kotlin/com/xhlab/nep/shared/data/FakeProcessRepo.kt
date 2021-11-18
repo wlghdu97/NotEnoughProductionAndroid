@@ -4,8 +4,8 @@ import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.paging.PagingConfig
 import com.xhlab.multiplatform.paging.PagingResult
 import com.xhlab.multiplatform.paging.createPager
-import com.xhlab.nep.model.Element
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.shared.data.process.ProcessRepo
@@ -64,7 +64,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
     override suspend fun createProcess(
         name: String,
         targetRecipe: Recipe,
-        keyElement: Element
+        keyElement: RecipeElement
     ): Boolean {
         TODO("not implemented")
     }
@@ -89,7 +89,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         processId: String,
         fromProcessId: String,
         to: Recipe?,
-        element: Element
+        element: RecipeElement
     ) {
         TODO("not implemented")
     }
@@ -98,7 +98,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         processId: String,
         from: Recipe,
         to: Recipe?,
-        element: Element,
+        element: RecipeElement,
         reversed: Boolean
     ) {
         val process = getProcessMutable(processId)
@@ -116,7 +116,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
         processId: String,
         from: Recipe,
         to: Recipe,
-        element: Element,
+        element: RecipeElement,
         reversed: Boolean
     ) {
         val process = getProcessMutable(processId)
@@ -131,7 +131,7 @@ class FakeProcessRepo @Inject constructor() : ProcessRepo {
     override suspend fun markNotConsumed(
         processId: String,
         recipe: Recipe,
-        element: Element,
+        element: RecipeElement,
         consumed: Boolean
     ) {
         val process = getProcessMutable(processId)

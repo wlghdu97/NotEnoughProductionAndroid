@@ -1,5 +1,7 @@
 package com.xhlab.nep.ui.process.editor.selection.internal
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,8 +12,10 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityRecipeSelectionExistingBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.internal.InternalRecipeSelectionViewModel
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -86,6 +90,15 @@ class InternalRecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
     }
 
     companion object {
-        const val CONSTRAINT = "constraint"
+        private const val CONSTRAINT = "constraint"
+
+        fun Context.navigateToInternalRecipeSelectionActivity(
+            constraint: ProcessEditViewModel.ConnectionConstraint
+        ) {
+            startActivity(Intent(this, InternalRecipeSelectionActivity::class.java).apply {
+                putExtra(CONSTRAINT, constraint)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+        }
     }
 }

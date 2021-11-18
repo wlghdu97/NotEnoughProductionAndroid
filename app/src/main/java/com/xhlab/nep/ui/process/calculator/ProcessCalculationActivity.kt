@@ -1,5 +1,7 @@
 package com.xhlab.nep.ui.process.calculator
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
@@ -111,5 +113,12 @@ class ProcessCalculationActivity : DaggerAppCompatActivity(), ViewInit {
 
     companion object {
         const val PROCESS_ID = "process_id"
+
+        fun Context.navigateToProcessCalculationActivity(processId: String) {
+            startActivity(Intent(this, ProcessCalculationActivity::class.java).apply {
+                putExtra(PROCESS_ID, processId)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+        }
     }
 }

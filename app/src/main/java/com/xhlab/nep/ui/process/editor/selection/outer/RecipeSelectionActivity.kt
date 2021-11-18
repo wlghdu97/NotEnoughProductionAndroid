@@ -1,5 +1,7 @@
 package com.xhlab.nep.ui.process.editor.selection.outer
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
@@ -8,8 +10,9 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityRecipeSelectionBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.model.Element
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
 import com.xhlab.nep.ui.process.editor.selection.outer.replacements.OreDictListFragment
 import com.xhlab.nep.ui.process.editor.selection.outer.replacements.ReplacementListFragment
@@ -48,12 +51,12 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
                 Element.ORE_CHAIN -> {
                     val replacements = it.element.unlocalizedName.split(',')
                     if (replacements.size > 1) {
-                        showOreDictListFragment()
+                        switchToOreDictListFragment()
                     } else {
                         showReplacementListFragment(elementKey)
                     }
                 }
-                else -> showRecipeListFragment(elementKey)
+                else -> switchToRecipeListFragment(elementKey)
             }
         }
 
@@ -66,17 +69,15 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         }
     }
 
-    private fun showRecipeListFragment(elementKey: String) {
-        val recipeListFragment = RecipeListFragment().apply {
-            arguments = Bundle().apply { putString(RecipeListFragment.ELEMENT_KEY, elementKey) }
-        }
+    private fun switchToRecipeListFragment(elementKey: String) {
+        val recipeListFragment = RecipeListFragment.getFragment(elementKey)
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, recipeListFragment, RECIPE_LIST_TAG)
             .commit()
     }
 
-    private fun showOreDictListFragment() {
+    private fun switchToOreDictListFragment() {
         val oreDictListFragment = OreDictListFragment()
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
@@ -85,10 +86,7 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
     }
 
     private fun showReplacementListFragment(elementKey: String) {
-        val replacementListFragment = ReplacementListFragment().apply {
-            arguments =
-                Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
-        }
+        val replacementListFragment = ReplacementListFragment.getFragment(elementKey)
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, replacementListFragment, REPLACEMENT_LIST_TAG)
@@ -102,5 +100,12 @@ class RecipeSelectionActivity : DaggerAppCompatActivity(), ViewInit {
         const val MACHINE_RECIPE_LIST_TAG = "machine_recipe_list_tag"
 
         const val CONSTRAINT = "constraint"
+
+        fun Context.navigateToRecipeSelectionActivity(constraint: ProcessEditViewModel.ConnectionConstraint) {
+            startActivity(Intent(this, RecipeSelectionActivity::class.java).apply {
+                putExtra(CONSTRAINT, constraint)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+        }
     }
 }

@@ -12,8 +12,8 @@ import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentElementDetailBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.domain.ElementDetailNavigationUseCase
 import com.xhlab.nep.model.Element
+import com.xhlab.nep.shared.ui.element.ElementDetailViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeListFragment
 import com.xhlab.nep.ui.element.replacements.ReplacementContainerFragment
@@ -171,15 +171,13 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
         const val ELEMENT_ID = "element_id"
         const val ELEMENT_TYPE = "element_type"
 
-        fun getBundle(params: ElementDetailNavigationUseCase.Parameters): Bundle {
-            return Bundle().apply {
-                putLong(ELEMENT_ID, params.elementId)
-                putInt(ELEMENT_TYPE, params.elementType)
+        fun getFragment(elementId: Long, elementType: Int): Fragment {
+            return ElementDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ELEMENT_ID, elementId)
+                    putInt(ELEMENT_TYPE, elementType)
+                }
             }
-        }
-
-        fun getFragment(params: ElementDetailNavigationUseCase.Parameters): Fragment {
-            return ElementDetailFragment().apply { arguments = getBundle(params) }
         }
     }
 }

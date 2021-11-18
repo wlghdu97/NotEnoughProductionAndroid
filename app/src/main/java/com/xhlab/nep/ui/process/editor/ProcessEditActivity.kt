@@ -1,6 +1,8 @@
 package com.xhlab.nep.ui.process.editor
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Menu
@@ -16,7 +18,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityProcessEditBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.process.calculator.ProcessCalculationActivity.Companion.navigateToProcessCalculationActivity
+import com.xhlab.nep.ui.process.editor.selection.internal.InternalRecipeSelectionActivity.Companion.navigateToInternalRecipeSelectionActivity
+import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity.Companion.navigateToRecipeSelectionActivity
+import com.xhlab.nep.ui.process.editor.selection.subprocess.ProcessSelectionActivity.Companion.navigateToProcessSelectionActivity
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
@@ -95,6 +102,22 @@ class ProcessEditActivity :
         viewModel.modificationErrorMessage.asLiveData().observe(this) {
             Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
         }
+
+        viewModel.navigateToInternalRecipeSelection.asLiveData().observe(this) {
+            navigateToInternalRecipeSelectionActivity(it)
+        }
+
+        viewModel.navigateToRecipeSelection.asLiveData().observe(this) {
+            navigateToRecipeSelectionActivity(it)
+        }
+
+        viewModel.navigateToProcessSelection.asLiveData().observe(this) {
+            navigateToProcessSelectionActivity(it)
+        }
+
+        viewModel.navigateToCalculation.asLiveData().observe(this) {
+            navigateToProcessCalculationActivity(it)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -155,5 +178,12 @@ class ProcessEditActivity :
 
     companion object {
         const val PROCESS_ID = "process_id"
+
+        fun Context.navigateToProcessEditActivity(processId: String) {
+            startActivity(Intent(this, ProcessEditActivity::class.java).apply {
+                putExtra(PROCESS_ID, processId)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+        }
     }
 }

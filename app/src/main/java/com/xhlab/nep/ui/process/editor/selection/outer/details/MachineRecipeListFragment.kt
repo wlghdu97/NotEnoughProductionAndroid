@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.RecipeSelectionViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.details.MachineRecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
+import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
@@ -113,5 +116,15 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
         const val CONNECT_TO_PARENT = "connect_to_parent"
+
+        fun getFragment(elementId: Long, machineId: Int, connectToParent: Boolean): Fragment {
+            return MachineRecipeListFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(RecipeListFragment.ELEMENT_ID, elementId)
+                    putInt(MACHINE_ID, machineId)
+                    putBoolean(RecipeListFragment.CONNECT_TO_PARENT, connectToParent)
+                }
+            }
+        }
     }
 }

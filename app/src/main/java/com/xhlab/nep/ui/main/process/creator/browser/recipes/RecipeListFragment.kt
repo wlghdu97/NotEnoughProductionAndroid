@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
@@ -60,5 +61,11 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
 
     companion object {
         const val ELEMENT_ID = "element_id"
+
+        fun getFragment(elementId: Long): Fragment {
+            return RecipeListFragment().apply {
+                arguments = Bundle().apply { putLong(ELEMENT_ID, elementId) }
+            }
+        }
     }
 }

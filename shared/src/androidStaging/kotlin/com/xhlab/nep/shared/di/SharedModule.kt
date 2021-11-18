@@ -25,7 +25,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
-@Module(includes = [SqlDelightModule::class, DomainModule::class])
+@Module(
+    includes = [
+        SqlDelightModule::class,
+        DomainModule::class,
+        UIModule::class
+    ]
+)
 @Suppress("unused")
 class SharedModule {
 
