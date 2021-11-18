@@ -1,6 +1,7 @@
 package com.xhlab.test.shared
 
 import com.xhlab.nep.model.Machine
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.ProcessSummary
 import com.xhlab.nep.model.process.RecipeNode
@@ -10,64 +11,63 @@ import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView.Companion.PowerType.EU
 import com.xhlab.nep.model.recipes.view.MachineRecipeView.Companion.PowerType.NONE
-import com.xhlab.nep.model.recipes.view.RecipeElementView
 import kotlinx.serialization.Serializable
 
 @Suppress("MagicNumber", "MaxLineLength")
 object ProcessData {
     val itemList = listOf(
-        RecipeElementViewImpl(0, 1, "tile.stonebrick", "Cobblestone", 0),
-        RecipeElementViewImpl(1, 1, "tile.sand.default", "Sand", 0),
-        RecipeElementViewImpl(2, 1, "tile.gravel", "Gravel", 0),
-        RecipeElementViewImpl(3, 3, "tile.gravel", "Gravel", 0),
-        RecipeElementViewImpl(4, 1, "item.flint", "Flint", 0),
-        RecipeElementViewImpl(5, 1, "item.SandDust", "Quartz Sand", 0),
-        RecipeElementViewImpl(6, 1, "gt.metaitem.01.802", "Tiny Pile of Flint Dust", 0),
-        RecipeElementViewImpl(7, 4, "gt.metaitem.01.802", "Tiny Pile of Flint Dust", 0),
-        RecipeElementViewImpl(8, 1, "gt.metaitem.01.2890", "Glass Dust", 0),
-        RecipeElementViewImpl(9, 1, "tile.glass", "Glass", 0),
+        RecipeElementImpl(0, 1, "tile.stonebrick", "Cobblestone", 0),
+        RecipeElementImpl(1, 1, "tile.sand.default", "Sand", 0),
+        RecipeElementImpl(2, 1, "tile.gravel", "Gravel", 0),
+        RecipeElementImpl(3, 3, "tile.gravel", "Gravel", 0),
+        RecipeElementImpl(4, 1, "item.flint", "Flint", 0),
+        RecipeElementImpl(5, 1, "item.SandDust", "Quartz Sand", 0),
+        RecipeElementImpl(6, 1, "gt.metaitem.01.802", "Tiny Pile of Flint Dust", 0),
+        RecipeElementImpl(7, 4, "gt.metaitem.01.802", "Tiny Pile of Flint Dust", 0),
+        RecipeElementImpl(8, 1, "gt.metaitem.01.2890", "Glass Dust", 0),
+        RecipeElementImpl(9, 1, "tile.glass", "Glass", 0),
 
-        RecipeElementViewImpl(10, 1, "gt.metaitem.01.30677", "Ethylene Cell", 0),
-        RecipeElementViewImpl(11, 1, "gt.metaitem.01.30706", "Ethanol Cell", 0),
-        RecipeElementViewImpl(12, 1, "tile.sapling.oak", "Sapling", 0),
-        RecipeElementViewImpl(13, 1, "gt.metaitem.01.30460", "Hydrogen Sulfide Cell", 0),
-        RecipeElementViewImpl(14, 1, "gt.metaitem.01.2022", "Sulfur Dust", 0),
-        RecipeElementViewImpl(15, 1, "gt.metaitem.01.30001", "Hydrogen Cell", 0),
-        RecipeElementViewImpl(16, 1, "ic2.itemCellEmpty", "Empty Cell", 0),
-        RecipeElementViewImpl(17, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "1"),
-        RecipeElementViewImpl(18, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "3"),
+        RecipeElementImpl(10, 1, "gt.metaitem.01.30677", "Ethylene Cell", 0),
+        RecipeElementImpl(11, 1, "gt.metaitem.01.30706", "Ethanol Cell", 0),
+        RecipeElementImpl(12, 1, "tile.sapling.oak", "Sapling", 0),
+        RecipeElementImpl(13, 1, "gt.metaitem.01.30460", "Hydrogen Sulfide Cell", 0),
+        RecipeElementImpl(14, 1, "gt.metaitem.01.2022", "Sulfur Dust", 0),
+        RecipeElementImpl(15, 1, "gt.metaitem.01.30001", "Hydrogen Cell", 0),
+        RecipeElementImpl(16, 1, "ic2.itemCellEmpty", "Empty Cell", 0),
+        RecipeElementImpl(17, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "1"),
+        RecipeElementImpl(18, 1, "gt.integrated_circuit", "Programmed Circuit", 0, "3"),
 
-        RecipeElementViewImpl(19, 1, "tile.chest", "Chest", 0),
-        RecipeElementViewImpl(20, 4, "logWood", "Ore Chain", 3),
-        RecipeElementViewImpl(21, 4, "plankWood", "Ore Chain", 3),
+        RecipeElementImpl(19, 1, "tile.chest", "Chest", 0),
+        RecipeElementImpl(20, 4, "logWood", "Ore Chain", 3),
+        RecipeElementImpl(21, 4, "plankWood", "Ore Chain", 3),
 
-        RecipeElementViewImpl(22, 1, "tile.log.oak", "Oak Wood", 0),
-        RecipeElementViewImpl(23, 4, "tile.wood.oak", "Oak Wood Planks", 0),
+        RecipeElementImpl(22, 1, "tile.log.oak", "Oak Wood", 0),
+        RecipeElementImpl(23, 4, "tile.wood.oak", "Oak Wood Planks", 0),
 
-        RecipeElementViewImpl(24, 1, "gt.metaitem.01.17874", "Polyethylene Sheet", 0),
-        RecipeElementViewImpl(25, 0, "gt.metaitem.01.32301", "Mold (Plate)", 0)
+        RecipeElementImpl(24, 1, "gt.metaitem.01.17874", "Polyethylene Sheet", 0),
+        RecipeElementImpl(25, 0, "gt.metaitem.01.32301", "Mold (Plate)", 0)
     )
 
     val fluidList = listOf(
-        RecipeElementViewImpl(19, 1500, "fluid.molten.plastic", "Molten Polyethylene", 0),
-        RecipeElementViewImpl(20, 7000, "fluid.oxygen", "Oxygen Gas", 0),
-        RecipeElementViewImpl(21, 500, "fluid.oxygen", "Oxygen Gas", 0),
-        RecipeElementViewImpl(22, 1000, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
-        RecipeElementViewImpl(23, 40, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
-        RecipeElementViewImpl(24, 750, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
-        RecipeElementViewImpl(25, 1000, "fluid.sulfuricacid", "Sulfuric Acid", 0),
-        RecipeElementViewImpl(26, 20, "fluid.sulfuricacid", "Sulfuric Acid", 0),
-        RecipeElementViewImpl(27, 1000, "fluid.bioethanol", "Ethanol", 0),
-        RecipeElementViewImpl(28, 20, "fluid.bioethanol", "Ethanol", 0),
-        RecipeElementViewImpl(29, 40, "ic2.fluidBiomass", "Biomass", 0),
-        RecipeElementViewImpl(30, 100, "ic2.fluidBiomass", "Biomass", 0),
-        RecipeElementViewImpl(31, 1000, "fluid.tile.water", "Water", 0),
-        RecipeElementViewImpl(32, 1500, "fluid.tile.water", "Water", 0),
-        RecipeElementViewImpl(33, 1000, "fluid.liquid_hydricsulfur", "Hydrogen Sulfide", 0),
-        RecipeElementViewImpl(34, 2000, "fluid.hydrogen", "Hydrogen Gas", 0),
-        RecipeElementViewImpl(35, 1000, "fluid.hydrogen", "Hydrogen Gas", 0),
-        RecipeElementViewImpl(36, 5, "fluid.tile.water", "Water", 1),
-        RecipeElementViewImpl(37, 144, "fluid.molten.plastic", "Molten Polyethylene", 0)
+        RecipeElementImpl(19, 1500, "fluid.molten.plastic", "Molten Polyethylene", 0),
+        RecipeElementImpl(20, 7000, "fluid.oxygen", "Oxygen Gas", 0),
+        RecipeElementImpl(21, 500, "fluid.oxygen", "Oxygen Gas", 0),
+        RecipeElementImpl(22, 1000, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
+        RecipeElementImpl(23, 40, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
+        RecipeElementImpl(24, 750, "fluid.dilutedsulfuricacid", "Diluted Sulfuric Acid", 0),
+        RecipeElementImpl(25, 1000, "fluid.sulfuricacid", "Sulfuric Acid", 0),
+        RecipeElementImpl(26, 20, "fluid.sulfuricacid", "Sulfuric Acid", 0),
+        RecipeElementImpl(27, 1000, "fluid.bioethanol", "Ethanol", 0),
+        RecipeElementImpl(28, 20, "fluid.bioethanol", "Ethanol", 0),
+        RecipeElementImpl(29, 40, "ic2.fluidBiomass", "Biomass", 0),
+        RecipeElementImpl(30, 100, "ic2.fluidBiomass", "Biomass", 0),
+        RecipeElementImpl(31, 1000, "fluid.tile.water", "Water", 0),
+        RecipeElementImpl(32, 1500, "fluid.tile.water", "Water", 0),
+        RecipeElementImpl(33, 1000, "fluid.liquid_hydricsulfur", "Hydrogen Sulfide", 0),
+        RecipeElementImpl(34, 2000, "fluid.hydrogen", "Hydrogen Gas", 0),
+        RecipeElementImpl(35, 1000, "fluid.hydrogen", "Hydrogen Gas", 0),
+        RecipeElementImpl(36, 5, "fluid.tile.water", "Water", 1),
+        RecipeElementImpl(37, 144, "fluid.molten.plastic", "Molten Polyethylene", 0)
     )
 
     val elementList = itemList + fluidList
@@ -503,25 +503,26 @@ object ProcessData {
         override val ept: Int,
         override val machineId: Int,
         override val machineName: String,
-        override val itemList: List<RecipeElementViewImpl>,
-        override val resultItemList: List<RecipeElementViewImpl>
+        override val itemList: List<RecipeElementImpl>,
+        override val resultItemList: List<RecipeElementImpl>
     ) : MachineRecipeView()
 
+    @Serializable
     data class CraftingRecipeViewImpl(
         override val recipeId: Long,
-        override val itemList: List<RecipeElementViewImpl>,
-        override val resultItemList: List<RecipeElementViewImpl>
+        override val itemList: List<RecipeElementImpl>,
+        override val resultItemList: List<RecipeElementImpl>
     ) : CraftingRecipeView()
 
     @Serializable
-    data class RecipeElementViewImpl(
+    data class RecipeElementImpl(
         override val id: Long,
         override val amount: Int,
         override val unlocalizedName: String,
         override val localizedName: String,
         override val type: Int,
         override val metaData: String? = null
-    ) : RecipeElementView()
+    ) : RecipeElement()
 
     data class ProcessSummaryImpl(
         override val processId: String,
