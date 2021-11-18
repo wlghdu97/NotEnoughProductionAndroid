@@ -1,10 +1,10 @@
 package com.xhlab.nep.shared.domain.process
 
-import android.util.Base64
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
 import com.xhlab.nep.shared.model.defaultJson
 import com.xhlab.nep.shared.parser.process.ProcessSerializer
+import com.xhlab.nep.shared.util.Base64Factory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
@@ -19,7 +19,8 @@ class ImportProcessStringUseCase @Inject constructor(
         if (params.string.isEmpty()) {
             throw IllegalArgumentException()
         }
-        val decodedInput = Base64.decode(params.string, Base64.NO_WRAP)
+        val decoder = Base64Factory.noWrapDecoder
+        val decodedInput = decoder.decode(params.string.toByteArray())
         if (decodedInput.isEmpty()) {
             throw IllegalArgumentException()
         }

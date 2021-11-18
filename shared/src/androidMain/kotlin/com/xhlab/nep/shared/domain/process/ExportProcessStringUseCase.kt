@@ -1,8 +1,8 @@
 package com.xhlab.nep.shared.domain.process
 
-import android.util.Base64
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
+import com.xhlab.nep.shared.util.Base64Factory
 import java.util.zip.Deflater
 import javax.inject.Inject
 
@@ -22,7 +22,8 @@ class ExportProcessStringUseCase @Inject constructor(
             val compressedByteLength = deflater.deflate(bytesCompressed)
             val returnValues = ByteArray(compressedByteLength)
             System.arraycopy(bytesCompressed, 0, returnValues, 0, compressedByteLength)
-            Base64.encodeToString(returnValues, Base64.NO_WRAP)
+            val encoder = Base64Factory.noWrapEncoder
+            encoder.encode(returnValues).decodeToString()
         } else {
             "Invalid string"
         }
