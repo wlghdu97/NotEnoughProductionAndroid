@@ -8,6 +8,7 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.model.defaultJson
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog.Companion.KEY_ELEMENT
@@ -16,6 +17,7 @@ import com.xhlab.nep.ui.main.process.creator.browser.details.MachineRecipeListFr
 import com.xhlab.nep.ui.main.process.creator.browser.recipes.RecipeListFragment
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.serialization.encodeToString
 import javax.inject.Inject
 
 class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
@@ -56,8 +58,8 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
 
         viewModel.returnResult.asLiveData().observe(this) { (targetRecipe, keyElement) ->
             val intent = Intent().apply {
-                putExtra(TARGET_RECIPE, targetRecipe)
-                putExtra(KEY_ELEMENT, keyElement)
+                putExtra(TARGET_RECIPE, defaultJson.encodeToString(targetRecipe))
+                putExtra(KEY_ELEMENT, defaultJson.encodeToString(keyElement))
             }
             setResult(Activity.RESULT_OK, intent)
             finish()

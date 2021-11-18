@@ -17,12 +17,14 @@ import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
+import com.xhlab.nep.shared.model.defaultJson
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.process.creator.browser.ItemBrowserActivity
 import com.xhlab.nep.util.getIcon
 import com.xhlab.nep.util.longToast
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerDialogFragment
+import kotlinx.serialization.decodeFromString
 import javax.inject.Inject
 
 class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
@@ -112,9 +114,11 @@ class ProcessCreationDialog : DaggerDialogFragment(), ViewInit {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_RECIPE_ID_CODE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                val targetRecipe = data.getSerializableExtra(TARGET_RECIPE) as? Recipe
-                val keyElement = data.getSerializableExtra(KEY_ELEMENT) as? RecipeElement
-                if (targetRecipe != null && keyElement != null) {
+                val targetRecipeString = data.getStringExtra(TARGET_RECIPE)
+                val keyElementString = data.getStringExtra(KEY_ELEMENT)
+                if (targetRecipeString != null && keyElementString != null) {
+                    val targetRecipe: Recipe = defaultJson.decodeFromString(targetRecipeString)
+                    val keyElement: RecipeElement = defaultJson.decodeFromString(keyElementString)
                     viewModel.submitRecipe(targetRecipe, keyElement)
                 }
             } else {
