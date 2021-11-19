@@ -17,6 +17,7 @@ import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepoImpl
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.NepProcess
+import com.xhlab.nep.shared.model.defaultJson
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.preference.GeneralSharedPreference
 import com.xhlab.nep.shared.util.StringResolver
@@ -24,6 +25,7 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Suppress("unused")
@@ -38,6 +40,10 @@ class SharedModule {
 
     private val io: CoroutineDispatcher
         get() = Dispatchers.IO
+
+    @Provides
+    @Singleton
+    fun provideJson() = defaultJson
 
     @Provides
     @Singleton
@@ -79,6 +85,6 @@ class SharedModule {
 
     @Provides
     @Singleton
-    internal fun provideProcessRepo(db: NepProcess): ProcessRepo =
-        ProcessRepoImpl(db, io)
+    internal fun provideProcessRepo(db: NepProcess, json: Json): ProcessRepo =
+        ProcessRepoImpl(db, io, json)
 }

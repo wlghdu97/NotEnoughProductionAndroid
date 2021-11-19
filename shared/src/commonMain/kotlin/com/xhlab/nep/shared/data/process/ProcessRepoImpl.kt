@@ -15,15 +15,17 @@ import com.xhlab.nep.shared.db.createOffsetLimitPager
 import com.xhlab.nep.shared.util.UUID
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import com.xhlab.nep.shared.db.Process as ProcessEntity
 
 internal class ProcessRepoImpl constructor(
     private val db: NepProcess,
-    private val io: CoroutineDispatcher
+    private val io: CoroutineDispatcher,
+    json: Json
 ) : ProcessRepo {
 
-    private val mapper = ProcessMapper()
-    private val roomMapper = SqlDelightProcessMapper()
+    private val mapper = ProcessMapper(json)
+    private val roomMapper = SqlDelightProcessMapper(json)
 
     // TODO: replace with LruCache
     private val cache = mutableMapOf<String, Process>()

@@ -9,8 +9,8 @@ import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.ExportProcessStringUseCase
 import com.xhlab.nep.shared.domain.process.ImportProcessStringUseCase
 import com.xhlab.nep.shared.parser.process.ProcessSerializer
-import com.xhlab.nep.shared.parser.process.processJson
 import com.xhlab.nep.shared.util.runBlockingTest
+import com.xhlab.nep.shared.util.testJson
 import com.xhlab.test.shared.ProcessData
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -40,13 +40,13 @@ class ProcessExportImportTest {
 
         processRepo = mock {
             onBlocking { exportProcessString(ProcessData.processPE.id) }
-                .doReturn(processJson.encodeToString(ProcessSerializer, ProcessData.processPE))
+                .doReturn(testJson.encodeToString(ProcessSerializer, ProcessData.processPE))
             onBlocking { insertProcess(any()) }
                 .doReturn(Unit)
         }
 
         exportUseCase = ExportProcessStringUseCase(processRepo)
-        importUseCase = ImportProcessStringUseCase(processRepo)
+        importUseCase = ImportProcessStringUseCase(processRepo, testJson)
     }
 
     @Test
