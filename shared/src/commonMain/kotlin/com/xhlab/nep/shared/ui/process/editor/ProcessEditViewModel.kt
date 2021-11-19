@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 
-@ProvideWithDagger("ProcessViewModel")
+@ProvideWithDagger("ProcessEditorViewModel")
 class ProcessEditViewModel constructor(
     private val processRepo: ProcessRepo,
     private val loadProcessUseCase: LoadProcessUseCase,

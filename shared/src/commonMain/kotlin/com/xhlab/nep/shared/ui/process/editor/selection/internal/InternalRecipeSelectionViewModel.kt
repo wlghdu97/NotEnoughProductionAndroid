@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 
-@ProvideWithDagger("ProcessViewModel")
+@ProvideWithDagger("ProcessEditorViewModel")
 class InternalRecipeSelectionViewModel constructor(
     private val processRepo: ProcessRepo,
     private val loadProcessUseCase: LoadProcessUseCase,

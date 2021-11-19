@@ -1,4 +1,4 @@
-package com.xhlab.nep.ui.main.process.creator.browser.details
+package com.xhlab.nep.shared.ui.main.process.creator.browser.details
 
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement

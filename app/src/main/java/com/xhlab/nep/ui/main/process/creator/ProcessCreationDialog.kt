@@ -18,6 +18,7 @@ import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.shared.model.defaultJson
+import com.xhlab.nep.shared.ui.main.process.creator.ProcessCreationViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.process.creator.browser.ItemBrowserActivity
 import com.xhlab.nep.util.getIcon

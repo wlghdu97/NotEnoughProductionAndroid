@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentProcessListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.main.process.ProcessListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.adapters.ProcessAdapter
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog

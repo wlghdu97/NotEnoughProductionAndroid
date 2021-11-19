@@ -9,8 +9,9 @@ import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.main.process.creator.browser.ProcessItemBrowserViewModel
+import com.xhlab.nep.shared.ui.main.process.creator.browser.details.MachineRecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider

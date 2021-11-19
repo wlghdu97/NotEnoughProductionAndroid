@@ -12,7 +12,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-@ProvideWithDagger("ProcessViewModel")
+@ProvideWithDagger("ProcessEditorViewModel")
 class MachineRecipeListViewModel constructor(
     private val loadRecipeListUseCase: LoadRecipeListUseCase,
     private val loadUsageRecipeListUseCase: LoadUsageRecipeListUseCase,

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-@ProvideWithDagger("ProcessViewModel")
+@ProvideWithDagger("ProcessEditorViewModel")
 class ReplacementListViewModel constructor(
     private val loadReplacementListUseCase: LoadReplacementListUseCase,
     private val checkReplacementListCountUseCase: CheckReplacementListCountUseCase,

@@ -1,5 +1,6 @@
-package com.xhlab.nep.ui.main.process.importer
+package com.xhlab.nep.shared.ui.main.process.importer
 
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.shared.domain.process.ImportProcessStringUseCase
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class ProcessImportViewModel @Inject constructor(
+@ProvideWithDagger("ProcessViewModel")
+class ProcessImportViewModel constructor(
     private val importProcessStringUseCase: ImportProcessStringUseCase
 ) : ViewModel() {
 

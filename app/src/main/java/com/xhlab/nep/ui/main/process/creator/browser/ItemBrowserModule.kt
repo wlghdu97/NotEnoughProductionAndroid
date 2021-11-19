@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.main.process.creator.browser
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.FragmentScope
+import com.xhlab.nep.shared.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.main.items.ItemBrowserModule
 import com.xhlab.nep.ui.main.process.creator.browser.details.MachineRecipeListFragment

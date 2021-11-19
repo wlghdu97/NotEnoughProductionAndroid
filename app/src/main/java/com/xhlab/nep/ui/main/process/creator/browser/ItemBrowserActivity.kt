@@ -9,6 +9,7 @@ import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
 import com.xhlab.nep.shared.model.defaultJson
+import com.xhlab.nep.shared.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog.Companion.KEY_ELEMENT

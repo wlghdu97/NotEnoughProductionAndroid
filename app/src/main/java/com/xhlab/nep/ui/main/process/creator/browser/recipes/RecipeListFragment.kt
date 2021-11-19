@@ -9,9 +9,10 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.main.process.creator.browser.ProcessItemBrowserViewModel
+import com.xhlab.nep.shared.ui.main.process.creator.browser.recipes.RecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.recipes.RecipeMachineAdapter
-import com.xhlab.nep.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import kotlinx.coroutines.flow.flatMapLatest

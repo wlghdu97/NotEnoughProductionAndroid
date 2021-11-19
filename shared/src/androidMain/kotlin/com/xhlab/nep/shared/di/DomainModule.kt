@@ -7,6 +7,7 @@ import dagger.Module
         ItemDomainModule::class,
         MachineDomainModule::class,
         ProcessDomainModule::class,
+        ProcessEditorViewModelModule::class,
         RecipeDomainModule::class
     ]
 )

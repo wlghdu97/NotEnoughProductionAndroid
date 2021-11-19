@@ -1,6 +1,7 @@
-package com.xhlab.nep.ui.main.process.rename
+package com.xhlab.nep.shared.ui.main.process.rename
 
 import co.touchlab.kermit.Logger
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.MR
 import com.xhlab.nep.shared.data.process.ProcessRepo
@@ -12,9 +13,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class ProcessRenameViewModel @Inject constructor(
+@ProvideWithDagger("ProcessViewModel")
+class ProcessRenameViewModel constructor(
     private val processRepo: ProcessRepo,
     private val stringResolver: StringResolver
 ) : ViewModel() {

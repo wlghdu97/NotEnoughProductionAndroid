@@ -1,5 +1,6 @@
-package com.xhlab.nep.ui.main.process.creator.browser.details
+package com.xhlab.nep.shared.ui.main.process.creator.browser.details
 
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -9,9 +10,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class MachineRecipeListViewModel @Inject constructor(
+@ProvideWithDagger("ProcessViewModel")
+class MachineRecipeListViewModel constructor(
     private val loadRecipeListUseCase: LoadRecipeListUseCase,
     generalPreference: GeneralPreference
 ) : ViewModel() {

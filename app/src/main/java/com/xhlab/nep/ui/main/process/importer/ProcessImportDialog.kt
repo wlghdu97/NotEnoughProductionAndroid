@@ -14,6 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.DialogProcessImportBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.main.process.importer.ProcessImportViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.util.longToast
 import com.xhlab.nep.util.viewModelProvider

@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
 
-@ProvideWithDagger("ProcessViewModel")
+@ProvideWithDagger("ProcessEditorViewModel")
 class RecipeSelectionViewModel constructor(
     private val processRepo: ProcessRepo,
     private val stringResolver: StringResolver

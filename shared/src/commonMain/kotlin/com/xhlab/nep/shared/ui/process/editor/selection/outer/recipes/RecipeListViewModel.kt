@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 
-@ProvideWithDagger("ProcessViewModel")
+@ProvideWithDagger("ProcessEditorViewModel")
 class RecipeListViewModel constructor(
     private val processRepo: ProcessRepo,
     private val loadElementDetailUseCase: LoadElementDetailUseCase,

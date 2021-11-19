@@ -10,7 +10,7 @@ import com.xhlab.nep.shared.ui.invokeMediatorUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-@ProvideWithDagger("ProcessViewModel")
+@ProvideWithDagger("ProcessEditorViewModel")
 class OreDictListViewModel constructor(
     private val loadOreDictListUseCase: LoadOreDictListUseCase
 ) : ViewModel(), OreDictListener {

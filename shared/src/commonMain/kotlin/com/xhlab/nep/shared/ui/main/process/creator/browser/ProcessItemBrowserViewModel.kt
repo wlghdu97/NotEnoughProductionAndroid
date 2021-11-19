@@ -1,18 +1,19 @@
-package com.xhlab.nep.ui.main.process.creator.browser
+package com.xhlab.nep.shared.ui.main.process.creator.browser
 
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.shared.ui.main.items.ElementListener
 import com.xhlab.nep.shared.ui.main.machines.MachineListener
-import com.xhlab.nep.ui.main.process.creator.browser.details.RootRecipeSelectionListener
+import com.xhlab.nep.shared.ui.main.process.creator.browser.details.RootRecipeSelectionListener
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class ProcessItemBrowserViewModel @Inject constructor() :
+@ProvideWithDagger("ProcessViewModel")
+class ProcessItemBrowserViewModel :
     ViewModel(),
     ElementListener,
     MachineListener,
