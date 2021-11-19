@@ -8,6 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		624536A9901A42308B982C81 /* Pods_NotEnoughProduction.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 833FBEDAAC6FDBBBB6D10118 /* Pods_NotEnoughProduction.framework */; };
+		C41A92C32747D1EF00D05B41 /* Cleanse in Frameworks */ = {isa = PBXBuildFile; productRef = C41A92C22747D1EF00D05B41 /* Cleanse */; };
+		C41A92C62747D20300D05B41 /* AppComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92C52747D20300D05B41 /* AppComponent.swift */; };
+		C41A92C82747D2D300D05B41 /* AppModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92C72747D2D300D05B41 /* AppModule.swift */; };
+		C41A92CA2747D2F700D05B41 /* DomainModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92C92747D2F700D05B41 /* DomainModule.swift */; };
+		C41A92CC2747D31100D05B41 /* UIModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92CB2747D31100D05B41 /* UIModule.swift */; };
+		C41A92CE2747D32C00D05B41 /* SwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92CD2747D32C00D05B41 /* SwiftUIViewModel.swift */; };
+		C41A92D22747D38600D05B41 /* MainSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92D12747D38600D05B41 /* MainSwiftUIViewModel.swift */; };
+		C41A92D42747D4D500D05B41 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92D32747D4D500D05B41 /* MainScreen.swift */; };
+		C41A92D62747D7D600D05B41 /* DatabaseModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92D52747D7D600D05B41 /* DatabaseModule.swift */; };
+		C41A92D92747DC0800D05B41 /* ItemDomainModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92D82747DC0700D05B41 /* ItemDomainModule.swift */; };
+		C41A92DC2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92DB2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift */; };
+		C41A92E12747E14F00D05B41 /* ItemBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92E02747E14F00D05B41 /* ItemBrowser.swift */; };
+		C41A92E42747EADE00D05B41 /* ModelRecipeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92E32747EADE00D05B41 /* ModelRecipeElement.swift */; };
+		C41A92E72747F6A300D05B41 /* RecipeElementItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92E62747F6A300D05B41 /* RecipeElementItem.swift */; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9A270D8358009A6A4F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A99270D8358009A6A4F /* ContentView.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
@@ -18,6 +32,19 @@
 /* Begin PBXFileReference section */
 		0C4607C414D7C1BB153B0525 /* Pods-NotEnoughProduction.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotEnoughProduction.release.xcconfig"; path = "Target Support Files/Pods-NotEnoughProduction/Pods-NotEnoughProduction.release.xcconfig"; sourceTree = "<group>"; };
 		833FBEDAAC6FDBBBB6D10118 /* Pods_NotEnoughProduction.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotEnoughProduction.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C41A92C52747D20300D05B41 /* AppComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppComponent.swift; sourceTree = "<group>"; };
+		C41A92C72747D2D300D05B41 /* AppModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModule.swift; sourceTree = "<group>"; };
+		C41A92C92747D2F700D05B41 /* DomainModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainModule.swift; sourceTree = "<group>"; };
+		C41A92CB2747D31100D05B41 /* UIModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIModule.swift; sourceTree = "<group>"; };
+		C41A92CD2747D32C00D05B41 /* SwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C41A92D12747D38600D05B41 /* MainSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C41A92D32747D4D500D05B41 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
+		C41A92D52747D7D600D05B41 /* DatabaseModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseModule.swift; sourceTree = "<group>"; };
+		C41A92D82747DC0700D05B41 /* ItemDomainModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDomainModule.swift; sourceTree = "<group>"; };
+		C41A92DB2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemBrowserSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C41A92E02747E14F00D05B41 /* ItemBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemBrowser.swift; sourceTree = "<group>"; };
+		C41A92E32747EADE00D05B41 /* ModelRecipeElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRecipeElement.swift; sourceTree = "<group>"; };
+		C41A92E62747F6A300D05B41 /* RecipeElementItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeElementItem.swift; sourceTree = "<group>"; };
 		C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotEnoughProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughProductionApp.swift; sourceTree = "<group>"; };
 		C47C0A99270D8358009A6A4F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -33,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C41A92C32747D1EF00D05B41 /* Cleanse in Frameworks */,
 				C47C0AA6270D9E60009A6A4F /* Shared.xcframework in Frameworks */,
 				624536A9901A42308B982C81 /* Pods_NotEnoughProduction.framework in Frameworks */,
 			);
@@ -41,10 +69,111 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C41A92BD2747D18700D05B41 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92C42747D1F600D05B41 /* di */,
+				C41A92CF2747D34B00D05B41 /* ui */,
+				C41A92E22747EAC900D05B41 /* extensions */,
+				C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		C41A92C42747D1F600D05B41 /* di */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92D72747DBF900D05B41 /* domain */,
+				C41A92C52747D20300D05B41 /* AppComponent.swift */,
+				C41A92C72747D2D300D05B41 /* AppModule.swift */,
+				C41A92D52747D7D600D05B41 /* DatabaseModule.swift */,
+				C41A92C92747D2F700D05B41 /* DomainModule.swift */,
+				C41A92CB2747D31100D05B41 /* UIModule.swift */,
+				C41A92CD2747D32C00D05B41 /* SwiftUIViewModel.swift */,
+			);
+			path = di;
+			sourceTree = "<group>";
+		};
+		C41A92CF2747D34B00D05B41 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92E52747F68C00D05B41 /* elements */,
+				C41A92D02747D37C00D05B41 /* main */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
+		C41A92D02747D37C00D05B41 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92DA2747DCB000D05B41 /* items */,
+				C41A92D12747D38600D05B41 /* MainSwiftUIViewModel.swift */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		C41A92D72747DBF900D05B41 /* domain */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92D82747DC0700D05B41 /* ItemDomainModule.swift */,
+			);
+			path = domain;
+			sourceTree = "<group>";
+		};
+		C41A92DA2747DCB000D05B41 /* items */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92DB2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift */,
+			);
+			path = items;
+			sourceTree = "<group>";
+		};
+		C41A92DD2747E13300D05B41 /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92DE2747E13E00D05B41 /* main */,
+			);
+			path = ui;
+			sourceTree = "<group>";
+		};
+		C41A92DE2747E13E00D05B41 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92DF2747E14500D05B41 /* items */,
+				C41A92D32747D4D500D05B41 /* MainScreen.swift */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		C41A92DF2747E14500D05B41 /* items */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92E02747E14F00D05B41 /* ItemBrowser.swift */,
+			);
+			path = items;
+			sourceTree = "<group>";
+		};
+		C41A92E22747EAC900D05B41 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92E32747EADE00D05B41 /* ModelRecipeElement.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
+		C41A92E52747F68C00D05B41 /* elements */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92E62747F6A300D05B41 /* RecipeElementItem.swift */,
+			);
+			path = elements;
+			sourceTree = "<group>";
+		};
 		C47C0A8B270D8358009A6A4F = {
 			isa = PBXGroup;
 			children = (
 				C47C0AA5270D9E60009A6A4F /* Shared.xcframework */,
+				C41A92BD2747D18700D05B41 /* Shared */,
 				C47C0A96270D8358009A6A4F /* NotEnoughProduction */,
 				C47C0A95270D8358009A6A4F /* Products */,
 				C67BC56AF29B8800FB29ED0B /* Pods */,
@@ -64,7 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				C49D93EB270EF9F40057BB63 /* Info.plist */,
-				C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */,
+				C41A92DD2747E13300D05B41 /* ui */,
 				C47C0A99270D8358009A6A4F /* ContentView.swift */,
 				C47C0A9B270D835A009A6A4F /* Assets.xcassets */,
 				C47C0A9D270D835A009A6A4F /* Preview Content */,
@@ -116,6 +245,9 @@
 			dependencies = (
 			);
 			name = NotEnoughProduction;
+			packageProductDependencies = (
+				C41A92C22747D1EF00D05B41 /* Cleanse */,
+			);
 			productName = NotEnoughProduction;
 			productReference = C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */;
 			productType = "com.apple.product-type.application";
@@ -144,6 +276,9 @@
 				Base,
 			);
 			mainGroup = C47C0A8B270D8358009A6A4F;
+			packageReferences = (
+				C41A92C12747D1EF00D05B41 /* XCRemoteSwiftPackageReference "Cleanse" */,
+			);
 			productRefGroup = C47C0A95270D8358009A6A4F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,8 +366,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C41A92E42747EADE00D05B41 /* ModelRecipeElement.swift in Sources */,
+				C41A92E12747E14F00D05B41 /* ItemBrowser.swift in Sources */,
+				C41A92E72747F6A300D05B41 /* RecipeElementItem.swift in Sources */,
 				C47C0A9A270D8358009A6A4F /* ContentView.swift in Sources */,
+				C41A92D22747D38600D05B41 /* MainSwiftUIViewModel.swift in Sources */,
+				C41A92CA2747D2F700D05B41 /* DomainModule.swift in Sources */,
+				C41A92C82747D2D300D05B41 /* AppModule.swift in Sources */,
 				C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */,
+				C41A92D62747D7D600D05B41 /* DatabaseModule.swift in Sources */,
+				C41A92DC2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift in Sources */,
+				C41A92CE2747D32C00D05B41 /* SwiftUIViewModel.swift in Sources */,
+				C41A92D42747D4D500D05B41 /* MainScreen.swift in Sources */,
+				C41A92C62747D20300D05B41 /* AppComponent.swift in Sources */,
+				C41A92D92747DC0800D05B41 /* ItemDomainModule.swift in Sources */,
+				C41A92CC2747D31100D05B41 /* UIModule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,7 +522,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				"KOTLIN_TARGET[sdk=iphoneos*]" = ios_arm64;
 				"KOTLIN_TARGET[sdk=iphonesimulator*]" = ios_x64;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -410,7 +558,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				"KOTLIN_TARGET[sdk=iphoneos*]" = ios_arm64;
 				"KOTLIN_TARGET[sdk=iphonesimulator*]" = ios_x64;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -449,6 +597,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C41A92C12747D1EF00D05B41 /* XCRemoteSwiftPackageReference "Cleanse" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/square/Cleanse.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C41A92C22747D1EF00D05B41 /* Cleanse */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C41A92C12747D1EF00D05B41 /* XCRemoteSwiftPackageReference "Cleanse" */;
+			productName = Cleanse;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C47C0A8C270D8358009A6A4F /* Project object */;
 }

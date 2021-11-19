@@ -1,0 +1,17 @@
+//
+//  UIModule.swift
+//  NotEnoughProduction
+//
+//  Created by xharpen on 2021/11/19.
+//
+
+import Foundation
+import Cleanse
+import Shared
+
+struct UIModule: Cleanse.Module {
+    static func configure(binder: Binder<Unscoped>) {
+        binder.install(dependency: MainSwiftUIViewModel.Component.self)
+        binder.install(dependency: ItemBrowserSwiftUIViewModel.Component.self)
+    }
+}
