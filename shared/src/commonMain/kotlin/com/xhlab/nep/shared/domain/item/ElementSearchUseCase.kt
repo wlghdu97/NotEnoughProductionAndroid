@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @ProvideWithDagger("ItemDomain")
-class ElementSearchUseCase internal constructor(
+class ElementSearchUseCase constructor(
     private val elementRepo: ElementRepo
 ) : BaseMediatorUseCase<ElementSearchUseCase.Parameter, Pager<Int, RecipeElement>>() {
 

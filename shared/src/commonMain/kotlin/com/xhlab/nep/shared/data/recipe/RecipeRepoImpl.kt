@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
-internal class RecipeRepoImpl constructor(
+class RecipeRepoImpl constructor(
     private val db: Nep,
     private val io: CoroutineDispatcher,
     private val recipeAdder: RecipeAdder

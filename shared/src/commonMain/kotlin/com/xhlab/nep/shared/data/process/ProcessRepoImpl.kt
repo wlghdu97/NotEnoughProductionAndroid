@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import com.xhlab.nep.shared.db.Process as ProcessEntity
 
-internal class ProcessRepoImpl constructor(
+class ProcessRepoImpl constructor(
     private val db: NepProcess,
     private val io: CoroutineDispatcher,
     json: Json

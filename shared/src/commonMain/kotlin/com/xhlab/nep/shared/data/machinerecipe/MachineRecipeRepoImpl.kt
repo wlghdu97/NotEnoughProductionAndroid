@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 
-internal class MachineRecipeRepoImpl constructor(
+class MachineRecipeRepoImpl constructor(
     private val db: Nep,
     private val io: CoroutineDispatcher
 ) : MachineRecipeRepo {

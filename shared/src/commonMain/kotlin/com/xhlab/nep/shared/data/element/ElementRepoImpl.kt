@@ -11,7 +11,7 @@ import com.xhlab.nep.shared.db.createOffsetLimitPager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-internal class ElementRepoImpl constructor(
+class ElementRepoImpl constructor(
     private val db: Nep,
     private val io: CoroutineDispatcher
 ) : ElementRepo {
