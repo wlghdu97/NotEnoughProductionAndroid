@@ -17,9 +17,9 @@ class LoadElementDetailWithKeyUseCase constructor(
         } else {
             val list = arrayListOf<RecipeElement>()
             for (id in ids) {
-                val elementView = elementRepo.getElementDetail(id)
-                if (elementView != null) {
-                    list.add(elementView)
+                val element = elementRepo.getElementDetail(id)
+                if (element != null) {
+                    list.add(element)
                 } else {
                     throw NullPointerException("element not found.")
                 }
