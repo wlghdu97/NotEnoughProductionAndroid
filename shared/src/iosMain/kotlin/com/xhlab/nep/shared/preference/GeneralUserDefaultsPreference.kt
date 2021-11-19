@@ -29,23 +29,23 @@ class GeneralUserDefaultsPreference : GeneralPreference {
         get() = _showDisconnectionAlert
 
     override fun getFirstDBLoad(): Boolean {
-        return userDefaults.objectForKey(GeneralPreference.KEY_DB_FIRST_LOAD, true)
+        return userDefaults.boolForKey(GeneralPreference.KEY_DB_FIRST_LOAD, true)
     }
 
     override fun getDBLoaded(): Boolean {
-        return userDefaults.objectForKey(GeneralPreference.KEY_DB_STATUS, false)
+        return userDefaults.boolForKey(GeneralPreference.KEY_DB_STATUS, false)
     }
 
     override fun getIconLoaded(): Boolean {
-        return userDefaults.objectForKey(GeneralPreference.KEY_ICON_STATUS, false)
+        return userDefaults.boolForKey(GeneralPreference.KEY_ICON_STATUS, false)
     }
 
     override fun getDarkTheme(): Boolean {
-        return userDefaults.objectForKey(GeneralPreference.KEY_THEME, false)
+        return userDefaults.boolForKey(GeneralPreference.KEY_THEME, false)
     }
 
     override fun getShowDisconnectionAlert(): Boolean {
-        return userDefaults.objectForKey(GeneralPreference.KEY_SHOW_DISCONNECTION_ALERT, true)
+        return userDefaults.boolForKey(GeneralPreference.KEY_SHOW_DISCONNECTION_ALERT, true)
     }
 
     override fun setDBLoaded(value: Boolean) {
@@ -81,8 +81,15 @@ class GeneralUserDefaultsPreference : GeneralPreference {
         _showDisconnectionAlert.value = value
     }
 
-    private inline fun <reified T> NSUserDefaults.objectForKey(key: String, default: T): T {
+    private fun NSUserDefaults.boolForKey(
+        key: String,
+        default: Boolean
+    ): Boolean {
         val value = objectForKey(key)
-        return value as? T ?: default
+        return if (value != null) {
+            boolForKey(key)
+        } else {
+            default
+        }
     }
 }
