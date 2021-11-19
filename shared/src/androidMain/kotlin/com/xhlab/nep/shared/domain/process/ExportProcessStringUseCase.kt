@@ -3,7 +3,7 @@ package com.xhlab.nep.shared.domain.process
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
 import com.xhlab.nep.shared.util.Base64Factory
-import java.util.zip.Deflater
+import com.xhlab.nep.shared.util.Deflater
 import javax.inject.Inject
 
 class ExportProcessStringUseCase @Inject constructor(
@@ -14,16 +14,9 @@ class ExportProcessStringUseCase @Inject constructor(
         val json = processRepo.exportProcessString(params.processId)
         return if (json != null) {
             val input = json.toByteArray()
-            val deflater = Deflater().apply {
-                setInput(input)
-                finish()
-            }
-            val bytesCompressed = ByteArray(Short.MAX_VALUE.toInt())
-            val compressedByteLength = deflater.deflate(bytesCompressed)
-            val returnValues = ByteArray(compressedByteLength)
-            System.arraycopy(bytesCompressed, 0, returnValues, 0, compressedByteLength)
+            val compressed = Deflater(input).deflate()
             val encoder = Base64Factory.noWrapEncoder
-            encoder.encode(returnValues).decodeToString()
+            encoder.encode(compressed).decodeToString()
         } else {
             "Invalid string"
         }
