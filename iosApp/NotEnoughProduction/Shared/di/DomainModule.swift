@@ -11,5 +11,6 @@ import Cleanse
 struct DomainModule: Cleanse.Module {
     static func configure(binder: Binder<Unscoped>) {
         binder.include(module: ItemDomainModule.self)
+        binder.include(module: MachineDomainModule.self)
     }
 }

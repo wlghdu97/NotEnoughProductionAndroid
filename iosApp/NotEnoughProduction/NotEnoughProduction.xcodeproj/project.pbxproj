@@ -22,6 +22,11 @@
 		C41A92E12747E14F00D05B41 /* ItemBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92E02747E14F00D05B41 /* ItemBrowser.swift */; };
 		C41A92E42747EADE00D05B41 /* ModelRecipeElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92E32747EADE00D05B41 /* ModelRecipeElement.swift */; };
 		C41A92E72747F6A300D05B41 /* RecipeElementItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92E62747F6A300D05B41 /* RecipeElementItem.swift */; };
+		C41A92E927480B6F00D05B41 /* MachineDomainModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92E827480B6F00D05B41 /* MachineDomainModule.swift */; };
+		C41A92EC27480C7300D05B41 /* MachineBrowserSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92EB27480C7300D05B41 /* MachineBrowserSwiftUIViewModel.swift */; };
+		C41A92EF27480E5500D05B41 /* MachineBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92EE27480E5500D05B41 /* MachineBrowser.swift */; };
+		C41A92F22748C4F900D05B41 /* MachineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92F12748C4F900D05B41 /* MachineItem.swift */; };
+		C41A92F42748C53B00D05B41 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92F32748C53B00D05B41 /* String.swift */; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9A270D8358009A6A4F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A99270D8358009A6A4F /* ContentView.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
@@ -45,6 +50,11 @@
 		C41A92E02747E14F00D05B41 /* ItemBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemBrowser.swift; sourceTree = "<group>"; };
 		C41A92E32747EADE00D05B41 /* ModelRecipeElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRecipeElement.swift; sourceTree = "<group>"; };
 		C41A92E62747F6A300D05B41 /* RecipeElementItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeElementItem.swift; sourceTree = "<group>"; };
+		C41A92E827480B6F00D05B41 /* MachineDomainModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineDomainModule.swift; sourceTree = "<group>"; };
+		C41A92EB27480C7300D05B41 /* MachineBrowserSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineBrowserSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C41A92EE27480E5500D05B41 /* MachineBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineBrowser.swift; sourceTree = "<group>"; };
+		C41A92F12748C4F900D05B41 /* MachineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineItem.swift; sourceTree = "<group>"; };
+		C41A92F32748C53B00D05B41 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotEnoughProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughProductionApp.swift; sourceTree = "<group>"; };
 		C47C0A99270D8358009A6A4F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -98,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A92E52747F68C00D05B41 /* elements */,
+				C41A92F02748C4ED00D05B41 /* machines */,
 				C41A92D02747D37C00D05B41 /* main */,
 			);
 			path = ui;
@@ -106,6 +117,7 @@
 		C41A92D02747D37C00D05B41 /* main */ = {
 			isa = PBXGroup;
 			children = (
+				C41A92EA27480C3A00D05B41 /* machines */,
 				C41A92DA2747DCB000D05B41 /* items */,
 				C41A92D12747D38600D05B41 /* MainSwiftUIViewModel.swift */,
 			);
@@ -116,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A92D82747DC0700D05B41 /* ItemDomainModule.swift */,
+				C41A92E827480B6F00D05B41 /* MachineDomainModule.swift */,
 			);
 			path = domain;
 			sourceTree = "<group>";
@@ -140,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A92DF2747E14500D05B41 /* items */,
+				C41A92ED27480E4400D05B41 /* machines */,
 				C41A92D32747D4D500D05B41 /* MainScreen.swift */,
 			);
 			path = main;
@@ -157,6 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A92E32747EADE00D05B41 /* ModelRecipeElement.swift */,
+				C41A92F32748C53B00D05B41 /* String.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -167,6 +182,30 @@
 				C41A92E62747F6A300D05B41 /* RecipeElementItem.swift */,
 			);
 			path = elements;
+			sourceTree = "<group>";
+		};
+		C41A92EA27480C3A00D05B41 /* machines */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92EB27480C7300D05B41 /* MachineBrowserSwiftUIViewModel.swift */,
+			);
+			path = machines;
+			sourceTree = "<group>";
+		};
+		C41A92ED27480E4400D05B41 /* machines */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92EE27480E5500D05B41 /* MachineBrowser.swift */,
+			);
+			path = machines;
+			sourceTree = "<group>";
+		};
+		C41A92F02748C4ED00D05B41 /* machines */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92F12748C4F900D05B41 /* MachineItem.swift */,
+			);
+			path = machines;
 			sourceTree = "<group>";
 		};
 		C47C0A8B270D8358009A6A4F = {
@@ -368,14 +407,19 @@
 			files = (
 				C41A92E42747EADE00D05B41 /* ModelRecipeElement.swift in Sources */,
 				C41A92E12747E14F00D05B41 /* ItemBrowser.swift in Sources */,
+				C41A92F42748C53B00D05B41 /* String.swift in Sources */,
 				C41A92E72747F6A300D05B41 /* RecipeElementItem.swift in Sources */,
 				C47C0A9A270D8358009A6A4F /* ContentView.swift in Sources */,
 				C41A92D22747D38600D05B41 /* MainSwiftUIViewModel.swift in Sources */,
 				C41A92CA2747D2F700D05B41 /* DomainModule.swift in Sources */,
 				C41A92C82747D2D300D05B41 /* AppModule.swift in Sources */,
+				C41A92E927480B6F00D05B41 /* MachineDomainModule.swift in Sources */,
 				C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */,
+				C41A92EC27480C7300D05B41 /* MachineBrowserSwiftUIViewModel.swift in Sources */,
+				C41A92F22748C4F900D05B41 /* MachineItem.swift in Sources */,
 				C41A92D62747D7D600D05B41 /* DatabaseModule.swift in Sources */,
 				C41A92DC2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift in Sources */,
+				C41A92EF27480E5500D05B41 /* MachineBrowser.swift in Sources */,
 				C41A92CE2747D32C00D05B41 /* SwiftUIViewModel.swift in Sources */,
 				C41A92D42747D4D500D05B41 /* MainScreen.swift in Sources */,
 				C41A92C62747D20300D05B41 /* AppComponent.swift in Sources */,

@@ -17,6 +17,10 @@ struct MainScreen: View {
                 .tabItem {
                     Label(MR.strings().menu_item_browser.desc().localized(), systemImage: "books.vertical.fill")
                 }
+            MachineBrowser(viewModel: viewModel.createMachineBrowserViewModel())
+                .tabItem {
+                    Label(MR.strings().menu_machine_browser.desc().localized(), systemImage: "shippingbox.fill")
+                }
         }
     }
 }

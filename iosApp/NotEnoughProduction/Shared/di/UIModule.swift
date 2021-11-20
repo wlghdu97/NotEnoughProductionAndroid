@@ -13,5 +13,6 @@ struct UIModule: Cleanse.Module {
     static func configure(binder: Binder<Unscoped>) {
         binder.install(dependency: MainSwiftUIViewModel.Component.self)
         binder.install(dependency: ItemBrowserSwiftUIViewModel.Component.self)
+        binder.install(dependency: MachineBrowserSwiftUIViewModel.Component.self)
     }
 }

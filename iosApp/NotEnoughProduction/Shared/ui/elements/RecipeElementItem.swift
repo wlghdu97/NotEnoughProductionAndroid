@@ -42,13 +42,3 @@ extension ModelRecipeElement {
         }
     }
 }
-
-extension String {
-    fileprivate func unnamedIfEmpty() -> String {
-        if self.isEmpty {
-            return MR.strings().txt_unnamed.desc().localized()
-        } else {
-            return self
-        }
-    }
-}

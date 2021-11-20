@@ -5,6 +5,7 @@
 //  Created by xharpen on 2021/11/19.
 //
 //  swiftlint:disable nesting
+//  swiftlint:disable closure_parameter_position
 //
 
 import SwiftUI
@@ -13,9 +14,12 @@ import Shared
 
 final class MainSwiftUIViewModel: ObservableObject {
     private var itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>?
+    private var machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>?
 
-    init(itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>) {
+    init(itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>,
+         machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>) {
         self.itemBrowserFactory = itemBrowserFactory
+        self.machineBrowserFactory = machineBrowserFactory
     }
 
     init() { }
@@ -27,6 +31,14 @@ final class MainSwiftUIViewModel: ObservableObject {
             return ItemBrowserSwiftUIViewModel()
         }
     }
+
+    func createMachineBrowserViewModel() -> MachineBrowserSwiftUIViewModel {
+        if let viewModel = machineBrowserFactory?.build(()) {
+            return viewModel
+        } else {
+            return MachineBrowserSwiftUIViewModel()
+        }
+    }
 }
 
 extension MainSwiftUIViewModel {
@@ -36,8 +48,9 @@ extension MainSwiftUIViewModel {
         static func configure(binder: Binder<Unscoped>) { }
 
         static func configureRoot(binder bind: ReceiptBinder<MainSwiftUIViewModel>) -> BindingReceipt<MainSwiftUIViewModel> {
-            bind.to { (itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>) in
-                MainSwiftUIViewModel(itemBrowserFactory: itemBrowserFactory)
+            bind.to { (itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>,
+                       machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>) in
+                MainSwiftUIViewModel(itemBrowserFactory: itemBrowserFactory, machineBrowserFactory: machineBrowserFactory)
             }
         }
     }

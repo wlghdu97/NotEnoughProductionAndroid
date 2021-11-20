@@ -26,5 +26,10 @@ struct AppModule: Cleanse.Module {
             .to { (db: Nep) in
                 ElementRepoImpl(db: db, io: Dispatchers().default_)
             }
+        binder.bind(MachineRepo.self)
+            .sharedInScope()
+            .to { (db: Nep) in
+                MachineRepoImpl(db: db, io: Dispatchers().default_)
+            }
     }
 }
