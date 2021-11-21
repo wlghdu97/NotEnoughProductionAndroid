@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.max
 
 internal open class QueryDataPager<RowType : Any, V : Any> constructor(
     private val clientScope: CoroutineScope,
@@ -47,7 +48,7 @@ internal open class QueryDataPager<RowType : Any, V : Any> constructor(
         val previousSize = _pagingData.value.size
         // Do not empty previous list to prevent flickering of some views
         isInvalid.value = true
-        loadInitial(previousSize)
+        loadInitial(max(previousSize, config.initialLoadSize))
     }
 
     override fun queryResultsChanged() {
@@ -56,12 +57,8 @@ internal open class QueryDataPager<RowType : Any, V : Any> constructor(
 
     final override fun loadInitial(initialLoadSize: Int) {
         clientScope.launch {
-            val items = withContext(ioDispatcher) {
-                getBlock(0, initialLoadSize)
-            }
-            totalCount.value = withContext(ioDispatcher) {
-                getCount()
-            }
+            val items = getBlock(0, initialLoadSize)
+            totalCount.value = getCount()
             // This replaces previous invalid items
             _pagingData.value = PagingData(items)
         }
@@ -70,13 +67,9 @@ internal open class QueryDataPager<RowType : Any, V : Any> constructor(
     final override fun loadNext(pageSize: Int) {
         clientScope.launch {
             _pagingData.value = PagingData(
-                _pagingData.value + withContext(ioDispatcher) {
-                    getBlock(_pagingData.value.size, pageSize)
-                }
+                _pagingData.value + getBlock(_pagingData.value.size, pageSize)
             )
-            totalCount.value = withContext(ioDispatcher) {
-                getCount()
-            }
+            totalCount.value = getCount()
         }
     }
 
