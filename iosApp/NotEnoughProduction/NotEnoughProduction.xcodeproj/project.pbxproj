@@ -40,6 +40,7 @@
 		C41A9310274A522100D05B41 /* ProcessImportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A930F274A522100D05B41 /* ProcessImportSheet.swift */; };
 		C41A9312274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */; };
 		C41A9314274A53E400D05B41 /* ProcessExportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */; };
+		C4706A9C274A875F00F444B6 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706A9B274A875F00F444B6 /* SettingsScreen.swift */; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
 		C47C0A9F270D835A009A6A4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */; };
@@ -80,6 +81,7 @@
 		C41A930F274A522100D05B41 /* ProcessImportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImportSheet.swift; sourceTree = "<group>"; };
 		C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImportSwiftUIViewModel.swift; sourceTree = "<group>"; };
 		C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessExportSheet.swift; sourceTree = "<group>"; };
+		C4706A9B274A875F00F444B6 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotEnoughProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughProductionApp.swift; sourceTree = "<group>"; };
 		C47C0A9B270D835A009A6A4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				C41A92DF2747E14500D05B41 /* items */,
 				C41A92ED27480E4400D05B41 /* machines */,
 				C41A92F52748C77200D05B41 /* process */,
+				C4706A9A274A874D00F444B6 /* settings */,
 				C41A92D32747D4D500D05B41 /* MainScreen.swift */,
 			);
 			path = main;
@@ -283,6 +286,14 @@
 				C41A930D274A366B00D05B41 /* SnackBar.swift */,
 			);
 			path = util;
+			sourceTree = "<group>";
+		};
+		C4706A9A274A874D00F444B6 /* settings */ = {
+			isa = PBXGroup;
+			children = (
+				C4706A9B274A875F00F444B6 /* SettingsScreen.swift */,
+			);
+			path = settings;
 			sourceTree = "<group>";
 		};
 		C47C0A8B270D8358009A6A4F = {
@@ -488,6 +499,7 @@
 				C41A92FA2748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift in Sources */,
 				C41A93012748D10300D05B41 /* StringResolver.swift in Sources */,
 				C41A92D22747D38600D05B41 /* MainSwiftUIViewModel.swift in Sources */,
+				C4706A9C274A875F00F444B6 /* SettingsScreen.swift in Sources */,
 				C41A930A27493D1200D05B41 /* TextFieldContainer.swift in Sources */,
 				C41A9310274A522100D05B41 /* ProcessImportSheet.swift in Sources */,
 				C41A9312274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift in Sources */,

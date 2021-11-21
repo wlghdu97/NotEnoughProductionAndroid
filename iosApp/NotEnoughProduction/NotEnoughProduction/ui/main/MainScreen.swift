@@ -25,6 +25,10 @@ struct MainScreen: View {
                 .tabItem {
                     Label(MR.strings().menu_process.desc().localized(), systemImage: "flowchart.fill")
                 }
+            SettingsScreen()
+                .tabItem {
+                    Label(MR.strings().menu_settings.desc().localized(), systemImage: "gearshape.fill")
+                }
         }
     }
 }
