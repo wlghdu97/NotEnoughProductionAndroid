@@ -83,7 +83,7 @@ class ProcessRepoImpl constructor(
     }
 
     override suspend fun insertProcess(process: Process) {
-        db.processQueries.insert(roomMapper.map(process))
+        db.processQueries.insert(roomMapper.mapWithRandomId(process))
     }
 
     override suspend fun renameProcess(processId: String, name: String) = withContext(io) {
