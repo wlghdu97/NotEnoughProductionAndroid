@@ -2,7 +2,7 @@ package com.xhlab.nep.shared.util
 
 import dev.icerock.moko.resources.PluralsResource
 import dev.icerock.moko.resources.StringResource
-import dev.icerock.moko.resources.desc.Plural
+import dev.icerock.moko.resources.desc.PluralFormatted
 import dev.icerock.moko.resources.desc.Resource
 import dev.icerock.moko.resources.desc.StringDesc
 import platform.Foundation.NSString
@@ -15,7 +15,7 @@ actual class StringResolver {
     }
 
     actual fun getPluralString(res: PluralsResource, quantity: Int): String {
-        return StringDesc.Plural(res, quantity).localized()
+        return StringDesc.PluralFormatted(res, quantity, quantity).localized()
     }
 
     // this was from https://stackoverflow.com/a/64499248/13203145
