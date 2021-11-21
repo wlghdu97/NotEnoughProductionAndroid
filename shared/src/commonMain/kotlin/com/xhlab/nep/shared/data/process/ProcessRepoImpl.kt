@@ -1,5 +1,6 @@
 package com.xhlab.nep.shared.data.process
 
+import co.touchlab.stately.isolate.IsolateState
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import com.xhlab.multiplatform.paging.Pager
@@ -28,7 +29,7 @@ class ProcessRepoImpl constructor(
     private val roomMapper = SqlDelightProcessMapper(json)
 
     // TODO: replace with LruCache
-    private val cache = mutableMapOf<String, Process>()
+    private val cache = IsolateState { mutableMapOf<String, Process>() }
 
     override suspend fun getProcess(processId: String): Process? = withContext(io) {
         val process = db.processQueries.getProcess(processId).executeAsOneOrNull()
@@ -87,12 +88,14 @@ class ProcessRepoImpl constructor(
     }
 
     override suspend fun renameProcess(processId: String, name: String) = withContext(io) {
-        val process = getProcessInternal(processId)
-        if (process != null) {
-            process.name = name.trim()
-            db.processQueries.upsert(roomMapper.map(process))
-        } else {
-            throw ProcessNotFoundException()
+        cache.access {
+            val process = it.getProcessInternal(processId)
+            if (process != null) {
+                process.name = name.trim()
+                db.processQueries.upsert(roomMapper.map(process))
+            } else {
+                throw ProcessNotFoundException()
+            }
         }
     }
 
@@ -110,13 +113,15 @@ class ProcessRepoImpl constructor(
         to: Recipe?,
         element: RecipeElement
     ) {
-        val process = getProcessInternal(processId)
-        val subProcess = getProcess(fromProcessId)
-        if (process != null && subProcess != null) {
-            process.connectProcess(subProcess, to, element)
-            db.processQueries.upsert(roomMapper.map(process))
-        } else {
-            throw ProcessNotFoundException()
+        cache.access {
+            val process = it.getProcessInternal(processId)
+            val subProcess = it.getProcessInternal(fromProcessId)
+            if (process != null && subProcess != null) {
+                process.connectProcess(subProcess, to, element)
+                db.processQueries.upsert(roomMapper.map(process))
+            } else {
+                throw ProcessNotFoundException()
+            }
         }
     }
 
@@ -127,12 +132,14 @@ class ProcessRepoImpl constructor(
         element: RecipeElement,
         reversed: Boolean
     ) = withContext(io) {
-        val process = getProcessInternal(processId)
-        if (process != null) {
-            process.connectRecipe(from, to, element, reversed)
-            db.processQueries.upsert(roomMapper.map(process))
-        } else {
-            throw ProcessNotFoundException()
+        cache.access {
+            val process = it.getProcessInternal(processId)
+            if (process != null) {
+                process.connectRecipe(from, to, element, reversed)
+                db.processQueries.upsert(roomMapper.map(process))
+            } else {
+                throw ProcessNotFoundException()
+            }
         }
     }
 
@@ -143,12 +150,14 @@ class ProcessRepoImpl constructor(
         element: RecipeElement,
         reversed: Boolean
     ) = withContext(io) {
-        val process = getProcessInternal(processId)
-        if (process != null) {
-            process.disconnectRecipe(from, to, element, reversed)
-            db.processQueries.upsert(roomMapper.map(process))
-        } else {
-            throw ProcessNotFoundException()
+        cache.access {
+            val process = it.getProcessInternal(processId)
+            if (process != null) {
+                process.disconnectRecipe(from, to, element, reversed)
+                db.processQueries.upsert(roomMapper.map(process))
+            } else {
+                throw ProcessNotFoundException()
+            }
         }
     }
 
@@ -158,20 +167,30 @@ class ProcessRepoImpl constructor(
         element: RecipeElement,
         consumed: Boolean
     ) = withContext(io) {
-        val process = getProcessInternal(processId)
-        if (process != null) {
-            process.markNotConsumed(recipe, element, consumed)
-            db.processQueries.upsert(roomMapper.map(process))
-        } else {
-            throw ProcessNotFoundException()
+        cache.access {
+            val process = it.getProcessInternal(processId)
+            if (process != null) {
+                process.markNotConsumed(recipe, element, consumed)
+                db.processQueries.upsert(roomMapper.map(process))
+            } else {
+                throw ProcessNotFoundException()
+            }
         }
     }
 
-    private suspend fun getProcessInternal(
-        processId: String
-    ): Process? = withContext(io) {
-        cache.get(processId) ?: db.processQueries.getProcess(processId, processCacheMapper)
-            .executeAsOneOrNull()
+    private inline fun MutableMap<String, Process>.getProcessInternal(processId: String): Process? {
+        val cached = this[processId]
+        return if (cached == null) {
+            val process = db.processQueries
+                .getProcess(processId, processCacheMapper)
+                .executeAsOneOrNull()
+            if (process != null) {
+                this[processId] = process
+            }
+            process
+        } else {
+            cached
+        }
     }
 
     private fun ProcessQueries.upsert(process: ProcessEntity) = with(process) {
@@ -188,19 +207,21 @@ class ProcessRepoImpl constructor(
                                        amount: Int,
                                        node_count: Int,
                                        json: String ->
-        val process = mapper.map(
-            ProcessEntity(
-                process_id = process_id,
-                name = name,
-                unlocalized_name = unlocalized_name,
-                localized_name = localized_name,
-                amount = amount,
-                node_count = node_count,
-                json = json
+        cache.access {
+            val process = mapper.map(
+                ProcessEntity(
+                    process_id = process_id,
+                    name = name,
+                    unlocalized_name = unlocalized_name,
+                    localized_name = localized_name,
+                    amount = amount,
+                    node_count = node_count,
+                    json = json
+                )
             )
-        )
-        cache.put(process_id, process)
-        process
+            it[process_id] = process
+            process
+        }
     }
 
     private val processSummaryMapper = { process_id: String,
