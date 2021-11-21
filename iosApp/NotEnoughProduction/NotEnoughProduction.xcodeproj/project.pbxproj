@@ -27,8 +27,20 @@
 		C41A92EF27480E5500D05B41 /* MachineBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92EE27480E5500D05B41 /* MachineBrowser.swift */; };
 		C41A92F22748C4F900D05B41 /* MachineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92F12748C4F900D05B41 /* MachineItem.swift */; };
 		C41A92F42748C53B00D05B41 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92F32748C53B00D05B41 /* String.swift */; };
+		C41A92F72748C78900D05B41 /* ProcessList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92F62748C78900D05B41 /* ProcessList.swift */; };
+		C41A92FA2748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92F92748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift */; };
+		C41A92FC2748CDE200D05B41 /* ProcessDomainModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92FB2748CDE100D05B41 /* ProcessDomainModule.swift */; };
+		C41A92FF2748D07B00D05B41 /* ProcessSummaryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A92FE2748D07B00D05B41 /* ProcessSummaryItem.swift */; };
+		C41A93012748D10300D05B41 /* StringResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A93002748D10300D05B41 /* StringResolver.swift */; };
+		C41A9303274930DD00D05B41 /* ProcessIdName.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9302274930DD00D05B41 /* ProcessIdName.swift */; };
+		C41A93052749357300D05B41 /* ProcessRenameSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A93042749357300D05B41 /* ProcessRenameSheet.swift */; };
+		C41A93072749358E00D05B41 /* ProcessRenameSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A93062749358E00D05B41 /* ProcessRenameSwiftUIViewModel.swift */; };
+		C41A930A27493D1200D05B41 /* TextFieldContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A930927493D1200D05B41 /* TextFieldContainer.swift */; };
+		C41A930E274A366B00D05B41 /* SnackBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A930D274A366B00D05B41 /* SnackBar.swift */; };
+		C41A9310274A522100D05B41 /* ProcessImportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A930F274A522100D05B41 /* ProcessImportSheet.swift */; };
+		C41A9312274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */; };
+		C41A9314274A53E400D05B41 /* ProcessExportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
-		C47C0A9A270D8358009A6A4F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A99270D8358009A6A4F /* ContentView.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
 		C47C0A9F270D835A009A6A4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */; };
 		C47C0AA6270D9E60009A6A4F /* Shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C47C0AA5270D9E60009A6A4F /* Shared.xcframework */; };
@@ -55,9 +67,21 @@
 		C41A92EE27480E5500D05B41 /* MachineBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineBrowser.swift; sourceTree = "<group>"; };
 		C41A92F12748C4F900D05B41 /* MachineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineItem.swift; sourceTree = "<group>"; };
 		C41A92F32748C53B00D05B41 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		C41A92F62748C78900D05B41 /* ProcessList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessList.swift; sourceTree = "<group>"; };
+		C41A92F92748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessListSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C41A92FB2748CDE100D05B41 /* ProcessDomainModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessDomainModule.swift; sourceTree = "<group>"; };
+		C41A92FE2748D07B00D05B41 /* ProcessSummaryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessSummaryItem.swift; sourceTree = "<group>"; };
+		C41A93002748D10300D05B41 /* StringResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringResolver.swift; sourceTree = "<group>"; };
+		C41A9302274930DD00D05B41 /* ProcessIdName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessIdName.swift; sourceTree = "<group>"; };
+		C41A93042749357300D05B41 /* ProcessRenameSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRenameSheet.swift; sourceTree = "<group>"; };
+		C41A93062749358E00D05B41 /* ProcessRenameSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessRenameSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C41A930927493D1200D05B41 /* TextFieldContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldContainer.swift; sourceTree = "<group>"; };
+		C41A930D274A366B00D05B41 /* SnackBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackBar.swift; sourceTree = "<group>"; };
+		C41A930F274A522100D05B41 /* ProcessImportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImportSheet.swift; sourceTree = "<group>"; };
+		C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImportSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessExportSheet.swift; sourceTree = "<group>"; };
 		C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotEnoughProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughProductionApp.swift; sourceTree = "<group>"; };
-		C47C0A99270D8358009A6A4F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		C47C0A9B270D835A009A6A4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C47C0AA5270D9E60009A6A4F /* Shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Shared.xcframework; path = ../../shared/swiftpackage/Shared.xcframework; sourceTree = "<group>"; };
@@ -109,7 +133,9 @@
 			children = (
 				C41A92E52747F68C00D05B41 /* elements */,
 				C41A92F02748C4ED00D05B41 /* machines */,
+				C41A92FD2748D05F00D05B41 /* process */,
 				C41A92D02747D37C00D05B41 /* main */,
+				C41A930C274A365900D05B41 /* util */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -119,6 +145,7 @@
 			children = (
 				C41A92EA27480C3A00D05B41 /* machines */,
 				C41A92DA2747DCB000D05B41 /* items */,
+				C41A92F82748C79300D05B41 /* process */,
 				C41A92D12747D38600D05B41 /* MainSwiftUIViewModel.swift */,
 			);
 			path = main;
@@ -129,6 +156,7 @@
 			children = (
 				C41A92D82747DC0700D05B41 /* ItemDomainModule.swift */,
 				C41A92E827480B6F00D05B41 /* MachineDomainModule.swift */,
+				C41A92FB2748CDE100D05B41 /* ProcessDomainModule.swift */,
 			);
 			path = domain;
 			sourceTree = "<group>";
@@ -145,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A92DE2747E13E00D05B41 /* main */,
+				C41A930827493D0600D05B41 /* util */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -154,6 +183,7 @@
 			children = (
 				C41A92DF2747E14500D05B41 /* items */,
 				C41A92ED27480E4400D05B41 /* machines */,
+				C41A92F52748C77200D05B41 /* process */,
 				C41A92D32747D4D500D05B41 /* MainScreen.swift */,
 			);
 			path = main;
@@ -172,6 +202,8 @@
 			children = (
 				C41A92E32747EADE00D05B41 /* ModelRecipeElement.swift */,
 				C41A92F32748C53B00D05B41 /* String.swift */,
+				C41A93002748D10300D05B41 /* StringResolver.swift */,
+				C41A9302274930DD00D05B41 /* ProcessIdName.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -208,6 +240,51 @@
 			path = machines;
 			sourceTree = "<group>";
 		};
+		C41A92F52748C77200D05B41 /* process */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92F62748C78900D05B41 /* ProcessList.swift */,
+				C41A93042749357300D05B41 /* ProcessRenameSheet.swift */,
+				C41A930F274A522100D05B41 /* ProcessImportSheet.swift */,
+				C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */,
+			);
+			path = process;
+			sourceTree = "<group>";
+		};
+		C41A92F82748C79300D05B41 /* process */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92F92748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift */,
+			);
+			path = process;
+			sourceTree = "<group>";
+		};
+		C41A92FD2748D05F00D05B41 /* process */ = {
+			isa = PBXGroup;
+			children = (
+				C41A92FE2748D07B00D05B41 /* ProcessSummaryItem.swift */,
+				C41A93062749358E00D05B41 /* ProcessRenameSwiftUIViewModel.swift */,
+				C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */,
+			);
+			path = process;
+			sourceTree = "<group>";
+		};
+		C41A930827493D0600D05B41 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				C41A930927493D1200D05B41 /* TextFieldContainer.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
+		C41A930C274A365900D05B41 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				C41A930D274A366B00D05B41 /* SnackBar.swift */,
+			);
+			path = util;
+			sourceTree = "<group>";
+		};
 		C47C0A8B270D8358009A6A4F = {
 			isa = PBXGroup;
 			children = (
@@ -233,7 +310,6 @@
 			children = (
 				C49D93EB270EF9F40057BB63 /* Info.plist */,
 				C41A92DD2747E13300D05B41 /* ui */,
-				C47C0A99270D8358009A6A4F /* ContentView.swift */,
 				C47C0A9B270D835A009A6A4F /* Assets.xcassets */,
 				C47C0A9D270D835A009A6A4F /* Preview Content */,
 			);
@@ -409,22 +485,34 @@
 				C41A92E12747E14F00D05B41 /* ItemBrowser.swift in Sources */,
 				C41A92F42748C53B00D05B41 /* String.swift in Sources */,
 				C41A92E72747F6A300D05B41 /* RecipeElementItem.swift in Sources */,
-				C47C0A9A270D8358009A6A4F /* ContentView.swift in Sources */,
+				C41A92FA2748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift in Sources */,
+				C41A93012748D10300D05B41 /* StringResolver.swift in Sources */,
 				C41A92D22747D38600D05B41 /* MainSwiftUIViewModel.swift in Sources */,
+				C41A930A27493D1200D05B41 /* TextFieldContainer.swift in Sources */,
+				C41A9310274A522100D05B41 /* ProcessImportSheet.swift in Sources */,
+				C41A9312274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift in Sources */,
 				C41A92CA2747D2F700D05B41 /* DomainModule.swift in Sources */,
+				C41A93072749358E00D05B41 /* ProcessRenameSwiftUIViewModel.swift in Sources */,
 				C41A92C82747D2D300D05B41 /* AppModule.swift in Sources */,
+				C41A9314274A53E400D05B41 /* ProcessExportSheet.swift in Sources */,
 				C41A92E927480B6F00D05B41 /* MachineDomainModule.swift in Sources */,
+				C41A92FF2748D07B00D05B41 /* ProcessSummaryItem.swift in Sources */,
+				C41A930E274A366B00D05B41 /* SnackBar.swift in Sources */,
 				C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */,
 				C41A92EC27480C7300D05B41 /* MachineBrowserSwiftUIViewModel.swift in Sources */,
 				C41A92F22748C4F900D05B41 /* MachineItem.swift in Sources */,
 				C41A92D62747D7D600D05B41 /* DatabaseModule.swift in Sources */,
+				C41A9303274930DD00D05B41 /* ProcessIdName.swift in Sources */,
 				C41A92DC2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift in Sources */,
 				C41A92EF27480E5500D05B41 /* MachineBrowser.swift in Sources */,
 				C41A92CE2747D32C00D05B41 /* SwiftUIViewModel.swift in Sources */,
 				C41A92D42747D4D500D05B41 /* MainScreen.swift in Sources */,
+				C41A92FC2748CDE200D05B41 /* ProcessDomainModule.swift in Sources */,
+				C41A92F72748C78900D05B41 /* ProcessList.swift in Sources */,
 				C41A92C62747D20300D05B41 /* AppComponent.swift in Sources */,
 				C41A92D92747DC0800D05B41 /* ItemDomainModule.swift in Sources */,
 				C41A92CC2747D31100D05B41 /* UIModule.swift in Sources */,
+				C41A93052749357300D05B41 /* ProcessRenameSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

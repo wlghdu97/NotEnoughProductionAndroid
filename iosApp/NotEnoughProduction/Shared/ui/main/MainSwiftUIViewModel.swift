@@ -15,11 +15,14 @@ import Shared
 final class MainSwiftUIViewModel: ObservableObject {
     private var itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>?
     private var machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>?
+    private var processListFactory: ComponentFactory<ProcessListSwiftUIViewModel.Component>?
 
     init(itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>,
-         machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>) {
+         machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>,
+         processListFactory: ComponentFactory<ProcessListSwiftUIViewModel.Component>) {
         self.itemBrowserFactory = itemBrowserFactory
         self.machineBrowserFactory = machineBrowserFactory
+        self.processListFactory = processListFactory
     }
 
     init() { }
@@ -39,6 +42,14 @@ final class MainSwiftUIViewModel: ObservableObject {
             return MachineBrowserSwiftUIViewModel()
         }
     }
+
+    func createProcessListViewModel() -> ProcessListSwiftUIViewModel {
+        if let viewModel = processListFactory?.build(()) {
+            return viewModel
+        } else {
+            return ProcessListSwiftUIViewModel()
+        }
+    }
 }
 
 extension MainSwiftUIViewModel {
@@ -49,8 +60,11 @@ extension MainSwiftUIViewModel {
 
         static func configureRoot(binder bind: ReceiptBinder<MainSwiftUIViewModel>) -> BindingReceipt<MainSwiftUIViewModel> {
             bind.to { (itemBrowserFactory: ComponentFactory<ItemBrowserSwiftUIViewModel.Component>,
-                       machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>) in
-                MainSwiftUIViewModel(itemBrowserFactory: itemBrowserFactory, machineBrowserFactory: machineBrowserFactory)
+                       machineBrowserFactory: ComponentFactory<MachineBrowserSwiftUIViewModel.Component>,
+                       processListFactory: ComponentFactory<ProcessListSwiftUIViewModel.Component>) in
+                MainSwiftUIViewModel(itemBrowserFactory: itemBrowserFactory,
+                                     machineBrowserFactory: machineBrowserFactory,
+                                     processListFactory: processListFactory)
             }
         }
     }

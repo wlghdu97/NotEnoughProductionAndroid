@@ -21,6 +21,10 @@ struct MainScreen: View {
                 .tabItem {
                     Label(MR.strings().menu_machine_browser.desc().localized(), systemImage: "shippingbox.fill")
                 }
+            ProcessList(viewModel: viewModel.createProcessListViewModel())
+                .tabItem {
+                    Label(MR.strings().menu_process.desc().localized(), systemImage: "flowchart.fill")
+                }
         }
     }
 }

@@ -17,6 +17,10 @@ struct AppModule: Cleanse.Module {
             .sharedInScope()
             .to(factory: StringResolver.init)
 
+        binder.bind(Kotlinx_serialization_jsonJson.self)
+            .sharedInScope()
+            .to(value: JsonKt.defaultJson)
+
         binder.bind(GeneralPreference.self)
             .sharedInScope()
             .to(factory: GeneralUserDefaultsPreference.init)
@@ -30,6 +34,11 @@ struct AppModule: Cleanse.Module {
             .sharedInScope()
             .to { (db: Nep) in
                 MachineRepoImpl(db: db, io: Dispatchers().default_)
+            }
+        binder.bind(ProcessRepo.self)
+            .sharedInScope()
+            .to { (db: NepProcess, json: Kotlinx_serialization_jsonJson) in
+                ProcessRepoImpl(db: db, io: Dispatchers().default_, json: json)
             }
     }
 }

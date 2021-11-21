@@ -133,6 +133,7 @@
     <string name="txt_import_successful">Import process successfully.</string>
     <string name="txt_empty_list">list is empty.</string>
     <string name="txt_empty_stack">Nothing to show.</string>
+    <string name="txt_copy_from_clipboard">Copy from clipboard</string>
 
     <string name="error_open_file_failed">Failed to open file.</string>
     <string name="error_connect_recipe_failed">Failed to connect recipe.</string>

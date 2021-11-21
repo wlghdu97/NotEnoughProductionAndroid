@@ -25,8 +25,8 @@ class ProcessListViewModel constructor(
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    private val _renameProcess = EventFlow<Pair<String, String>>()
-    val renameProcess: Flow<Pair<String, String>>
+    private val _renameProcess = EventFlow<ProcessIdName>()
+    val renameProcess: Flow<ProcessIdName>
         get() = _renameProcess.flow
 
     private val _showExportStringDialog = EventFlow<String>()
@@ -37,8 +37,8 @@ class ProcessListViewModel constructor(
     val showExportFailedMessage: Flow<Unit>
         get() = _showExportFailedMessage.flow
 
-    private val _deleteProcess = EventFlow<Pair<String, String>>()
-    val deleteProcess: Flow<Pair<String, String>>
+    private val _deleteProcess = EventFlow<ProcessIdName>()
+    val deleteProcess: Flow<ProcessIdName>
         get() = _deleteProcess.flow
 
     // ProcessId
@@ -63,7 +63,7 @@ class ProcessListViewModel constructor(
 
     override fun onRename(id: String, prevName: String) {
         scope.launch {
-            _renameProcess.emit(id to prevName)
+            _renameProcess.emit(ProcessIdName(id, prevName))
         }
     }
 
@@ -81,7 +81,7 @@ class ProcessListViewModel constructor(
 
     override fun onDelete(id: String, name: String) {
         scope.launch {
-            _deleteProcess.emit(id to name)
+            _deleteProcess.emit(ProcessIdName(id, name))
         }
     }
 
@@ -90,4 +90,6 @@ class ProcessListViewModel constructor(
             processRepo.deleteProcess(processId)
         }
     }
+
+    data class ProcessIdName(val id: String, val name: String)
 }
