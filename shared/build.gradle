@@ -189,12 +189,10 @@ sqldelight {
     Nep {
         packageName = "com.xhlab.nep.shared.db"
         sourceFolders = ["db/nep"]
-        linkSqlite = false
     }
     NepProcess {
         packageName = "com.xhlab.nep.shared.db"
         sourceFolders = ["db/process"]
-        linkSqlite = false
     }
 }
 
