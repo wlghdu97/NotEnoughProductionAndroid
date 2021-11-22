@@ -41,11 +41,26 @@
 		C41A9312274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */; };
 		C41A9314274A53E400D05B41 /* ProcessExportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */; };
 		C4706A9C274A875F00F444B6 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706A9B274A875F00F444B6 /* SettingsScreen.swift */; };
+		C4706AA6274B2B0500F444B6 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4706AA4274B21A600F444B6 /* shared.xcframework */; };
+		C4706AA7274B2B0500F444B6 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C4706AA4274B21A600F444B6 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
 		C47C0A9F270D835A009A6A4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */; };
-		C47C0AA6270D9E60009A6A4F /* Shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C47C0AA5270D9E60009A6A4F /* Shared.xcframework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C4706AA8274B2B0500F444B6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C4706AA7274B2B0500F444B6 /* shared.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0C4607C414D7C1BB153B0525 /* Pods-NotEnoughProduction.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotEnoughProduction.release.xcconfig"; path = "Target Support Files/Pods-NotEnoughProduction/Pods-NotEnoughProduction.release.xcconfig"; sourceTree = "<group>"; };
@@ -82,11 +97,11 @@
 		C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImportSwiftUIViewModel.swift; sourceTree = "<group>"; };
 		C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessExportSheet.swift; sourceTree = "<group>"; };
 		C4706A9B274A875F00F444B6 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
+		C4706AA4274B21A600F444B6 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shared.xcframework; path = ../../shared/build/XCFrameworks/debug/shared.xcframework; sourceTree = "<group>"; };
 		C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotEnoughProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughProductionApp.swift; sourceTree = "<group>"; };
 		C47C0A9B270D835A009A6A4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		C47C0AA5270D9E60009A6A4F /* Shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Shared.xcframework; path = ../../shared/swiftpackage/Shared.xcframework; sourceTree = "<group>"; };
 		C49D93EB270EF9F40057BB63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C6FC1DA07691A09C62C2FCC1 /* Pods-NotEnoughProduction.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotEnoughProduction.debug.xcconfig"; path = "Target Support Files/Pods-NotEnoughProduction/Pods-NotEnoughProduction.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,8 +112,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41A92C32747D1EF00D05B41 /* Cleanse in Frameworks */,
-				C47C0AA6270D9E60009A6A4F /* Shared.xcframework in Frameworks */,
 				624536A9901A42308B982C81 /* Pods_NotEnoughProduction.framework in Frameworks */,
+				C4706AA6274B2B0500F444B6 /* shared.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,7 +314,7 @@
 		C47C0A8B270D8358009A6A4F = {
 			isa = PBXGroup;
 			children = (
-				C47C0AA5270D9E60009A6A4F /* Shared.xcframework */,
+				C4706AA4274B21A600F444B6 /* shared.xcframework */,
 				C41A92BD2747D18700D05B41 /* Shared */,
 				C47C0A96270D8358009A6A4F /* NotEnoughProduction */,
 				C47C0A95270D8358009A6A4F /* Products */,
@@ -361,10 +376,11 @@
 			buildPhases = (
 				0A7F0474FE11FF558BC113B4 /* [CP] Check Pods Manifest.lock */,
 				C47C0A90270D8358009A6A4F /* Sources */,
+				C4706AAA274B99F400F444B6 /* Assemble Shared Framework */,
 				C47C0A91270D8358009A6A4F /* Frameworks */,
-				C49D93ED270EFA200057BB63 /* Copy Resources */,
 				C47C0A92270D8358009A6A4F /* Resources */,
 				C47C0AAC270DA508009A6A4F /* Lint */,
+				C4706AA8274B2B0500F444B6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -449,6 +465,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C4706AAA274B99F400F444B6 /* Assemble Shared Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Assemble Shared Framework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif [ \"${CONFIGURATION}\" = \"Release\" ]; then\n    \"$SRCROOT/../../gradlew\" -p \"$SRCROOT/../../\" :shared:assembleSharedReleaseXCFramework;\nfi\n    \"$SRCROOT/../../gradlew\" -p \"$SRCROOT/../../\" :shared:assembleSharedDebugXCFramework;\n";
+		};
 		C47C0AAC270DA508009A6A4F /* Lint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -466,24 +500,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >\"${PODS_ROOT}/SwiftLint/swiftlint\"; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
-		};
-		C49D93ED270EFA200057BB63 /* Copy Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Resources";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"$SRCROOT/../../gradlew\" -p \"$SRCROOT/../../\" :shared:copyFrameworkResourcesToApp \\\n    -Pmoko.resources.PLATFORM_NAME=$PLATFORM_NAME \\\n    -Pmoko.resources.CONFIGURATION=$CONFIGURATION \\\n    -Pmoko.resources.BUILT_PRODUCTS_DIR=$BUILT_PRODUCTS_DIR \\\n    -Pmoko.resources.CONTENTS_FOLDER_PATH=$CONTENTS_FOLDER_PATH\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -658,7 +674,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NotEnoughProduction/Preview Content\"";
 				DEVELOPMENT_TEAM = 888A6PYX4T;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../shared/swiftpackage";
+				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../shared/build/XCFrameworks/debug";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotEnoughProduction/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -694,7 +710,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"NotEnoughProduction/Preview Content\"";
 				DEVELOPMENT_TEAM = 888A6PYX4T;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../shared/swiftpackage";
+				FRAMEWORK_SEARCH_PATHS = "${SRCROOT}/../../shared/build/XCFrameworks/release";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotEnoughProduction/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

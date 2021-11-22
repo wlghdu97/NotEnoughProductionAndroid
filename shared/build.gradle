@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
+
 plugins {
     id "org.jetbrains.kotlin.multiplatform"
     id "kotlin-kapt"
@@ -5,7 +7,6 @@ plugins {
     id "com.android.library"
     id "com.squareup.sqldelight"
     id "dev.icerock.mobile.multiplatform-resources"
-    id "com.chromaticnoise.multiplatform-swiftpackage" version "2.0.3"
     id "io.gitlab.arturbosch.detekt"
 }
 
@@ -27,23 +28,15 @@ android {
 }
 
 kotlin {
+    def xcf = new XCFrameworkConfig(project)
+
     android()
 
-    // HMPP issue by https://youtrack.jetbrains.com/issue/KT-40975
-    def onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
-    if (onPhone) {
-        iosArm64("ios") {
-            binaries.framework {
-                baseName = "Shared"
-                isStatic = true
-            }
-        }
-    } else {
-        iosX64("ios") {
-            binaries.framework {
-                baseName = "Shared"
-                isStatic = true
-            }
+    ios {
+        binaries.framework {
+            baseName = "Shared"
+            linkerOpts += "-lsqlite3"
+            xcf.add(it)
         }
     }
 
@@ -208,12 +201,4 @@ sqldelight {
 multiplatformResources {
     multiplatformResourcesPackage = "com.xhlab.nep"
     disableStaticFrameworkWarning = true
-}
-
-multiplatformSwiftPackage {
-    swiftToolsVersion("5.3")
-    buildConfiguration { debug() }
-    targetPlatforms {
-        iOS { v("15") }
-    }
 }
