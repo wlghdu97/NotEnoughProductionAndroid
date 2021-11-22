@@ -1,7 +1,4 @@
-CREATE VIRTUAL TABLE element_fts USING FTS4(
-    localized_name TEXT NOT NULL,
-    content = element
-);
+CREATE VIRTUAL TABLE element_fts USING fts4(content="element", localized_name TEXT NOT NULL);
 
 CREATE TRIGGER room_fts_content_sync_element_fts_BEFORE_UPDATE
 BEFORE UPDATE ON element
