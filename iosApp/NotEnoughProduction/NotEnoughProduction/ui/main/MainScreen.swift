@@ -10,8 +10,10 @@ import Introspect
 import Shared
 
 struct MainScreen: View {
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     @StateObject var viewModel: MainSwiftUIViewModel
     @State private var selection: Int? = 0
+    @State private var firstLoad = true
 
     var body: some View {
         let nav = NavigationView {
@@ -31,24 +33,25 @@ struct MainScreen: View {
             }
             .navigationTitle(MR.strings().app_name.desc().localized())
             .navigationBarTitleDisplayMode(.inline)
-            if isPad {
+            if widthRegular {
                 list.listStyle(.sidebar)
             } else {
                 list.listStyle(.automatic)
             }
-            if isPad {
+            if widthRegular {
                 EmptyView()
             }
-            if isPad {
+            if widthRegular {
                 EmptyView()
             }
         }
-        if isPad {
+        if widthRegular {
             nav.navigationViewStyle(.columns)
                 .introspectSplitViewController { svc in
                     // this will show sidebar at startup
-                    if isPad {
+                    if widthRegular && firstLoad {
                         svc.show(.primary)
+                        firstLoad = false
                     }
                 }
         } else {
@@ -58,8 +61,8 @@ struct MainScreen: View {
 }
 
 extension MainScreen {
-    fileprivate var isPad: Bool {
-        UIDevice.current.userInterfaceIdiom == .pad
+    fileprivate var widthRegular: Bool {
+        horizontalSizeClass == .regular
     }
 }
 
