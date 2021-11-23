@@ -377,8 +377,8 @@
 			buildConfigurationList = C47C0AA2270D835A009A6A4F /* Build configuration list for PBXNativeTarget "NotEnoughProduction" */;
 			buildPhases = (
 				0A7F0474FE11FF558BC113B4 /* [CP] Check Pods Manifest.lock */,
-				C47C0A90270D8358009A6A4F /* Sources */,
 				C4706AAA274B99F400F444B6 /* Assemble Shared Framework */,
+				C47C0A90270D8358009A6A4F /* Sources */,
 				C47C0A91270D8358009A6A4F /* Frameworks */,
 				C47C0A92270D8358009A6A4F /* Resources */,
 				C47C0AAC270DA508009A6A4F /* Lint */,
@@ -471,7 +471,7 @@
 		};
 		C4706AAA274B99F400F444B6 /* Assemble Shared Framework */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
