@@ -6,30 +6,60 @@
 //
 
 import SwiftUI
+import Introspect
 import Shared
 
 struct MainScreen: View {
     @StateObject var viewModel: MainSwiftUIViewModel
+    @State private var selection: Int? = 0
 
     var body: some View {
-        TabView {
-            ItemBrowser(viewModel: viewModel.createItemBrowserViewModel())
-                .tabItem {
+        let nav = NavigationView {
+            let list = List {
+                NavigationLink(destination: ItemBrowser(viewModel: viewModel.createItemBrowserViewModel()), tag: 0, selection: $selection) {
                     Label(MR.strings().menu_item_browser.desc().localized(), systemImage: "books.vertical.fill")
                 }
-            MachineBrowser(viewModel: viewModel.createMachineBrowserViewModel())
-                .tabItem {
+                NavigationLink(destination: MachineBrowser(viewModel: viewModel.createMachineBrowserViewModel()), tag: 1, selection: $selection) {
                     Label(MR.strings().menu_machine_browser.desc().localized(), systemImage: "shippingbox.fill")
                 }
-            ProcessList(viewModel: viewModel.createProcessListViewModel())
-                .tabItem {
+                NavigationLink(destination: ProcessList(viewModel: viewModel.createProcessListViewModel()), tag: 2, selection: $selection) {
                     Label(MR.strings().menu_process.desc().localized(), systemImage: "flowchart.fill")
                 }
-            SettingsScreen()
-                .tabItem {
+                NavigationLink(destination: SettingsScreen(), tag: 3, selection: $selection) {
                     Label(MR.strings().menu_settings.desc().localized(), systemImage: "gearshape.fill")
                 }
+            }
+            .navigationTitle(MR.strings().app_name.desc().localized())
+            .navigationBarTitleDisplayMode(.inline)
+            if isPad {
+                list.listStyle(.sidebar)
+            } else {
+                list.listStyle(.automatic)
+            }
+            if isPad {
+                EmptyView()
+            }
+            if isPad {
+                EmptyView()
+            }
         }
+        if isPad {
+            nav.navigationViewStyle(.columns)
+                .introspectSplitViewController { svc in
+                    // this will show sidebar at startup
+                    if isPad {
+                        svc.show(.primary)
+                    }
+                }
+        } else {
+            nav.navigationViewStyle(.stack)
+        }
+    }
+}
+
+extension MainScreen {
+    fileprivate var isPad: Bool {
+        UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 

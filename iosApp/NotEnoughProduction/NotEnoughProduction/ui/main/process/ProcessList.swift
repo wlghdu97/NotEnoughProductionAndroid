@@ -15,47 +15,45 @@ struct ProcessList: View {
     private let stringResolver = StringResolver()
 
     var body: some View {
-        NavigationView {
-            List { [items = viewModel.processList] in
-                ForEach(items, id: \.processId) { process in
-                    ProcessSummaryItem(process: process, processListener: viewModel)
-                        .equatable()
-                        .swipeActions {
-                            Button {
-                                viewModel.onDelete(id: process.processId, name: process.name)
-                            } label: {
-                                Text(MR.strings().btn_delete.desc().localized())
-                            }
-                            .tint(.red)
-                        }
-                        .onAppear {
-                            if items.last == process {
-                                viewModel.loadMoreProcesses()
-                            }
-                        }
-                }
-            }
-            .animation(.default, value: viewModel.processList)
-            .listStyle(.grouped)
-            .navigationTitle(MR.strings().app_name.desc().localized())
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Menu {
+        List { [items = viewModel.processList] in
+            ForEach(items, id: \.processId) { process in
+                ProcessSummaryItem(process: process, processListener: viewModel)
+                    .equatable()
+                    .swipeActions {
                         Button {
-                            showProcessCreationDialog = true
+                            viewModel.onDelete(id: process.processId, name: process.name)
                         } label: {
-                            Text(MR.strings().menu_create_new.desc().localized())
+                            Text(MR.strings().btn_delete.desc().localized())
                         }
-                        .disabled(true)
-                        Button {
-                            showProcessImportDialog = true
-                        } label: {
-                            Text(MR.strings().menu_import_from_string.desc().localized())
-                        }
-                    } label: {
-                        Image(systemName: "plus")
+                        .tint(.red)
                     }
+                    .onAppear {
+                        if items.last == process {
+                            viewModel.loadMoreProcesses()
+                        }
+                    }
+            }
+        }
+        .animation(.default, value: viewModel.processList)
+        .listStyle(.grouped)
+        .navigationTitle(MR.strings().menu_process.desc().localized())
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Button {
+                        showProcessCreationDialog = true
+                    } label: {
+                        Text(MR.strings().menu_create_new.desc().localized())
+                    }
+                    .disabled(true)
+                    Button {
+                        showProcessImportDialog = true
+                    } label: {
+                        Text(MR.strings().menu_import_from_string.desc().localized())
+                    }
+                } label: {
+                    Image(systemName: "plus")
                 }
             }
         }

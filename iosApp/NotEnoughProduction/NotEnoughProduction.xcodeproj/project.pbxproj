@@ -43,6 +43,7 @@
 		C4706A9C274A875F00F444B6 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706A9B274A875F00F444B6 /* SettingsScreen.swift */; };
 		C4706AA6274B2B0500F444B6 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4706AA4274B21A600F444B6 /* shared.xcframework */; };
 		C4706AA7274B2B0500F444B6 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C4706AA4274B21A600F444B6 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C4706AB0274C888600F444B6 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = C4706AAF274C888600F444B6 /* Introspect */; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
 		C47C0A9F270D835A009A6A4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */; };
@@ -112,6 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C41A92C32747D1EF00D05B41 /* Cleanse in Frameworks */,
+				C4706AB0274C888600F444B6 /* Introspect in Frameworks */,
 				624536A9901A42308B982C81 /* Pods_NotEnoughProduction.framework in Frameworks */,
 				C4706AA6274B2B0500F444B6 /* shared.xcframework in Frameworks */,
 			);
@@ -389,6 +391,7 @@
 			name = NotEnoughProduction;
 			packageProductDependencies = (
 				C41A92C22747D1EF00D05B41 /* Cleanse */,
+				C4706AAF274C888600F444B6 /* Introspect */,
 			);
 			productName = NotEnoughProduction;
 			productReference = C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */;
@@ -420,6 +423,7 @@
 			mainGroup = C47C0A8B270D8358009A6A4F;
 			packageReferences = (
 				C41A92C12747D1EF00D05B41 /* XCRemoteSwiftPackageReference "Cleanse" */,
+				C4706AAE274C888600F444B6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 			);
 			productRefGroup = C47C0A95270D8358009A6A4F /* Products */;
 			projectDirPath = "";
@@ -769,6 +773,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		C4706AAE274C888600F444B6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -776,6 +788,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C41A92C12747D1EF00D05B41 /* XCRemoteSwiftPackageReference "Cleanse" */;
 			productName = Cleanse;
+		};
+		C4706AAF274C888600F444B6 /* Introspect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4706AAE274C888600F444B6 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			productName = Introspect;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

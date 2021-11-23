@@ -10,14 +10,13 @@ import Shared
 
 struct ItemBrowser: View {
     @StateObject var viewModel: ItemBrowserSwiftUIViewModel
-    @State private var searchTerm: String = ""
+    @State private var searchTerm = ""
 
     var body: some View {
-        NavigationView {
-            Group {
-                if viewModel.isDBLoaded {
-                    List { [items = viewModel.itemList] in
-                        ForEach(items, id: \.id) { item in
+        Group {
+            if viewModel.isDBLoaded {
+                List { [items = viewModel.itemList] in
+                    ForEach(items, id: \.id) { item in
                             RecipeElementItem(element: item)
                                 .equatable()
                                 .onAppear {
@@ -27,15 +26,15 @@ struct ItemBrowser: View {
                                 }
                         }
                     }
-                    .listStyle(.grouped)
-                } else {
-                    Text(MR.strings().txt_db_not_loaded.desc().localized())
                 }
+                .listStyle(.grouped)
+            } else {
+                Text(MR.strings().txt_db_not_loaded.desc().localized())
             }
-            .animation(.default, value: viewModel.isDBLoaded)
-            .navigationTitle(MR.strings().app_name.desc().localized())
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .animation(.default, value: viewModel.isDBLoaded)
+        .navigationTitle(MR.strings().menu_item_browser.desc().localized())
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $searchTerm)
         .onChange(of: searchTerm) { term in
             viewModel.search(term)

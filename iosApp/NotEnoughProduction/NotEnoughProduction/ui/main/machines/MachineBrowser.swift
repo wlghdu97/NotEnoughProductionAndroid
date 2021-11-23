@@ -12,29 +12,27 @@ struct MachineBrowser: View {
     @StateObject var viewModel: MachineBrowserSwiftUIViewModel
 
     var body: some View {
-        NavigationView {
-            Group {
-                if viewModel.isDBLoaded {
-                    List { [items = viewModel.machineList] in
-                        ForEach(items, id: \.id) { machine in
-                            MachineItem(machine: machine)
-                                .equatable()
-                                .onAppear {
-                                    if items.last == machine {
-                                        viewModel.loadMoreMachines()
-                                    }
+        Group {
+            if viewModel.isDBLoaded {
+                List { [items = viewModel.machineList] in
+                    ForEach(items, id: \.id) { machine in
+                        MachineItem(machine: machine)
+                            .equatable()
+                            .onAppear {
+                                if items.last == machine {
+                                    viewModel.loadMoreMachines()
                                 }
-                        }
+                            }
                     }
-                    .listStyle(.grouped)
-                } else {
-                    Text(MR.strings().txt_db_not_loaded.desc().localized())
                 }
+                .listStyle(.grouped)
+            } else {
+                Text(MR.strings().txt_db_not_loaded.desc().localized())
             }
-            .animation(.default, value: viewModel.isDBLoaded)
-            .navigationTitle(MR.strings().app_name.desc().localized())
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .animation(.default, value: viewModel.isDBLoaded)
+        .navigationTitle(MR.strings().menu_machine_browser.desc().localized())
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

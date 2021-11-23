@@ -10,13 +10,11 @@ import Shared
 
 struct SettingsScreen: View {
     var body: some View {
-        NavigationView {
-            Group {
-                Text("Nothing here yet")
-            }
-            .navigationTitle(MR.strings().app_name.desc().localized())
-            .navigationBarTitleDisplayMode(.inline)
+        Group {
+            Text("Nothing here yet")
         }
+        .navigationTitle(MR.strings().menu_settings.desc().localized())
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
