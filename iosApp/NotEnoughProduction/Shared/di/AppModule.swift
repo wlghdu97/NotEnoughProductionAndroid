@@ -30,6 +30,17 @@ struct AppModule: Cleanse.Module {
             .to { (db: Nep) in
                 ElementRepoImpl(db: db, io: Dispatchers().default_)
             }
+        binder.bind(RecipeRepo.self)
+            .sharedInScope()
+            .to { (db: Nep) in
+                let io = Dispatchers().default_
+                return RecipeRepoImpl(db: db, io: io, recipeAdder: RecipeAdder(db: db, io: io))
+            }
+        binder.bind(MachineRecipeRepo.self)
+            .sharedInScope()
+            .to { (db: Nep) in
+                MachineRecipeRepoImpl(db: db, io: Dispatchers().default_)
+            }
         binder.bind(MachineRepo.self)
             .sharedInScope()
             .to { (db: Nep) in

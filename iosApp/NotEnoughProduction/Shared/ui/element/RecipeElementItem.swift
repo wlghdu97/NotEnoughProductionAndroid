@@ -29,16 +29,3 @@ struct RecipeElementItem: View, Equatable {
         .padding(.vertical, 4)
     }
 }
-
-extension ModelRecipeElement {
-    fileprivate var elementTypeText: String {
-        switch self.type {
-        case ModelElement.companion.ITEM:
-            return MR.strings().txt_item.desc().localized()
-        case ModelElement.companion.FLUID:
-            return MR.strings().txt_fluid.desc().localized()
-        default:
-            return MR.strings().txt_unknown.desc().localized()
-        }
-    }
-}

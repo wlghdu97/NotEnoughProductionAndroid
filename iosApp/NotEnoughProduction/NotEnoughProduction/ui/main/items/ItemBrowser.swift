@@ -17,6 +17,9 @@ struct ItemBrowser: View {
             if viewModel.isDBLoaded {
                 List { [items = viewModel.itemList] in
                     ForEach(items, id: \.id) { item in
+                        NavigationLink {
+                            ElementDetailScreen(viewModel: viewModel.createElementDetailViewModel(item.id))
+                        } label: {
                             RecipeElementItem(element: item)
                                 .equatable()
                                 .onAppear {

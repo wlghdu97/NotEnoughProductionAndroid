@@ -16,6 +16,8 @@ final class ItemBrowserSwiftUIViewModel: SwiftUIViewModel<ItemBrowserViewModel>,
     @Published var isDBLoaded = false
     @Published var isIconLoaded = false
 
+    private var elementDetailFactory: ComponentFactory<ElementDetailSwiftUIViewModel.Component>?
+
     private weak var itemPager: Multiplatform_pagingPager<AnyObject, AnyObject>? {
         didSet {
             if let pager = self.itemPager {
@@ -29,8 +31,10 @@ final class ItemBrowserSwiftUIViewModel: SwiftUIViewModel<ItemBrowserViewModel>,
         }
     }
 
-    override init(viewModel: ItemBrowserViewModel) {
+    init(viewModel: ItemBrowserViewModel,
+         elementDetailFactory: ComponentFactory<ElementDetailSwiftUIViewModel.Component>) {
         super.init(viewModel: viewModel)
+        self.elementDetailFactory = elementDetailFactory
 
         viewModel.toCommonFlow(flow: viewModel.elementSearchResult).watch { [unowned self] pager in
             guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
@@ -67,6 +71,17 @@ final class ItemBrowserSwiftUIViewModel: SwiftUIViewModel<ItemBrowserViewModel>,
     func loadMoreItems() {
         itemPager?.loadNext()
     }
+
+    func createElementDetailViewModel(_ elementId: Int64) -> ElementDetailSwiftUIViewModel {
+        if let viewModel = elementDetailFactory?.build(()) {
+            viewModel.doInit(elementId)
+            return viewModel
+        } else {
+            let viewModel = ElementDetailSwiftUIViewModel()
+            viewModel.doInit(elementId)
+            return viewModel
+        }
+    }
 }
 
 extension ItemBrowserSwiftUIViewModel {
@@ -79,8 +94,8 @@ extension ItemBrowserSwiftUIViewModel {
         }
 
         static func configureRoot(binder bind: ReceiptBinder<ItemBrowserSwiftUIViewModel>) -> BindingReceipt<ItemBrowserSwiftUIViewModel> {
-            bind.to { (viewModel: ItemBrowserViewModel) in
-                ItemBrowserSwiftUIViewModel(viewModel: viewModel)
+            bind.to { (viewModel: ItemBrowserViewModel, elementDetailFactory: ComponentFactory<ElementDetailSwiftUIViewModel.Component>) in
+                ItemBrowserSwiftUIViewModel(viewModel: viewModel, elementDetailFactory: elementDetailFactory)
             }
         }
     }

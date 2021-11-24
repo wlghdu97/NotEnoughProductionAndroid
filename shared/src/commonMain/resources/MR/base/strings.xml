@@ -35,6 +35,7 @@
     <string name="title_error">Something went wrong.</string>
     <string name="title_misc">Misc</string>
     <string name="title_privacy_policy">Privacy policy</string>
+    <string name="title_element_details">Element details</string>
 
     <string name="menu_item_browser">Item browser</string>
     <string name="menu_machine_browser">Machines</string>
@@ -111,6 +112,9 @@
     <string name="txt_ore_chain_recipe">Ore Dictionary Chain</string>
     <string name="txt_process_reference">Process Reference</string>
     <string name="txt_unknown_recipe">Unknown recipe</string>
+
+    <string name="txt_localized_name">Localized Name</string>
+    <string name="txt_unlocalized_name">Unlocalized Name</string>
 
     <string name="txt_db_not_loaded">DB is not loaded.\nPlease import your recEx json file.</string>
     <string name="txt_parse_json">Previous DB data will be erased.\nThis job may take longer than 4
