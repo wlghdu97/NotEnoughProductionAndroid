@@ -9,6 +9,10 @@ import Foundation
 import Shared
 
 extension StringResolver {
+    static let global = StringResolver()
+}
+
+extension StringResolver {
     func formatString(format res: StringResource, args: Any...) -> String {
         let array = KotlinArray(size: Int32(args.count)) { index in
             args[index.intValue] as AnyObject

@@ -33,10 +33,8 @@ struct ElementRecipeList: View {
 }
 
 extension ElementRecipeList {
-    fileprivate static let stringResolver = StringResolver()
-
     fileprivate var recipeListHeaderText: String {
-        ElementRecipeList.stringResolver.formatString(format: MR.strings().form_tab_recipes, args: recipeCount)
+        StringResolver.global.formatString(format: MR.strings().form_tab_recipes, args: recipeCount)
     }
 }
 

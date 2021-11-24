@@ -37,10 +37,8 @@ struct ElementUsageList: View {
 }
 
 extension ElementUsageList {
-    fileprivate static let stringResolver = StringResolver()
-
     fileprivate var usageListHeaderText: String {
-        ElementUsageList.stringResolver.formatString(format: MR.strings().form_tab_usages, args: usageCount)
+        StringResolver.global.formatString(format: MR.strings().form_tab_usages, args: usageCount)
     }
 }
 

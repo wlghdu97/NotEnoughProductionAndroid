@@ -12,7 +12,6 @@ struct ProcessList: View {
     @StateObject var viewModel: ProcessListSwiftUIViewModel
     @State private var showProcessCreationDialog = false
     @State private var showProcessImportDialog = false
-    private let stringResolver = StringResolver()
 
     var body: some View {
         List { [items = viewModel.processList] in
@@ -67,7 +66,7 @@ struct ProcessList: View {
         .sheet(isPresented: $showProcessImportDialog) {
             ProcessImportSheet(viewModel: viewModel.createProcessImportViewModel(), showSheet: $showProcessImportDialog)
         }
-        .alert(stringResolver.formatString(format: MR.strings().title_delete_process, args: viewModel.deleteProcess?.name ?? ""),
+        .alert(StringResolver.global.formatString(format: MR.strings().title_delete_process, args: viewModel.deleteProcess?.name ?? ""),
                isPresented: $viewModel.showDeleteProcessDialog,
                presenting: viewModel.deleteProcess) { idName in
             Button(MR.strings().btn_delete.desc().localized(), role: .destructive) {

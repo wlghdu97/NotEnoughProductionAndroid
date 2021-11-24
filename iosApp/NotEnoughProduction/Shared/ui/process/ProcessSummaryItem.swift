@@ -45,11 +45,8 @@ extension ProcessSummaryItem: Equatable {
 }
 
 extension ModelProcessSummary {
-    private static let stringResolver = StringResolver()
-
     fileprivate var processDetailsText: String {
-        let nodeCount = ModelProcessSummary.stringResolver.getPluralString(res: MR.plurals().node, quantity: self.nodeCount)
-        return ModelProcessSummary.stringResolver.formatString(format: MR.strings().form_process_description,
-                                                               args: self.amount, self.localizedName, nodeCount)
+        let nodeCount = StringResolver.global.getPluralString(res: MR.plurals().node, quantity: self.nodeCount)
+        return StringResolver.global.formatString(format: MR.strings().form_process_description, args: self.amount, self.localizedName, nodeCount)
     }
 }
