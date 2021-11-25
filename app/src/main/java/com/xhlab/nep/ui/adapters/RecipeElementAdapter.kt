@@ -72,7 +72,7 @@ open class RecipeElementAdapter(
             itemView.setOnClickListener {
                 val model = model
                 if (model != null) {
-                    listener?.onClick(model.id, model.type)
+                    listener?.onClick(model.id)
                 }
             }
         }

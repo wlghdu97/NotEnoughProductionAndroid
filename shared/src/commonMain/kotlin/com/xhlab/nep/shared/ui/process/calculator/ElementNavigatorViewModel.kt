@@ -25,20 +25,19 @@ class ElementNavigatorViewModel constructor(
             val data = it.data!!
             if (data.size == 1) {
                 val element = data[0]
-                navigateToDetails(element.id, element.type)
+                navigateToDetails(element.id)
             } else {
                 emit(data)
             }
         }
     }
 
-    // Pair<ElementId, ElementType>
-    private val _navigateToElementDetail = EventFlow<Pair<Long, Int>>()
-    val navigateElementToDetail: Flow<Pair<Long, Int>>
+    private val _navigateToElementDetail = EventFlow<Long>()
+    val navigateElementToDetail: Flow<Long>
         get() = _navigateToElementDetail.flow
 
     fun submitElement(element: RecipeElement) {
-        navigateToDetails(element.id, element.type)
+        navigateToDetails(element.id)
     }
 
     override fun onClick(elementKey: String) {
@@ -49,9 +48,9 @@ class ElementNavigatorViewModel constructor(
         )
     }
 
-    private fun navigateToDetails(elementId: Long, elementType: Int) {
+    private fun navigateToDetails(elementId: Long) {
         scope.launch {
-            _navigateToElementDetail.emit(elementId to elementType)
+            _navigateToElementDetail.emit(elementId)
         }
     }
 }

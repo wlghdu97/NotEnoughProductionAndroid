@@ -47,7 +47,7 @@ class RecipeElementDetailAdapter(
 
         init {
             itemView.setOnClickListener {
-                model?.let { listener?.onClick(it.id, it.type) }
+                model?.let { listener?.onClick(it.id) }
             }
         }
 

@@ -64,8 +64,8 @@ class BaseIngredientsFragment : DaggerFragment(), ViewInit {
             showElementSelectionDialog(it)
         }
 
-        viewModel.navigateElementToDetail.asLiveData().observe(this) { (elementId, elementType) ->
-            context?.navigateToElementDetailActivity(elementId, elementType)
+        viewModel.navigateElementToDetail.asLiveData().observe(this) { elementId ->
+            context?.navigateToElementDetailActivity(elementId)
         }
     }
 

@@ -73,7 +73,7 @@ class ReplacementListViewModel constructor(
         this.oreDictName.value = oreDictName
     }
 
-    override fun onClick(elementId: Long, elementType: Int) {
+    override fun onClick(elementId: Long) {
         scope.launch {
             _navigateToRecipeList.emit(elementId)
         }

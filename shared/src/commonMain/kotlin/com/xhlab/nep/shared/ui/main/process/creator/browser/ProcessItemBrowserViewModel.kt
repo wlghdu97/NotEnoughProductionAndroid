@@ -36,7 +36,7 @@ class ProcessItemBrowserViewModel :
     private fun requireElementId() =
         elementId.value ?: throw NullPointerException("element id is null.")
 
-    override fun onClick(elementId: Long, elementType: Int) {
+    override fun onClick(elementId: Long) {
         this.elementId.value = elementId
         scope.launch {
             _navigateToMachineList.emit(elementId)

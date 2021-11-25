@@ -92,22 +92,19 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             elementAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToDetail.asLiveData().observe(this) { (elementId, elementType) ->
+        viewModel.navigateToDetail.asLiveData().observe(this) { elementId ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
                 with(childFragmentManager) {
                     popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                        .add(
-                            R.id.container,
-                            ElementDetailFragment.getFragment(elementId, elementType)
-                        )
+                        .add(R.id.container, ElementDetailFragment.getFragment(elementId))
                         .addToBackStack(null)
                         .commit()
                 }
             } else {
-                context?.navigateToElementDetailActivity(elementId, elementType)
+                context?.navigateToElementDetailActivity(elementId)
             }
         }
     }

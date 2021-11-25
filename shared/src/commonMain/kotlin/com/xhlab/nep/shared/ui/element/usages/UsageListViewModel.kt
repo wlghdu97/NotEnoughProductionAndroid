@@ -21,9 +21,8 @@ class UsageListViewModel constructor(
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    // Pair<ElementId, ElementType>
-    private val _navigateToDetail = EventFlow<Pair<Long, Int>>()
-    val navigateToDetail: Flow<Pair<Long, Int>>
+    private val _navigateToDetail = EventFlow<Long>()
+    val navigateToDetail: Flow<Long>
         get() = _navigateToDetail.flow
 
     fun init(elementId: Long?) {
@@ -42,9 +41,9 @@ class UsageListViewModel constructor(
         }
     }
 
-    override fun onClick(elementId: Long, elementType: Int) {
+    override fun onClick(elementId: Long) {
         scope.launch {
-            _navigateToDetail.emit(elementId to elementType)
+            _navigateToDetail.emit(elementId)
         }
     }
 }

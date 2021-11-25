@@ -27,9 +27,8 @@ class MachineRecipeListViewModel constructor(
 
     val isIconLoaded = generalPreference.isIconLoaded
 
-    // Pair<ElementId, ElementType>
-    private val _navigateToDetail = EventFlow<Pair<Long, Int>>()
-    val navigateToDetail: Flow<Pair<Long, Int>>
+    private val _navigateToDetail = EventFlow<Long>()
+    val navigateToDetail: Flow<Long>
         get() = _navigateToDetail.flow
 
     // to prevent DiffUtil's index out of bound
@@ -71,13 +70,13 @@ class MachineRecipeListViewModel constructor(
         }
     }
 
-    override fun onClick(elementId: Long, elementType: Int) {
-        navigateToElementDetail(elementId, elementType)
+    override fun onClick(elementId: Long) {
+        navigateToElementDetail(elementId)
     }
 
-    private fun navigateToElementDetail(elementId: Long, elementType: Int) {
+    private fun navigateToElementDetail(elementId: Long) {
         scope.launch {
-            _navigateToDetail.emit(elementId to elementType)
+            _navigateToDetail.emit(elementId)
         }
     }
 }

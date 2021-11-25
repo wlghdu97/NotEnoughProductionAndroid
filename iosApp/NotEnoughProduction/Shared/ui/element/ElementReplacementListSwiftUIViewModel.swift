@@ -75,8 +75,8 @@ final class ElementReplacementListSwiftUIViewModel: SwiftUIViewModel<Replacement
 }
 
 extension ElementReplacementListSwiftUIViewModel: ElementListener {
-    func onClick(elementId: Int64, elementType: Int32) {
-        viewModel.onClick(elementId: elementId, elementType: elementType)
+    func onClick(elementId: Int64) {
+        viewModel.onClick(elementId: elementId)
     }
 }
 

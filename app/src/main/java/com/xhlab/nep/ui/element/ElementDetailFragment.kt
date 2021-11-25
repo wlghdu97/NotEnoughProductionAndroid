@@ -21,6 +21,7 @@ import com.xhlab.nep.ui.element.usages.UsageListFragment
 import com.xhlab.nep.util.getCardBackgroundColor
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.take
 import javax.inject.Inject
 
 class ElementDetailFragment : DaggerFragment(), ViewInit {
@@ -34,7 +35,6 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
     private lateinit var viewPagerAdapter: FragmentStatePagerAdapter
 
     private var elementId: Long = 0L
-    private var elementType: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,16 +54,14 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
 
     private fun checkIntent() {
         elementId = arguments?.getLong(ELEMENT_ID) ?: 0L
-        elementType = arguments?.getInt(ELEMENT_TYPE) ?: -1
         require(elementId != 0L)
-        require(elementType != -1)
     }
 
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(elementId)
 
-        viewModel.element.asLiveData().observe(this) { element ->
+        viewModel.element.take(1).asLiveData().observe(this) { element ->
             (activity as? AppCompatActivity)?.let { activity ->
                 activity.setSupportActionBar(binding.toolbar)
                 activity.supportActionBar?.let {
@@ -78,35 +76,35 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
                     it.subtitle = element.unlocalizedName.trim()
                 }
             }
+
+            val firstTab = binding.tabLayout.getTabAt(0)
+            if (firstTab != null) {
+                firstTab.text = getString(
+                    when (element.type) {
+                        Element.ORE_CHAIN -> R.string.tab_replacements
+                        else -> R.string.tab_recipes
+                    }
+                )
+            }
+
+            with(binding.viewPager) {
+                viewPagerAdapter = when (element.type) {
+                    Element.ORE_CHAIN -> ReplacementListPagerAdapter(childFragmentManager)
+                    else -> RecipeListPagerAdapter(childFragmentManager)
+                }
+                adapter = viewPagerAdapter
+                addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
+                    override fun onPageSelected(position: Int) {
+                        binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
+                    }
+                })
+            }
         }
     }
 
     override fun initView() {
         // make background opaque when tablet mode
         binding.root.setBackgroundColor(requireContext().getCardBackgroundColor())
-
-        val firstTab = binding.tabLayout.getTabAt(0)
-        if (firstTab != null) {
-            firstTab.text = getString(
-                when (elementType) {
-                    Element.ORE_CHAIN -> R.string.tab_replacements
-                    else -> R.string.tab_recipes
-                }
-            )
-        }
-
-        with(binding.viewPager) {
-            viewPagerAdapter = when (elementType) {
-                Element.ORE_CHAIN -> ReplacementListPagerAdapter(childFragmentManager)
-                else -> RecipeListPagerAdapter(childFragmentManager)
-            }
-            adapter = viewPagerAdapter
-            addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-                override fun onPageSelected(position: Int) {
-                    binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
-                }
-            })
-        }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -169,13 +167,11 @@ class ElementDetailFragment : DaggerFragment(), ViewInit {
 
     companion object {
         const val ELEMENT_ID = "element_id"
-        const val ELEMENT_TYPE = "element_type"
 
-        fun getFragment(elementId: Long, elementType: Int): Fragment {
+        fun getFragment(elementId: Long): Fragment {
             return ElementDetailFragment().apply {
                 arguments = Bundle().apply {
                     putLong(ELEMENT_ID, elementId)
-                    putInt(ELEMENT_TYPE, elementType)
                 }
             }
         }

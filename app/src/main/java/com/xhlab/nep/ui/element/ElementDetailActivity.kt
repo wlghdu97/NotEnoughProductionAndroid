@@ -18,10 +18,9 @@ class ElementDetailActivity : DaggerAppCompatActivity() {
     }
 
     companion object {
-        fun Context.navigateToElementDetailActivity(elementId: Long, elementType: Int) {
+        fun Context.navigateToElementDetailActivity(elementId: Long) {
             startActivity(Intent(this, ElementDetailActivity::class.java).apply {
                 putExtra(ElementDetailFragment.ELEMENT_ID, elementId)
-                putExtra(ElementDetailFragment.ELEMENT_TYPE, elementType)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             })
         }
