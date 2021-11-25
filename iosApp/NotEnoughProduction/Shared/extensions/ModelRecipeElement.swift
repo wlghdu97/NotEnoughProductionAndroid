@@ -26,6 +26,10 @@ extension ModelRecipeElement {
             return MR.strings().txt_item.desc().localized()
         case ModelElement.companion.FLUID:
             return MR.strings().txt_fluid.desc().localized()
+        case ModelElement.companion.ORE_DICT:
+            return MR.strings().txt_ore_dict.desc().localized()
+        case ModelElement.companion.ORE_CHAIN:
+            return MR.strings().txt_ore_chain_recipe.desc().localized()
         default:
             return MR.strings().txt_unknown.desc().localized()
         }
