@@ -15,19 +15,19 @@ WHERE element_view.id = recipe.target_item_id
 ORDER BY element_view.type, element_view.localized_name ASC;
 
 searchRecipeIdByElement:
-SELECT recipe.recipe_id FROM recipe
+SELECT DISTINCT recipe.recipe_id FROM recipe
 INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
 WHERE recipe.recipe_id = recipe_result.recipe_id
 ORDER BY recipe.amount
 LIMIT :limit OFFSET :offset;
 
 searchRecipeIdCountByElement:
-SELECT COUNT(recipe.recipe_id) FROM recipe
+SELECT COUNT(DISTINCT recipe.recipe_id) FROM recipe
 INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
 WHERE recipe.recipe_id = recipe_result.recipe_id;
 
 searchRecipeIdByElementFts:
-SELECT recipe.recipe_id FROM recipe
+SELECT DISTINCT recipe.recipe_id FROM recipe
 INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
 INNER JOIN element_fts ON element_fts.docid = recipe.target_item_id
 WHERE recipe.recipe_id = recipe_result.recipe_id AND element_fts MATCH :term
@@ -35,7 +35,7 @@ ORDER BY recipe.amount
 LIMIT :limit OFFSET :offset;
 
 searchRecipeIdCountByElementFts:
-SELECT COUNT(recipe.recipe_id) FROM recipe
+SELECT COUNT(DISTINCT recipe.recipe_id) FROM recipe
 INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
 INNER JOIN element_fts ON element_fts.docid = recipe.target_item_id
 WHERE recipe.recipe_id = recipe_result.recipe_id AND element_fts MATCH :term;
