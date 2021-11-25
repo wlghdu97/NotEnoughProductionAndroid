@@ -18,7 +18,7 @@ struct MachineRecipeList: View {
                 EmptyView()
             }
             LazyVStack { [items = viewModel.recipeList] in
-                ForEach(items, id: \.self) { recipe in
+                ForEach(items, id: \.recipeId) { recipe in
                     RecipeViewItem(recipe: recipe, targetElement: viewModel.targetElementId, elementListener: viewModel)
                         .equatable()
                         .onAppear {

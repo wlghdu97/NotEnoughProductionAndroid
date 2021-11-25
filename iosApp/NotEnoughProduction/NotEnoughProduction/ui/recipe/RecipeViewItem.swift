@@ -25,6 +25,6 @@ struct RecipeViewItem: View {
 
 extension RecipeViewItem: Equatable {
     static func == (lhs: RecipeViewItem, rhs: RecipeViewItem) -> Bool {
-        (lhs.recipe == rhs.recipe) && (lhs.targetElement == rhs.targetElement)
+        (lhs.recipe.recipeId == rhs.recipe.recipeId) && (lhs.targetElement == rhs.targetElement)
     }
 }

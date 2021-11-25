@@ -33,6 +33,7 @@ struct MachineRecipeViewItem: View {
                 .padding(.vertical, 4)
             ForEach(recipe.itemList, id: \.id) { item in
                 RecipeViewElementItem(element: item, elementListener: elementListener)
+                    .equatable()
             }
             if !byproductList.isEmpty {
                 Divider()
