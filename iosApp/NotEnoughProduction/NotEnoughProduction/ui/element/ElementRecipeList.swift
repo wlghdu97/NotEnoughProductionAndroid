@@ -16,13 +16,17 @@ struct ElementRecipeList: View {
         List { [items = viewModel.recipeList] in
             Section(header: Text(recipeListHeaderText)) {
                 ForEach(items, id: \.machineId) { item in
-                    RecipeMachineViewItem(view: item)
-                        .equatable()
-                        .onAppear {
-                            if items.last == item {
-                                viewModel.loadMoreItems()
+                    NavigationLink {
+                        MachineRecipeList(viewModel: viewModel.createMachineRecipeListViewModel(item.machineId))
+                    } label: {
+                        RecipeMachineViewItem(view: item)
+                            .equatable()
+                            .onAppear {
+                                if items.last == item {
+                                    viewModel.loadMoreItems()
+                                }
                             }
-                        }
+                    }
                 }
             }
         }

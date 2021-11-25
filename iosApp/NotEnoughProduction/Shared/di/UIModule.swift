@@ -18,6 +18,7 @@ struct UIModule: Cleanse.Module {
         binder.install(dependency: ElementUsageListSwiftUIViewModel.Component.self)
         binder.install(dependency: ElementOreDictListSwiftUIViewModel.Component.self)
         binder.install(dependency: ElementReplacementListSwiftUIViewModel.Component.self)
+        binder.install(dependency: MachineRecipeListSwiftUIViewModel.Component.self)
         binder.install(dependency: MachineBrowserSwiftUIViewModel.Component.self)
         binder.install(dependency: ProcessListSwiftUIViewModel.Component.self)
         binder.install(dependency: ProcessRenameSwiftUIViewModel.Component.self)

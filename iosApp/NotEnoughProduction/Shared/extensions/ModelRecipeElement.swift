@@ -11,6 +11,15 @@ import Shared
 extension ModelRecipeElement: Identifiable { }
 
 extension ModelRecipeElement {
+    var localizedNameText: String {
+        let localizedName = localizedName.unnamedIfEmpty().trimmingCharacters(in: .whitespacesAndNewlines)
+        if let metaData = metaData, !metaData.isEmpty {
+            return localizedName + " : " + metaData
+        } else {
+            return localizedName
+        }
+    }
+
     var elementTypeText: String {
         switch self.type {
         case ModelElement.companion.ITEM:

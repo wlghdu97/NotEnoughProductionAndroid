@@ -17,8 +17,7 @@ struct ProcessSummaryItem: View {
             VStack(alignment: .leading) {
                 Text(process.name)
                 Text(process.processDetailsText)
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                    .captionText()
                     .fixedSize(horizontal: false, vertical: true)
             }
             Spacer()

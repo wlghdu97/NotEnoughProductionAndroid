@@ -14,6 +14,8 @@ import Shared
 final class ElementRecipeListSwiftUIViewModel: SwiftUIViewModel<RecipeListViewModel_>, ObservableObject {
     @Published var recipeList = [ModelRecipeMachineView]()
 
+    private var elementId: Int64!
+
     private weak var recipePager: Multiplatform_pagingPager<AnyObject, AnyObject>? {
         didSet {
             if let pager = self.recipePager {
@@ -27,8 +29,12 @@ final class ElementRecipeListSwiftUIViewModel: SwiftUIViewModel<RecipeListViewMo
         }
     }
 
-    override init(viewModel: RecipeListViewModel_) {
+    private var recipeListFactory: ComponentFactory<MachineRecipeListSwiftUIViewModel.Component>?
+
+    init(viewModel: RecipeListViewModel_,
+         recipeListFactory: ComponentFactory<MachineRecipeListSwiftUIViewModel.Component>) {
         super.init(viewModel: viewModel)
+        self.recipeListFactory = recipeListFactory
 
         viewModel.toCommonFlow(flow: viewModel.recipeList).watch { [unowned self] pager in
             guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
@@ -45,10 +51,22 @@ final class ElementRecipeListSwiftUIViewModel: SwiftUIViewModel<RecipeListViewMo
 
     func doInit(_ elementId: Int64) {
         viewModel.doInit(elementId: KotlinLong(value: elementId))
+        self.elementId = elementId
     }
 
     func loadMoreItems() {
         recipePager?.loadNext()
+    }
+
+    func createMachineRecipeListViewModel(_ machineId: Int32) -> MachineRecipeListSwiftUIViewModel {
+        if let viewModel = recipeListFactory?.build(()) {
+            viewModel.doInit(elementId: elementId, machineId: machineId)
+            return viewModel
+        } else {
+            let viewModel = MachineRecipeListSwiftUIViewModel()
+            viewModel.doInit(elementId: elementId, machineId: machineId)
+            return viewModel
+        }
     }
 }
 
@@ -68,8 +86,8 @@ extension ElementRecipeListSwiftUIViewModel {
         }
 
         static func configureRoot(binder bind: ReceiptBinder<ElementRecipeListSwiftUIViewModel>) -> BindingReceipt<ElementRecipeListSwiftUIViewModel> {
-            bind.to { (viewModel: RecipeListViewModel_) in
-                ElementRecipeListSwiftUIViewModel(viewModel: viewModel)
+            bind.to { (viewModel: RecipeListViewModel_, recipeListFactory: ComponentFactory<MachineRecipeListSwiftUIViewModel.Component>) in
+                ElementRecipeListSwiftUIViewModel(viewModel: viewModel, recipeListFactory: recipeListFactory)
             }
         }
     }

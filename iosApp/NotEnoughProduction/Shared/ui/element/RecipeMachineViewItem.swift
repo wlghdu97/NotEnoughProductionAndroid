@@ -17,14 +17,12 @@ struct RecipeMachineViewItem: View, Equatable {
                 Text(view.machineName.unnamedIfEmpty())
                     .font(.body)
                 Text(view.modName.unnamedIfEmpty())
-                    .font(.caption)
-                    .foregroundColor(.gray)
+                    .captionText()
                     .lineLimit(1)
             }
             Spacer()
             Text("\(view.recipeCount)")
-                .font(.caption)
-                .foregroundColor(.gray)
+                .captionText()
         }
         .padding(.vertical, 4)
     }

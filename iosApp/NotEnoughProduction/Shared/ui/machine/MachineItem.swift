@@ -16,8 +16,7 @@ struct MachineItem: View, Equatable {
             Text(machine.name.unnamedIfEmpty())
                 .font(.body)
             Text(machine.modName.unnamedIfEmpty())
-                .font(.caption)
-                .foregroundColor(.gray)
+                .captionText()
                 .lineLimit(1)
         }
         .padding(.vertical, 4)

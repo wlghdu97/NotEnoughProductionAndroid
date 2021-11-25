@@ -57,6 +57,18 @@
 		C4706AC7274E760100F444B6 /* ElementOreDictListSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AC6274E760100F444B6 /* ElementOreDictListSwiftUIViewModel.swift */; };
 		C4706AC9274E7DE200F444B6 /* ElementReplacementListSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AC8274E7DE200F444B6 /* ElementReplacementListSwiftUIViewModel.swift */; };
 		C4706ACB274E809700F444B6 /* ElementReplacementList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706ACA274E809700F444B6 /* ElementReplacementList.swift */; };
+		C4706ACE274E9BD200F444B6 /* MachineRecipeListSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706ACD274E9BD100F444B6 /* MachineRecipeListSwiftUIViewModel.swift */; };
+		C4706AD1274E9CDF00F444B6 /* MachineRecipeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AD0274E9CDF00F444B6 /* MachineRecipeList.swift */; };
+		C4706AD3274E9ECF00F444B6 /* ModelRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AD2274E9ECF00F444B6 /* ModelRecipeView.swift */; };
+		C4706AD5274E9EFC00F444B6 /* RecipeViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AD4274E9EFC00F444B6 /* RecipeViewItem.swift */; };
+		C4706AD7274EA0AF00F444B6 /* MachineRecipeViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AD6274EA0AF00F444B6 /* MachineRecipeViewItem.swift */; };
+		C4706AD9274EA48000F444B6 /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AD8274EA48000F444B6 /* NumberFormatter.swift */; };
+		C4706ADB274EA4A600F444B6 /* HasApply.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706ADA274EA4A600F444B6 /* HasApply.swift */; };
+		C4706ADD274EA73200F444B6 /* ModelMachineRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706ADC274EA73200F444B6 /* ModelMachineRecipeView.swift */; };
+		C4706AE0274F863300F444B6 /* ListCardBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706ADF274F863200F444B6 /* ListCardBackground.swift */; };
+		C4706AE2274F8A3800F444B6 /* CaptionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AE1274F8A3800F444B6 /* CaptionText.swift */; };
+		C4706AE6274FCA7000F444B6 /* RecipeViewElementItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AE5274FCA7000F444B6 /* RecipeViewElementItem.swift */; };
+		C4706AE8274FF98F00F444B6 /* CraftingRecipeViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AE7274FF98F00F444B6 /* CraftingRecipeViewItem.swift */; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
 		C47C0A9F270D835A009A6A4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */; };
@@ -125,6 +137,18 @@
 		C4706AC6274E760100F444B6 /* ElementOreDictListSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementOreDictListSwiftUIViewModel.swift; sourceTree = "<group>"; };
 		C4706AC8274E7DE200F444B6 /* ElementReplacementListSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementReplacementListSwiftUIViewModel.swift; sourceTree = "<group>"; };
 		C4706ACA274E809700F444B6 /* ElementReplacementList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementReplacementList.swift; sourceTree = "<group>"; };
+		C4706ACD274E9BD100F444B6 /* MachineRecipeListSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineRecipeListSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C4706AD0274E9CDF00F444B6 /* MachineRecipeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineRecipeList.swift; sourceTree = "<group>"; };
+		C4706AD2274E9ECF00F444B6 /* ModelRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRecipeView.swift; sourceTree = "<group>"; };
+		C4706AD4274E9EFC00F444B6 /* RecipeViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewItem.swift; sourceTree = "<group>"; };
+		C4706AD6274EA0AF00F444B6 /* MachineRecipeViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineRecipeViewItem.swift; sourceTree = "<group>"; };
+		C4706AD8274EA48000F444B6 /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
+		C4706ADA274EA4A600F444B6 /* HasApply.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HasApply.swift; sourceTree = "<group>"; };
+		C4706ADC274EA73200F444B6 /* ModelMachineRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelMachineRecipeView.swift; sourceTree = "<group>"; };
+		C4706ADF274F863200F444B6 /* ListCardBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCardBackground.swift; sourceTree = "<group>"; };
+		C4706AE1274F8A3800F444B6 /* CaptionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionText.swift; sourceTree = "<group>"; };
+		C4706AE5274FCA7000F444B6 /* RecipeViewElementItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewElementItem.swift; sourceTree = "<group>"; };
+		C4706AE7274FF98F00F444B6 /* CraftingRecipeViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftingRecipeViewItem.swift; sourceTree = "<group>"; };
 		C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotEnoughProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughProductionApp.swift; sourceTree = "<group>"; };
 		C47C0A9B270D835A009A6A4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -179,7 +203,9 @@
 				C41A92E52747F68C00D05B41 /* element */,
 				C41A92F02748C4ED00D05B41 /* machine */,
 				C41A92FD2748D05F00D05B41 /* process */,
+				C4706ACC274E96EC00F444B6 /* recipe */,
 				C41A92D02747D37C00D05B41 /* main */,
+				C4706ADE274F861A00F444B6 /* modifiers */,
 				C41A930C274A365900D05B41 /* util */,
 			);
 			path = ui;
@@ -219,6 +245,7 @@
 			isa = PBXGroup;
 			children = (
 				C4706A9F274A8BC200F444B6 /* element */,
+				C4706ACF274E9CCE00F444B6 /* recipe */,
 				C41A92DE2747E13E00D05B41 /* main */,
 				C41A930827493D0600D05B41 /* util */,
 			);
@@ -253,6 +280,10 @@
 				C41A93002748D10300D05B41 /* StringResolver.swift */,
 				C41A9302274930DD00D05B41 /* ProcessIdName.swift */,
 				C4706AC0274D3C9000F444B6 /* ModelRecipeMachineView.swift */,
+				C4706AD2274E9ECF00F444B6 /* ModelRecipeView.swift */,
+				C4706AD8274EA48000F444B6 /* NumberFormatter.swift */,
+				C4706ADA274EA4A600F444B6 /* HasApply.swift */,
+				C4706ADC274EA73200F444B6 /* ModelMachineRecipeView.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -358,6 +389,35 @@
 				C4706ACA274E809700F444B6 /* ElementReplacementList.swift */,
 			);
 			path = element;
+			sourceTree = "<group>";
+		};
+		C4706ACC274E96EC00F444B6 /* recipe */ = {
+			isa = PBXGroup;
+			children = (
+				C4706ACD274E9BD100F444B6 /* MachineRecipeListSwiftUIViewModel.swift */,
+			);
+			path = recipe;
+			sourceTree = "<group>";
+		};
+		C4706ACF274E9CCE00F444B6 /* recipe */ = {
+			isa = PBXGroup;
+			children = (
+				C4706AD0274E9CDF00F444B6 /* MachineRecipeList.swift */,
+				C4706AD4274E9EFC00F444B6 /* RecipeViewItem.swift */,
+				C4706AD6274EA0AF00F444B6 /* MachineRecipeViewItem.swift */,
+				C4706AE7274FF98F00F444B6 /* CraftingRecipeViewItem.swift */,
+				C4706AE5274FCA7000F444B6 /* RecipeViewElementItem.swift */,
+			);
+			path = recipe;
+			sourceTree = "<group>";
+		};
+		C4706ADE274F861A00F444B6 /* modifiers */ = {
+			isa = PBXGroup;
+			children = (
+				C4706ADF274F863200F444B6 /* ListCardBackground.swift */,
+				C4706AE1274F8A3800F444B6 /* CaptionText.swift */,
+			);
+			path = modifiers;
 			sourceTree = "<group>";
 		};
 		C47C0A8B270D8358009A6A4F = {
@@ -567,9 +627,11 @@
 				C41A92F42748C53B00D05B41 /* String.swift in Sources */,
 				C41A92E72747F6A300D05B41 /* RecipeElementItem.swift in Sources */,
 				C41A92FA2748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift in Sources */,
+				C4706ADB274EA4A600F444B6 /* HasApply.swift in Sources */,
 				C41A93012748D10300D05B41 /* StringResolver.swift in Sources */,
 				C41A92D22747D38600D05B41 /* MainSwiftUIViewModel.swift in Sources */,
 				C4706A9C274A875F00F444B6 /* SettingsScreen.swift in Sources */,
+				C4706AD1274E9CDF00F444B6 /* MachineRecipeList.swift in Sources */,
 				C41A930A27493D1200D05B41 /* TextFieldContainer.swift in Sources */,
 				C4706AC9274E7DE200F444B6 /* ElementReplacementListSwiftUIViewModel.swift in Sources */,
 				C41A9310274A522100D05B41 /* ProcessImportSheet.swift in Sources */,
@@ -579,6 +641,8 @@
 				C4706AC3274D3CFB00F444B6 /* RecipeMachineViewItem.swift in Sources */,
 				C41A92C82747D2D300D05B41 /* AppModule.swift in Sources */,
 				C4706AA1274A8BF300F444B6 /* ElementDetailScreen.swift in Sources */,
+				C4706AD5274E9EFC00F444B6 /* RecipeViewItem.swift in Sources */,
+				C4706ACE274E9BD200F444B6 /* MachineRecipeListSwiftUIViewModel.swift in Sources */,
 				C41A9314274A53E400D05B41 /* ProcessExportSheet.swift in Sources */,
 				C41A92E927480B6F00D05B41 /* MachineDomainModule.swift in Sources */,
 				C41A92FF2748D07B00D05B41 /* ProcessSummaryItem.swift in Sources */,
@@ -589,22 +653,30 @@
 				C41A92F22748C4F900D05B41 /* MachineItem.swift in Sources */,
 				C41A92D62747D7D600D05B41 /* DatabaseModule.swift in Sources */,
 				C41A9303274930DD00D05B41 /* ProcessIdName.swift in Sources */,
+				C4706AE0274F863300F444B6 /* ListCardBackground.swift in Sources */,
 				C41A92DC2747DCC100D05B41 /* ItemBrowserSwiftUIViewModel.swift in Sources */,
+				C4706AD7274EA0AF00F444B6 /* MachineRecipeViewItem.swift in Sources */,
 				C41A92EF27480E5500D05B41 /* MachineBrowser.swift in Sources */,
 				C41A92CE2747D32C00D05B41 /* SwiftUIViewModel.swift in Sources */,
 				C4706AC5274E75BB00F444B6 /* ElementOreDictList.swift in Sources */,
 				C41A92D42747D4D500D05B41 /* MainScreen.swift in Sources */,
+				C4706AE8274FF98F00F444B6 /* CraftingRecipeViewItem.swift in Sources */,
 				C4706AB5274D263B00F444B6 /* RecipeDomainModule.swift in Sources */,
 				C41A92FC2748CDE200D05B41 /* ProcessDomainModule.swift in Sources */,
 				C4706A9E274A89DC00F444B6 /* ElementDetailSwiftUIViewModel.swift in Sources */,
+				C4706AE6274FCA7000F444B6 /* RecipeViewElementItem.swift in Sources */,
 				C41A92F72748C78900D05B41 /* ProcessList.swift in Sources */,
 				C4706AB3274C97AA00F444B6 /* ElementUsageListSwiftUIViewModel.swift in Sources */,
 				C4706ABA274D2F3200F444B6 /* ElementRecipeListSwiftUIViewModel.swift in Sources */,
 				C41A92C62747D20300D05B41 /* AppComponent.swift in Sources */,
 				C41A92D92747DC0800D05B41 /* ItemDomainModule.swift in Sources */,
+				C4706ADD274EA73200F444B6 /* ModelMachineRecipeView.swift in Sources */,
 				C41A92CC2747D31100D05B41 /* UIModule.swift in Sources */,
+				C4706AD3274E9ECF00F444B6 /* ModelRecipeView.swift in Sources */,
+				C4706AD9274EA48000F444B6 /* NumberFormatter.swift in Sources */,
 				C41A93052749357300D05B41 /* ProcessRenameSheet.swift in Sources */,
 				C4706ACB274E809700F444B6 /* ElementReplacementList.swift in Sources */,
+				C4706AE2274F8A3800F444B6 /* CaptionText.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

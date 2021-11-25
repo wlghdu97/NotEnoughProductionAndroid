@@ -19,19 +19,14 @@ struct ElementDetailScreen: View {
                         Text(element.localizedName.unnamedIfEmpty())
                         if let unlocalizedName = element.unlocalizedName, !unlocalizedName.isEmpty {
                             Text(unlocalizedName)
-                                .font(.caption)
-                                .foregroundColor(.gray)
+                                .captionText()
                         }
                     }
                     Spacer()
                     Text(element.elementTypeText)
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                        .captionText()
                 }
-                .padding()
-                .background(Color(UIColor.secondarySystemBackground))
-                .cornerRadius(10)
-                .padding()
+                .listCardBackground()
                 TabView {
                     if element.type == ModelElement.companion.ORE_CHAIN {
                         ElementOreDictList(viewModel: viewModel.createOreDictListViewModel(element.id))
