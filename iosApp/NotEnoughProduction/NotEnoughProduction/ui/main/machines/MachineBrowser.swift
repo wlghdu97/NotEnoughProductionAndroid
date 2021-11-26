@@ -16,13 +16,17 @@ struct MachineBrowser: View {
             if viewModel.isDBLoaded {
                 List { [items = viewModel.machineList] in
                     ForEach(items, id: \.id) { machine in
-                        MachineItem(machine: machine)
-                            .equatable()
-                            .onAppear {
-                                if items.last == machine {
-                                    viewModel.loadMoreMachines()
+                        NavigationLink {
+                            MachineResultList(viewModel: viewModel.createMachineResultViewModel(machine.id))
+                        } label: {
+                            MachineItem(machine: machine)
+                                .equatable()
+                                .onAppear {
+                                    if items.last == machine {
+                                        viewModel.loadMoreMachines()
+                                    }
                                 }
-                            }
+                        }
                     }
                 }
                 .listStyle(.grouped)

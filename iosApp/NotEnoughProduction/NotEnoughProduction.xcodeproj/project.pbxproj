@@ -69,6 +69,8 @@
 		C4706AE2274F8A3800F444B6 /* CaptionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AE1274F8A3800F444B6 /* CaptionText.swift */; };
 		C4706AE6274FCA7000F444B6 /* RecipeViewElementItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AE5274FCA7000F444B6 /* RecipeViewElementItem.swift */; };
 		C4706AE8274FF98F00F444B6 /* CraftingRecipeViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AE7274FF98F00F444B6 /* CraftingRecipeViewItem.swift */; };
+		C4706AEA2750A6EE00F444B6 /* MachineResultSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AE92750A6ED00F444B6 /* MachineResultSwiftUIViewModel.swift */; };
+		C4706AEC2750AC1D00F444B6 /* MachineResultList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706AEB2750AC1C00F444B6 /* MachineResultList.swift */; };
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
 		C47C0A9F270D835A009A6A4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */; };
@@ -149,6 +151,8 @@
 		C4706AE1274F8A3800F444B6 /* CaptionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionText.swift; sourceTree = "<group>"; };
 		C4706AE5274FCA7000F444B6 /* RecipeViewElementItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewElementItem.swift; sourceTree = "<group>"; };
 		C4706AE7274FF98F00F444B6 /* CraftingRecipeViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CraftingRecipeViewItem.swift; sourceTree = "<group>"; };
+		C4706AE92750A6ED00F444B6 /* MachineResultSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineResultSwiftUIViewModel.swift; sourceTree = "<group>"; };
+		C4706AEB2750AC1C00F444B6 /* MachineResultList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MachineResultList.swift; sourceTree = "<group>"; };
 		C47C0A94270D8358009A6A4F /* NotEnoughProduction.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotEnoughProduction.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotEnoughProductionApp.swift; sourceTree = "<group>"; };
 		C47C0A9B270D835A009A6A4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A92EE27480E5500D05B41 /* MachineBrowser.swift */,
+				C4706AEB2750AC1C00F444B6 /* MachineResultList.swift */,
 			);
 			path = machines;
 			sourceTree = "<group>";
@@ -322,6 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				C41A92F12748C4F900D05B41 /* MachineItem.swift */,
+				C4706AE92750A6ED00F444B6 /* MachineResultSwiftUIViewModel.swift */,
 			);
 			path = machine;
 			sourceTree = "<group>";
@@ -665,11 +671,13 @@
 				C41A92FC2748CDE200D05B41 /* ProcessDomainModule.swift in Sources */,
 				C4706A9E274A89DC00F444B6 /* ElementDetailSwiftUIViewModel.swift in Sources */,
 				C4706AE6274FCA7000F444B6 /* RecipeViewElementItem.swift in Sources */,
+				C4706AEC2750AC1D00F444B6 /* MachineResultList.swift in Sources */,
 				C41A92F72748C78900D05B41 /* ProcessList.swift in Sources */,
 				C4706AB3274C97AA00F444B6 /* ElementUsageListSwiftUIViewModel.swift in Sources */,
 				C4706ABA274D2F3200F444B6 /* ElementRecipeListSwiftUIViewModel.swift in Sources */,
 				C41A92C62747D20300D05B41 /* AppComponent.swift in Sources */,
 				C41A92D92747DC0800D05B41 /* ItemDomainModule.swift in Sources */,
+				C4706AEA2750A6EE00F444B6 /* MachineResultSwiftUIViewModel.swift in Sources */,
 				C4706ADD274EA73200F444B6 /* ModelMachineRecipeView.swift in Sources */,
 				C41A92CC2747D31100D05B41 /* UIModule.swift in Sources */,
 				C4706AD3274E9ECF00F444B6 /* ModelRecipeView.swift in Sources */,

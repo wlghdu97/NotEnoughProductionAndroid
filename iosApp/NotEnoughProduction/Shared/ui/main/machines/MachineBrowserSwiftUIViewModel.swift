@@ -28,8 +28,12 @@ final class MachineBrowserSwiftUIViewModel: SwiftUIViewModel<MachineBrowserViewM
         }
     }
 
-    override init(viewModel: MachineBrowserViewModel) {
+    private var machineResultFactory: ComponentFactory<MachineResultSwiftUIViewModel.Component>?
+
+    init(viewModel: MachineBrowserViewModel,
+         machineResultFactory: ComponentFactory<MachineResultSwiftUIViewModel.Component>) {
         super.init(viewModel: viewModel)
+        self.machineResultFactory = machineResultFactory
 
         viewModel.toCommonFlow(flow: viewModel.machineList).watch { [unowned self] pager in
             guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
@@ -53,6 +57,17 @@ final class MachineBrowserSwiftUIViewModel: SwiftUIViewModel<MachineBrowserViewM
     func loadMoreMachines() {
         machinePager?.loadNext()
     }
+
+    func createMachineResultViewModel(_ machineId: Int32) -> MachineResultSwiftUIViewModel {
+        if let viewModel = machineResultFactory?.build(()) {
+            viewModel.doInit(machineId)
+            return viewModel
+        } else {
+            let viewModel = MachineResultSwiftUIViewModel()
+            viewModel.doInit(machineId)
+            return viewModel
+        }
+    }
 }
 
 extension MachineBrowserSwiftUIViewModel {
@@ -65,8 +80,8 @@ extension MachineBrowserSwiftUIViewModel {
         }
 
         static func configureRoot(binder bind: ReceiptBinder<MachineBrowserSwiftUIViewModel>) -> BindingReceipt<MachineBrowserSwiftUIViewModel> {
-            bind.to { (viewModel: MachineBrowserViewModel) in
-                MachineBrowserSwiftUIViewModel(viewModel: viewModel)
+            bind.to { (viewModel: MachineBrowserViewModel, machineResultFactory: ComponentFactory<MachineResultSwiftUIViewModel.Component>) in
+                MachineBrowserSwiftUIViewModel(viewModel: viewModel, machineResultFactory: machineResultFactory)
             }
         }
     }

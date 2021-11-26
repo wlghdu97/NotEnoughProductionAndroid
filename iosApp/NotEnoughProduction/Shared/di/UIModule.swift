@@ -20,6 +20,7 @@ struct UIModule: Cleanse.Module {
         binder.install(dependency: ElementReplacementListSwiftUIViewModel.Component.self)
         binder.install(dependency: MachineRecipeListSwiftUIViewModel.Component.self)
         binder.install(dependency: MachineBrowserSwiftUIViewModel.Component.self)
+        binder.install(dependency: MachineResultSwiftUIViewModel.Component.self)
         binder.install(dependency: ProcessListSwiftUIViewModel.Component.self)
         binder.install(dependency: ProcessRenameSwiftUIViewModel.Component.self)
         binder.install(dependency: ProcessImportSwiftUIViewModel.Component.self)
