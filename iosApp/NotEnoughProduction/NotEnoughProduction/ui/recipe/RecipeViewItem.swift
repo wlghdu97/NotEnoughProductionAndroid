@@ -13,12 +13,13 @@ struct RecipeViewItem: View {
     let recipe: ModelRecipeView
     let targetElement: Int64
     let elementListener: ElementListener?
+    let withIcon: Bool
 
     var body: some View {
         if let machineRecipe = recipe as? ModelMachineRecipeView {
-            MachineRecipeViewItem(recipe: machineRecipe, targetElementId: targetElement, elementListener: elementListener)
+            MachineRecipeViewItem(recipe: machineRecipe, targetElementId: targetElement, elementListener: elementListener, withIcon: withIcon)
         } else {
-            CraftingRecipeViewItem(recipe: recipe, targetElementId: targetElement, elementListener: elementListener)
+            CraftingRecipeViewItem(recipe: recipe, targetElementId: targetElement, elementListener: elementListener, withIcon: withIcon)
         }
     }
 }

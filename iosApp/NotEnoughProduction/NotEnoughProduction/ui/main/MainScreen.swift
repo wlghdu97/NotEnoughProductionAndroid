@@ -12,6 +12,7 @@ import Shared
 struct MainScreen: View {
     @Environment(\.horizontalSizeClass) var horizontalSizeClass: UserInterfaceSizeClass?
     @StateObject var viewModel: MainSwiftUIViewModel
+    @StateObject var settingsVieWModel: SettingsSwiftUIViewModel
     @State private var selection: Int? = 0
     @State private var firstLoad = true
 
@@ -27,7 +28,7 @@ struct MainScreen: View {
                 NavigationLink(destination: ProcessList(viewModel: viewModel.createProcessListViewModel()), tag: 2, selection: $selection) {
                     Label(MR.strings().menu_process.desc().localized(), systemImage: "flowchart.fill")
                 }
-                NavigationLink(destination: SettingsScreen(), tag: 3, selection: $selection) {
+                NavigationLink(destination: SettingsScreen(viewModel: settingsVieWModel), tag: 3, selection: $selection) {
                     Label(MR.strings().menu_settings.desc().localized(), systemImage: "gearshape.fill")
                 }
             }
@@ -68,6 +69,6 @@ extension MainScreen {
 
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MainScreen(viewModel: MainSwiftUIViewModel())
+        MainScreen(viewModel: MainSwiftUIViewModel(), settingsVieWModel: SettingsSwiftUIViewModel())
     }
 }

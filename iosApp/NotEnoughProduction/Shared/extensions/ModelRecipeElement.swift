@@ -7,6 +7,7 @@
 
 import Foundation
 import Shared
+import UIKit
 
 extension ModelRecipeElement: Identifiable { }
 
@@ -32,6 +33,24 @@ extension ModelRecipeElement {
             return MR.strings().txt_ore_chain_recipe.desc().localized()
         default:
             return MR.strings().txt_unknown.desc().localized()
+        }
+    }
+}
+
+extension ModelRecipeElement {
+    var image: UIImage? {
+        if let iconDirUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+            let fileName = Data(unlocalizedName.utf8).base64EncodedString()
+            let iconUrl = iconDirUrl.appendingPathComponent("icons/\(fileName).png")
+            do {
+                let data = try Data(contentsOf: iconUrl)
+                return UIImage(data: data)
+            } catch {
+                print(error)
+                return nil
+            }
+        } else {
+            return nil
         }
     }
 }

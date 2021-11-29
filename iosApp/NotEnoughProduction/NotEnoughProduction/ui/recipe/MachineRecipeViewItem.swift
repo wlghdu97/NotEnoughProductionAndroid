@@ -12,6 +12,7 @@ struct MachineRecipeViewItem: View {
     let recipe: ModelMachineRecipeView
     let targetElementId: Int64
     let elementListener: ElementListener?
+    let withIcon: Bool
 
     private var targetElement: ModelRecipeElement! {
         recipe.resultItemList.first { $0.id == targetElementId }
@@ -32,7 +33,7 @@ struct MachineRecipeViewItem: View {
                 .captionText()
                 .padding(.vertical, 4)
             ForEach(recipe.itemList, id: \.id) { item in
-                RecipeViewElementItem(element: item, elementListener: elementListener)
+                RecipeViewElementItem(element: item, elementListener: elementListener, withIcon: withIcon)
                     .equatable()
             }
             if !byproductList.isEmpty {
@@ -41,7 +42,7 @@ struct MachineRecipeViewItem: View {
                     .captionText()
                     .padding(.vertical, 4)
                 ForEach(byproductList, id: \.id) { item in
-                    RecipeViewElementItem(element: item, elementListener: elementListener)
+                    RecipeViewElementItem(element: item, elementListener: elementListener, withIcon: withIcon)
                 }
             }
         }

@@ -11,14 +11,20 @@ import Shared
 struct RecipeElementItem: View, Equatable {
     let element: ModelRecipeElement
     let withAmount: Bool
+    let withIcon: Bool
 
-    init (element: ModelRecipeElement, withAmount: Bool = false) {
+    init (element: ModelRecipeElement, withAmount: Bool = false, withIcon: Bool = false) {
         self.element = element
         self.withAmount = withAmount
+        self.withIcon = withIcon
     }
 
     var body: some View {
         HStack {
+            if withIcon {
+                RecipeElementIcon(element: element)
+                    .frame(width: 32, height: 32)
+            }
             VStack(alignment: .leading) {
                 Text(localizedNameText)
                     .font(.body)

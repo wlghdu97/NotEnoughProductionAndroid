@@ -24,5 +24,6 @@ struct UIModule: Cleanse.Module {
         binder.install(dependency: ProcessListSwiftUIViewModel.Component.self)
         binder.install(dependency: ProcessRenameSwiftUIViewModel.Component.self)
         binder.install(dependency: ProcessImportSwiftUIViewModel.Component.self)
+        binder.install(dependency: SettingsSwiftUIViewModel.Component.self)
     }
 }

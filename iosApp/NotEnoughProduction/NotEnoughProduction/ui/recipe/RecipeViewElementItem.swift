@@ -11,13 +11,14 @@ import Shared
 struct RecipeViewElementItem: View {
     let element: ModelRecipeElement
     let elementListener: ElementListener?
+    let withIcon: Bool
 
     var body: some View {
         Button {
             elementListener?.onClick(elementId: element.id)
         } label: {
             HStack {
-                RecipeElementItem(element: element, withAmount: true)
+                RecipeElementItem(element: element, withAmount: true, withIcon: withIcon)
                 Spacer()
                 Image(systemName: "chevron.right")
                     .resizable()

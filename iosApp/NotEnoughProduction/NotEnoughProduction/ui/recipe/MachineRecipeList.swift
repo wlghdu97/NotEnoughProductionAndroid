@@ -19,7 +19,7 @@ struct MachineRecipeList: View {
             }
             LazyVStack { [items = viewModel.recipeList] in
                 ForEach(items, id: \.recipeId) { recipe in
-                    RecipeViewItem(recipe: recipe, targetElement: viewModel.targetElementId, elementListener: viewModel)
+                    RecipeViewItem(recipe: recipe, targetElement: viewModel.targetElementId, elementListener: viewModel, withIcon: viewModel.isIconLoaded)
                         .equatable()
                         .onAppear {
                             if items.last == recipe {

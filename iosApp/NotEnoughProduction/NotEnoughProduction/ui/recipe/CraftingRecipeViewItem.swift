@@ -12,6 +12,7 @@ struct CraftingRecipeViewItem: View {
     let recipe: ModelRecipeView
     let targetElementId: Int64
     let elementListener: ElementListener?
+    let withIcon: Bool
 
     private var targetElement: ModelRecipeElement! {
         recipe.resultItemList.first { $0.id == targetElementId }
@@ -30,7 +31,7 @@ struct CraftingRecipeViewItem: View {
                 .captionText()
                 .padding(.vertical, 4)
             ForEach(recipe.itemList, id: \.id) { item in
-                RecipeViewElementItem(element: item, elementListener: elementListener)
+                RecipeViewElementItem(element: item, elementListener: elementListener, withIcon: withIcon)
                     .equatable()
             }
         }

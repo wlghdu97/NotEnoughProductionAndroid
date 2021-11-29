@@ -17,7 +17,7 @@ struct ElementReplacementList: View {
                 NavigationLink {
                     ElementDetailScreen(viewModel: viewModel.createElementDetailViewModel(item.id))
                 } label: {
-                    RecipeElementItem(element: item)
+                    RecipeElementItem(element: item, withIcon: viewModel.isIconLoaded)
                         .equatable()
                         .onAppear {
                             if items.last == item {

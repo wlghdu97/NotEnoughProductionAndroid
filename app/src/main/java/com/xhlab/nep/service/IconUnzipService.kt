@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.icon.IconUnzipUseCase
+import com.xhlab.nep.shared.util.JavaZipArchiver
 import com.xhlab.nep.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import kotlinx.coroutines.*
@@ -66,7 +67,11 @@ class IconUnzipService : Service() {
         val fileUri = intent.getParcelableExtra<Uri>(ZIP_URI)
         if (fileUri != null) {
             CoroutineScope(SupervisorJob()).launch {
-                val job = iconUnzipUseCase.execute(Dispatchers.Default, fileUri).apply {
+                val archiver = JavaZipArchiver {
+                    contentResolver.openInputStream(fileUri)?.buffered()
+                        ?: throw RuntimeException("Could not open file uri input stream.")
+                }
+                val job = iconUnzipUseCase.execute(Dispatchers.IO, archiver).apply {
                     iconUnzipJob = this
                 }
                 withContext(job) {
