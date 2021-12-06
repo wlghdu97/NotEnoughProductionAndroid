@@ -20,7 +20,6 @@ class IconUnzipUseCase constructor(
     private val io: CoroutineDispatcher
 ) : BaseMediatorUseCase<ZipArchiver, IconUnzipUseCase.Progress>(), Cancellable {
 
-    @ExperimentalCoroutinesApi
     override suspend fun executeInternal(params: ZipArchiver) = channelFlow {
         // mark icon status is dirty
         generalPreference.setIconLoaded(false)
