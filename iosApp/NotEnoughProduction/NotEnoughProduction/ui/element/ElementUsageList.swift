@@ -10,7 +10,6 @@ import Shared
 
 struct ElementUsageList: View {
     @StateObject var viewModel: ElementUsageListSwiftUIViewModel
-    @State private var usageCount = 0
 
     var body: some View {
         List { [items = viewModel.usageList] in
@@ -30,15 +29,12 @@ struct ElementUsageList: View {
                 }
             }
         }
-        .onChange(of: viewModel.usageList) { list in
-            usageCount = list.count
-        }
     }
 }
 
 extension ElementUsageList {
     fileprivate var usageListHeaderText: String {
-        StringResolver.global.formatString(format: MR.strings().form_tab_usages, args: usageCount)
+        StringResolver.global.formatString(format: MR.strings().form_tab_usages, args: viewModel.totalCount)
     }
 }
 

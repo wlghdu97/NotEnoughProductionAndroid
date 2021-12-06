@@ -13,9 +13,10 @@ import Shared
 
 final class ElementUsageListSwiftUIViewModel: SwiftUIViewModel<UsageListViewModel>, ObservableObject {
     @Published var usageList = [ModelRecipeElement]()
+    @Published var totalCount = 0
     @Published var isIconLoaded = false
 
-    private weak var usagePager: Multiplatform_pagingPager<AnyObject, AnyObject>? {
+    private weak var usagePager: Multiplatform_pagingFinitePager<AnyObject, AnyObject>? {
         didSet {
             if let pager = self.usagePager {
                 viewModel.toPagingData(pager: pager).watch(block: { [unowned self] list in
@@ -24,6 +25,7 @@ final class ElementUsageListSwiftUIViewModel: SwiftUIViewModel<UsageListViewMode
                         self.usageList = newUsageList
                     }
                 })
+                self.totalCount = Int(pager.getTotalCount())
             }
         }
     }
@@ -36,7 +38,7 @@ final class ElementUsageListSwiftUIViewModel: SwiftUIViewModel<UsageListViewMode
         self.elementDetailFactory = elementDetailFactory
 
         viewModel.toCommonFlow(flow: viewModel.usageList).watch { [unowned self] pager in
-            guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
+            guard let pager = pager as? Multiplatform_pagingFinitePager<AnyObject, AnyObject> else {
                 debugPrint("item pager not found.")
                 return
             }

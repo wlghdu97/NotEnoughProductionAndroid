@@ -4,6 +4,8 @@
 //
 //  Created by xharpen on 2021/11/26.
 //
+//  swiftlint:disable nesting
+//
 
 import SwiftUI
 import Cleanse
@@ -12,9 +14,10 @@ import Shared
 final class MachineResultSwiftUIViewModel: SwiftUIViewModel<MachineResultViewModel>, ObservableObject {
     @Published var machine: ModelMachine?
     @Published var resultList = [ModelRecipeElement]()
+    @Published var matchedCount = 0
     @Published var isIconLoaded = false
 
-    private weak var resultPager: Multiplatform_pagingPager<AnyObject, AnyObject>? {
+    private weak var resultPager: Multiplatform_pagingFinitePager<AnyObject, AnyObject>? {
         didSet {
             if let pager = self.resultPager {
                 viewModel.toPagingData(pager: pager).watch(block: { [unowned self] list in
@@ -22,6 +25,7 @@ final class MachineResultSwiftUIViewModel: SwiftUIViewModel<MachineResultViewMod
                     if !newResultList.isEmpty {
                         self.resultList = newResultList
                     }
+                    self.matchedCount = Int(pager.getTotalCount())
                 })
             }
         }
@@ -41,7 +45,7 @@ final class MachineResultSwiftUIViewModel: SwiftUIViewModel<MachineResultViewMod
         }
 
         viewModel.toCommonFlow(flow: viewModel.resultList).watch { [unowned self] pager in
-            guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
+            guard let pager = pager as? Multiplatform_pagingFinitePager<AnyObject, AnyObject> else {
                 debugPrint("item pager not found.")
                 return
             }

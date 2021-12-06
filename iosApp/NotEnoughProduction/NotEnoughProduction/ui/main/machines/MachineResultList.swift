@@ -14,7 +14,7 @@ struct MachineResultList: View {
 
     var body: some View {
         List { [items = viewModel.resultList] in
-            Section(header: Text(MR.strings().tab_usages.desc().localized())) {
+            Section(header: Text(StringResolver.global.formatString(format: MR.strings().form_tab_usages, args: viewModel.matchedCount))) {
                 ForEach(items, id: \.id) { item in
                     NavigationLink {
                         ElementDetailScreen(viewModel: viewModel.createElementDetailViewModel(item.id))

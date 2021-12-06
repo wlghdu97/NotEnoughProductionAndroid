@@ -10,7 +10,6 @@ import Shared
 
 struct ElementRecipeList: View {
     @StateObject var viewModel: ElementRecipeListSwiftUIViewModel
-    @State private var recipeCount = 0
 
     var body: some View {
         List { [items = viewModel.recipeList] in
@@ -30,15 +29,12 @@ struct ElementRecipeList: View {
                 }
             }
         }
-        .onChange(of: viewModel.recipeList) { list in
-            recipeCount = list.map({ Int($0.recipeCount) }).reduce(0, +)
-        }
     }
 }
 
 extension ElementRecipeList {
     fileprivate var recipeListHeaderText: String {
-        StringResolver.global.formatString(format: MR.strings().form_tab_recipes, args: recipeCount)
+        StringResolver.global.formatString(format: MR.strings().form_tab_recipes, args: viewModel.totalCount)
     }
 }
 

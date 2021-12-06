@@ -2,6 +2,7 @@ package com.xhlab.nep.shared.db
 
 import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.Transacter
+import com.xhlab.multiplatform.paging.FinitePager
 import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.multiplatform.paging.PagingConfig
 import com.xhlab.multiplatform.paging.PagingData
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.max
 
-internal open class QueryDataPager<RowType : Any, V : Any> constructor(
+class QueryDataPager<RowType : Any, V : Any> constructor(
     private val clientScope: CoroutineScope,
     private val ioDispatcher: CoroutineDispatcher,
     private val config: PagingConfig,
@@ -23,7 +24,7 @@ internal open class QueryDataPager<RowType : Any, V : Any> constructor(
     private val countQuery: Query<Long>,
     private val transactor: Transacter,
     private val transform: suspend (RowType) -> V
-) : Pager<Int, V>(), Query.Listener {
+) : FinitePager<Int, V>(), Query.Listener {
 
     private val _pagingData = MutableStateFlow<PagingData<RowType>>(PagingData(emptyList()))
     override val pagingData: Flow<PagingData<V>> = _pagingData.map { data ->
@@ -55,7 +56,7 @@ internal open class QueryDataPager<RowType : Any, V : Any> constructor(
         refresh()
     }
 
-    final override fun loadInitial(initialLoadSize: Int) {
+    override fun loadInitial(initialLoadSize: Int) {
         clientScope.launch {
             val items = getBlock(0, initialLoadSize)
             totalCount.value = getCount()
@@ -64,7 +65,7 @@ internal open class QueryDataPager<RowType : Any, V : Any> constructor(
         }
     }
 
-    final override fun loadNext(pageSize: Int) {
+    override fun loadNext(pageSize: Int) {
         clientScope.launch {
             _pagingData.value = PagingData(
                 _pagingData.value + getBlock(_pagingData.value.size, pageSize)
@@ -73,9 +74,13 @@ internal open class QueryDataPager<RowType : Any, V : Any> constructor(
         }
     }
 
-    final override fun loadNext() {
+    override fun loadNext() {
         loadNext(config.pageSize)
     }
+
+    override fun getLoadedCount() = _pagingData.value.size
+
+    override fun getTotalCount() = totalCount.value
 
     private suspend fun getCount() = withContext(ioDispatcher) {
         countQuery.executeAsOne().toInt()

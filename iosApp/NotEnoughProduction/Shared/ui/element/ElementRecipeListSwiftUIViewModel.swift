@@ -13,10 +13,11 @@ import Shared
 
 final class ElementRecipeListSwiftUIViewModel: SwiftUIViewModel<RecipeListViewModel_>, ObservableObject {
     @Published var recipeList = [ModelRecipeMachineView]()
+    @Published var totalCount = 0
 
     private var elementId: Int64!
 
-    private weak var recipePager: Multiplatform_pagingPager<AnyObject, AnyObject>? {
+    private weak var recipePager: Multiplatform_pagingFinitePager<AnyObject, AnyObject>? {
         didSet {
             if let pager = self.recipePager {
                 viewModel.toPagingData(pager: pager).watch(block: { [unowned self] list in
@@ -24,6 +25,7 @@ final class ElementRecipeListSwiftUIViewModel: SwiftUIViewModel<RecipeListViewMo
                     if !newRecipeList.isEmpty {
                         self.recipeList = newRecipeList
                     }
+                    self.totalCount = Int(pager.getTotalCount())
                 })
             }
         }
@@ -37,7 +39,7 @@ final class ElementRecipeListSwiftUIViewModel: SwiftUIViewModel<RecipeListViewMo
         self.recipeListFactory = recipeListFactory
 
         viewModel.toCommonFlow(flow: viewModel.recipeList).watch { [unowned self] pager in
-            guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
+            guard let pager = pager as? Multiplatform_pagingFinitePager<AnyObject, AnyObject> else {
                 debugPrint("item pager not found.")
                 return
             }

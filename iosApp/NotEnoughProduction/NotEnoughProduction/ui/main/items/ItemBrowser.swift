@@ -16,17 +16,19 @@ struct ItemBrowser: View {
         Group {
             if viewModel.isDBLoaded {
                 List { [items = viewModel.itemList] in
-                    ForEach(items, id: \.id) { item in
-                        NavigationLink {
-                            ElementDetailScreen(viewModel: viewModel.createElementDetailViewModel(item.id))
-                        } label: {
-                            RecipeElementItem(element: item, withIcon: viewModel.isIconLoaded)
-                                .equatable()
-                                .onAppear {
-                                    if items.last == item {
-                                        viewModel.loadMoreItems()
+                    Section(header: Text(StringResolver.global.formatString(format: MR.strings().form_matched_total, args: viewModel.matchedCount))) {
+                        ForEach(items, id: \.id) { item in
+                            NavigationLink {
+                                ElementDetailScreen(viewModel: viewModel.createElementDetailViewModel(item.id))
+                            } label: {
+                                RecipeElementItem(element: item, withIcon: viewModel.isIconLoaded)
+                                    .equatable()
+                                    .onAppear {
+                                        if items.last == item {
+                                            viewModel.loadMoreItems()
+                                        }
                                     }
-                                }
+                            }
                         }
                     }
                 }
@@ -38,7 +40,7 @@ struct ItemBrowser: View {
         .animation(.default, value: viewModel.isDBLoaded)
         .navigationTitle(MR.strings().menu_item_browser.desc().localized())
         .navigationBarTitleDisplayMode(.inline)
-        .searchable(text: $searchTerm)
+        .searchable(text: $searchTerm, placement: .navigationBarDrawer(displayMode: .always))
         .onChange(of: searchTerm) { term in
             viewModel.search(term)
         }

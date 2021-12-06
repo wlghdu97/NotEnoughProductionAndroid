@@ -13,12 +13,13 @@ import Shared
 
 final class ItemBrowserSwiftUIViewModel: SwiftUIViewModel<ItemBrowserViewModel>, ObservableObject {
     @Published var itemList = [ModelRecipeElement]()
+    @Published var matchedCount = 0
     @Published var isDBLoaded = false
     @Published var isIconLoaded = false
 
     private var elementDetailFactory: ComponentFactory<ElementDetailSwiftUIViewModel.Component>?
 
-    private weak var itemPager: Multiplatform_pagingPager<AnyObject, AnyObject>? {
+    private weak var itemPager: Multiplatform_pagingFinitePager<AnyObject, AnyObject>? {
         didSet {
             if let pager = self.itemPager {
                 viewModel.toPagingData(pager: pager).watch(block: { [unowned self] list in
@@ -26,6 +27,7 @@ final class ItemBrowserSwiftUIViewModel: SwiftUIViewModel<ItemBrowserViewModel>,
                     if !newItemList.isEmpty {
                         self.itemList = newItemList
                     }
+                    self.matchedCount = Int(pager.getTotalCount())
                 })
             }
         }
@@ -37,7 +39,7 @@ final class ItemBrowserSwiftUIViewModel: SwiftUIViewModel<ItemBrowserViewModel>,
         self.elementDetailFactory = elementDetailFactory
 
         viewModel.toCommonFlow(flow: viewModel.elementSearchResult).watch { [unowned self] pager in
-            guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
+            guard let pager = pager as? Multiplatform_pagingFinitePager<AnyObject, AnyObject> else {
                 debugPrint("item pager not found.")
                 return
             }
