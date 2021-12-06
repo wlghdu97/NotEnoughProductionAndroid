@@ -61,13 +61,10 @@ class SwiftZipEntry: ZipArchiverZipEntry {
     }
 
     func extract(to: File) {
-        let url = to.url
-        DispatchQueue.global(qos: .userInitiated).async {
-            do {
-                try self.data.write(to: url, options: .atomic)
-            } catch {
-                debugPrint(error)
-            }
+        do {
+            try data.write(to: to.url, options: .atomic)
+        } catch {
+            debugPrint(error)
         }
     }
 }
