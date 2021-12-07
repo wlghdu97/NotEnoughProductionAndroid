@@ -39,7 +39,7 @@ class ProcessRepoImpl constructor(
     }
 
     override suspend fun getProcessFlow(processId: String) = withContext(io) {
-        db.processQueries.getProcess(processId, processCacheMapper).asFlow().mapToOneOrNull()
+        db.processQueries.getProcess(processId, processMapper).asFlow().mapToOneOrNull()
     }
 
     override fun getProcesses(): Pager<Int, ProcessSummary> {
@@ -178,19 +178,26 @@ class ProcessRepoImpl constructor(
         }
     }
 
-    private inline fun MutableMap<String, Process>.getProcessInternal(processId: String): Process? {
+    private fun MutableMap<String, Process>.getProcessInternal(processId: String): Process? {
         val cached = this[processId]
-        return if (cached == null) {
+        return if (cached != null) {
+            cached
+        } else {
             val process = db.processQueries
-                .getProcess(processId, processCacheMapper)
+                .getProcess(processId, processMapper)
                 .executeAsOneOrNull()
             if (process != null) {
-                this[processId] = process
+                updateProcessCache(processId, process)
             }
             process
-        } else {
-            cached
         }
+    }
+
+    private fun MutableMap<String, Process>.updateProcessCache(
+        processId: String,
+        process: Process
+    ) {
+        this[processId] = process
     }
 
     private fun ProcessQueries.update(process: Process) {
@@ -205,28 +212,24 @@ class ProcessRepoImpl constructor(
     private val pagingConfig: PagingConfig
         get() = PagingConfig(PAGE_SIZE)
 
-    private val processCacheMapper = { process_id: String,
-                                       name: String,
-                                       unlocalized_name: String,
-                                       localized_name: String,
-                                       amount: Int,
-                                       node_count: Int,
-                                       json: String ->
-        cache.access {
-            val process = mapper.map(
-                ProcessEntity(
-                    process_id = process_id,
-                    name = name,
-                    unlocalized_name = unlocalized_name,
-                    localized_name = localized_name,
-                    amount = amount,
-                    node_count = node_count,
-                    json = json
-                )
+    private val processMapper = { process_id: String,
+                                  name: String,
+                                  unlocalized_name: String,
+                                  localized_name: String,
+                                  amount: Int,
+                                  node_count: Int,
+                                  json: String ->
+        mapper.map(
+            ProcessEntity(
+                process_id = process_id,
+                name = name,
+                unlocalized_name = unlocalized_name,
+                localized_name = localized_name,
+                amount = amount,
+                node_count = node_count,
+                json = json
             )
-            it[process_id] = process
-            process
-        }
+        )
     }
 
     private val processSummaryMapper = { process_id: String,
