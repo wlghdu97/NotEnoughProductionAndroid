@@ -7,4 +7,8 @@ internal actual object UUID {
     actual fun generateLongUUID(): Long {
         return UUID.randomUUID().mostSignificantBits and Long.MAX_VALUE
     }
+
+    actual fun generateUUID(): String {
+        return UUID.randomUUID().toString()
+    }
 }

@@ -23,7 +23,7 @@ class SqlDelightProcessMapper(private val json: Json) : Mapper<Process, ProcessE
 
     fun mapWithRandomId(element: Process): ProcessEntity {
         return ProcessEntity(
-            UUID.generateLongUUID().toString(),
+            UUID.generateUUID(),
             element.name,
             element.targetOutput.unlocalizedName,
             element.targetOutput.localizedName,

@@ -10,7 +10,7 @@ internal actual object UUID {
      * @see java.util.UUID.fromString
      */
     actual fun generateLongUUID(): Long {
-        val uuidString = NSUUID.UUID().UUIDString()
+        val uuidString = generateUUID()
 
         val components = uuidString.split("-").toMutableList()
         if (components.size != 5) {
@@ -24,5 +24,9 @@ internal actual object UUID {
         mostSigBits = mostSigBits or components[2].toLong(radix = 16)
 
         return mostSigBits
+    }
+
+    actual fun generateUUID(): String {
+        return NSUUID.UUID().UUIDString().lowercase()
     }
 }
