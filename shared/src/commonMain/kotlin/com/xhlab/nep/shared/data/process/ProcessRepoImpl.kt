@@ -92,7 +92,7 @@ class ProcessRepoImpl constructor(
             val process = it.getProcessInternal(processId)
             if (process != null) {
                 process.name = name.trim()
-                db.processQueries.upsert(roomMapper.map(process))
+                db.processQueries.update(process)
             } else {
                 throw ProcessNotFoundException()
             }
@@ -118,7 +118,7 @@ class ProcessRepoImpl constructor(
             val subProcess = it.getProcessInternal(fromProcessId)
             if (process != null && subProcess != null) {
                 process.connectProcess(subProcess, to, element)
-                db.processQueries.upsert(roomMapper.map(process))
+                db.processQueries.update(process)
             } else {
                 throw ProcessNotFoundException()
             }
@@ -136,7 +136,7 @@ class ProcessRepoImpl constructor(
             val process = it.getProcessInternal(processId)
             if (process != null) {
                 process.connectRecipe(from, to, element, reversed)
-                db.processQueries.upsert(roomMapper.map(process))
+                db.processQueries.update(process)
             } else {
                 throw ProcessNotFoundException()
             }
@@ -154,7 +154,7 @@ class ProcessRepoImpl constructor(
             val process = it.getProcessInternal(processId)
             if (process != null) {
                 process.disconnectRecipe(from, to, element, reversed)
-                db.processQueries.upsert(roomMapper.map(process))
+                db.processQueries.update(process)
             } else {
                 throw ProcessNotFoundException()
             }
@@ -171,7 +171,7 @@ class ProcessRepoImpl constructor(
             val process = it.getProcessInternal(processId)
             if (process != null) {
                 process.markNotConsumed(recipe, element, consumed)
-                db.processQueries.upsert(roomMapper.map(process))
+                db.processQueries.update(process)
             } else {
                 throw ProcessNotFoundException()
             }
@@ -193,8 +193,13 @@ class ProcessRepoImpl constructor(
         }
     }
 
-    private fun ProcessQueries.upsert(process: ProcessEntity) = with(process) {
-        upsert(name, unlocalized_name, localized_name, amount, node_count, json, process_id)
+    private fun ProcessQueries.update(process: Process) {
+        with(roomMapper.map(process)) {
+            update(name, unlocalized_name, localized_name, amount, node_count, json, process_id)
+        }
+        cache.access {
+            it.updateProcessCache(process.id, process)
+        }
     }
 
     private val pagingConfig: PagingConfig

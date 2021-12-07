@@ -24,19 +24,15 @@ insert:
 INSERT OR IGNORE INTO process
 VALUES ?;
 
-upsert {
-    UPDATE process
-    SET name = :name,
-        unlocalized_name = :unlocalizedName,
-        localized_name = :localizedName,
-        amount = :amount,
-        node_count = :nodeCount,
-        json = :json
-    WHERE process_id = :processId;
-
-    INSERT OR IGNORE INTO process
-    VALUES (:processId, :name, :unlocalizedName, :localizedName, :amount, :nodeCount, :json);
-}
+update:
+UPDATE process
+SET name = :name,
+    unlocalized_name = :unlocalizedName,
+    localized_name = :localizedName,
+    amount = :amount,
+    node_count = :nodeCount,
+    json = :json
+WHERE process_id = :processId;
 
 delete:
 DELETE FROM process
