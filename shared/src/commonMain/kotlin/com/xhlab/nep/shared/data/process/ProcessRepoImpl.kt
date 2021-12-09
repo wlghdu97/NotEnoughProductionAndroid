@@ -79,8 +79,11 @@ class ProcessRepoImpl constructor(
     ): Boolean {
         val processId = UUID.generateLongUUID().toString()
         val process = Process(processId, name, targetRecipe, keyElement)
-        db.processQueries.insert(roomMapper.map(process))
-        return db.processQueries.getLastProcessId().executeAsOne() == processId
+        // https://github.com/cashapp/sqldelight/issues/1828
+        return db.transactionWithResult {
+            db.processQueries.insert(roomMapper.map(process))
+            db.processQueries.getLastProcessId().executeAsOne() == processId
+        }
     }
 
     override suspend fun insertProcess(process: Process) {
