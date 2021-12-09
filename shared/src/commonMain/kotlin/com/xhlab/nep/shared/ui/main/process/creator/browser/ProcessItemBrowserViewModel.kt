@@ -25,12 +25,12 @@ class ProcessItemBrowserViewModel :
     val navigateToMachineList: Flow<Long>
         get() = _navigateToMachineList.flow
 
-    private val _navigateToRecipeDetails = EventFlow<Pair<Long, Int>>()
-    val navigateToRecipeDetails: Flow<Pair<Long, Int>>
+    private val _navigateToRecipeDetails = EventFlow<ElementIdWithMachineId>()
+    val navigateToRecipeDetails: Flow<ElementIdWithMachineId>
         get() = _navigateToRecipeDetails.flow
 
-    private val _returnResult = EventFlow<Pair<Recipe, RecipeElement>>()
-    val returnResult: Flow<Pair<Recipe, RecipeElement>>
+    private val _returnResult = EventFlow<RecipeWithElement>()
+    val returnResult: Flow<RecipeWithElement>
         get() = _returnResult.flow
 
     private fun requireElementId() =
@@ -45,13 +45,17 @@ class ProcessItemBrowserViewModel :
 
     override fun onClick(machineId: Int) {
         scope.launch {
-            _navigateToRecipeDetails.emit(requireElementId() to machineId)
+            _navigateToRecipeDetails.emit(ElementIdWithMachineId(requireElementId(), machineId))
         }
     }
 
     override fun onSelect(targetRecipe: Recipe, keyElement: RecipeElement) {
         scope.launch {
-            _returnResult.emit(targetRecipe to keyElement)
+            _returnResult.emit(RecipeWithElement(targetRecipe, keyElement))
         }
     }
+
+    data class ElementIdWithMachineId(val elementId: Long, val machineId: Int)
+
+    data class RecipeWithElement(val recipe: Recipe, val element: RecipeElement)
 }

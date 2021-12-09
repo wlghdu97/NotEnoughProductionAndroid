@@ -45,7 +45,6 @@ struct ProcessList: View {
                     } label: {
                         Text(MR.strings().menu_create_new.desc().localized())
                     }
-                    .disabled(true)
                     Button {
                         showProcessImportDialog = true
                     } label: {
@@ -65,6 +64,9 @@ struct ProcessList: View {
         }
         .sheet(isPresented: $showProcessImportDialog) {
             ProcessImportSheet(viewModel: viewModel.createProcessImportViewModel(), showSheet: $showProcessImportDialog)
+        }
+        .sheet(isPresented: $showProcessCreationDialog) {
+            ProcessCreationSheet(viewModel: viewModel.createProcessCreationViewModel(), showSheet: $showProcessCreationDialog)
         }
         .alert(StringResolver.global.formatString(format: MR.strings().title_delete_process, args: viewModel.deleteProcess?.name ?? ""),
                isPresented: $viewModel.showDeleteProcessDialog,

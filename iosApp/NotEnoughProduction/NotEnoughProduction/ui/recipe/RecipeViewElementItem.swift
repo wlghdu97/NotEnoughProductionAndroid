@@ -14,9 +14,28 @@ struct RecipeViewElementItem: View {
     let withIcon: Bool
 
     var body: some View {
-        Button {
-            elementListener?.onClick(elementId: element.id)
-        } label: {
+        if let listener = elementListener {
+            Button {
+                listener.onClick(elementId: element.id)
+            } label: {
+                ElementItem(element: element, withIcon: withIcon)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .padding(.vertical, 4)
+        } else {
+            ElementItem(element: element, withIcon: withIcon)
+        }
+    }
+}
+
+extension RecipeViewElementItem {
+    private struct ElementItem: View {
+        let element: ModelRecipeElement
+        let withIcon: Bool
+
+        @ViewBuilder
+        var body: some View {
             HStack {
                 RecipeElementItem(element: element, withAmount: true, withIcon: withIcon)
                 Spacer()
@@ -27,10 +46,7 @@ struct RecipeViewElementItem: View {
                     .foregroundColor(Color(UIColor.tertiaryLabel))
                     .padding(4)
             }
-            .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
-        .padding(.vertical, 4)
     }
 }
 

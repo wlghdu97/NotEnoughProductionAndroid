@@ -31,7 +31,9 @@ struct ElementDetailScreen: View {
                     if element.type == ModelElement.companion.ORE_CHAIN {
                         ElementOreDictList(viewModel: viewModel.createOreDictListViewModel(element.id))
                     } else {
-                        ElementRecipeList(viewModel: viewModel.createRecipeListViewModel(element.id))
+                        ElementRecipeList(viewModel: viewModel.createRecipeListViewModel(element.id)) { viewModel, item in
+                            MachineRecipeList(viewModel: viewModel.createMachineRecipeListViewModel(item.machineId))
+                        }
                     }
                     ElementUsageList(viewModel: viewModel.createUsageListViewModel(element.id))
                 }

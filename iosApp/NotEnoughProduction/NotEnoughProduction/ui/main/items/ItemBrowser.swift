@@ -8,9 +8,10 @@
 import SwiftUI
 import Shared
 
-struct ItemBrowser: View {
+struct ItemBrowser<Destination: View>: View {
     @StateObject var viewModel: ItemBrowserSwiftUIViewModel
     @State private var searchTerm = ""
+    let detailView: (ItemBrowserSwiftUIViewModel, ModelRecipeElement) -> Destination
 
     var body: some View {
         Group {
@@ -19,7 +20,7 @@ struct ItemBrowser: View {
                     Section(header: Text(StringResolver.global.formatString(format: MR.strings().form_matched_total, args: viewModel.matchedCount))) {
                         ForEach(items, id: \.id) { item in
                             NavigationLink {
-                                ElementDetailScreen(viewModel: viewModel.createElementDetailViewModel(item.id))
+                                detailView(viewModel, item)
                             } label: {
                                 RecipeElementItem(element: item, withIcon: viewModel.isIconLoaded)
                                     .equatable()
@@ -49,6 +50,8 @@ struct ItemBrowser: View {
 
 struct ItemBrowser_Previews: PreviewProvider {
     static var previews: some View {
-        ItemBrowser(viewModel: ItemBrowserSwiftUIViewModel())
+        ItemBrowser(viewModel: ItemBrowserSwiftUIViewModel()) { viewModel, item in
+            ElementDetailScreen(viewModel: viewModel.createElementDetailViewModel(item.id))
+        }
     }
 }

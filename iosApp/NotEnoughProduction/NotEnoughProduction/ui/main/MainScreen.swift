@@ -19,7 +19,9 @@ struct MainScreen: View {
     var body: some View {
         let nav = NavigationView {
             let list = List {
-                NavigationLink(destination: ItemBrowser(viewModel: viewModel.createItemBrowserViewModel()), tag: 0, selection: $selection) {
+                NavigationLink(destination: ItemBrowser(viewModel: viewModel.createItemBrowserViewModel()) { browserViewModel, item in
+                    ElementDetailScreen(viewModel: browserViewModel.createElementDetailViewModel(item.id))
+                }, tag: 0, selection: $selection) {
                     Label(MR.strings().menu_item_browser.desc().localized(), systemImage: "books.vertical.fill")
                 }
                 NavigationLink(destination: MachineBrowser(viewModel: viewModel.createMachineBrowserViewModel()), tag: 1, selection: $selection) {

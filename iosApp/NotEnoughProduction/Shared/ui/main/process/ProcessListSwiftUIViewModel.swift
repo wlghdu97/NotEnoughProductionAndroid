@@ -45,6 +45,7 @@ final class ProcessListSwiftUIViewModel: SwiftUIViewModel<ProcessListViewModel>,
 
     private var processRenameFactory: ComponentFactory<ProcessRenameSwiftUIViewModel.Component>?
     private var processImportFactory: ComponentFactory<ProcessImportSwiftUIViewModel.Component>?
+    private var processCreationFactory: ComponentFactory<ProcessCreationSwiftUIViewModel.Component>?
 
     private weak var processPager: Multiplatform_pagingPager<AnyObject, AnyObject>? {
         didSet {
@@ -61,10 +62,12 @@ final class ProcessListSwiftUIViewModel: SwiftUIViewModel<ProcessListViewModel>,
 
     init(viewModel: ProcessListViewModel,
          processRenameFactory: ComponentFactory<ProcessRenameSwiftUIViewModel.Component>,
-         processImportFactory: ComponentFactory<ProcessImportSwiftUIViewModel.Component>) {
+         processImportFactory: ComponentFactory<ProcessImportSwiftUIViewModel.Component>,
+         processCreationFactory: ComponentFactory<ProcessCreationSwiftUIViewModel.Component>) {
         super.init(viewModel: viewModel)
         self.processRenameFactory = processRenameFactory
         self.processImportFactory = processImportFactory
+        self.processCreationFactory = processCreationFactory
 
         viewModel.toCommonFlow(flow: viewModel.processList).watch { [unowned self] pager in
             guard let pager = pager as? Multiplatform_pagingPager<AnyObject, AnyObject> else {
@@ -132,6 +135,14 @@ final class ProcessListSwiftUIViewModel: SwiftUIViewModel<ProcessListViewModel>,
             return ProcessImportSwiftUIViewModel()
         }
     }
+
+    func createProcessCreationViewModel() -> ProcessCreationSwiftUIViewModel {
+        if let viewModel = processCreationFactory?.build(()) {
+            return viewModel
+        } else {
+            return ProcessCreationSwiftUIViewModel()
+        }
+    }
 }
 
 extension ProcessListSwiftUIViewModel: ProcessListener {
@@ -164,8 +175,12 @@ extension ProcessListSwiftUIViewModel {
         static func configureRoot(binder bind: ReceiptBinder<ProcessListSwiftUIViewModel>) -> BindingReceipt<ProcessListSwiftUIViewModel> {
             bind.to { (viewModel: ProcessListViewModel,
                        processRenameFactory: ComponentFactory<ProcessRenameSwiftUIViewModel.Component>,
-                       processImportFactory: ComponentFactory<ProcessImportSwiftUIViewModel.Component>) in
-                ProcessListSwiftUIViewModel(viewModel: viewModel, processRenameFactory: processRenameFactory, processImportFactory: processImportFactory)
+                       processImportFactory: ComponentFactory<ProcessImportSwiftUIViewModel.Component>,
+                       processCreationFactory: ComponentFactory<ProcessCreationSwiftUIViewModel.Component>) in
+                ProcessListSwiftUIViewModel(viewModel: viewModel,
+                                            processRenameFactory: processRenameFactory,
+                                            processImportFactory: processImportFactory,
+                                            processCreationFactory: processCreationFactory)
             }
         }
     }

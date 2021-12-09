@@ -25,7 +25,7 @@ class ProcessCreationViewModel constructor(
     private val _processName = MutableStateFlow<String?>(null)
     val processName = _processName.mapNotNull { it }
 
-    private val _recipePair = MutableStateFlow<Pair<Recipe, RecipeElement>?>(null)
+    private val _recipePair = MutableStateFlow<RecipeWithElement?>(null)
     val recipePair = _recipePair.mapNotNull { it }
 
     private val _isNameValid = MutableStateFlow<Boolean?>(null)
@@ -52,7 +52,7 @@ class ProcessCreationViewModel constructor(
     }
 
     fun submitRecipe(recipe: Recipe, keyElement: RecipeElement) {
-        _recipePair.value = recipe to keyElement
+        _recipePair.value = RecipeWithElement(recipe, keyElement)
     }
 
     fun createProcess() {
@@ -60,14 +60,14 @@ class ProcessCreationViewModel constructor(
         val recipePair = _recipePair.value
         if (isNameValid == true && recipePair != null) {
             val handler = CoroutineExceptionHandler { _, throwable ->
-                Logger.e("Failed to create process", throwable)
+                Logger.e("Failed to create process ${throwable.stackTraceToString()}", throwable)
                 scope.launch {
                     _creationErrorMessage.emit(stringResolver.getString(MR.strings.error_failed_to_create_process))
                 }
             }
             scope.launch(handler) {
                 val name = _processName.value.toString().trim()
-                processRepo.createProcess(name, recipePair.first, recipePair.second)
+                processRepo.createProcess(name, recipePair.recipe, recipePair.element)
                 _dismiss.emit(Unit)
             }
         } else if (isNameValid == null) {
@@ -78,4 +78,6 @@ class ProcessCreationViewModel constructor(
             }
         }
     }
+
+    data class RecipeWithElement(val recipe: Recipe, val element: RecipeElement)
 }

@@ -48,7 +48,9 @@ final class ProcessRenameSwiftUIViewModel: SwiftUIViewModel<ProcessRenameViewMod
         }
 
         viewModel.toCommonFlow(flow: viewModel.dismiss).watch { dismiss in
-            self.dismiss = true
+            if dismiss != nil {
+                self.dismiss = true
+            }
         }
     }
 
