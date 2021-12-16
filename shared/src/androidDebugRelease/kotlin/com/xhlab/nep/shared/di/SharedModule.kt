@@ -33,6 +33,7 @@ import javax.inject.Singleton
     includes = [
         SqlDelightModule::class,
         DomainModule::class,
+        ParserModule::class,
         UIModule::class
     ]
 )

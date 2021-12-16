@@ -1,17 +1,17 @@
 package com.xhlab.nep.shared.parser
 
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
 import com.xhlab.nep.shared.parser.oredict.ReplacementParser
+import com.xhlab.nep.shared.parser.stream.JsonReader
+import com.xhlab.nep.shared.parser.stream.JsonToken
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class ReplacementListParser @Inject constructor(
+@ProvideWithDagger("Parser")
+class ReplacementListParser constructor(
     private val replacementParser: ReplacementParser,
     private val oreDictRepo: OreDictRepo
 ) {
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun parse(reader: JsonReader) = flow {
         emit("parsing replacement list")
         while (reader.hasNext()) {

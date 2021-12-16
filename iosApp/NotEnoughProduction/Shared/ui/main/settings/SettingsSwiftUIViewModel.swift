@@ -14,7 +14,17 @@ import Shared
 
 final class SettingsSwiftUIViewModel: SwiftUIViewModel<SettingsViewModel>, ObservableObject {
     @Published var isFirstDBLoad = false
-    @Published var isDBLoaded = false
+    @Published var isDBLoaded = false {
+        didSet {
+            if cancelToggleDB {
+                cancelToggleDB = false
+                return
+            }
+            if oldValue != isDBLoaded {
+                viewModel.toggleDBLoaded()
+            }
+        }
+    }
     @Published var isIconLoaded = false {
         didSet {
             if cancelToggleIcon {
@@ -27,10 +37,15 @@ final class SettingsSwiftUIViewModel: SwiftUIViewModel<SettingsViewModel>, Obser
         }
     }
 
+    @Published var parserLog: String?
+    @Published var isParsing = false
+    @Published var showJsonPicker = false
+
     @Published var iconUnzipLog: IconUnzipUseCase.Progress?
     @Published var isUnzipping = false
     @Published var showIconZipPicker = false
 
+    private var cancelToggleDB = true
     private var cancelToggleIcon = true
 
     override init(viewModel: SettingsViewModel) {
@@ -54,6 +69,18 @@ final class SettingsSwiftUIViewModel: SwiftUIViewModel<SettingsViewModel>, Obser
             }
         }
 
+        viewModel.toCommonFlow(flow: viewModel.parseRecipeLog).watch { progress in
+            if let progress = progress as? String {
+                self.parserLog = progress
+            }
+        }
+
+        viewModel.toCommonFlow(flow: viewModel.isParsing).watch { parsing in
+            if let parsing = parsing as? Bool {
+                self.isParsing = parsing
+            }
+        }
+
         viewModel.toCommonFlow(flow: viewModel.iconUnzipLog).watch { progress in
             if let progress = progress as? IconUnzipUseCase.Progress {
                 self.iconUnzipLog = progress
@@ -66,6 +93,10 @@ final class SettingsSwiftUIViewModel: SwiftUIViewModel<SettingsViewModel>, Obser
             }
         }
 
+        viewModel.toCommonFlow(flow: viewModel.showJsonPicker).watch { _ in
+            self.showJsonPicker = true
+        }
+
         viewModel.toCommonFlow(flow: viewModel.showIconZipPicker).watch { _ in
             self.showIconZipPicker = true
         }
@@ -75,12 +106,29 @@ final class SettingsSwiftUIViewModel: SwiftUIViewModel<SettingsViewModel>, Obser
         super.init()
     }
 
+    func toggleDBLoaded() {
+        viewModel.toggleDBLoaded()
+    }
+
     func toggleIconLoaded() {
         viewModel.toggleIconLoaded()
     }
 
+    func parse(_ data: Data) {
+        viewModel.parseRecipes {
+            let stream = InputStream(data: data)
+            debugPrint(data.count)
+            return JsonReader(input: stream)
+        }
+    }
+
     func reloadIcons(_ archive: Archive) {
         viewModel.reloadIcons(archiver: SwiftZipArchiver(archive))
+    }
+
+    func cancelLoadDB() {
+        cancelToggleDB = true
+        isDBLoaded = false
     }
 
     func cancelLoadIcons() {

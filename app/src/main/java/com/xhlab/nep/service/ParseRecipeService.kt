@@ -10,6 +10,7 @@ import android.os.Binder
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.google.gson.stream.JsonReader
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
@@ -68,7 +69,8 @@ class ParseRecipeService @Inject constructor() : Service() {
             val inputStream = contentResolver.openInputStream(fileUri)
             if (inputStream != null) {
                 CoroutineScope(SupervisorJob()).launch {
-                    val job = parseRecipeUseCase.execute(Dispatchers.Default, inputStream).apply {
+                    val reader = { JsonReader(inputStream.bufferedReader()) }
+                    val job = parseRecipeUseCase.execute(Dispatchers.Default, reader).apply {
                         parseRecipeJob = this
                     }
                     withContext(job) {

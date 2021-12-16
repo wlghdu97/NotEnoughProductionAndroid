@@ -4,6 +4,8 @@ import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.shared.domain.icon.IconUnzipUseCase
+import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
+import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.preference.GeneralPreference
 import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.shared.ui.invokeMediatorUseCase
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 
 @ProvideWithDagger("SettingsViewModel")
 class SettingsViewModel constructor(
+    private val parseRecipeUseCase: ParseRecipeUseCase,
     private val iconUnzipUseCase: IconUnzipUseCase,
     private val generalPreference: GeneralPreference,
 ) : ViewModel() {
@@ -23,15 +26,35 @@ class SettingsViewModel constructor(
     val isDBLoaded = generalPreference.isDBLoaded
     val isIconLoaded = generalPreference.isIconLoaded
 
+    private val parseRecipeResult = parseRecipeUseCase.observe()
+    val parseRecipeLog = parseRecipeResult.mapNotNull { it.data }
+    val isParsing = parseRecipeResult.map {
+        it.data != null && it.status == Resource.Status.LOADING
+    }
+
     private val iconUnzipResult = iconUnzipUseCase.observe()
     val iconUnzipLog = iconUnzipResult.mapNotNull { it.data }
     val isUnzipping = iconUnzipResult.map {
         it.data != null && it.status == Resource.Status.LOADING
     }
 
+    private val _showJsonPicker = EventFlow<Unit>()
+    val showJsonPicker: Flow<Unit>
+        get() = _showJsonPicker.flow
+
     private val _showIconZipPicker = EventFlow<Unit>()
     val showIconZipPicker: Flow<Unit>
         get() = _showIconZipPicker.flow
+
+    fun toggleDBLoaded() {
+        scope.launch {
+            if (generalPreference.getDBLoaded()) {
+                generalPreference.setDBLoaded(false)
+            } else {
+                _showJsonPicker.emit(Unit)
+            }
+        }
+    }
 
     fun toggleIconLoaded() {
         scope.launch {
@@ -43,9 +66,15 @@ class SettingsViewModel constructor(
         }
     }
 
+    fun parseRecipes(reader: () -> JsonReader) {
+        invokeMediatorUseCase(parseRecipeUseCase, reader)
+    }
+
     fun reloadIcons(archiver: ZipArchiver) {
         invokeMediatorUseCase(iconUnzipUseCase, archiver)
     }
+
+    fun isDBLoaded() = generalPreference.getDBLoaded()
 
     fun isIconLoaded() = generalPreference.getIconLoaded()
 }

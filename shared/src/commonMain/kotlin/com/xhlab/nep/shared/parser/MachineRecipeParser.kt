@@ -1,6 +1,6 @@
 package com.xhlab.nep.shared.parser
 
-import com.google.gson.stream.JsonReader
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.FluidForm
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.model.form.recipes.MachineRecipeForm
@@ -9,18 +9,18 @@ import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
+import com.xhlab.nep.shared.parser.stream.JsonReader
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class MachineRecipeParser @Inject constructor(
+@ProvideWithDagger("Parser")
+class MachineRecipeParser constructor(
     private val itemParser: ItemParser,
     private val fluidParser: FluidParser,
     private val machineRepo: MachineRepo,
     private val recipeRepo: RecipeRepo
 ) : RecipeParser<MachineRecipeForm>() {
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parse(type: String, reader: JsonReader) = flow {
         while (reader.hasNext()) {
             reader.nextName()
@@ -28,7 +28,6 @@ class MachineRecipeParser @Inject constructor(
         }
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun FlowCollector<String>.parseMachineList(
         reader: JsonReader,
         modName: String
@@ -40,7 +39,6 @@ class MachineRecipeParser @Inject constructor(
         reader.endArray()
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun FlowCollector<String>.parseMachine(
         reader: JsonReader,
         modName: String
@@ -72,7 +70,6 @@ class MachineRecipeParser @Inject constructor(
         recipeRepo.insertRecipes(mappedRecipes)
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parseElement(reader: JsonReader): MachineRecipeForm {
         var isEnabled = false
         var duration = 0

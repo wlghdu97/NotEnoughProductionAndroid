@@ -1,12 +1,17 @@
 package com.xhlab.nep.shared.parser.element
 
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
+import com.xhlab.nep.MR
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.shared.parser.Parser
-import javax.inject.Inject
+import com.xhlab.nep.shared.parser.stream.JsonReader
+import com.xhlab.nep.shared.parser.stream.JsonToken
+import com.xhlab.nep.shared.util.StringResolver
 
-class ItemParser @Inject constructor() : Parser<ItemForm> {
+@ProvideWithDagger("Parser")
+class ItemParser constructor(
+    private val stringResolver: StringResolver
+) : Parser<ItemForm> {
 
     override suspend fun parseElement(reader: JsonReader): ItemForm {
         var amount = 0
@@ -37,7 +42,10 @@ class ItemParser @Inject constructor() : Parser<ItemForm> {
                 "meta" ->
                     metaData = reader.nextString() // meta data
                 "percentage" ->
-                    metaData = String.format("%.2f%%", reader.nextDouble() * 100) // drop chance
+                    metaData = stringResolver.formatString(
+                        MR.strings.form_drop_chance,
+                        reader.nextDouble() * 100
+                    ) // drop chance
             }
         }
         reader.endObject()

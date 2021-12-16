@@ -1,12 +1,13 @@
 package com.xhlab.nep.shared.parser.element
 
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.FluidForm
 import com.xhlab.nep.shared.parser.Parser
-import javax.inject.Inject
+import com.xhlab.nep.shared.parser.stream.JsonReader
+import com.xhlab.nep.shared.parser.stream.JsonToken
 
-class FluidParser @Inject constructor() : Parser<FluidForm> {
+@ProvideWithDagger("Parser")
+class FluidParser : Parser<FluidForm> {
 
     override suspend fun parseElement(reader: JsonReader): FluidForm {
         var amount = 0

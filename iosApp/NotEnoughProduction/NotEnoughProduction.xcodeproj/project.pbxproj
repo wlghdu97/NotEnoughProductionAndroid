@@ -40,6 +40,7 @@
 		C41A9310274A522100D05B41 /* ProcessImportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A930F274A522100D05B41 /* ProcessImportSheet.swift */; };
 		C41A9312274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */; };
 		C41A9314274A53E400D05B41 /* ProcessExportSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */; };
+		C4526FBE276A216300069BB7 /* ParserModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4526FBD276A216300069BB7 /* ParserModule.swift */; };
 		C45C391E27622EFC007AFEBF /* ProcessMachineRecipeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45C391D27622EFC007AFEBF /* ProcessMachineRecipeList.swift */; };
 		C4706A9C274A875F00F444B6 /* SettingsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706A9B274A875F00F444B6 /* SettingsScreen.swift */; };
 		C4706A9E274A89DC00F444B6 /* ElementDetailSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4706A9D274A89DC00F444B6 /* ElementDetailSwiftUIViewModel.swift */; };
@@ -80,6 +81,7 @@
 		C47C0A98270D8358009A6A4F /* NotEnoughProductionApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C47C0A97270D8358009A6A4F /* NotEnoughProductionApp.swift */; };
 		C47C0A9C270D835A009A6A4F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9B270D835A009A6A4F /* Assets.xcassets */; };
 		C47C0A9F270D835A009A6A4F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */; };
+		C4A286F42758FEEB00965D38 /* JsonPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A286F32758FEEB00965D38 /* JsonPicker.swift */; };
 		C4E48FE7275E3BF000790C86 /* ProcessCreationSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E48FE6275E3BF000790C86 /* ProcessCreationSheet.swift */; };
 		C4E48FE9275E3C0500790C86 /* ProcessCreationSwiftUIViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E48FE8275E3C0500790C86 /* ProcessCreationSwiftUIViewModel.swift */; };
 		C4E48FEB275FA12C00790C86 /* ModelRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4E48FEA275FA12C00790C86 /* ModelRecipe.swift */; };
@@ -135,6 +137,7 @@
 		C41A930F274A522100D05B41 /* ProcessImportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImportSheet.swift; sourceTree = "<group>"; };
 		C41A9311274A523400D05B41 /* ProcessImportSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessImportSwiftUIViewModel.swift; sourceTree = "<group>"; };
 		C41A9313274A53E400D05B41 /* ProcessExportSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessExportSheet.swift; sourceTree = "<group>"; };
+		C4526FBD276A216300069BB7 /* ParserModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParserModule.swift; sourceTree = "<group>"; };
 		C45C391D27622EFC007AFEBF /* ProcessMachineRecipeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessMachineRecipeList.swift; sourceTree = "<group>"; };
 		C4706A9B274A875F00F444B6 /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
 		C4706A9D274A89DC00F444B6 /* ElementDetailSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementDetailSwiftUIViewModel.swift; sourceTree = "<group>"; };
@@ -174,6 +177,7 @@
 		C47C0A9B270D835A009A6A4F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C47C0A9E270D835A009A6A4F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C49D93EB270EF9F40057BB63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C4A286F32758FEEB00965D38 /* JsonPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonPicker.swift; sourceTree = "<group>"; };
 		C4E48FE6275E3BF000790C86 /* ProcessCreationSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessCreationSheet.swift; sourceTree = "<group>"; };
 		C4E48FE8275E3C0500790C86 /* ProcessCreationSwiftUIViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessCreationSwiftUIViewModel.swift; sourceTree = "<group>"; };
 		C4E48FEA275FA12C00790C86 /* ModelRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelRecipe.swift; sourceTree = "<group>"; };
@@ -220,6 +224,7 @@
 				C41A92C92747D2F700D05B41 /* DomainModule.swift */,
 				C41A92CB2747D31100D05B41 /* UIModule.swift */,
 				C41A92CD2747D32C00D05B41 /* SwiftUIViewModel.swift */,
+				C4526FBD276A216300069BB7 /* ParserModule.swift */,
 			);
 			path = di;
 			sourceTree = "<group>";
@@ -395,6 +400,7 @@
 			children = (
 				C41A930927493D1200D05B41 /* TextFieldContainer.swift */,
 				C4706AFE2753D5E200F444B6 /* ArchivePicker.swift */,
+				C4A286F32758FEEB00965D38 /* JsonPicker.swift */,
 			);
 			path = util;
 			sourceTree = "<group>";
@@ -690,6 +696,7 @@
 				C4706AB8274D2CE500F444B6 /* ElementUsageList.swift in Sources */,
 				C41A92F42748C53B00D05B41 /* String.swift in Sources */,
 				C41A92E72747F6A300D05B41 /* RecipeElementItem.swift in Sources */,
+				C4A286F42758FEEB00965D38 /* JsonPicker.swift in Sources */,
 				C41A92FA2748C7A300D05B41 /* ProcessListSwiftUIViewModel.swift in Sources */,
 				C4E48FED275FA22100790C86 /* ProcessItemBrowserSwiftUIViewModel.swift in Sources */,
 				C4706ADB274EA4A600F444B6 /* HasApply.swift in Sources */,
@@ -714,6 +721,7 @@
 				C4E48FE7275E3BF000790C86 /* ProcessCreationSheet.swift in Sources */,
 				C4706AD5274E9EFC00F444B6 /* RecipeViewItem.swift in Sources */,
 				C4706AFA27537C6200F444B6 /* SwiftZipArchiver.swift in Sources */,
+				C4526FBE276A216300069BB7 /* ParserModule.swift in Sources */,
 				C4706ACE274E9BD200F444B6 /* MachineRecipeListSwiftUIViewModel.swift in Sources */,
 				C41A9314274A53E400D05B41 /* ProcessExportSheet.swift in Sources */,
 				C41A92E927480B6F00D05B41 /* MachineDomainModule.swift in Sources */,

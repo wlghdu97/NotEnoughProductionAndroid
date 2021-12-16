@@ -178,6 +178,7 @@
 
     <string name="form_unzip_file">Extracting : %s</string>
     <string name="form_work_done">Done! elapsed time : %d sec</string>
+    <string name="form_drop_chance">%.2f%%</string>
 
     <string name="key_theme_category">theme_category</string>
     <string name="key_theme">theme</string>

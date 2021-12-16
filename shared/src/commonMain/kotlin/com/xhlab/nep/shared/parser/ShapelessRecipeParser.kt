@@ -1,20 +1,20 @@
 package com.xhlab.nep.shared.parser
 
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.model.form.recipes.ShapelessRecipeForm
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.VanillaItemParser
+import com.xhlab.nep.shared.parser.stream.JsonReader
+import com.xhlab.nep.shared.parser.stream.JsonToken
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class ShapelessRecipeParser @Inject constructor(
+@ProvideWithDagger("Parser")
+class ShapelessRecipeParser constructor(
     private val vanillaItemParser: VanillaItemParser,
     private val recipeRepo: RecipeRepo
 ) : RecipeParser<ShapelessRecipeForm>() {
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parse(type: String, reader: JsonReader) = flow {
         emit("parsing shapeless recipes")
         while (reader.hasNext()) {
@@ -29,7 +29,6 @@ class ShapelessRecipeParser @Inject constructor(
         }
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parseElement(reader: JsonReader): ShapelessRecipeForm {
         var inputItems = emptyList<ItemForm>()
         var outputItem: ItemForm? = null

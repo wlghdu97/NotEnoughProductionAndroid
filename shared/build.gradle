@@ -51,6 +51,7 @@ kotlin {
         all {
             languageSettings {
                 optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                optIn("kotlin.ExperimentalUnsignedTypes")
             }
         }
         commonMain.dependencies {

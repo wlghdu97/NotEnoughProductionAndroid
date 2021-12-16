@@ -1,21 +1,43 @@
 package com.xhlab.nep.shared.parser.oredict
 
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.ElementForm
 import com.xhlab.nep.model.form.ItemForm
-import com.xhlab.nep.model.form.OreDictForm
+import com.xhlab.nep.model.form.ReplacementForm
 import com.xhlab.nep.shared.parser.Parser
-import javax.inject.Inject
+import com.xhlab.nep.shared.parser.stream.JsonReader
+import com.xhlab.nep.shared.parser.stream.JsonToken
 
-class OreDictItemParser @Inject constructor() : Parser<ElementForm> {
+@ProvideWithDagger("Parser")
+class ReplacementParser : Parser<ReplacementForm> {
 
-    override suspend fun parseElement(reader: JsonReader): ElementForm {
-        return if (reader.peek() == JsonToken.BEGIN_ARRAY) {
-            parseOreDictNameList(reader)
-        } else {
-            parseItemInternal(reader)
+    override suspend fun parseElement(reader: JsonReader): ReplacementForm {
+        var oreDictName = ""
+        var elementList: List<ElementForm> = emptyList()
+
+        reader.beginObject()
+        while (reader.hasNext()) {
+            when (reader.nextName()) {
+                "name" -> oreDictName = reader.nextString()
+                "reps" -> elementList = parseElementList(reader)
+            }
         }
+        reader.endObject()
+
+        return ReplacementForm(
+            oreDictName = oreDictName,
+            elementList = elementList
+        )
+    }
+
+    private fun parseElementList(reader: JsonReader): List<ElementForm> {
+        val list = ArrayList<ElementForm>()
+        reader.beginArray()
+        while (reader.hasNext()) {
+            list.add(parseItemInternal(reader))
+        }
+        reader.endArray()
+        return list
     }
 
     private fun parseItemInternal(reader: JsonReader): ItemForm {
@@ -49,19 +71,6 @@ class OreDictItemParser @Inject constructor() : Parser<ElementForm> {
             amount = amount,
             unlocalizedName = unlocalizedName,
             localizedName = localizedName
-        )
-    }
-
-    private fun parseOreDictNameList(reader: JsonReader): OreDictForm {
-        val nameList = ArrayList<String>()
-        reader.beginArray()
-        while (reader.hasNext()) {
-            nameList.add(reader.nextString())
-        }
-        reader.endArray()
-        return OreDictForm(
-            amount = 1,
-            oreDictNameList = nameList
         )
     }
 }

@@ -17,6 +17,7 @@ struct AppComponent: Cleanse.RootComponent {
         binder.include(module: DatabaseModule.self)
         binder.include(module: DomainModule.self)
         binder.include(module: UIModule.self)
+        binder.include(module: ParserModule.self)
     }
 
     static func configureRoot(binder bind: ReceiptBinder<PropertyInjector<NotEnoughProductionApp>>) -> BindingReceipt<PropertyInjector<NotEnoughProductionApp>> {

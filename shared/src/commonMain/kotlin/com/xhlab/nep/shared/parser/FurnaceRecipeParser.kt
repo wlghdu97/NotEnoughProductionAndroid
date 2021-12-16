@@ -1,25 +1,27 @@
 package com.xhlab.nep.shared.parser
 
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
+import co.touchlab.stately.concurrency.AtomicInt
+import co.touchlab.stately.concurrency.value
+import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.model.form.recipes.MachineRecipeForm
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
 import com.xhlab.nep.shared.parser.element.ItemParser
+import com.xhlab.nep.shared.parser.stream.JsonReader
+import com.xhlab.nep.shared.parser.stream.JsonToken
 import kotlinx.coroutines.flow.flow
-import javax.inject.Inject
 
-class FurnaceRecipeParser @Inject constructor(
+@ProvideWithDagger("Parser")
+class FurnaceRecipeParser constructor(
     private val itemParser: ItemParser,
     private val machineRepo: MachineRepo,
     private val recipeRepo: RecipeRepo
 ) : RecipeParser<MachineRecipeForm>() {
 
-    private var machineId: Int = -1
+    private var machineId = AtomicInt(-1)
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parse(type: String, reader: JsonReader) = flow {
         emit("parsing furnace recipes")
         registerFurnace()
@@ -35,7 +37,6 @@ class FurnaceRecipeParser @Inject constructor(
         }
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun parseElement(reader: JsonReader): MachineRecipeForm {
         var input: ItemForm? = null
         var output: ItemForm? = null
@@ -57,7 +58,7 @@ class FurnaceRecipeParser @Inject constructor(
             duration = 200,
             ept = 1,
             powerType = MachineRecipeView.Companion.PowerType.FUEL.type,
-            machineId = machineId,
+            machineId = machineId.value,
             itemInputs = listOf(input),
             itemOutputs = listOf(output),
             fluidInputs = emptyList(),
@@ -66,7 +67,7 @@ class FurnaceRecipeParser @Inject constructor(
     }
 
     private suspend fun registerFurnace() {
-        machineId = machineRepo.insertMachine("minecraft", "Furnace")
+        machineId.value = machineRepo.insertMachine("minecraft", "Furnace")
             ?: throw NullPointerException("failed to insert furnace.")
     }
 }

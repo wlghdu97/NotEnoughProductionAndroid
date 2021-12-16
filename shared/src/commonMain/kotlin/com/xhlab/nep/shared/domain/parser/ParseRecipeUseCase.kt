@@ -1,23 +1,22 @@
 package com.xhlab.nep.shared.domain.parser
 
-import com.google.gson.stream.JsonReader
+import co.touchlab.kermit.Logger
 import com.xhlab.multiplatform.domain.Cancellable
 import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.domain.BaseMediatorUseCase
 import com.xhlab.nep.shared.parser.*
+import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.preference.GeneralPreference
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.FlowCollector
+import com.xhlab.nep.shared.util.epochMillis
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.ProducerScope
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import timber.log.Timber
-import java.io.InputStream
-import javax.inject.Inject
 
-class ParseRecipeUseCase @Inject constructor(
+class ParseRecipeUseCase constructor(
     private val machineRecipeParser: MachineRecipeParser,
     private val shapedRecipeParser: ShapedRecipeParser,
     private val shapelessRecipeParser: ShapelessRecipeParser,
@@ -27,11 +26,11 @@ class ParseRecipeUseCase @Inject constructor(
     private val furnaceRecipeParser: FurnaceRecipeParser,
     private val elementRepo: ElementRepo,
     private val machineRepo: MachineRepo,
-    private val generalPreference: GeneralPreference
-) : BaseMediatorUseCase<InputStream, String>(), Cancellable {
+    private val generalPreference: GeneralPreference,
+    private val io: CoroutineDispatcher
+) : BaseMediatorUseCase<() -> JsonReader, String>(), Cancellable {
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    override suspend fun executeInternal(params: InputStream) = flow {
+    override suspend fun executeInternal(params: () -> JsonReader) = channelFlow {
         // mark db is dirty
         generalPreference.setDBLoaded(false)
 
@@ -40,8 +39,8 @@ class ParseRecipeUseCase @Inject constructor(
         machineRepo.deleteAll()
         elementRepo.deleteAll()
 
-        val reader = JsonReader(params.bufferedReader())
-        val startTime = System.currentTimeMillis()
+        val startTime = epochMillis
+        val reader = params()
 
         reader.beginObject()
         emitLog("source start. ${reader.nextName()}")
@@ -64,22 +63,22 @@ class ParseRecipeUseCase @Inject constructor(
         reader.endObject()
 
         // close stream
-        params.close()
+        reader.close()
 
         // mark db is successfully loaded
         generalPreference.setDBLoaded(true)
 
-        val elapsedTime = System.currentTimeMillis() - startTime
+        val elapsedTime = epochMillis - startTime
         emitLog("done! elapsed time : ${elapsedTime / 1000} sec", Resource.Status.SUCCESS)
-    }.flowOn(Dispatchers.IO)
+    }.flowOn(io)
 
     override fun onCancellation() {
         val message = "job canceled."
-        Timber.i(message)
+        Logger.i(message)
         result.value = Resource.success(message)
     }
 
-    private suspend fun FlowCollector<Resource<String>>.parse(type: String, reader: JsonReader) {
+    private suspend fun ProducerScope<Resource<String>>.parse(type: String, reader: JsonReader) {
         when (type) {
             "shaped" -> shapedRecipeParser.parse(type, reader)
             "shapeless" -> shapelessRecipeParser.parse(type, reader)
@@ -93,11 +92,11 @@ class ParseRecipeUseCase @Inject constructor(
         }
     }
 
-    private suspend fun FlowCollector<Resource<String>>.emitLog(
+    private suspend fun ProducerScope<Resource<String>>.emitLog(
         log: String,
         status: Resource.Status = Resource.Status.LOADING
     ) {
-        Timber.i(log)
-        emit(Resource(status, log, null))
+        Logger.i(log)
+        send(Resource(status, log, null))
     }
 }

@@ -4,6 +4,8 @@
 //
 //  Created by xharpen on 2021/11/19.
 //
+//  swiftlint:disable closure_parameter_position
+//
 
 import Foundation
 import Cleanse
@@ -15,6 +17,30 @@ struct DomainModule: Cleanse.Module {
         binder.include(module: RecipeDomainModule.self)
         binder.include(module: MachineDomainModule.self)
         binder.include(module: ProcessDomainModule.self)
+
+        binder.bind(ParseRecipeUseCase.self)
+            .to { (machineRecipeParser: MachineRecipeParser,
+                   shapedRecipeParser: ShapedRecipeParser,
+                   shapelessRecipeParser: ShapelessRecipeParser,
+                   shapedOreRecipeParser: ShapedOreRecipeParser,
+                   shapelessOreRecipeParser: ShapelessOreRecipeParser,
+                   replacementListParser: ReplacementListParser,
+                   furnaceRecipeParser: FurnaceRecipeParser,
+                   elementRepo: ElementRepo,
+                   machineRepo: MachineRepo,
+                   preference: GeneralPreference) in
+                return ParseRecipeUseCase(machineRecipeParser: machineRecipeParser,
+                                          shapedRecipeParser: shapedRecipeParser,
+                                          shapelessRecipeParser: shapelessRecipeParser,
+                                          shapedOreRecipeParser: shapedOreRecipeParser,
+                                          shapelessOreRecipeParser: shapelessOreRecipeParser,
+                                          replacementListParser: replacementListParser,
+                                          furnaceRecipeParser: furnaceRecipeParser,
+                                          elementRepo: elementRepo,
+                                          machineRepo: machineRepo,
+                                          generalPreference: preference,
+                                          io: Dispatchers().default_)
+            }
 
         binder.bind(IconUnzipUseCase.self)
             .to { (preference: GeneralPreference, stringResolver: StringResolver) in

@@ -1,6 +1,6 @@
 package com.xhlab.nep.shared.parser
 
-import com.google.gson.stream.JsonReader
+import com.xhlab.nep.shared.parser.stream.JsonReader
 
 interface Parser<T> {
     suspend fun parseElement(reader: JsonReader): T

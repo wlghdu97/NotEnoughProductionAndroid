@@ -30,6 +30,11 @@ struct AppModule: Cleanse.Module {
             .to { (db: Nep) in
                 ElementRepoImpl(db: db, io: Dispatchers().default_)
             }
+        binder.bind(OreDictRepo.self)
+            .sharedInScope()
+            .to { (db: Nep) in
+                OreDictRepoImpl(adder: ReplacementAdder(db: db, io: Dispatchers().default_))
+            }
         binder.bind(RecipeRepo.self)
             .sharedInScope()
             .to { (db: Nep) in
