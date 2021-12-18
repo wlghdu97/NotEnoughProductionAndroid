@@ -1,5 +1,6 @@
 package com.xhlab.nep.shared.util
 
+import com.xhlab.nep.annotation.OpenForTesting
 import dev.icerock.moko.resources.PluralsResource
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.desc.PluralFormatted
@@ -8,6 +9,7 @@ import dev.icerock.moko.resources.desc.StringDesc
 import platform.Foundation.NSString
 import platform.Foundation.stringWithFormat
 
+@OpenForTesting
 actual class StringResolver {
 
     actual fun getString(res: StringResource): String {

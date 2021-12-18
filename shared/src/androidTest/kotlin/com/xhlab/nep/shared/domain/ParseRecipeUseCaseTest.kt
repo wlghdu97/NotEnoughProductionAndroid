@@ -12,14 +12,16 @@ import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.data.machinerecipe.MachineRecipeRepo
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
-import com.xhlab.nep.shared.domain.parser.*
+import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
 import com.xhlab.nep.shared.parser.*
 import com.xhlab.nep.shared.parser.element.FluidParser
 import com.xhlab.nep.shared.parser.element.ItemParser
 import com.xhlab.nep.shared.parser.element.VanillaItemParser
 import com.xhlab.nep.shared.parser.oredict.OreDictItemParser
 import com.xhlab.nep.shared.parser.oredict.ReplacementParser
+import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.preference.GeneralPreference
+import com.xhlab.nep.shared.util.StringResolver
 import com.xhlab.nep.shared.util.dropLoading
 import com.xhlab.nep.shared.util.runBlockingTest
 import com.xhlab.test.shared.RecipeData
@@ -45,6 +47,7 @@ class ParseRecipeUseCaseTest {
     private lateinit var oreDictRepo: OreDictRepo
 
     private lateinit var generalPreference: GeneralPreference
+    private lateinit var stringResolver: StringResolver
 
     private lateinit var useCase: ParseRecipeUseCase
 
@@ -58,8 +61,13 @@ class ParseRecipeUseCaseTest {
         machineRecipeRepo = FakeMachineRecipeRepo()
         oreDictRepo = FakeOreDictRepo()
 
+        stringResolver = mock {
+            // ignore meta data
+            doReturn("").`when`(it).formatString(any(), any())
+        }
+
         val machineRecipeParser = MachineRecipeParser(
-            itemParser = ItemParser(),
+            itemParser = ItemParser(stringResolver),
             fluidParser = FluidParser(),
             machineRepo = machineRepo,
             recipeRepo = recipeRepo
@@ -70,7 +78,8 @@ class ParseRecipeUseCaseTest {
         val shapedOreRecipeParser = ShapedOreRecipeParser(OreDictItemParser(), recipeRepo)
         val shapelessOreRecipeParser = ShapelessOreRecipeParser(OreDictItemParser(), recipeRepo)
         val replacementListParser = ReplacementListParser(ReplacementParser(), oreDictRepo)
-        val furnaceRecipeParser = FurnaceRecipeParser(ItemParser(), machineRepo, recipeRepo)
+        val furnaceRecipeParser =
+            FurnaceRecipeParser(ItemParser(stringResolver), machineRepo, recipeRepo)
 
         generalPreference = mock {
             doNothing().`when`(it).setDBLoaded(any())
@@ -86,7 +95,8 @@ class ParseRecipeUseCaseTest {
             furnaceRecipeParser = furnaceRecipeParser,
             elementRepo = elementRepo,
             machineRepo = machineRepo,
-            generalPreference = generalPreference
+            generalPreference = generalPreference,
+            io = Dispatchers.Main
         )
     }
 
@@ -94,7 +104,8 @@ class ParseRecipeUseCaseTest {
     fun executeSuccessfully() = runBlockingTest {
         val result = useCase.observe()
 
-        useCase.execute(Dispatchers.Main, RecipeData.getInputStream())
+        val reader = { JsonReader(RecipeData.getInputStream().bufferedReader()) }
+        useCase.execute(Dispatchers.Main, reader)
 
         assertEquals(
             Resource.Status.SUCCESS,

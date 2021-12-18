@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
 plugins {
     id "org.jetbrains.kotlin.multiplatform"
     id "kotlin-kapt"
+    id "kotlin-allopen"
     id "kotlinx-serialization"
     id "com.android.library"
     id "com.squareup.sqldelight"
@@ -205,4 +206,8 @@ sqldelight {
 multiplatformResources {
     multiplatformResourcesPackage = "com.xhlab.nep"
     disableStaticFrameworkWarning = true
+}
+
+allOpen {
+    annotation("com.xhlab.nep.annotation.OpenForTesting")
 }

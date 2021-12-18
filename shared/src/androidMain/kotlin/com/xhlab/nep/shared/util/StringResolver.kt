@@ -1,6 +1,7 @@
 package com.xhlab.nep.shared.util
 
 import android.content.Context
+import com.xhlab.nep.annotation.OpenForTesting
 import dev.icerock.moko.resources.PluralsResource
 import dev.icerock.moko.resources.StringResource
 import dev.icerock.moko.resources.desc.Plural
@@ -8,6 +9,7 @@ import dev.icerock.moko.resources.desc.Resource
 import dev.icerock.moko.resources.desc.ResourceFormatted
 import dev.icerock.moko.resources.desc.StringDesc
 
+@OpenForTesting
 actual class StringResolver constructor(private val context: Context) {
 
     actual fun getString(res: StringResource): String {
