@@ -1,17 +1,17 @@
 package com.xhlab.nep.ui.process.editor.selection
 
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
 import com.xhlab.nep.model.Recipe
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
-import com.xhlab.nep.shared.db.entity.ElementEntity
-import com.xhlab.nep.ui.process.editor.ProcessEditViewModel
-import com.xhlab.nep.ui.process.editor.selection.outer.OreDictRecipeSelectionListener
+import com.xhlab.nep.shared.ui.process.editor.ProcessEditViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.RecipeSelectionListener
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.OreDictRecipeSelectionListener
 
 fun ProcessEditViewModel.ConnectionConstraint.select(
     to: Recipe,
     listener: RecipeSelectionListener?,
-    keyElement: Element? = getKeyElement(recipe),
+    keyElement: RecipeElement? = getKeyElement(recipe),
     reversed: Boolean = isReversed()
 ) {
     val from = recipe
@@ -35,10 +35,10 @@ fun ProcessEditViewModel.ConnectionConstraint.select(
     if (keyElement != null) {
         if (oreDictListener != null &&
             recipe !is OreChainRecipe &&
-            element.type == ElementEntity.ORE_CHAIN
+            element.type == Element.ORE_CHAIN
         ) {
             val ingredient = (to.getInputs() + to.getOutput()).find {
-                (it as? ElementView)?.id == targetElementId
+                it.id == targetElementId
             }
             if (ingredient != null) {
                 if (ingredient.unlocalizedName != element.unlocalizedName) {
@@ -67,7 +67,7 @@ fun ProcessEditViewModel.ConnectionConstraint.isReversed(): Boolean {
 fun ProcessEditViewModel.ConnectionConstraint.getKeyElement(
     node: Recipe,
     isReversed: Boolean? = isReversed()
-): Element? {
+): RecipeElement? {
     val elementKey = element.unlocalizedName
     return if (connectToParent xor (isReversed == true)) {
         node.getInputs().find { it.unlocalizedName == elementKey }
@@ -76,7 +76,7 @@ fun ProcessEditViewModel.ConnectionConstraint.getKeyElement(
     }
 }
 
-fun ProcessEditViewModel.ConnectionConstraint.getKeyElement(node: Recipe): Element? {
+fun ProcessEditViewModel.ConnectionConstraint.getKeyElement(node: Recipe): RecipeElement? {
     val elementKey = element.unlocalizedName
     return (node.getInputs() + node.getOutput()).find { it.unlocalizedName == elementKey }
 }

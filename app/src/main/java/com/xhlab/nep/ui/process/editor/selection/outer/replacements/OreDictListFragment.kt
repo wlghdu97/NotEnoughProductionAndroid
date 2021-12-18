@@ -5,16 +5,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentOreDictListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.RecipeSelectionViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.replacements.OreDictListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.replacements.OreDictAdapter
 import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionActivity
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class OreDictListFragment : DaggerFragment(), ViewInit {
@@ -55,24 +58,23 @@ class OreDictListFragment : DaggerFragment(), ViewInit {
         recipeSelectionViewModel = requireActivity().viewModelProvider(viewModelFactory)
         viewModel = viewModelProvider(viewModelFactory)
 
-        recipeSelectionViewModel.constraint.observe(this) {
+        recipeSelectionViewModel.constraint.asLiveData().observe(this) {
             viewModel.init(it.element.id)
         }
 
-        viewModel.oreDictNameList.observe(this) {
-            oreDictAdapter.submitList(it)
+        viewModel.oreDictNameList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            oreDictAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToReplacementList.observe(this) {
+        viewModel.navigateToReplacementList.asLiveData().observe(this) {
             switchToReplacementList(it)
         }
     }
 
     private fun switchToReplacementList(elementKey: String) {
-        val replacementListFragment = ReplacementListFragment().apply {
-            arguments =
-                Bundle().apply { putString(ReplacementListFragment.ELEMENT_KEY, elementKey) }
-        }
+        val replacementListFragment = ReplacementListFragment.getFragment(elementKey)
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(

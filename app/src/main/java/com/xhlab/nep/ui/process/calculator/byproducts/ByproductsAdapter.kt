@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
-import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
-import com.xhlab.nep.ui.adapters.ElementViewHolder
+import com.xhlab.nep.shared.ui.process.calculator.ingredients.ElementKeyListener
+import com.xhlab.nep.ui.adapters.RecipeElementViewHolder
 import com.xhlab.nep.ui.process.calculator.cycles.RecipeRatio
-import com.xhlab.nep.ui.process.calculator.ingredients.ElementKeyListener
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import java.text.DecimalFormat
@@ -20,8 +20,8 @@ class ByproductsAdapter(
     private val listener: ElementKeyListener? = null
 ) : RecyclerView.Adapter<ByproductsAdapter.ByproductViewHolder>() {
 
-    private val elementRatioMap = hashMapOf<Element, Double>()
-    private val elementList = arrayListOf<Element>()
+    private val elementRatioMap = hashMapOf<RecipeElement, Double>()
+    private val elementList = arrayListOf<RecipeElement>()
     private var isIconVisible = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ByproductViewHolder {
@@ -42,7 +42,7 @@ class ByproductsAdapter(
     }
 
     fun submitRecipeRatioList(list: List<RecipeRatio>) {
-        val elements = mutableMapOf<Element, Double>()
+        val elements = mutableMapOf<RecipeElement, Double>()
         for ((recipe, ratio) in list) {
             for (element in recipe.getOutput()) {
                 elements[element] = ratio
@@ -54,7 +54,7 @@ class ByproductsAdapter(
     }
 
     fun submitProcess(process: Process) {
-        val list = arrayListOf<Element>()
+        val list = arrayListOf<RecipeElement>()
         preOrderTraverse(process, 0, process.getRecipeDFSTree(), list)
         elementList.clear()
         elementList.addAll(list.distinct())
@@ -65,7 +65,7 @@ class ByproductsAdapter(
         process: Process,
         degree: Int,
         node: RecipeNode,
-        list: ArrayList<Element>
+        list: ArrayList<RecipeElement>
     ) {
         val recipe = node.recipe
         for (element in recipe.getOutput()) {
@@ -81,7 +81,7 @@ class ByproductsAdapter(
         }
     }
 
-    inner class ByproductViewHolder(itemView: View) : ElementViewHolder(itemView) {
+    inner class ByproductViewHolder(itemView: View) : RecipeElementViewHolder(itemView) {
         private val format = DecimalFormat("#.##")
 
         init {
@@ -90,7 +90,7 @@ class ByproductsAdapter(
             }
         }
 
-        override fun bindNotNull(model: Element) {
+        override fun bindNotNull(model: RecipeElement) {
             super.bindNotNull(model)
             icon.isGone = !isIconVisible
             if (isIconVisible) {

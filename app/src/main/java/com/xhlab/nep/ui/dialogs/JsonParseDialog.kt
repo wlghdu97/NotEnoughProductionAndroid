@@ -9,13 +9,14 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.DialogWithProgressBinding
 import com.xhlab.nep.service.IServiceBinder
 import com.xhlab.nep.service.ParseRecipeService
-import com.xhlab.nep.shared.util.Resource
+import kotlinx.coroutines.flow.collectLatest
+import kr.sparkweb.multiplatform.util.Resource
 
 class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
 
@@ -39,28 +40,32 @@ class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
     }
 
     override fun initService(service: ParseRecipeService) {
-        service.parseLog.observe(this) {
-            binding.log.text = it.data
+        lifecycleScope.launchWhenResumed {
+            service.parseLog.collectLatest {
+                binding.log.text = it.data
+            }
         }
 
-        service.parseLog.observe(this) {
-            isTaskDone = when (it.status) {
-                Resource.Status.LOADING -> false
-                else -> true
-            }
-            with(binding.progressBar) {
-                isIndeterminate = !isTaskDone
-                negativeButton?.setText(
-                    when (isTaskDone) {
-                        true -> {
-                            progress = 100
-                            R.string.btn_close
+        lifecycleScope.launchWhenResumed {
+            service.parseLog.collectLatest {
+                isTaskDone = when (it.status) {
+                    Resource.Status.LOADING -> false
+                    else -> true
+                }
+                with(binding.progressBar) {
+                    isIndeterminate = !isTaskDone
+                    negativeButton?.setText(
+                        when (isTaskDone) {
+                            true -> {
+                                progress = 100
+                                R.string.btn_close
+                            }
+                            false -> {
+                                R.string.btn_abort
+                            }
                         }
-                        false -> {
-                            R.string.btn_abort
-                        }
-                    }
-                )
+                    )
+                }
             }
         }
     }

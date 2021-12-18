@@ -8,17 +8,20 @@ import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
-import androidx.paging.PagedList
+import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.model.ElementView
+import com.xhlab.nep.shared.ui.main.items.ElementListener
+import com.xhlab.nep.shared.ui.main.items.ItemBrowserViewModel
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.element.ElementDetailFragment
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class ItemBrowserFragment : DaggerFragment, ViewInit {
@@ -30,7 +33,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
     private lateinit var viewModel: ItemBrowserViewModel
 
     private var listener: ElementListener? = null
-    private val elementAdapter by lazy { ElementDetailAdapter(listener) }
+    private val elementAdapter by lazy { RecipeElementDetailAdapter(listener) }
 
     constructor() : super()
 
@@ -59,7 +62,7 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             this.listener = viewModel
         }
 
-        viewModel.isDBLoaded.observe(this) {
+        viewModel.isDBLoaded.asLiveData().observe(this) {
             with(binding) {
                 elementList.isGone = !it
                 totalText.isGone = !it
@@ -79,27 +82,29 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
             viewModel.searchElements("")
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             elementAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.elementSearchResult.observeNotNull(this) {
-            submitSearchResultList(it)
+        viewModel.elementSearchResult.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            elementAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.navigateToDetail.observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) { elementId ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 // clear all fragments, then add new fragment
                 with(childFragmentManager) {
                     popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     beginTransaction()
                         .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                        .add(R.id.container, ElementDetailFragment.getFragment(it))
+                        .add(R.id.container, ElementDetailFragment.getFragment(elementId))
                         .addToBackStack(null)
                         .commit()
                 }
             } else {
-                viewModel.navigateToElementDetail(it)
+                context?.navigateToElementDetailActivity(elementId)
             }
         }
     }
@@ -120,17 +125,18 @@ class ItemBrowserFragment : DaggerFragment, ViewInit {
 
         binding.elementList.adapter = elementAdapter
 
+        elementAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.totalText.text =
+                    String.format(getString(R.string.form_matched_total), elementAdapter.itemCount)
+            }
+        }
+
         if (resources.getBoolean(R.bool.isTablet)) {
             val fragmentManager = childFragmentManager
             fragmentManager.addOnBackStackChangedListener {
                 binding.stackEmptyText?.isGone = fragmentManager.backStackEntryCount != 0
             }
         }
-    }
-
-    private fun submitSearchResultList(list: PagedList<ElementView>?) {
-        binding.totalText.text =
-            String.format(getString(R.string.form_matched_total), list?.size ?: 0)
-        elementAdapter.submitList(list)
     }
 }

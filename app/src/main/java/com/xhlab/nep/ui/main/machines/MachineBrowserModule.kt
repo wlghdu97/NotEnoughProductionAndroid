@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.main.machines
 
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
+import com.xhlab.nep.shared.ui.main.machines.MachineBrowserViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

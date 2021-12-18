@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.main.process.creator.browser.details
 
 import android.view.View
 import com.xhlab.nep.R
+import com.xhlab.nep.shared.ui.main.process.creator.browser.details.RootRecipeSelectionListener
 import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
 import com.xhlab.nep.ui.adapters.RecipeDetailViewHolder
 import com.xhlab.nep.ui.process.editor.selection.outer.details.RecipeSelectionElementAdapter

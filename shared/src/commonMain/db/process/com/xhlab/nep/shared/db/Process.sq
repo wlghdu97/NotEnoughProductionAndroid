@@ -1,0 +1,39 @@
+CREATE TABLE process (
+    process_id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    unlocalized_name TEXT NOT NULL,
+    localized_name TEXT NOT NULL,
+    amount INTEGER AS Int NOT NULL,
+    node_count INTEGER AS Int NOT NULL,
+    json TEXT NOT NULL
+);
+
+getLastProcessId:
+SELECT process.process_id FROM process
+WHERE process.rowid = last_insert_rowid();
+
+getProcess:
+SELECT * FROM process
+WHERE process.process_id = :processId;
+
+getProcessJson:
+SELECT process.json FROM process
+WHERE process.process_id = :processId;
+
+insert:
+INSERT OR IGNORE INTO process
+VALUES ?;
+
+update:
+UPDATE process
+SET name = :name,
+    unlocalized_name = :unlocalizedName,
+    localized_name = :localizedName,
+    amount = :amount,
+    node_count = :nodeCount,
+    json = :json
+WHERE process_id = :processId;
+
+delete:
+DELETE FROM process
+WHERE process.process_id = :processId;

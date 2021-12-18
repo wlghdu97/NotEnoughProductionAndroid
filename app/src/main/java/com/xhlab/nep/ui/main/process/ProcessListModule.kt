@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.main.process
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.ChildFragmentScope
+import com.xhlab.nep.shared.ui.main.process.ProcessListViewModel
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationModule
 import com.xhlab.nep.ui.main.process.importer.ProcessImportDialog

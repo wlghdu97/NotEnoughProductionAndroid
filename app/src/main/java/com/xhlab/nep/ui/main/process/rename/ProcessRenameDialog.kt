@@ -5,15 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.observe
+import androidx.lifecycle.asLiveData
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.DialogProcessRenameBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.util.isSuccessful
+import com.xhlab.nep.shared.ui.main.process.rename.ProcessRenameViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.util.longToast
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerDialogFragment
 import javax.inject.Inject
@@ -63,7 +62,7 @@ class ProcessRenameDialog : DaggerDialogFragment(), ViewInit {
         val processName = arguments?.getString(PROCESS_NAME)
         viewModel.init(processId, processName)
 
-        viewModel.name.observeNotNull(this) {
+        viewModel.name.asLiveData().observe(this) {
             with(binding.nameEdit) {
                 if (text.toString() != it) {
                     setText(it)
@@ -72,18 +71,19 @@ class ProcessRenameDialog : DaggerDialogFragment(), ViewInit {
             }
         }
 
-        viewModel.isNameValid.observeNotNull(this) {
+        viewModel.isNameValid.asLiveData().observe(this) {
             binding.nameInputLayout.helperText = when (it) {
                 true -> ""
                 false -> getString(R.string.txt_name_empty)
             }
         }
 
-        viewModel.renameResult.observe(this) {
-            when {
-                it.isSuccessful() -> dismiss()
-                else -> longToast(R.string.error_failed_to_rename_process)
-            }
+        viewModel.renameErrorMessage.asLiveData().observe(this) {
+            longToast(it)
+        }
+
+        viewModel.dismiss.asLiveData().observe(this) {
+            dismiss()
         }
     }
 

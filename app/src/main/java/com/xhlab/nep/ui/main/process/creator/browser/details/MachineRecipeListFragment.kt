@@ -3,16 +3,20 @@ package com.xhlab.nep.ui.main.process.creator.browser.details
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.main.process.creator.browser.ProcessItemBrowserViewModel
+import com.xhlab.nep.shared.ui.main.process.creator.browser.details.MachineRecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class MachineRecipeListFragment : DaggerFragment(), ViewInit {
@@ -59,11 +63,13 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         val machineId = arguments?.getInt(MACHINE_ID)
         viewModel.init(elementId, machineId)
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             recipeAdapter.setIconVisibility(isLoaded)
         }
     }
@@ -87,5 +93,14 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
     companion object {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
+
+        fun getFragment(elementId: Long, machineId: Int): Fragment {
+            return MachineRecipeListFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ELEMENT_ID, elementId)
+                    putInt(MACHINE_ID, machineId)
+                }
+            }
+        }
     }
 }

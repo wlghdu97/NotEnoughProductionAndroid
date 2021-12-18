@@ -1,0 +1,186 @@
+CREATE VIEW element_view AS
+SELECT
+element.id,
+CASE
+    WHEN element.type = 3 THEN (
+        SELECT
+        CASE
+            WHEN COUNT(ore_element.unlocalized_name) = 1 THEN (
+                SELECT
+                CASE
+                    WHEN COUNT(replacement.name) = 1 THEN (
+                        SELECT element.localized_name FROM element
+                        WHERE element.id = replacement.element_id
+                    )
+                    ELSE "Ore Chain"
+                END
+                FROM element
+                INNER JOIN replacement ON replacement.name = element.unlocalized_name
+                WHERE element.unlocalized_name = ore_element.unlocalized_name
+            )
+            ELSE "Ore Chain"
+        END
+        FROM element AS ore_element
+        INNER JOIN ore_dict_chain
+        ON ore_dict_chain.chain_element_id = element.unlocalized_name
+        WHERE ore_element.id = ore_dict_chain.element_id
+    )
+    ELSE element.localized_name
+END localized_name,
+CASE
+    WHEN element.type = 3 THEN (
+        SELECT
+        CASE
+            WHEN COUNT(ore_element.unlocalized_name) = 1 THEN (
+                SELECT
+                CASE
+                    WHEN COUNT(replacement.name) = 1 THEN (
+                        SELECT element.unlocalized_name FROM element
+                        WHERE element.id = replacement.element_id
+                    )
+                    ELSE element.unlocalized_name
+                END
+                FROM element
+                INNER JOIN replacement ON replacement.name = element.unlocalized_name
+                WHERE element.unlocalized_name = ore_element.unlocalized_name
+            )
+            ELSE GROUP_CONCAT(ore_element.unlocalized_name, ", ")
+        END
+        FROM element AS ore_element
+        INNER JOIN ore_dict_chain
+        ON ore_dict_chain.chain_element_id = element.unlocalized_name
+        WHERE ore_element.id = ore_dict_chain.element_id
+    )
+    ELSE element.unlocalized_name
+END unlocalized_name,
+element.type
+FROM element;
+
+getElements:
+SELECT * FROM element_view
+WHERE element_view.type NOT IN (2, 3)
+ORDER BY element_view.localized_name ASC
+LIMIT :limit OFFSET :offset;
+
+getElementCount:
+SELECT COUNT(*) FROM element_view
+WHERE element_view.type NOT IN (2, 3);
+
+searchByName:
+SELECT element_view.* FROM element_view
+INNER JOIN element_fts ON element_view.id = element_fts.docid
+WHERE element_fts MATCH :term AND element_view.type NOT IN (2, 3)
+ORDER BY element_view.localized_name ASC
+LIMIT :limit OFFSET :offset;
+
+searchCountByName:
+SELECT COUNT(*) FROM element_view
+INNER JOIN element_fts ON element_view.id = element_fts.docid
+WHERE element_fts MATCH :term AND element_view.type NOT IN (2, 3);
+
+getCraftingResults:
+SELECT DISTINCT element_view.* FROM element_view
+INNER JOIN recipe
+INNER JOIN recipe_result ON element_view.id = recipe_result.result_item_id
+GROUP BY element_view.id
+ORDER BY element_view.localized_name ASC
+LIMIT :limit OFFSET :offset;
+
+getCraftingResultCount:
+SELECT COUNT(DISTINCT element_view.id) FROM element_view
+INNER JOIN recipe
+INNER JOIN recipe_result ON element_view.id = recipe_result.result_item_id;
+
+getMachineResults:
+SELECT DISTINCT element_view.* FROM element_view
+INNER JOIN machine_recipe ON machine_recipe.machine_id = :machineId
+INNER JOIN recipe_result ON
+element_view.id = recipe_result.result_item_id AND
+recipe_result.recipe_id = machine_recipe.recipe_id
+ORDER BY element_view.localized_name ASC
+LIMIT :limit OFFSET :offset;
+
+getMachineResultCount:
+SELECT COUNT(DISTINCT element_view.id) FROM element_view
+INNER JOIN machine_recipe ON machine_recipe.machine_id = :machineId
+INNER JOIN recipe_result ON
+element_view.id = recipe_result.result_item_id AND
+recipe_result.recipe_id = machine_recipe.recipe_id;
+
+searchMachineResults:
+SELECT DISTINCT element_view.* FROM element_view
+INNER JOIN machine_recipe ON machine_recipe.machine_id = :machineId
+INNER JOIN recipe_result ON
+element_view.id = recipe_result.result_item_id AND
+recipe_result.recipe_id = machine_recipe.recipe_id
+WHERE element_view.localized_name LIKE :term
+ORDER BY element_view.localized_name ASC
+LIMIT :limit OFFSET :offset;
+
+searchMachineResultCount:
+SELECT COUNT(DISTINCT element_view.id) FROM element_view
+INNER JOIN machine_recipe ON machine_recipe.machine_id = :machineId
+INNER JOIN recipe_result ON
+element_view.id = recipe_result.result_item_id AND
+recipe_result.recipe_id = machine_recipe.recipe_id
+WHERE element_view.localized_name LIKE :term;
+
+searchMachineResultsFts:
+SELECT DISTINCT element_view.* FROM element_view
+INNER JOIN machine_recipe ON machine_recipe.machine_id = :machineId
+INNER JOIN recipe_result ON
+element_view.id = recipe_result.result_item_id AND
+recipe_result.recipe_id = machine_recipe.recipe_id
+INNER JOIN element_fts ON element_view.id = element_fts.docid
+WHERE element_fts MATCH :term
+ORDER BY element_view.localized_name ASC
+LIMIT :limit OFFSET :offset;
+
+searchMachineResultCountFts:
+SELECT COUNT(DISTINCT element_view.id) FROM element_view
+INNER JOIN machine_recipe ON machine_recipe.machine_id = :machineId
+INNER JOIN recipe_result ON
+element_view.id = recipe_result.result_item_id AND
+recipe_result.recipe_id = machine_recipe.recipe_id
+INNER JOIN element_fts ON element_view.id = element_fts.docid
+WHERE element_fts MATCH :term;
+
+getUsagesByElement:
+SELECT DISTINCT element_view.* FROM element_view
+INNER JOIN recipe_result ON recipe_result.recipe_id IN (
+    SELECT machine_recipe.recipe_id FROM machine_recipe
+    WHERE machine_recipe.target_item_id = :elementId
+    UNION ALL
+    SELECT recipe.recipe_id FROM recipe
+    WHERE recipe.target_item_id = :elementId
+)
+WHERE id = recipe_result.result_item_id
+GROUP BY id
+ORDER BY localized_name ASC
+LIMIT :limit OFFSET :offset;
+
+getUsageCountByElement:
+SELECT COUNT(DISTINCT element_view.id) FROM element_view
+INNER JOIN recipe_result ON recipe_result.recipe_id IN (
+    SELECT machine_recipe.recipe_id FROM machine_recipe
+    WHERE machine_recipe.target_item_id = :elementId
+    UNION ALL
+    SELECT recipe.recipe_id FROM recipe
+    WHERE recipe.target_item_id = :elementId
+)
+WHERE id = recipe_result.result_item_id;
+
+getReplacements:
+SELECT DISTINCT element_view.* FROM element_view
+INNER JOIN replacement ON replacement.name = :oreDictName
+WHERE element_view.id = replacement.element_id
+LIMIT :limit OFFSET :offset;
+
+getReplacementCount:
+SELECT COUNT(DISTINCT element_view.id) FROM element_view
+INNER JOIN replacement ON replacement.name = :oreDictName
+WHERE element_view.id = replacement.element_id;
+
+getElementDetail:
+SELECT * FROM element_view
+WHERE element_view.id = :id;

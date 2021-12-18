@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.process.recipes.OreChainRecipe
 import com.xhlab.nep.model.process.recipes.SupplierRecipe
-import com.xhlab.nep.model.recipes.MachineRecipe
 import com.xhlab.nep.model.recipes.view.CraftingRecipeView
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
 import com.xhlab.nep.ui.util.BindableViewHolder
@@ -44,8 +43,12 @@ abstract class ProcessTreeViewHolder(itemView: View) :
 
         if (recipe is MachineRecipeView) {
             val unit = when (recipe.powerType) {
-                MachineRecipe.Companion.PowerType.EU.type -> context.getString(R.string.txt_eu)
-                MachineRecipe.Companion.PowerType.RF.type -> context.getString(R.string.txt_rf)
+                MachineRecipeView.Companion.PowerType.EU.type -> context.getString(
+                    R.string.txt_eu
+                )
+                MachineRecipeView.Companion.PowerType.RF.type -> context.getString(
+                    R.string.txt_rf
+                )
                 else -> context.getString(R.string.txt_unknown)
             }
             val unitTick = "$unit${context.getString(R.string.txt_per_tick)}"

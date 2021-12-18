@@ -5,19 +5,19 @@ import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.xhlab.nep.R
-import com.xhlab.nep.model.Element
+import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
-import com.xhlab.nep.ui.adapters.ElementViewHolder
+import com.xhlab.nep.ui.adapters.RecipeElementViewHolder
 import com.xhlab.nep.util.setIcon
 import kotlin.math.min
 
-abstract class ProcessElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
+abstract class ProcessElementViewHolder(itemView: View) : RecipeElementViewHolder(itemView) {
     protected var connectionStatus = Process.Connection(Process.ConnectionStatus.UNCONNECTED, null)
 
     protected abstract val showConnection: Boolean
     protected abstract val isIconVisible: Boolean
 
-    override fun bindNotNull(model: Element) {
+    override fun bindNotNull(model: RecipeElement) {
         super.bindNotNull(
             when (model) {
                 is ElementConnection -> model.element

@@ -3,6 +3,8 @@ package com.xhlab.nep.ui.element.replacements
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.FragmentScope
+import com.xhlab.nep.shared.ui.element.replacements.OreDictListViewModel
+import com.xhlab.nep.shared.ui.element.replacements.ReplacementListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

@@ -3,19 +3,22 @@ package com.xhlab.nep.ui.main.process.creator.browser
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.model.defaultJson
+import com.xhlab.nep.shared.ui.main.process.creator.browser.ProcessItemBrowserViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.main.items.ItemBrowserFragment
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog.Companion.KEY_ELEMENT
 import com.xhlab.nep.ui.main.process.creator.ProcessCreationDialog.Companion.TARGET_RECIPE
 import com.xhlab.nep.ui.main.process.creator.browser.details.MachineRecipeListFragment
 import com.xhlab.nep.ui.main.process.creator.browser.recipes.RecipeListFragment
-import com.xhlab.nep.ui.main.process.creator.browser.recipes.RecipeListFragment.Companion.ELEMENT_ID
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.serialization.encodeToString
 import javax.inject.Inject
 
 class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
@@ -46,28 +49,26 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
     override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
 
-        viewModel.navigateToMachineList.observe(this) {
-            navigateToRecipeList(it)
+        viewModel.navigateToMachineList.asLiveData().observe(this) {
+            switchToRecipeList(it)
         }
 
-        viewModel.navigateToRecipeDetails.observe(this) { (elementId, machineId) ->
-            navigateToRecipeDetail(elementId, machineId)
+        viewModel.navigateToRecipeDetails.asLiveData().observe(this) { (elementId, machineId) ->
+            switchToRecipeDetail(elementId, machineId)
         }
 
-        viewModel.returnResult.observe(this) { (targetRecipe, keyElement) ->
+        viewModel.returnResult.asLiveData().observe(this) { (targetRecipe, keyElement) ->
             val intent = Intent().apply {
-                putExtra(TARGET_RECIPE, targetRecipe)
-                putExtra(KEY_ELEMENT, keyElement)
+                putExtra(TARGET_RECIPE, defaultJson.encodeToString(targetRecipe))
+                putExtra(KEY_ELEMENT, defaultJson.encodeToString(keyElement))
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }
 
-    private fun navigateToRecipeList(elementId: Long) {
-        val fragment = RecipeListFragment().apply {
-            arguments = Bundle().apply { putLong(ELEMENT_ID, elementId) }
-        }
+    private fun switchToRecipeList(elementId: Long) {
+        val fragment = RecipeListFragment.getFragment(elementId)
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, RECIPE_LIST_TAG)
@@ -75,13 +76,8 @@ class ItemBrowserActivity : DaggerAppCompatActivity(), ViewInit {
             .commit()
     }
 
-    private fun navigateToRecipeDetail(elementId: Long, machineId: Int) {
-        val fragment = MachineRecipeListFragment().apply {
-            arguments = Bundle().apply {
-                putLong(MachineRecipeListFragment.ELEMENT_ID, elementId)
-                putInt(MachineRecipeListFragment.MACHINE_ID, machineId)
-            }
-        }
+    private fun switchToRecipeDetail(elementId: Long, machineId: Int) {
+        val fragment = MachineRecipeListFragment.getFragment(elementId, machineId)
         supportFragmentManager.beginTransaction()
             .setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_left)
             .replace(R.id.container, fragment, MACHINE_RECIPE_LIST_TAG)

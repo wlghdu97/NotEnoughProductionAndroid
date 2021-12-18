@@ -3,15 +3,14 @@ import io.gitlab.arturbosch.detekt.Detekt
 
 buildscript {
     ext {
-        kotlin_version = "1.4.30"
-        coroutine_version = "1.4.2"
+        kotlin_version = "1.6.0"
+        coroutine_version = "1.5.2-native-mt"
+        serialization_version = "1.3.0"
 
         lifecycle_version = "2.2.0-rc03"
         recyclerview_version = "1.1.0"
-        paging_version = "2.1.1"
+        paging_version = "3.0.1"
         preference_version = "1.1.0"
-        room_version = "2.2.3"
-        room_compiler_version = "2.2.1"
         dagger_version = "2.24"
         live_event_version = "1.2.0"
         material_version = "1.2.0-alpha03"
@@ -26,17 +25,23 @@ buildscript {
         crashlytics_version = "17.2.1"
 
         junit_version = "4.12"
-        core_testing_version = "1.1.1"
-        mockito_version = "3.2.0"
+        core_testing_version = "1.4.0"
+        mockito_version = "4.0.0"
         mockito_kotlin_version = "2.2.0"
         coroutine_test_version = "1.3.2"
         test_fragment_version = "1.1.0-rc04"
-        test_runner_version = "1.2.0"
-        test_junit_version = "1.1.1"
-        espresso_version = "3.2.0"
+        test_runner_version = "1.4.0"
+        test_junit_version = "1.1.3"
+        espresso_version = "3.4.0"
         awaitibility_version = "3.1.6"
-        test_rules_version = "1.2.0"
-        test_orchestrator_version = "1.2.0"
+        test_rules_version = "1.4.0"
+        test_orchestrator_version = "1.4.0"
+
+        resources_version = "0.17.2"
+        mobile_infrastructure_version = "0.7.0"
+        sqldelight_version = "1.5.2"
+        kermit_version = "1.0.0-rc4"
+        stately_version = "1.1.10"
 
         detekt_version = "1.17.1"
         jacoco_version = "0.8.1"
@@ -49,16 +54,21 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        gradlePluginPortal()
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
         classpath "org.jacoco:org.jacoco.core:$jacoco_version"
         classpath "com.google.gms:google-services:$google_services_version"
         classpath "com.google.firebase:firebase-crashlytics-gradle:$crashlytics_gradle_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath "com.squareup.sqldelight:gradle-plugin:$sqldelight_version"
+        classpath "dev.icerock.moko:resources-generator:$resources_version"
         classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$detekt_version"
     }
 }

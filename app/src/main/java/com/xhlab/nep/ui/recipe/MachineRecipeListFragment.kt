@@ -5,18 +5,21 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.domain.MachineRecipeListNavigationUseCase
+import com.xhlab.nep.shared.ui.recipe.MachineRecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.adapters.RecipeDetailAdapter
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.element.ElementDetailFragment
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class MachineRecipeListFragment : DaggerFragment(), ViewInit {
@@ -59,24 +62,26 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         viewModel = viewModelProvider(viewModelFactory)
         viewModel.init(elementId, machineId)
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             recipeAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) { elementId ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment()
                 parent.childFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .add(R.id.container, ElementDetailFragment.getFragment(elementId))
                     .addToBackStack(null)
                     .commit()
             } else {
-                viewModel.navigateToElementDetail(it)
+                context?.navigateToElementDetailActivity(elementId)
             }
         }
     }
@@ -129,15 +134,13 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
 
-        fun getBundle(params: MachineRecipeListNavigationUseCase.Parameters): Bundle {
-            return Bundle().apply {
-                putLong(ELEMENT_ID, params.elementId)
-                putInt(MACHINE_ID, params.machineId ?: -1)
+        fun getFragment(elementId: Long, machineId: Int): Fragment {
+            return MachineRecipeListFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(ELEMENT_ID, elementId)
+                    putInt(MACHINE_ID, machineId)
+                }
             }
-        }
-
-        fun getFragment(params: MachineRecipeListNavigationUseCase.Parameters): Fragment {
-            return MachineRecipeListFragment().apply { arguments = getBundle(params) }
         }
     }
 }

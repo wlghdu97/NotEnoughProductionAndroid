@@ -1,12 +1,119 @@
-apply plugin: 'com.android.library'
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFrameworkConfig
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-
-apply plugin: 'io.gitlab.arturbosch.detekt'
+plugins {
+    id "org.jetbrains.kotlin.multiplatform"
+    id "kotlin-kapt"
+    id "kotlin-allopen"
+    id "kotlinx-serialization"
+    id "com.android.library"
+    id "com.squareup.sqldelight"
+    id "dev.icerock.mobile.multiplatform-resources"
+    id "io.gitlab.arturbosch.detekt"
+}
 
 if (jacocoEnabled.toBoolean()) {
     apply from: rootProject.file("jacoco.gradle")
+}
+
+android {
+    configurations {
+        androidTestApi {}
+        androidTestDebugApi {}
+        androidTestReleaseApi {}
+        androidTestStagingApi {}
+        testApi {}
+        testDebugApi {}
+        testReleaseApi {}
+        testStagingApi {}
+    }
+}
+
+kotlin {
+    def xcf = new XCFrameworkConfig(project)
+
+    android()
+
+    ios {
+        binaries.framework {
+            baseName = "Shared"
+            linkerOpts += "-lsqlite3"
+            xcf.add(it)
+        }
+    }
+
+    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget).all {
+        binaries.withType(org.jetbrains.kotlin.gradle.plugin.mpp.Framework).all {
+            export "dev.icerock.moko:resources:$resources_version"
+            transitiveExport = true
+        }
+    }
+
+    sourceSets {
+        all {
+            languageSettings {
+                optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
+                optIn("kotlin.ExperimentalUnsignedTypes")
+            }
+        }
+        commonMain.dependencies {
+            implementation project(path: ':model')
+            implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+            implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
+            implementation "kr.sparkweb:mobile-infrastructure:$mobile_infrastructure_version"
+            implementation "kr.sparkweb:mobile-infrastructure-paging:$mobile_infrastructure_version"
+            implementation "kr.sparkweb:mobile-infrastructure-annotation:$mobile_infrastructure_version"
+            configurations {
+                kapt {
+                    dependencies {
+                        kapt "kr.sparkweb:mobile-infrastructure-processor:$mobile_infrastructure_version"
+                    }
+                }
+            }
+            implementation "com.squareup.sqldelight:coroutines-extensions:$sqldelight_version"
+            implementation "co.touchlab:stately-concurrency:$stately_version"
+            implementation "co.touchlab:stately-isolate:${stately_version}-a1"
+            api "dev.icerock.moko:resources:$resources_version"
+            api "co.touchlab:kermit:$kermit_version"
+        }
+        commonTest.dependencies {
+            implementation kotlin("test")
+            implementation project(path: ':model')
+            implementation project(path: ':test-shared')
+        }
+        androidMain.dependencies {
+            implementation 'androidx.appcompat:appcompat:1.1.0'
+            implementation 'androidx.core:core-ktx:1.1.0'
+            implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+            implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+            implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+            implementation "androidx.paging:paging-runtime:$paging_version"
+            implementation "androidx.preference:preference:$preference_version"
+
+            implementation "com.squareup.sqldelight:android-driver:$sqldelight_version"
+
+            implementation "com.jakewharton.timber:timber:$timber_version"
+
+            implementation "com.google.dagger:dagger:$dagger_version"
+            implementation "com.google.dagger:dagger-android-support:$dagger_version"
+
+            implementation "com.google.code.gson:gson:$gson_version"
+            implementation "org.apache.commons:commons-math3:$math_version"
+        }
+        androidTest.dependencies {
+            implementation "org.mockito:mockito-android:$mockito_version"
+            implementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+            implementation "androidx.test:runner:$test_runner_version"
+            implementation "androidx.test.ext:junit:$test_junit_version"
+            implementation "androidx.test.espresso:espresso-core:$espresso_version"
+            implementation "android.arch.core:core-testing:$core_testing_version"
+            implementation "org.awaitility:awaitility:$awaitibility_version"
+            implementation "androidx.test:rules:$test_rules_version"
+            implementation project(path: ':test-shared')
+        }
+        iosMain.dependencies {
+            implementation "com.squareup.sqldelight:native-driver:$sqldelight_version"
+        }
+    }
 }
 
 android {
@@ -40,61 +147,67 @@ android {
     }
 
     sourceSets {
-        debug.java.srcDir 'src/debugRelease/java'
-        release.java.srcDir 'src/debugRelease/java'
+        main {
+            manifest.srcFile("src/androidMain/AndroidManifest.xml")
+            java.srcDirs("src/androidMain/kotlin")
+            res.srcDirs("src/androidMain/res")
+        }
+        androidTest {
+            java.srcDirs("src/androidTest/kotlin")
+            res.srcDirs("src/androidTest/res")
+        }
+        debug {
+            java.srcDirs("src/androidDebugRelease/kotlin")
+            res.srcDirs("src/androidDebugRelease/res")
+        }
+        release {
+            java.srcDirs("src/androidDebugRelease/kotlin")
+            res.srcDirs("src/androidDebugRelease/res")
+        }
+        staging {
+            java.srcDirs("src/androidStaging/kotlin")
+            res.srcDirs("src/androidStaging/res")
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(path: ':model')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
-    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
-    implementation "androidx.paging:paging-runtime:$paging_version"
-    implementation "androidx.preference:preference:$preference_version"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    kapt "androidx.room:room-compiler:$room_compiler_version"
-
-    implementation "com.jakewharton.timber:timber:$timber_version"
-
-    implementation "com.google.dagger:dagger:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
-    implementation "com.google.code.gson:gson:$gson_version"
-    implementation "org.apache.commons:commons-math3:$math_version"
-
-    testImplementation "junit:junit:$junit_version"
-    testImplementation "android.arch.core:core-testing:$core_testing_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    testImplementation "org.awaitility:awaitility:$awaitibility_version"
-    testImplementation "org.awaitility:awaitility-kotlin:$awaitibility_version"
-    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_test_version"
-
-    androidTestImplementation "org.mockito:mockito-android:$mockito_version"
-    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
-    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_test_version"
-    androidTestImplementation "androidx.test:runner:$test_runner_version"
-    androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
-    androidTestImplementation "android.arch.core:core-testing:$core_testing_version"
-    androidTestImplementation "org.awaitility:awaitility:$awaitibility_version"
-    androidTestImplementation "androidx.test:rules:$test_rules_version"
+    stagingImplementation project(path: ':test-shared')
 
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator_version"
+}
 
-    testImplementation project(path: ':model')
-    testImplementation project(path: ':test-shared')
-    stagingImplementation project(path: ':test-shared')
-    androidTestImplementation project(path: ':test-shared')
+kapt {
+    correctErrorTypes true
+    arguments {
+        arg("modulePackage", "com.xhlab.nep.shared.di")
+    }
+}
+
+sqldelight {
+    Nep {
+        packageName = "com.xhlab.nep.shared.db"
+        sourceFolders = ["db/nep"]
+    }
+    NepProcess {
+        packageName = "com.xhlab.nep.shared.db"
+        sourceFolders = ["db/process"]
+    }
+}
+
+multiplatformResources {
+    multiplatformResourcesPackage = "com.xhlab.nep"
+    disableStaticFrameworkWarning = true
+}
+
+allOpen {
+    annotation("com.xhlab.nep.annotation.OpenForTesting")
 }

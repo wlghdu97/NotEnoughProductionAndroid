@@ -1,0 +1,25 @@
+CREATE VIRTUAL TABLE element_fts USING fts4(content="element", localized_name TEXT NOT NULL);
+
+CREATE TRIGGER room_fts_content_sync_element_fts_BEFORE_UPDATE
+BEFORE UPDATE ON element
+BEGIN DELETE FROM element_fts
+WHERE docid = old.rowid;
+END;
+
+CREATE TRIGGER room_fts_content_sync_element_fts_BEFORE_DELETE
+BEFORE DELETE ON element
+BEGIN DELETE FROM element_fts
+WHERE docid = old.rowid;
+END;
+
+CREATE TRIGGER room_fts_content_sync_element_fts_AFTER_UPDATE
+AFTER UPDATE ON element
+BEGIN INSERT INTO element_fts (docid, localized_name)
+VALUES (new.rowid, new.localized_name);
+END;
+
+CREATE TRIGGER room_fts_content_sync_element_fts_AFTER_INSERT
+AFTER INSERT ON element
+BEGIN INSERT INTO element_fts (docid, localized_name)
+VALUES (new.rowid, new.localized_name);
+END;

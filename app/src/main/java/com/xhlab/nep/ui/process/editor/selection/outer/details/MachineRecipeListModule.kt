@@ -2,6 +2,7 @@ package com.xhlab.nep.ui.process.editor.selection.outer.details
 
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.details.MachineRecipeListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

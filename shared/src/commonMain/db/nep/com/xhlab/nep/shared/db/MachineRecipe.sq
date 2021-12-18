@@ -1,0 +1,147 @@
+CREATE TABLE machine_recipe (
+    recipe_id INTEGER NOT NULL,
+    target_item_id INTEGER NOT NULL,
+    amount INTEGER AS Integer NOT NULL,
+    machine_id INTEGER NOT NULL,
+    enabled INTEGER AS Boolean NOT NULL,
+    duration INTEGER AS Integer NOT NULL,
+    power_type INTEGER AS Integer NOT NULL,
+    ept INTEGER AS Integer NOT NULL,
+    meta_data TEXT DEFAULT NULL,
+    PRIMARY KEY (recipe_id, target_item_id),
+    FOREIGN KEY (target_item_id) REFERENCES element (id) ON UPDATE NO ACTION ON DELETE CASCADE
+);
+
+CREATE INDEX index_machine_recipe_target_item_id ON machine_recipe (target_item_id);
+
+getElementListOfRecipe:
+SELECT element_view.*, machine_recipe.amount, machine_recipe.meta_data FROM element_view
+INNER JOIN machine_recipe ON machine_recipe.recipe_id = :recipeId
+WHERE element_view.id = machine_recipe.target_item_id
+ORDER BY element_view.type, element_view.localized_name ASC;
+
+searchRecipeIdByElement:
+SELECT
+machine_recipe.recipe_id,
+machine_recipe.enabled,
+machine_recipe.duration,
+machine_recipe.power_type,
+machine_recipe.ept,
+machine_recipe.meta_data,
+machine.id AS machine_id,
+machine.name AS machine_name
+FROM machine_recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+INNER JOIN machine ON machine.id = :machineId
+WHERE
+machine_recipe.recipe_id = recipe_result.recipe_id AND
+machine_recipe.machine_id = machine.id
+GROUP BY machine_recipe.recipe_id
+ORDER BY recipe_result.amount DESC
+LIMIT :limit OFFSET :offset;
+
+searchRecipeIdCountByElement:
+SELECT COUNT(DISTINCT machine_recipe.recipe_id)
+FROM machine_recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+INNER JOIN machine ON machine.id = :machineId
+WHERE
+machine_recipe.recipe_id = recipe_result.recipe_id AND
+machine_recipe.machine_id = machine.id;
+
+searchRecipeIdByElementFts:
+SELECT
+machine_recipe.recipe_id,
+machine_recipe.enabled,
+machine_recipe.duration,
+machine_recipe.power_type,
+machine_recipe.ept,
+machine_recipe.meta_data,
+machine.id AS machine_id,
+machine.name AS machine_name
+FROM machine_recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+INNER JOIN machine ON machine.id = :machineId
+INNER JOIN element_fts ON element_fts.docid = machine_recipe.target_item_id
+WHERE
+machine_recipe.recipe_id = recipe_result.recipe_id AND
+machine_recipe.machine_id = machine.id AND
+element_fts MATCH :term
+GROUP BY machine_recipe.recipe_id
+ORDER BY recipe_result.amount DESC
+LIMIT :limit OFFSET :offset;
+
+searchRecipeIdCountByElementFts:
+SELECT COUNT(DISTINCT machine_recipe.recipe_id)
+FROM machine_recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+INNER JOIN machine ON machine.id = :machineId
+INNER JOIN element_fts ON element_fts.docid = machine_recipe.target_item_id
+WHERE
+machine_recipe.recipe_id = recipe_result.recipe_id AND
+machine_recipe.machine_id = machine.id AND
+element_fts MATCH :term;
+
+searchUsageRecipeIdByElement:
+SELECT
+machine_recipe.recipe_id,
+machine_recipe.enabled,
+machine_recipe.duration,
+machine_recipe.power_type,
+machine_recipe.ept,
+machine_recipe.meta_data,
+machine.id AS machine_id,
+machine.name AS machine_name
+FROM machine_recipe
+INNER JOIN machine ON machine.id = :machineId
+WHERE
+machine_recipe.target_item_id = :elementId AND
+machine_recipe.machine_id = machine.id
+GROUP BY machine_recipe.recipe_id
+ORDER BY machine_recipe.amount DESC
+LIMIT :limit OFFSET :offset;
+
+searchUsageRecipeIdCountByElement:
+SELECT COUNT(DISTINCT machine_recipe.recipe_id)
+FROM machine_recipe
+INNER JOIN machine ON machine.id = :machineId
+WHERE
+machine_recipe.target_item_id = :elementId AND
+machine_recipe.machine_id = machine.id;
+
+searchUsageRecipeIdByElementFts:
+SELECT
+machine_recipe.recipe_id,
+machine_recipe.enabled,
+machine_recipe.duration,
+machine_recipe.power_type,
+machine_recipe.ept,
+machine_recipe.meta_data,
+machine.id AS machine_id,
+machine.name AS machine_name
+FROM machine_recipe
+INNER JOIN machine ON machine.id = :machineId
+INNER JOIN recipe_result ON recipe_result.recipe_id = machine_recipe.recipe_id
+INNER JOIN element_fts ON element_fts.docid = recipe_result.result_item_id
+WHERE
+machine_recipe.target_item_id = :elementId AND
+machine_recipe.machine_id = machine.id AND
+element_fts MATCH :term
+GROUP BY machine_recipe.recipe_id
+ORDER BY machine_recipe.amount DESC
+LIMIT :limit OFFSET :offset;
+
+searchUsageRecipeIdCountByElementFts:
+SELECT COUNT(DISTINCT machine_recipe.recipe_id)
+FROM machine_recipe
+INNER JOIN machine ON machine.id = :machineId
+INNER JOIN recipe_result ON recipe_result.recipe_id = machine_recipe.recipe_id
+INNER JOIN element_fts ON element_fts.docid = recipe_result.result_item_id
+WHERE
+machine_recipe.target_item_id = :elementId AND
+machine_recipe.machine_id = machine.id AND
+element_fts MATCH :term;
+
+insert:
+INSERT OR IGNORE INTO machine_recipe
+VALUES ?;

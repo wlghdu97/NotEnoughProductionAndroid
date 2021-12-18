@@ -8,21 +8,22 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Element
-import com.xhlab.nep.model.ElementView
-import com.xhlab.nep.model.recipes.view.RecipeElementView
-import com.xhlab.nep.shared.db.entity.ElementEntity.Companion.ORE_CHAIN
-import com.xhlab.nep.ui.main.items.ElementListener
+import com.xhlab.nep.model.RecipeElement
+import com.xhlab.nep.shared.ui.main.items.ElementListener
 import com.xhlab.nep.ui.util.DiffCallback
 import com.xhlab.nep.util.setIcon
 
 open class RecipeElementAdapter(
     private val listener: ElementListener? = null
-) : RecyclerView.Adapter<ElementViewHolder>() {
+) : RecyclerView.Adapter<RecipeElementViewHolder>() {
 
-    private val elementList = ArrayList<RecipeElementView>()
+    private val elementList = ArrayList<RecipeElement>()
     protected var isIconVisible = false
 
-    final override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ElementViewHolder {
+    final override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecipeElementViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(
                 when (viewType) {
@@ -34,24 +35,24 @@ open class RecipeElementAdapter(
         return createViewHolder(view)
     }
 
-    protected open fun createViewHolder(itemView: View): ElementViewHolder {
+    protected open fun createViewHolder(itemView: View): RecipeElementViewHolder {
         return DefaultElementViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ElementViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecipeElementViewHolder, position: Int) {
         holder.bind(elementList[position])
     }
 
     final override fun getItemViewType(position: Int): Int {
         return when (elementList[position].type) {
-            ORE_CHAIN -> 1
+            Element.ORE_CHAIN -> 1
             else -> 0
         }
     }
 
     final override fun getItemCount() = elementList.size
 
-    fun submitList(list: List<RecipeElementView>) {
+    fun submitList(list: List<RecipeElement>) {
         val callback = RecipeElementDiffCallback(elementList, list)
         val result = DiffUtil.calculateDiff(callback)
 
@@ -65,18 +66,18 @@ open class RecipeElementAdapter(
         notifyDataSetChanged()
     }
 
-    inner class DefaultElementViewHolder(itemView: View) : ElementViewHolder(itemView) {
+    inner class DefaultElementViewHolder(itemView: View) : RecipeElementViewHolder(itemView) {
 
         init {
             itemView.setOnClickListener {
                 val model = model
-                if (model != null && model is ElementView) {
-                    listener?.onClick(model.id, model.type)
+                if (model != null) {
+                    listener?.onClick(model.id)
                 }
             }
         }
 
-        override fun bindNotNull(model: Element) {
+        override fun bindNotNull(model: RecipeElement) {
             super.bindNotNull(model)
             icon.isGone = !isIconVisible
             if (isIconVisible) {
@@ -86,9 +87,9 @@ open class RecipeElementAdapter(
     }
 
     private class RecipeElementDiffCallback(
-        private val oldList: List<RecipeElementView>,
-        private val newList: List<RecipeElementView>
-    ) : DiffCallback<RecipeElementView>(oldList, newList) {
+        private val oldList: List<RecipeElement>,
+        private val newList: List<RecipeElement>
+    ) : DiffCallback<RecipeElement>(oldList, newList) {
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition].id == newList[newItemPosition].id

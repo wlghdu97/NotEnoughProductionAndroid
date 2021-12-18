@@ -3,6 +3,7 @@ package com.xhlab.nep.ui.process.calculator
 import androidx.lifecycle.ViewModel
 import com.xhlab.nep.di.ViewModelKey
 import com.xhlab.nep.di.scopes.FragmentScope
+import com.xhlab.nep.shared.ui.process.calculator.ElementNavigatorViewModel
 import com.xhlab.nep.ui.process.calculator.byproducts.ByproductsFragment
 import com.xhlab.nep.ui.process.calculator.cycles.ProcessingOrderFragment
 import com.xhlab.nep.ui.process.calculator.ingredients.BaseIngredientsFragment

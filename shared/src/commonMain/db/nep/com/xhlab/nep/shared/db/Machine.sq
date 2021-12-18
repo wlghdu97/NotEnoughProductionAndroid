@@ -1,0 +1,32 @@
+CREATE TABLE machine (
+    id INTEGER AS Int NOT NULL PRIMARY KEY AUTOINCREMENT,
+    mod_name TEXT NOT NULL,
+    name TEXT NOT NULL
+);
+
+CREATE UNIQUE INDEX index_machine_mod_name_name ON machine (mod_name, name);
+CREATE INDEX index_machine_name ON machine (name);
+
+getMachines:
+SELECT * FROM machine
+WHERE machine.id = :machineId
+ORDER BY machine.name ASC;
+
+getAllMachines:
+SELECT * FROM machine
+ORDER BY machine.name ASC
+LIMIT :limit OFFSET :offset;
+
+getMachineCount:
+SELECT COUNT(*) FROM machine;
+
+getId:
+SELECT machine.id FROM machine
+WHERE machine.mod_name = :modName AND machine.name = :machineName;
+
+insert:
+INSERT OR IGNORE INTO machine(mod_name, name)
+VALUES (?, ?);
+
+deleteAll:
+DELETE FROM machine;

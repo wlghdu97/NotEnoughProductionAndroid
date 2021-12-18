@@ -3,7 +3,15 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
       <module name="Not_Enough_Production.app" target="11" />
+      <module name="Not_Enough_Production.model.commonMain" target="1.8" />
+      <module name="Not_Enough_Production.model.commonTest" target="1.8" />
+      <module name="Not_Enough_Production.model.jvmMain" target="1.8" />
+      <module name="Not_Enough_Production.model.jvmTest" target="1.8" />
       <module name="Not_Enough_Production.shared" target="11" />
+      <module name="Not_Enough_Production.test-shared.commonMain" target="1.8" />
+      <module name="Not_Enough_Production.test-shared.commonTest" target="1.8" />
+      <module name="Not_Enough_Production.test-shared.jvmMain" target="1.8" />
+      <module name="Not_Enough_Production.test-shared.jvmTest" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.recipes.view.RecipeMachineView
-import com.xhlab.nep.ui.main.machines.MachineListener
+import com.xhlab.nep.shared.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 
 class RecipeMachineAdapter(
     private val listener: MachineListener? = null
-) : PagedListAdapter<RecipeMachineView, RecipeMachineAdapter.RecipeMachineViewHolder>(
+) : PagingDataAdapter<RecipeMachineView, RecipeMachineAdapter.RecipeMachineViewHolder>(
     object : DiffUtil.ItemCallback<RecipeMachineView>() {
         override fun areItemsTheSame(
             oldItem: RecipeMachineView,

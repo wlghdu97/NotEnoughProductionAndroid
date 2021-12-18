@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
 import com.xhlab.nep.databinding.FragmentProcessingOrderBinding
 import com.xhlab.nep.di.ViewModelFactory
-import com.xhlab.nep.shared.util.isSuccessful
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.process.calculator.ProcessCalculationViewModel
-import com.xhlab.nep.util.observeNotNull
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -46,14 +45,12 @@ class ProcessingOrderFragment : DaggerFragment(), ViewInit {
     override fun initViewModel() {
         calculationViewModel = requireActivity().viewModelProvider(viewModelFactory)
 
-        calculationViewModel.process.observeNotNull(this) {
+        calculationViewModel.process.asLiveData().observe(this) {
             adapter.submitProcess(it)
         }
 
-        calculationViewModel.calculationResult.observe(this) {
-            if (it.isSuccessful()) {
-                adapter.submitRecipeRatioList(it.data!!.recipes)
-            }
+        calculationViewModel.calculationResult.asLiveData().observe(this) {
+            adapter.submitRecipeRatioList(it.recipes)
         }
     }
 }

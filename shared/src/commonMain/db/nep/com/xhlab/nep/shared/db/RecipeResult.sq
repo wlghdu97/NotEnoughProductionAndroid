@@ -1,0 +1,19 @@
+CREATE TABLE recipe_result (
+    recipe_id INTEGER NOT NULL,
+    result_item_id INTEGER NOT NULL,
+    amount INTEGER AS Integer NOT NULL,
+    meta_data TEXT DEFAULT NULL,
+    PRIMARY KEY (recipe_id, result_item_id),
+    FOREIGN KEY (result_item_id) REFERENCES element (id) ON UPDATE NO ACTION ON DELETE CASCADE
+);
+
+CREATE INDEX index_recipe_result_result_item_id ON recipe_result (result_item_id);
+
+getElementsOfResult:
+SELECT element_view.*, recipe_result.amount, recipe_result.meta_data FROM element_view
+INNER JOIN recipe_result ON recipe_result.recipe_id = :recipeId
+WHERE element_view.id = recipe_result.result_item_id;
+
+insert:
+INSERT OR IGNORE INTO recipe_result
+VALUES ?;

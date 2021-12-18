@@ -10,14 +10,15 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.observe
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.DialogWithProgressBinding
 import com.xhlab.nep.service.IServiceBinder
 import com.xhlab.nep.service.IconUnzipService
-import com.xhlab.nep.shared.util.Resource
 import com.xhlab.nep.ui.ViewInit
+import kotlinx.coroutines.flow.collectLatest
+import kr.sparkweb.multiplatform.util.Resource
 
 class IconUnzipDialog : ServiceBoundDialog<IconUnzipService>(), ViewInit {
 
@@ -41,16 +42,18 @@ class IconUnzipDialog : ServiceBoundDialog<IconUnzipService>(), ViewInit {
     }
 
     override fun initService(service: IconUnzipService) {
-        service.unzipLog.observe(this) {
-            isTaskDone = it.status != Resource.Status.LOADING
-            binding.log.text = it.data?.message
-            binding.progressBar.progress = it.data?.progress ?: 0
-            negativeButton?.setText(
-                when (isTaskDone) {
-                    true -> R.string.btn_close
-                    false -> R.string.btn_abort
-                }
-            )
+        lifecycleScope.launchWhenResumed {
+            service.unzipLog.collectLatest {
+                isTaskDone = it.status != Resource.Status.LOADING
+                binding.log.text = it.data?.message
+                binding.progressBar.progress = it.data?.progress ?: 0
+                negativeButton?.setText(
+                    when (isTaskDone) {
+                        true -> R.string.btn_close
+                        false -> R.string.btn_abort
+                    }
+                )
+            }
         }
     }
 

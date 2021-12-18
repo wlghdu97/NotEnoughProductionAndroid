@@ -5,16 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentReplacementListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.element.replacements.ReplacementListViewModel
 import com.xhlab.nep.ui.ViewInit
+import com.xhlab.nep.ui.element.ElementDetailActivity.Companion.navigateToElementDetailActivity
 import com.xhlab.nep.ui.element.ElementDetailFragment
-import com.xhlab.nep.ui.main.items.ElementDetailAdapter
+import com.xhlab.nep.ui.main.items.RecipeElementDetailAdapter
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class ReplacementListFragment : DaggerFragment(), ViewInit {
@@ -25,7 +30,7 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     private lateinit var binding: FragmentReplacementListBinding
     private lateinit var viewModel: ReplacementListViewModel
 
-    private val elementAdapter by lazy { ElementDetailAdapter(viewModel) }
+    private val elementAdapter by lazy { RecipeElementDetailAdapter(viewModel) }
 
     private lateinit var oreDictName: String
 
@@ -53,29 +58,26 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
         oreDictName = arguments?.getString(ORE_DICT_NAME) ?: getString(R.string.txt_unknown)
         viewModel.init(oreDictName)
 
-        viewModel.replacementList.observe(this) {
-            elementAdapter.submitList(it)
-            binding.oreDictName.text = requireContext().formatString(
-                R.string.form_ore_dict_name,
-                oreDictName,
-                it?.size ?: 0
-            )
+        viewModel.replacementList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            elementAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             elementAdapter.setIconVisibility(isLoaded)
         }
 
-        viewModel.navigateToDetail.observe(this) {
+        viewModel.navigateToDetail.asLiveData().observe(this) { elementId ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment().requireParentFragment()
                 parent.childFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.container, ElementDetailFragment.getFragment(it))
+                    .add(R.id.container, ElementDetailFragment.getFragment(elementId))
                     .addToBackStack(null)
                     .commit()
             } else {
-                viewModel.navigateToElementDetail(it)
+                context?.navigateToElementDetailActivity(elementId)
             }
         }
     }
@@ -83,6 +85,16 @@ class ReplacementListFragment : DaggerFragment(), ViewInit {
     override fun initView() {
         binding.oreDictName.text = oreDictName
         binding.replacementList.adapter = elementAdapter
+
+        elementAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.oreDictName.text = requireContext().formatString(
+                    R.string.form_ore_dict_name,
+                    oreDictName,
+                    elementAdapter.itemCount
+                )
+            }
+        }
     }
 
     companion object {

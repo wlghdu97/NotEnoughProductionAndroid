@@ -1,0 +1,69 @@
+CREATE TABLE recipe (
+    recipe_id INTEGER NOT NULL,
+    target_item_id INTEGER NOT NULL,
+    amount INTEGER AS Integer NOT NULL,
+    PRIMARY KEY (recipe_id, target_item_id),
+    FOREIGN KEY (target_item_id) REFERENCES element (id) ON UPDATE NO ACTION ON DELETE CASCADE
+);
+
+CREATE INDEX index_recipe_target_item_id ON recipe (target_item_id);
+
+getElementsOfRecipe:
+SELECT element_view.*, recipe.amount FROM element_view
+INNER JOIN recipe ON recipe.recipe_id = :recipeId
+WHERE element_view.id = recipe.target_item_id
+ORDER BY element_view.type, element_view.localized_name ASC;
+
+searchRecipeIdByElement:
+SELECT DISTINCT recipe.recipe_id FROM recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+WHERE recipe.recipe_id = recipe_result.recipe_id
+ORDER BY recipe.amount
+LIMIT :limit OFFSET :offset;
+
+searchRecipeIdCountByElement:
+SELECT COUNT(DISTINCT recipe.recipe_id) FROM recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+WHERE recipe.recipe_id = recipe_result.recipe_id;
+
+searchRecipeIdByElementFts:
+SELECT DISTINCT recipe.recipe_id FROM recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+INNER JOIN element_fts ON element_fts.docid = recipe.target_item_id
+WHERE recipe.recipe_id = recipe_result.recipe_id AND element_fts MATCH :term
+ORDER BY recipe.amount
+LIMIT :limit OFFSET :offset;
+
+searchRecipeIdCountByElementFts:
+SELECT COUNT(DISTINCT recipe.recipe_id) FROM recipe
+INNER JOIN recipe_result ON recipe_result.result_item_id = :elementId
+INNER JOIN element_fts ON element_fts.docid = recipe.target_item_id
+WHERE recipe.recipe_id = recipe_result.recipe_id AND element_fts MATCH :term;
+
+searchUsageRecipeIdByElement:
+SELECT recipe.recipe_id FROM recipe
+WHERE recipe.target_item_id = :elementId
+ORDER BY recipe.amount
+LIMIT :limit OFFSET :offset;
+
+searchUsageRecipeIdCountByElement:
+SELECT COUNT(recipe.recipe_id) FROM recipe
+WHERE recipe.target_item_id = :elementId;
+
+searchUsageRecipeIdByElementFts:
+SELECT recipe.recipe_id FROM recipe
+INNER JOIN recipe_result ON recipe_result.recipe_id = recipe.recipe_id
+INNER JOIN element_fts ON element_fts.docid = recipe_result.result_item_id
+WHERE recipe.target_item_id = :elementId AND element_fts MATCH :term
+ORDER BY recipe.amount
+LIMIT :limit OFFSET :offset;
+
+searchUsageRecipeIdCountByElementFts:
+SELECT COUNT(recipe.recipe_id) FROM recipe
+INNER JOIN recipe_result ON recipe_result.recipe_id = recipe.recipe_id
+INNER JOIN element_fts ON element_fts.docid = recipe_result.result_item_id
+WHERE recipe.target_item_id = :elementId AND element_fts MATCH :term;
+
+insert:
+INSERT OR IGNORE INTO recipe
+VALUES ?;

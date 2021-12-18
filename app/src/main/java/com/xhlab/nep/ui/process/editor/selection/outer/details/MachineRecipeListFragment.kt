@@ -4,16 +4,22 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentMachineRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.RecipeSelectionViewModel
+import com.xhlab.nep.shared.ui.process.editor.selection.outer.details.MachineRecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
-import com.xhlab.nep.ui.process.editor.selection.outer.RecipeSelectionViewModel
+import com.xhlab.nep.ui.process.editor.selection.outer.recipes.RecipeListFragment
 import com.xhlab.nep.ui.util.LinearItemSpacingDecorator
 import com.xhlab.nep.util.dip
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class MachineRecipeListFragment : DaggerFragment(), ViewInit {
@@ -52,6 +58,12 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
             adapter = recipeAdapter
             addItemDecoration(LinearItemSpacingDecorator(context.dip(4)))
         }
+
+        recipeAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                binding.emptyText.isGone = recipeAdapter.itemCount > 0
+            }
+        }
     }
 
     override fun initViewModel() {
@@ -62,21 +74,23 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         val connectToParent = arguments?.getBoolean(CONNECT_TO_PARENT)
         viewModel.init(elementId, machineId, connectToParent)
 
-        recipeSelectionViewModel.constraint.observe(this) {
+        recipeSelectionViewModel.constraint.asLiveData().observe(this) {
             recipeAdapter.setConnectionConstraint(it)
         }
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
-            binding.emptyText.isGone = it?.isEmpty() != true
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.usageList.observe(this) {
-            recipeAdapter.submitList(it)
-            binding.emptyText.isGone = it?.isEmpty() != true
+        viewModel.usageList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.isIconLoaded.observe(this) { isLoaded ->
+        viewModel.isIconLoaded.asLiveData().observe(this) { isLoaded ->
             recipeAdapter.setIconVisibility(isLoaded)
         }
     }
@@ -102,5 +116,15 @@ class MachineRecipeListFragment : DaggerFragment(), ViewInit {
         const val ELEMENT_ID = "element_id"
         const val MACHINE_ID = "machine_id"
         const val CONNECT_TO_PARENT = "connect_to_parent"
+
+        fun getFragment(elementId: Long, machineId: Int, connectToParent: Boolean): Fragment {
+            return MachineRecipeListFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(RecipeListFragment.ELEMENT_ID, elementId)
+                    putInt(MACHINE_ID, machineId)
+                    putBoolean(RecipeListFragment.CONNECT_TO_PARENT, connectToParent)
+                }
+            }
+        }
     }
 }

@@ -4,14 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
+import com.xhlab.nep.shared.ui.element.replacements.OreDictListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 
 class OreDictAdapter(
     private val listener: OreDictListener? = null
-) : PagedListAdapter<String, OreDictAdapter.OreDictViewHolder>(
+) : PagingDataAdapter<String, OreDictAdapter.OreDictViewHolder>(
     object : DiffUtil.ItemCallback<String>() {
         override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
             return oldItem == newItem

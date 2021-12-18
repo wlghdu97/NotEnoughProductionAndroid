@@ -4,15 +4,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Machine
+import com.xhlab.nep.shared.ui.main.machines.MachineListener
 import com.xhlab.nep.ui.util.BindableViewHolder
 
 class MachineAdapter(
     private val listener: MachineListener? = null
-) : PagedListAdapter<Machine, MachineAdapter.MachineViewHolder>(differ) {
+) : PagingDataAdapter<Machine, MachineAdapter.MachineViewHolder>(differ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MachineViewHolder {
         val view = LayoutInflater.from(parent.context)

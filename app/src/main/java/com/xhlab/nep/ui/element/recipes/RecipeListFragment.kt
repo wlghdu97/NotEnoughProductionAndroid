@@ -5,17 +5,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.observe
+import androidx.paging.LoadState
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.FragmentRecipeListBinding
 import com.xhlab.nep.di.ViewModelFactory
+import com.xhlab.nep.shared.ui.element.recipes.RecipeListViewModel
 import com.xhlab.nep.ui.ViewInit
 import com.xhlab.nep.ui.element.ElementDetailFragment.Companion.ELEMENT_ID
+import com.xhlab.nep.ui.recipe.MachineRecipeListActivity.Companion.navigateToMachineRecipeListActivity
 import com.xhlab.nep.ui.recipe.MachineRecipeListFragment
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.viewModelProvider
 import dagger.android.support.DaggerFragment
+import kotlinx.coroutines.flow.flatMapLatest
 import javax.inject.Inject
 
 class RecipeListFragment : DaggerFragment(), ViewInit {
@@ -52,33 +57,38 @@ class RecipeListFragment : DaggerFragment(), ViewInit {
         viewModel.init(arguments?.getLong(ELEMENT_ID))
 
         // update parent tab item title
-        viewModel.recipeList.observe(this) {
-            val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
-            tabLayout?.getTabAt(0)?.text = requireContext().formatString(
-                R.string.form_tab_recipes,
-                it?.size ?: 0
-            )
+        viewModel.recipeList.flatMapLatest {
+            it.pagingData
+        }.asLiveData().observe(this) {
+            recipeAdapter.submitData(lifecycle, it)
         }
 
-        viewModel.recipeList.observe(this) {
-            recipeAdapter.submitList(it)
-        }
-
-        viewModel.navigateToRecipeList.observe(this) {
+        viewModel.navigateToRecipeList.asLiveData().observe(this) { (elementId, machineId) ->
             if (resources.getBoolean(R.bool.isTablet)) {
                 val parent = requireParentFragment().requireParentFragment()
+                val fragment = MachineRecipeListFragment.getFragment(elementId, machineId)
                 parent.childFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in_top, 0, 0, R.anim.slide_out_bottom)
-                    .add(R.id.container, MachineRecipeListFragment.getFragment(it))
+                    .add(R.id.container, fragment)
                     .addToBackStack(null)
                     .commit()
             } else {
-                viewModel.navigateToRecipeList(it)
+                context?.navigateToMachineRecipeListActivity(elementId, machineId)
             }
         }
     }
 
     override fun initView() {
         binding.recipeList.adapter = recipeAdapter
+
+        recipeAdapter.addLoadStateListener {
+            if (it.refresh is LoadState.NotLoading) {
+                val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
+                tabLayout?.getTabAt(0)?.text = requireContext().formatString(
+                    R.string.form_tab_recipes,
+                    recipeAdapter.itemCount
+                )
+            }
+        }
     }
 }
