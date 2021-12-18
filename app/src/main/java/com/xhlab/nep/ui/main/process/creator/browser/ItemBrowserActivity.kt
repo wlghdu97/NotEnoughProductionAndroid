@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.observe
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityItemBrowserBinding
 import com.xhlab.nep.di.ViewModelFactory

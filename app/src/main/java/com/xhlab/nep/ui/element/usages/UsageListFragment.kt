@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.observe
 import androidx.paging.LoadState
 import com.google.android.material.tabs.TabLayout
 import com.xhlab.nep.R

@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.observe
 import androidx.viewpager.widget.ViewPager
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityProcessCalculationBinding

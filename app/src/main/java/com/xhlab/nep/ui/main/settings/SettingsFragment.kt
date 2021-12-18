@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.observe
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat

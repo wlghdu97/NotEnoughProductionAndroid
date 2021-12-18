@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.view.isGone
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.observe
 import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R

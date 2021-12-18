@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.view.isGone
 import androidx.lifecycle.asLiveData
-import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.ActivityRecipeSelectionExistingBinding
