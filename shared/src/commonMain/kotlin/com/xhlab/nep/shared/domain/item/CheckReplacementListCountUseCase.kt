@@ -1,8 +1,8 @@
 package com.xhlab.nep.shared.domain.item
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("ItemDomain")
 class CheckReplacementListCountUseCase constructor(

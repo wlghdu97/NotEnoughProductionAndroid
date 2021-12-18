@@ -1,13 +1,13 @@
 package com.xhlab.nep.shared.domain.recipe
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.recipes.view.RecipeMachineView
 import com.xhlab.nep.shared.data.element.ElementRepo
 import com.xhlab.nep.shared.domain.BaseMediatorUseCase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.util.Resource
 
 @ProvideWithDagger("RecipeDomain")
 class LoadRecipeMachineListUseCase constructor(

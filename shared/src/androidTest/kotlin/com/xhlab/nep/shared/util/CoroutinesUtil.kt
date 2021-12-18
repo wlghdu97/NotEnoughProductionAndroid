@@ -1,11 +1,11 @@
 package com.xhlab.nep.shared.util
 
-import com.xhlab.multiplatform.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.runBlocking
+import kr.sparkweb.multiplatform.util.Resource
 import java.util.concurrent.Executors
 import kotlin.coroutines.CoroutineContext
 

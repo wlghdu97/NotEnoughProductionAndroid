@@ -3,7 +3,6 @@ package com.xhlab.nep.shared.domain
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.nhaarman.mockitokotlin2.*
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.process.ExportProcessStringUseCase
@@ -12,6 +11,7 @@ import com.xhlab.nep.shared.parser.process.ProcessSerializer
 import com.xhlab.nep.shared.util.runBlockingTest
 import com.xhlab.nep.shared.util.testJson
 import com.xhlab.test.shared.ProcessData
+import kr.sparkweb.multiplatform.util.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before

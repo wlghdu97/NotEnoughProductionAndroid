@@ -1,11 +1,11 @@
 package com.xhlab.nep.shared.domain
 
 import co.touchlab.kermit.Logger
-import com.xhlab.multiplatform.domain.MediatorUseCase
-import com.xhlab.multiplatform.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.transform
+import kr.sparkweb.multiplatform.domain.MediatorUseCase
+import kr.sparkweb.multiplatform.util.Resource
 
 abstract class BaseMediatorUseCase<in Params, Result> : MediatorUseCase<Params, Result>() {
 

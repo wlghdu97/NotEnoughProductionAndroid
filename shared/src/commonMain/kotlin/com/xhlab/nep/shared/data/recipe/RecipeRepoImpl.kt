@@ -1,7 +1,5 @@
 package com.xhlab.nep.shared.data.recipe
 
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.paging.PagingConfig
 import com.xhlab.nep.model.PlainRecipeElement
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.form.recipes.RecipeForm
@@ -12,6 +10,8 @@ import com.xhlab.nep.shared.db.createOffsetLimitPager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.paging.PagingConfig
 
 class RecipeRepoImpl constructor(
     private val db: Nep,

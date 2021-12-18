@@ -1,7 +1,5 @@
 package com.xhlab.nep.shared.ui.main.process.creator.browser
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
-import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.ui.ViewModel
@@ -11,6 +9,8 @@ import com.xhlab.nep.shared.ui.main.process.creator.browser.details.RootRecipeSe
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
+import kr.sparkweb.multiplatform.util.EventFlow
 
 @ProvideWithDagger("ProcessViewModel")
 class ProcessItemBrowserViewModel :

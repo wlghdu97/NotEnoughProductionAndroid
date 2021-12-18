@@ -1,14 +1,14 @@
 package com.xhlab.nep.shared.ui.element
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
-import com.xhlab.multiplatform.util.Resource
-import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.domain.item.LoadElementDetailUseCase
 import com.xhlab.nep.shared.ui.ViewModel
 import com.xhlab.nep.shared.ui.invokeUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.transform
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
+import kr.sparkweb.multiplatform.util.Resource
+import kr.sparkweb.multiplatform.util.Resource.Companion.isSuccessful
 
 @ProvideWithDagger("ViewModel")
 class ElementDetailViewModel constructor(

@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.domain
 
 import co.touchlab.kermit.Logger
-import com.xhlab.multiplatform.domain.UseCase
+import kr.sparkweb.multiplatform.domain.UseCase
 
 abstract class BaseUseCase<in Params, Result> : UseCase<Params, Result>() {
 

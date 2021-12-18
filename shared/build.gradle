@@ -58,13 +58,13 @@ kotlin {
             implementation project(path: ':model')
             implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
             implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version"
-            implementation "com.xhlab.mobile:infrastructure:$mobile_infrastructure_version"
-            implementation "com.xhlab.mobile:infrastructure-paging:$mobile_infrastructure_version"
-            implementation "com.xhlab.mobile:infrastructure-annotation:$mobile_infrastructure_version"
+            implementation "kr.sparkweb:mobile-infrastructure:$mobile_infrastructure_version"
+            implementation "kr.sparkweb:mobile-infrastructure-paging:$mobile_infrastructure_version"
+            implementation "kr.sparkweb:mobile-infrastructure-annotation:$mobile_infrastructure_version"
             configurations {
                 kapt {
                     dependencies {
-                        kapt "com.xhlab.mobile:infrastructure-processor:$mobile_infrastructure_version"
+                        kapt "kr.sparkweb:mobile-infrastructure-processor:$mobile_infrastructure_version"
                     }
                 }
             }

@@ -1,12 +1,12 @@
 package com.xhlab.nep.shared.parser.oredict
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.ElementForm
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.model.form.OreDictForm
 import com.xhlab.nep.shared.parser.Parser
 import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.parser.stream.JsonToken
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("Parser")
 class OreDictItemParser : Parser<ElementForm> {

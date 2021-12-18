@@ -1,6 +1,5 @@
 package com.xhlab.nep.ui.process.calculator
 
-import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.process.LoadProcessUseCase
 import com.xhlab.nep.shared.domain.process.ResourceRateCalculationUseCase
@@ -12,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import kr.sparkweb.multiplatform.util.Resource.Companion.isSuccessful
 import javax.inject.Inject
 
 class ProcessCalculationViewModel @Inject constructor(

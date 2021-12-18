@@ -1,11 +1,11 @@
 package com.xhlab.nep.shared.domain
 
 import co.touchlab.kermit.Logger
-import com.xhlab.multiplatform.domain.MediatorUseCase
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.shared.util.runBlockingTest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kr.sparkweb.multiplatform.domain.MediatorUseCase
+import kr.sparkweb.multiplatform.util.Resource
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -1,8 +1,6 @@
 package com.xhlab.nep.shared.domain.icon
 
 import co.touchlab.kermit.Logger
-import com.xhlab.multiplatform.domain.Cancellable
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.MR
 import com.xhlab.nep.shared.domain.BaseMediatorUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -12,6 +10,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flowOn
+import kr.sparkweb.multiplatform.domain.Cancellable
+import kr.sparkweb.multiplatform.util.Resource
 
 class IconUnzipUseCase constructor(
     private val generalPreference: GeneralPreference,

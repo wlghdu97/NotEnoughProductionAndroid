@@ -1,13 +1,13 @@
 package com.xhlab.nep.shared.data.machine
 
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.paging.PagingConfig
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.data.pagerScope
 import com.xhlab.nep.shared.db.Nep
 import com.xhlab.nep.shared.db.createOffsetLimitPager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.paging.PagingConfig
 
 class MachineRepoImpl constructor(
     private val db: Nep,

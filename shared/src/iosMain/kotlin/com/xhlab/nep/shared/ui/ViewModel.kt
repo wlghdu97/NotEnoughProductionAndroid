@@ -1,13 +1,13 @@
 package com.xhlab.nep.shared.ui
 
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.paging.PagingData
-import com.xhlab.multiplatform.util.CommonFlow
-import com.xhlab.multiplatform.util.asCommonFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.paging.PagingData
+import kr.sparkweb.multiplatform.util.CommonFlow
+import kr.sparkweb.multiplatform.util.asCommonFlow
 
 actual open class ViewModel {
     actual val scope: CoroutineScope = MainScope()

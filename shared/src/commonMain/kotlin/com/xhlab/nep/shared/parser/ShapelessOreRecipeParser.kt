@@ -1,6 +1,5 @@
 package com.xhlab.nep.shared.parser
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.ElementForm
 import com.xhlab.nep.model.form.recipes.ShapelessOreDictRecipeForm
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
@@ -8,6 +7,7 @@ import com.xhlab.nep.shared.parser.oredict.OreDictItemParser
 import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.parser.stream.JsonToken
 import kotlinx.coroutines.flow.flow
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("Parser")
 class ShapelessOreRecipeParser constructor(

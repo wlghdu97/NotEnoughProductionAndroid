@@ -1,9 +1,5 @@
 package com.xhlab.nep.shared.ui.main.machines.details
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
-import com.xhlab.multiplatform.util.EventFlow
-import com.xhlab.multiplatform.util.Resource
-import com.xhlab.multiplatform.util.Resource.Companion.isSuccessful
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.domain.machine.LoadMachineUseCase
 import com.xhlab.nep.shared.domain.machine.MachineResultSearchUseCase
@@ -19,6 +15,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
+import kr.sparkweb.multiplatform.util.EventFlow
+import kr.sparkweb.multiplatform.util.Resource
+import kr.sparkweb.multiplatform.util.Resource.Companion.isSuccessful
 
 @ProvideWithDagger("ViewModel")
 class MachineResultViewModel constructor(

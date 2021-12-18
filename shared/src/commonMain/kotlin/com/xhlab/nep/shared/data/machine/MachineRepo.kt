@@ -1,7 +1,7 @@
 package com.xhlab.nep.shared.data.machine
 
-import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.nep.model.Machine
+import kr.sparkweb.multiplatform.paging.Pager
 
 interface MachineRepo {
     suspend fun getMachine(machineId: Int): Machine?

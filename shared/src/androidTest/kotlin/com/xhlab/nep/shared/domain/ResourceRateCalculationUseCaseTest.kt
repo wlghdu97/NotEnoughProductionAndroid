@@ -1,10 +1,10 @@
 package com.xhlab.nep.shared.domain
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.shared.domain.process.ResourceRateCalculationUseCase
 import com.xhlab.nep.shared.util.runBlockingTest
 import com.xhlab.test.shared.ProcessData
+import kr.sparkweb.multiplatform.util.Resource
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

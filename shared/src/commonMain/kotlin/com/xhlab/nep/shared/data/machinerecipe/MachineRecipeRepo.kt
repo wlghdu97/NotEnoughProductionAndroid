@@ -1,8 +1,8 @@
 package com.xhlab.nep.shared.data.machinerecipe
 
-import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.recipes.view.RecipeView
+import kr.sparkweb.multiplatform.paging.Pager
 
 interface MachineRecipeRepo {
     suspend fun getElementListByRecipe(recipeId: Long): List<RecipeElement>

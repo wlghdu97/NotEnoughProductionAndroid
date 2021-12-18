@@ -2,7 +2,6 @@ package com.xhlab.nep.shared.parser
 
 import co.touchlab.stately.concurrency.AtomicInt
 import co.touchlab.stately.concurrency.value
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.model.form.recipes.MachineRecipeForm
 import com.xhlab.nep.model.recipes.view.MachineRecipeView
@@ -12,6 +11,7 @@ import com.xhlab.nep.shared.parser.element.ItemParser
 import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.parser.stream.JsonToken
 import kotlinx.coroutines.flow.flow
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("Parser")
 class FurnaceRecipeParser constructor(

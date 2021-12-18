@@ -1,8 +1,8 @@
 package com.xhlab.nep.shared.data.element
 
-import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.recipes.view.RecipeMachineView
+import kr.sparkweb.multiplatform.paging.Pager
 
 interface ElementRepo {
     suspend fun getIdsByKey(unlocalizedName: String): List<Long>

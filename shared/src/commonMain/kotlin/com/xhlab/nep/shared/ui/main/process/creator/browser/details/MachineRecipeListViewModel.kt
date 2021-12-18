@@ -1,6 +1,5 @@
 package com.xhlab.nep.shared.ui.main.process.creator.browser.details
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.shared.domain.observeOnlySuccess
 import com.xhlab.nep.shared.domain.recipe.LoadRecipeListUseCase
 import com.xhlab.nep.shared.preference.GeneralPreference
@@ -10,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("ProcessViewModel")
 class MachineRecipeListViewModel constructor(

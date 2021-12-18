@@ -3,8 +3,6 @@ package com.xhlab.nep.shared.data.process
 import co.touchlab.stately.isolate.IsolateState
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.paging.PagingConfig
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
@@ -17,6 +15,8 @@ import com.xhlab.nep.shared.util.UUID
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.paging.PagingConfig
 import com.xhlab.nep.shared.db.Process as ProcessEntity
 
 class ProcessRepoImpl constructor(

@@ -1,6 +1,5 @@
 package com.xhlab.nep.shared.parser
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.model.form.recipes.ShapedRecipeForm
 import com.xhlab.nep.shared.data.recipe.RecipeRepo
@@ -8,6 +7,7 @@ import com.xhlab.nep.shared.parser.element.VanillaItemParser
 import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.parser.stream.JsonToken
 import kotlinx.coroutines.flow.flow
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("Parser")
 class ShapedRecipeParser constructor(

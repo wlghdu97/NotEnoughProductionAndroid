@@ -10,7 +10,6 @@ import android.os.Binder
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.icon.IconUnzipUseCase
 import com.xhlab.nep.shared.util.JavaZipArchiver
@@ -18,6 +17,7 @@ import com.xhlab.nep.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
+import kr.sparkweb.multiplatform.util.Resource
 import javax.inject.Inject
 
 class IconUnzipService : Service() {

@@ -1,6 +1,5 @@
 package com.xhlab.nep.shared.domain.process
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
 import com.xhlab.nep.shared.parser.process.ProcessSerializer
@@ -9,6 +8,7 @@ import com.xhlab.nep.shared.util.Inflater
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("ProcessDomain")
 class ImportProcessStringUseCase constructor(

@@ -1,13 +1,13 @@
 package com.xhlab.nep.shared.ui
 
-import com.xhlab.multiplatform.domain.MediatorUseCase
-import com.xhlab.multiplatform.domain.UseCase
-import com.xhlab.multiplatform.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kr.sparkweb.multiplatform.domain.MediatorUseCase
+import kr.sparkweb.multiplatform.domain.UseCase
+import kr.sparkweb.multiplatform.util.Resource
 
 expect open class ViewModel constructor() {
     val scope: CoroutineScope

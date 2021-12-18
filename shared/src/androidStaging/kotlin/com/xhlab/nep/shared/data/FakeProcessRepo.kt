@@ -1,9 +1,5 @@
 package com.xhlab.nep.shared.data
 
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.paging.PagingConfig
-import com.xhlab.multiplatform.paging.PagingResult
-import com.xhlab.multiplatform.paging.createPager
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
@@ -12,6 +8,10 @@ import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.test.shared.ProcessData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.paging.PagingConfig
+import kr.sparkweb.multiplatform.paging.PagingResult
+import kr.sparkweb.multiplatform.paging.createPager
 import javax.inject.Inject
 
 class FakeProcessRepo @Inject constructor() : ProcessRepo {

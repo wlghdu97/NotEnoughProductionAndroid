@@ -11,12 +11,12 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.R
 import com.xhlab.nep.databinding.DialogWithProgressBinding
 import com.xhlab.nep.service.IServiceBinder
 import com.xhlab.nep.service.ParseRecipeService
 import kotlinx.coroutines.flow.collectLatest
+import kr.sparkweb.multiplatform.util.Resource
 
 class JsonParseDialog : ServiceBoundDialog<ParseRecipeService>() {
 

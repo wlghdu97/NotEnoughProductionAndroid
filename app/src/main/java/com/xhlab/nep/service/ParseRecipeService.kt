@@ -11,13 +11,13 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.gson.stream.JsonReader
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.R
 import com.xhlab.nep.shared.domain.parser.ParseRecipeUseCase
 import com.xhlab.nep.ui.main.MainActivity
 import dagger.android.AndroidInjection
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
+import kr.sparkweb.multiplatform.util.Resource
 import javax.inject.Inject
 
 class ParseRecipeService @Inject constructor() : Service() {

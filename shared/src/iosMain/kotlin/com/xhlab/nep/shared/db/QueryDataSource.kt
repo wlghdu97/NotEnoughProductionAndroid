@@ -2,10 +2,6 @@ package com.xhlab.nep.shared.db
 
 import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.Transacter
-import com.xhlab.multiplatform.paging.FinitePager
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.paging.PagingConfig
-import com.xhlab.multiplatform.paging.PagingData
 import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kr.sparkweb.multiplatform.paging.FinitePager
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.paging.PagingConfig
+import kr.sparkweb.multiplatform.paging.PagingData
 import kotlin.math.max
 
 class QueryDataPager<RowType : Any, V : Any> constructor(

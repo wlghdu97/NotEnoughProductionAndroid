@@ -1,11 +1,11 @@
 package com.xhlab.nep.shared.parser
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.shared.data.oredict.OreDictRepo
 import com.xhlab.nep.shared.parser.oredict.ReplacementParser
 import com.xhlab.nep.shared.parser.stream.JsonReader
 import com.xhlab.nep.shared.parser.stream.JsonToken
 import kotlinx.coroutines.flow.flow
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("Parser")
 class ReplacementListParser constructor(

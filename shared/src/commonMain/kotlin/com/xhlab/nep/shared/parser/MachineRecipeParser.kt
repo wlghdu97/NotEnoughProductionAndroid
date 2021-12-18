@@ -1,6 +1,5 @@
 package com.xhlab.nep.shared.parser
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.form.FluidForm
 import com.xhlab.nep.model.form.ItemForm
 import com.xhlab.nep.model.form.recipes.MachineRecipeForm
@@ -12,6 +11,7 @@ import com.xhlab.nep.shared.parser.element.ItemParser
 import com.xhlab.nep.shared.parser.stream.JsonReader
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("Parser")
 class MachineRecipeParser constructor(

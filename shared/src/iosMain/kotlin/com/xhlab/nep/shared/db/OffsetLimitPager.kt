@@ -2,10 +2,10 @@ package com.xhlab.nep.shared.db
 
 import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.Transacter
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.paging.PagingConfig
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.paging.PagingConfig
 
 actual fun <RowType : Any> createOffsetLimitPager(
     clientScope: CoroutineScope,

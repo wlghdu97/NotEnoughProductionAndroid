@@ -1,11 +1,11 @@
 package com.xhlab.nep.shared.data.process
 
-import com.xhlab.multiplatform.paging.Pager
 import com.xhlab.nep.model.Recipe
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.ProcessSummary
 import kotlinx.coroutines.flow.Flow
+import kr.sparkweb.multiplatform.paging.Pager
 
 interface ProcessRepo {
     fun getProcesses(): Pager<Int, ProcessSummary>

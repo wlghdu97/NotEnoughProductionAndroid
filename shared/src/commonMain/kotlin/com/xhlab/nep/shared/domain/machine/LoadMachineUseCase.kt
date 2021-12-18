@@ -1,9 +1,9 @@
 package com.xhlab.nep.shared.domain.machine
 
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.shared.data.machine.MachineRepo
 import com.xhlab.nep.shared.domain.BaseUseCase
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
 
 @ProvideWithDagger("MachineDomain")
 class LoadMachineUseCase constructor(

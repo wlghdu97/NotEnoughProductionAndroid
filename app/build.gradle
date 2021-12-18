@@ -90,8 +90,8 @@ dependencies {
 
     implementation "com.google.code.gson:gson:$gson_version"
 
-    implementation "com.xhlab.mobile:infrastructure:$mobile_infrastructure_version"
-    implementation "com.xhlab.mobile:infrastructure-paging:$mobile_infrastructure_version"
+    implementation "kr.sparkweb:mobile-infrastructure:$mobile_infrastructure_version"
+    implementation "kr.sparkweb:mobile-infrastructure-paging:$mobile_infrastructure_version"
 
     implementation "com.google.firebase:firebase-core:$firebase_core_version"
     implementation "com.google.firebase:firebase-analytics-ktx:$firebase_analytics_version"

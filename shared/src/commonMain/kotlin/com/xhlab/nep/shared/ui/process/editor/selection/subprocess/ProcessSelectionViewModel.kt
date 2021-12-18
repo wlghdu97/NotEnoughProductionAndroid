@@ -1,8 +1,6 @@
 package com.xhlab.nep.shared.ui.process.editor.selection.subprocess
 
 import co.touchlab.kermit.Logger
-import com.xhlab.multiplatform.annotation.ProvideWithDagger
-import com.xhlab.multiplatform.util.EventFlow
 import com.xhlab.nep.MR
 import com.xhlab.nep.shared.data.process.ProcessRepo
 import com.xhlab.nep.shared.domain.observeOnlySuccess
@@ -18,6 +16,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import kr.sparkweb.multiplatform.annotation.ProvideWithDagger
+import kr.sparkweb.multiplatform.util.EventFlow
 
 @ProvideWithDagger("ProcessEditorViewModel")
 class ProcessSelectionViewModel constructor(

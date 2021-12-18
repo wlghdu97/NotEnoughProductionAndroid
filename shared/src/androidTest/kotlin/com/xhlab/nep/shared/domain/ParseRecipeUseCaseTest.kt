@@ -2,8 +2,6 @@ package com.xhlab.nep.shared.domain
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.*
-import com.xhlab.multiplatform.paging.Pager
-import com.xhlab.multiplatform.util.Resource
 import com.xhlab.nep.model.Machine
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.model.form.ReplacementForm
@@ -27,6 +25,8 @@ import com.xhlab.nep.shared.util.runBlockingTest
 import com.xhlab.test.shared.RecipeData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kr.sparkweb.multiplatform.paging.Pager
+import kr.sparkweb.multiplatform.util.Resource
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
