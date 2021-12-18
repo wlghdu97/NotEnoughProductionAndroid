@@ -34,7 +34,7 @@ class RecipeElementDetailAdapter(
 
     fun setIconVisibility(isVisible: Boolean) {
         isIconVisible = isVisible
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     inner class RecipeElementViewHolder(itemView: View) :

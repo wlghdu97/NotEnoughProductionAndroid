@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.Recipe
@@ -43,14 +44,18 @@ class ProcessingOrderAdapter :
 
     fun submitRecipeRatioList(list: List<RecipeRatio>) {
         val newList = list.filterNot { it.first is OreChainRecipe }.reversed()
-        recipeList.clear()
-        recipeList.addAll(newList)
-        notifyDataSetChanged()
+
+        val result = DiffUtil.calculateDiff(getDiffer(newList))
+        with(recipeList) {
+            clear()
+            addAll(newList)
+        }
+        result.dispatchUpdatesTo(this)
     }
 
     fun submitProcess(process: Process) {
         preOrderTraverse(0, process.getRecipeDFSTree())
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     private fun preOrderTraverse(degree: Int, node: RecipeNode) {
@@ -97,6 +102,21 @@ class ProcessingOrderAdapter :
             val index = min(colorList.size - 1, degree)
             label.setImageDrawable(ColorDrawable(colorList[index]))
         }
+    }
+
+    private fun getDiffer(newList: List<RecipeRatio>) = object : DiffUtil.Callback() {
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return recipeList[oldItemPosition].first == newList[newItemPosition].first
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return recipeList[oldItemPosition] == newList[newItemPosition]
+        }
+
+        override fun getOldListSize() = recipeList.size
+
+        override fun getNewListSize() = newList.size
     }
 
     companion object {

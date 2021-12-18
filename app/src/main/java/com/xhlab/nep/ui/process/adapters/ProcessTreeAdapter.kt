@@ -32,12 +32,12 @@ abstract class ProcessTreeAdapter :
 
     fun setIconVisible(isVisible: Boolean) {
         isIconVisible = isVisible
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     fun setShowConnection(mode: Boolean) {
         showConnection = mode
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     protected fun recalculateVisibleList() {

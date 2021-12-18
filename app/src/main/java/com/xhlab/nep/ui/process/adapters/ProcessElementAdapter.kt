@@ -95,12 +95,12 @@ abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
 
     fun setIconVisible(isVisible: Boolean) {
         isIconVisible = isVisible
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     fun setShowConnection(mode: Boolean) {
         showConnection = mode
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     private fun isHeaderPosition(position: Int) = (position == 0 || position == outputListSize + 1)
@@ -118,7 +118,7 @@ abstract class ProcessElementAdapter : RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         override fun bindNotNull(model: ElementConnection) {
-            adapter.notifyDataSetChanged()
+            adapter.notifyItemRangeChanged(0, adapter.itemCount)
         }
 
         private inner class MultiConnectionAdapter :

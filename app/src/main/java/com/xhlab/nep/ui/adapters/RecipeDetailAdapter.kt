@@ -53,7 +53,7 @@ open class RecipeDetailAdapter(
 
     fun setIconVisibility(isVisible: Boolean) {
         isIconVisible = isVisible
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     inner class DefaultRecipeDetailViewHolder(itemView: View) : RecipeDetailViewHolder(itemView) {

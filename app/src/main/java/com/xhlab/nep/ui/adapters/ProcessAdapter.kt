@@ -39,7 +39,7 @@ open class ProcessAdapter(
 
     fun setIconVisibility(isVisible: Boolean) {
         isIconVisible = isVisible
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     inner class ProcessViewHolder(itemView: View) : BindableViewHolder<ProcessSummary>(itemView),

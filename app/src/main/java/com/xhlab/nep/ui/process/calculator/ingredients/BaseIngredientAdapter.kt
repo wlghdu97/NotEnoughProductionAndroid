@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.RecipeElement
 import com.xhlab.nep.shared.ui.process.calculator.ingredients.ElementKeyListener
 import com.xhlab.nep.ui.adapters.RecipeElementViewHolder
+import com.xhlab.nep.ui.process.adapters.getRecipeElementDiffer
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
 import java.text.DecimalFormat
@@ -35,16 +37,22 @@ class BaseIngredientAdapter(
 
     fun submitList(list: List<Pair<RecipeElement, Double>>) {
         val sortedList = list.sortedBy { it.first.unlocalizedName }
-        elementList.clear()
-        elementList.addAll(sortedList.map { it.first })
-        ratioList.clear()
-        ratioList.addAll(sortedList.map { it.second })
-        notifyDataSetChanged()
+        val sortedElementList = sortedList.map { it.first }
+        val result = DiffUtil.calculateDiff(getRecipeElementDiffer(elementList, sortedElementList))
+        with(elementList) {
+            clear()
+            addAll(sortedElementList)
+        }
+        with(ratioList) {
+            clear()
+            addAll(sortedList.map { it.second })
+        }
+        result.dispatchUpdatesTo(this)
     }
 
     fun setIconVisibility(isVisible: Boolean) {
         isIconVisible = isVisible
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     inner class BaseIngredientViewHolder(itemView: View) : RecipeElementViewHolder(itemView) {

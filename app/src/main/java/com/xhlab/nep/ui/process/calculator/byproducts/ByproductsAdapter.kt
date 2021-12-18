@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.xhlab.nep.R
 import com.xhlab.nep.model.RecipeElement
@@ -11,6 +12,7 @@ import com.xhlab.nep.model.process.Process
 import com.xhlab.nep.model.process.RecipeNode
 import com.xhlab.nep.shared.ui.process.calculator.ingredients.ElementKeyListener
 import com.xhlab.nep.ui.adapters.RecipeElementViewHolder
+import com.xhlab.nep.ui.process.adapters.getRecipeElementDiffer
 import com.xhlab.nep.ui.process.calculator.cycles.RecipeRatio
 import com.xhlab.nep.util.formatString
 import com.xhlab.nep.util.setIcon
@@ -38,7 +40,7 @@ class ByproductsAdapter(
 
     fun setIconVisibility(isVisible: Boolean) {
         isIconVisible = isVisible
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     fun submitRecipeRatioList(list: List<RecipeRatio>) {
@@ -50,15 +52,21 @@ class ByproductsAdapter(
         }
         elementRatioMap.clear()
         elementRatioMap.putAll(elements)
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, itemCount)
     }
 
     fun submitProcess(process: Process) {
-        val list = arrayListOf<RecipeElement>()
-        preOrderTraverse(process, 0, process.getRecipeDFSTree(), list)
-        elementList.clear()
-        elementList.addAll(list.distinct())
-        notifyDataSetChanged()
+        val list = with(ArrayList<RecipeElement>()) {
+            preOrderTraverse(process, 0, process.getRecipeDFSTree(), this)
+            this.distinct()
+        }
+
+        val result = DiffUtil.calculateDiff(getRecipeElementDiffer(elementList, list))
+        with(elementList) {
+            clear()
+            addAll(list)
+        }
+        result.dispatchUpdatesTo(this)
     }
 
     private fun preOrderTraverse(
