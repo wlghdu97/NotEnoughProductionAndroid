@@ -26,7 +26,7 @@ abstract class ProcessElementViewHolder(itemView: View) : RecipeElementViewHolde
         )
 
         connectionStatus = when (model is ElementConnection) {
-            true -> model.connections[min(adapterPosition, model.connections.size - 1)]
+            true -> model.connections[min(bindingAdapterPosition, model.connections.size - 1)]
             false -> Process.Connection(Process.ConnectionStatus.UNCONNECTED, null)
         }
 

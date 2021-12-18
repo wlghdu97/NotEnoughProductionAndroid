@@ -72,7 +72,7 @@ class BaseIngredientAdapter(
             }
             name.text = context.formatString(
                 R.string.form_item_with_amount,
-                format.format(ratioList[adapterPosition]),
+                format.format(ratioList[bindingAdapterPosition]),
                 getNameText(model)
             )
         }

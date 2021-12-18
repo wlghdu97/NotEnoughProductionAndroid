@@ -64,7 +64,7 @@ class RecipeTreeAdapter(
                         expandedNodes.add(it.node.recipe)
                         chevron.animate().rotation(270f)
 
-                        val position = adapterPosition + it.node.childNodes.size
+                        val position = bindingAdapterPosition + it.node.childNodes.size
                         treeListener?.onProcessTreeExpanded(position)
                     }
                     recalculateVisibleList()
