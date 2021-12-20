@@ -2,6 +2,16 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.8">
+      <module name="Not-Enough-Production.app" target="11" />
+      <module name="Not-Enough-Production.model.commonMain" target="1.8" />
+      <module name="Not-Enough-Production.model.commonTest" target="1.8" />
+      <module name="Not-Enough-Production.model.jvmMain" target="1.8" />
+      <module name="Not-Enough-Production.model.jvmTest" target="1.8" />
+      <module name="Not-Enough-Production.shared" target="11" />
+      <module name="Not-Enough-Production.test-shared.commonMain" target="1.8" />
+      <module name="Not-Enough-Production.test-shared.commonTest" target="1.8" />
+      <module name="Not-Enough-Production.test-shared.jvmMain" target="1.8" />
+      <module name="Not-Enough-Production.test-shared.jvmTest" target="1.8" />
       <module name="Not_Enough_Production.app" target="11" />
       <module name="Not_Enough_Production.model.commonMain" target="1.8" />
       <module name="Not_Enough_Production.model.commonTest" target="1.8" />

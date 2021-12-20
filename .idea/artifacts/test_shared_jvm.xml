@@ -1,8 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="test-shared-jvm">
     <output-path>$PROJECT_DIR$/test-shared/build/libs</output-path>
-    <root id="archive" name="test-shared-jvm.jar">
-      <element id="module-output" name="Not_Enough_Production.test-shared.jvmMain" />
-    </root>
+    <root id="archive" name="test-shared-jvm.jar" />
   </artifact>
 </component>

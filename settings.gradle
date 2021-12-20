@@ -1,2 +1,2 @@
 include ':app', ':model', ':shared', ':test-shared'
-rootProject.name='Not Enough Production'
+rootProject.name = 'Not-Enough-Production'
